@@ -55,4 +55,14 @@ class Mods extends Model
         'isAvatarApproved',
         'isTagVerified',
     ];
+
+    /**
+     * Get the user associated with the Mods
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function userMod()
+    {
+        return $this->hasOne(UserMods::class, 'mod_id', 'id');
+    }
 }
