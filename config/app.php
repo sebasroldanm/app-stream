@@ -82,7 +82,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'es',
 
     /*
     |--------------------------------------------------------------------------
@@ -195,6 +195,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\Filament\StreamPanelProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\Filament\StreamPanelProvider::class,
 
     ],
 
