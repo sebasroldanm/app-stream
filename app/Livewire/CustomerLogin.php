@@ -9,11 +9,11 @@ use Livewire\Component;
 
 class CustomerLogin extends Component
 {
-    public $username;
+    public $email;
     public $password;
 
     protected $rules = [
-        'username' => 'required',
+        'email' => 'required',
         'password' => 'required',
     ];
 
@@ -21,7 +21,7 @@ class CustomerLogin extends Component
     {
         $this->validate();
 
-        $customer = Customer::where('username', $this->username)->first();
+        $customer = Customer::where('email', $this->email)->first();
 
         if ($customer && Hash::check($this->password, $customer->password)) {
             Auth::guard('customer')->login($customer);

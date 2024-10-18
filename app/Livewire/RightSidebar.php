@@ -4,10 +4,10 @@ namespace App\Livewire;
 
 use Livewire\Component;
 
-class Header extends Component
+class RightSidebar extends Component
 {
     public function render()
     {
-        return view('components.layouts.header');
+        return view('components.layouts.right-sidebar');
     }
 }

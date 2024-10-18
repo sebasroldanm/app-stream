@@ -4,11 +4,16 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{ asset('css/frontend/app.css') }}">
-
     <title>{{ $title ?? env('APP_NAME') }}</title>
+
+    <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}" />
+    <link rel="stylesheet" href="{{ asset('/css/frontend/libs.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('/css/frontend/socialv.css?v=4.0.0') }}">
+    <link rel="stylesheet" href="{{ asset('/vendor/fortawesome/fontawesome-free/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('/vendor/remixicon/fonts/remixicon.css') }}">
+    <link rel="stylesheet" href="{{ asset('/vendor/vanillajs-datepicker/dist/css/datepicker.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('/vendor/font-awesome-line-awesome/css/all.min.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('/vendor/line-awesome/dist/line-awesome/css/line-awesome.min.css') }}">
 
     @stack('styles')
     @livewireStyles
@@ -16,21 +21,42 @@
 
 <body>
 
-    @livewire('header')
+    <!-- loader Start -->
+    <div id="loading">
+        <div id="loading-center">
+        </div>
+    </div>
+    <!-- loader END -->
 
-    <main>
-        {{ $slot }} <!-- Contenido de la vista -->
-    </main>
+    <!-- Wrapper Start -->
+    <div class="wrapper">
+
+        @livewire('sidebar-default')
+        @livewire('top-navbar')
+        @livewire('right-sidebar')
+
+        <main>
+            {{ $slot }} <!-- Contenido de la vista -->
+        </main>
+    </div>
 
     @livewire('footer')
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
-        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
-        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
-    </script>
+    <!-- Backend Bundle JavaScript -->
+    <script src="{{ asset('js/frontend/libs.min.js') }}"></script>
+    <!-- slider JavaScript -->
+    <script src="{{ asset('js/frontend/slider.js') }}"></script>
+    <!-- masonry JavaScript -->
+    <script src="{{ asset('js/frontend/masonry.pkgd.min.js') }}"></script>
+    <!-- SweetAlert JavaScript -->
+    <script src="{{ asset('js/frontend/enchanter.js') }}"></script>
+    <!-- SweetAlert JavaScript -->
+    <script src="{{ asset('js/frontend/sweetalert.js') }}"></script>
+    <!-- app JavaScript -->
+    <script src="{{ asset('js/frontend/charts/weather-chart.js') }}"></script>
+    <script src="{{ asset('js/frontend/app.js') }}"></script>
+    <script src="{{ asset('vendor/vanillajs-datepicker/dist/js/datepicker.min.js') }}"></script>
+    <script src="{{ asset('js/frontend/lottie.js') }}"></script>
 
     @livewireScripts
 </body>
