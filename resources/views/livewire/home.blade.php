@@ -91,7 +91,7 @@
                     <div class="card mb-0">
                         <div class="top-bg-image" style="height: 110px; overflow: hidden;">
                             @if ($mod->data)
-                                <img style="object-fit: cover; object-position: center;"
+                                <img style="width: 100%; height: 100%; object-fit: cover; object-position: center;"
                                     src="{{ $mod->data->user->user->previewUrlThumbSmall }}" class="img-fluid w-100"
                                     alt="group-bg">
                             @else
@@ -138,7 +138,7 @@
                                     <li class="pe-3 ps-3">
                                         <p class="mb-0">Ranking</p>
                                         @if ($mod->data)
-                                            @if (isset($mod->data->user->modelTopPosition))
+                                            @if (isset($mod->data->user->modelTopPosition->position) && $mod->data->user->modelTopPosition->position !== 0)
                                                 <h6>{{ $mod->data->user->modelTopPosition->position }}</h6>
                                             @else
                                                 <h6>-</h6>

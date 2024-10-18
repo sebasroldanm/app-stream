@@ -9,7 +9,6 @@ use App\Models\Panel;
 use App\Models\Photos;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
-use Masterminds\HTML5\Parser\TreeBuildingRules;
 
 trait SyncData
 {

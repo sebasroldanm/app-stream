@@ -41,24 +41,24 @@ class ViewMod extends Component
     public function render()
     {
         $result = Owner::where('username', $this->mod)->first();
+        $result->data = json_decode($result->data);
+        if (!isset($result->data->user)) {
+            $this->syncOwnerByUsername($this->mod);
+        }
         $this->id_mod = $result->id;
         $intro = Intro::where('owner_id', $result->id)->first();
         $albums = Album::with('photos')->where('owner_id', $result->id)->get();
         $videos = Video::where('owner_id', $result->id)->limit($this->limitVideos)->get();
         $panels = Panel::where('owner_id', $result->id)->limit($this->limitPanels)->get();
 
-        // dd($albums);
+        // dd($result->data);
         // dd($intro);
         if ($intro) {
-            $intro->content = json_decode($intro->content);
-            if ($intro->type ==  'image') {
-                $introImage = $intro->url;
-            } else {
-                $point = '720p';
-                $introImage = $intro->content->previews->$point;
-            }
+            $intro->data = json_decode($intro->data);
+            // dd($intro);
         } else {
-            $introImage = 'https://placehold.co/1000x300?text=Cover+Photo';
+            $intro->type = 'image';
+            $intro->url = 'https://placehold.co/1000x300?text=Cover+Photo';
         }
 
         if (Auth::guard('customer')->check()) {
@@ -69,7 +69,7 @@ class ViewMod extends Component
 
             return view('livewire.view-mod', [
                 'data_mod' => $result,
-                'intro' => $introImage,
+                'intro' => $intro,
                 'albums' => $albums,
                 'videos' => $videos,
                 'panels' => $panels,
@@ -80,7 +80,7 @@ class ViewMod extends Component
         } else {
             return view('livewire.view-mod', [
                 'data_mod' => $result,
-                'intro' => $introImage,
+                'intro' => $intro,
                 'albums' => $albums,
                 'panels' => $panels,
                 'status_owner' => $this->status_owner,
