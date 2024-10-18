@@ -2,32 +2,32 @@
     <div id="sidebar-scrollbar">
         <nav class="iq-sidebar-menu">
             <ul id="iq-sidebar-toggle" class="iq-menu">
-                <li class="">
-                    <a href="../dashboard/index.html" class=" ">
-                        <i class="las la-newspaper"></i><span>Newsfeed</span>
+                <li class="@if (Route::is('home')) active @endif">
+                    <a href="{{ route('home') }}" class=" ">
+                        <i class="las la-users"></i><span>Home</span>
                     </a>
                 </li>
                 <li class="">
-                    <a href="../app/profile.html" class=" ">
-                        <i class="las la-user"></i><span>Profile</span>
+                    <a href="#" class=" ">
+                        <i class="las la-newspaper"></i><span>Feed</span>
                     </a>
                 </li>
-                <li class="active">
-                    <a href="../app/group.html" class=" ">
-                        <i class="las la-users"></i><span>Group</span>
+                <li class="">
+                    <a href="#" class=" ">
+                        <i class="las la-user"></i><span>Perfil</span>
                     </a>
                 </li>
-                <li class=" ">
+                {{-- <li class=" ">
                     <a href="../app/todo.html" class=" ">
                         <i class="las la-check-circle"></i><span>Todo</span>
                     </a>
-                </li>
-                <li class=" ">
+                </li> --}}
+                {{-- <li class=" ">
                     <a href="../dashboard/calendar.html" class=" ">
                         <i class="las la-calendar"></i><span>Calendar</span>
                     </a>
-                </li>
-                <li class=" ">
+                </li> --}}
+                {{-- <li class=" ">
                     <a href="#mailbox" data-bs-toggle="collapse" class="  collapsed" aria-expanded="false">
                         <i class="ri-mail-line"></i><span>Email</span><i
                             class="ri-arrow-right-s-line iq-arrow-right"></i>
@@ -294,7 +294,7 @@
                             </ul>
                         </li>
                     </ul>
-                </li>
+                </li> --}}
             </ul>
         </nav>
         <div class="p-5"></div>

@@ -2,9 +2,9 @@
     <div class="iq-navbar-custom">
         <nav class="navbar navbar-expand-lg navbar-light p-0">
             <div class="iq-navbar-logo d-flex justify-content-between">
-                <a href="../dashboard/index.html">
+                <a href="{{ route('home') }}">
                     <img src="{{ asset('/images/logo.png') }}" class="img-fluid" alt="">
-                    <span>SocialV</span>
+                    <span>{{ env('APP_NAME') }}</span>
                 </a>
                 <div class="iq-menu-bt align-self-center">
                     <div class="wrapper-menu">
@@ -26,7 +26,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav  ms-auto navbar-list">
                     <li>
-                        <a href="../dashboard/index.html" class="  d-flex align-items-center">
+                        <a href="{{ route('home') }}" class="  d-flex align-items-center">
                             <i class="ri-home-line"></i>
                         </a>
                     </li>
@@ -294,8 +294,8 @@
                             <div class="card shadow-none m-0">
                                 <div class="card-header  bg-primary">
                                     <div class="header-title">
-                                        <h5 class="mb-0 text-white">Hello Bni Cyst</h5>
-                                        <span class="text-white font-size-12">Available</span>
+                                        <h5 class="mb-0 text-white">Hola {{ auth()->guard('customer')->user()->username }}</h5>
+                                        <span class="text-white font-size-12">Activo</span>
                                     </div>
                                 </div>
                                 <div class="card-body p-0 ">
@@ -346,9 +346,8 @@
                                         </div>
                                     </a>
                                     <div class="d-inline-block w-100 text-center p-3">
-                                        <a class="btn btn-primary iq-sign-btn" href="../dashboard/sign-in.html"
-                                            role="button">Sign
-                                            out<i class="ri-login-box-line ms-2"></i></a>
+                                        <a class="btn btn-primary iq-sign-btn" href="{{ route('customer.logout') }}"
+                                            role="button">Cerrar sesión<i class="ri-login-box-line ms-2"></i></a>
                                     </div>
                                 </div>
                             </div>

@@ -17,7 +17,7 @@ Route::get('/', Home::class)->name('home');
 Route::get('/about', About::class);
 Route::get('/contact', Contact::class);
 
-Route::get('/mod/{mod}', ViewMod::class);
+Route::get('/mod/{mod}', ViewMod::class)->name('view.owner');
 
 
 Route::get('/dashboard', function () {

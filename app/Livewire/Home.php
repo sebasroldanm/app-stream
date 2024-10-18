@@ -54,7 +54,6 @@ class Home extends Component
                 ->get();
         }
 
-        return view('livewire.newhome');
-        // return view('livewire.home');
+        return view('livewire.home');
     }
 }
