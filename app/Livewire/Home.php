@@ -19,6 +19,12 @@ class Home extends Component
 
     public $search = '';
 
+    public function mount() {
+        if (!Auth::guard('customer')->check()) {
+            return redirect()->route('customer.logout');
+        }
+    }
+
     public function moreLimit() {
         $this->limit += 18;
     }
@@ -40,7 +46,6 @@ class Home extends Component
 
     public function render()
     {
-        // dd(Auth::guard('web')->check());
         if ($this->search != '') {
             $this->mods = Owner::select('*')
                 ->where('username', 'like', '%' . $this->search . '%')

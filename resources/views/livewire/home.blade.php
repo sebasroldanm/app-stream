@@ -14,7 +14,14 @@
     <div id="content-page" class="content-page">
         <div class="container">
             <div class="row mb-2">
-                <div class="offset-9 col-md-3">
+                <div class="col-md-4">
+                    <label>Username:</label>
+                    <div class="col-sm-12">
+                        <input wire:model="search" wire:keyup.debounce.500ms="searchByText"
+                            class="form-control" type="search" placeholder="Ingresa el username">
+                    </div>
+                </div>
+                <div class="offset-5 col-md-3">
                     <label>Ordenar nuevos owners: </label>
                     <select class="form-select" wire:change="order" wire:model="orderDir">
                         <option value="asc">Asecdendente</option>
