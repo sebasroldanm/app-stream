@@ -19759,6 +19759,10 @@ ul.header-nav li a {
     margin: 0 .938rem 0 0
 }
 
+ul.header-nav li a.delete_favorite i {
+    color: #e50000;
+}
+
 .profile-header .user-detail {
     position: absolute;
     left: 0;
@@ -20092,10 +20096,41 @@ ul.request-list>li:last-child {
     transition: all .45s ease-in-out
 }
 
+.card_owner_home {
+    max-width: 380px;
+}
+
+.top-bg-list-owner {
+    height: 110px;
+}
+
 .top-bg-image>img {
     border-radius: 5px 5px 0 0;
     -webkit-border-radius: 5px 5px 0 0;
     border-radius: 5px 5px 0 0
+}
+
+.intro-owner {
+    height: 300px;
+}
+
+.blur_avatar {
+    filter: blur(10px);
+}
+
+.feed-bg-lists {
+    height: 110px;
+}
+
+.container-overlay {
+    overflow: hidden;
+}
+
+._overlay {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
 }
 
 .modal-open {

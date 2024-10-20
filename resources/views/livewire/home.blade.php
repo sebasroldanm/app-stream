@@ -17,8 +17,8 @@
                 <div class="col-md-4">
                     <label>Username:</label>
                     <div class="col-sm-12">
-                        <input wire:model="search" wire:keyup.debounce.500ms="searchByText"
-                            class="form-control" type="search" placeholder="Ingresa el username">
+                        <input wire:model="search" wire:keyup.debounce.500ms="searchByText" class="form-control"
+                            type="search" placeholder="Ingresa el username">
                     </div>
                 </div>
                 <div class="offset-5 col-md-3">
@@ -95,14 +95,13 @@
                     @php
                         $mod->data = json_decode($mod->data);
                     @endphp
-                    <div class="card mb-0">
-                        <div class="top-bg-image" style="height: 110px; overflow: hidden;">
+                    <div class="card mb-0 card_owner_home">
+                        <div class="top-bg-image top-bg-list-owner container-overlay">
                             @if ($mod->data)
-                                <img style="width: 100%; height: 100%; object-fit: cover; object-position: center;"
-                                    src="{{ $mod->data->user->user->previewUrlThumbSmall }}" class="img-fluid w-100"
-                                    alt="group-bg">
+                                <img src="{{ $mod->data->user->user->previewUrlThumbSmall }}"
+                                    class="img-fluid w-100 _overlay" alt="group-bg">
                             @else
-                                <img src="https://placehold.co/320x110?text=No+Imagen" class="img-fluid w-100"
+                                <img src="https://placehold.co/320x110?text=No+Imagen" class="img-fluid w-100 _overlay"
                                     alt="group-bg">
                             @endif
                         </div>
@@ -156,46 +155,48 @@
                                     </li>
                                 </ul>
                             </div>
-                            {{-- <div class="group-member mb-3">
-                                <div class="iq-media-group">
-                                    <a href="#" class="iq-media">
-                                        <img class="img-fluid avatar-40 rounded-circle"
-                                            src="{{ asset('/images/user/05.jpg') }}" alt="">
-                                    </a>
-                                    <a href="#" class="iq-media">
-                                        <img class="img-fluid avatar-40 rounded-circle"
-                                            src="{{ asset('/images/user/06.jpg') }}" alt="">
-                                    </a>
-                                    <a href="#" class="iq-media">
-                                        <img class="img-fluid avatar-40 rounded-circle"
-                                            src="{{ asset('/images/user/07.jpg') }}" alt="">
-                                    </a>
-                                    <a href="#" class="iq-media">
-                                        <img class="img-fluid avatar-40 rounded-circle"
-                                            src="{{ asset('/images/user/08.jpg') }}" alt="">
-                                    </a>
-                                    <a href="#" class="iq-media">
-                                        <img class="img-fluid avatar-40 rounded-circle"
-                                            src="{{ asset('/images/user/09.jpg') }}" alt="">
-                                    </a>
-                                    <a href="#" class="iq-media">
-                                        <img class="img-fluid avatar-40 rounded-circle"
-                                            src="{{ asset('/images/user/10.jpg') }}" alt="">
-                                    </a>
+                            @if ($mod->latestSnapshots->count() > 0)
+                                <div class="group-member mb-3">
+                                    <div class="iq-media-group">
+                                        @foreach ($mod->latestSnapshots as $snapshot)
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle"
+                                                    src="{{ $snapshot->local_url }}" onerror="this.onerror=null; this.src='https://placehold.co/50x50.jpg?text=:(';" alt="">
+                                            </a>
+                                        @endforeach
+                                    </div>
                                 </div>
-                            </div> --}}
-                            <a href="{{ route('view.owner', $mod->username) }}" type="submit"
-                                class="btn btn-primary d-block w-100">Ver detalle</a>
+                            @endif
+                            @if ($mod->isError)
+                                <button class="btn btn-danger d-block w-100"><i class="las la-exclamation-triangle"></i>
+                                    No encontrado</button>
+                            @else
+                                <a href="{{ route('view.owner', $mod->username) }}" type="submit"
+                                    class="btn btn-primary d-block w-100">Ver detalle</a>
+                            @endif
                         </div>
                     </div>
                 @endforeach
             </div>
-            <div class="row mt-3">
-                <div class="offset-4 col-md-4 text-center">
-                    <button type="button" wire:click="moreLimit" class="btn btn-soft-primary mb-1">Ver más</button>
-                    <button type="button" wire:click="lessLimit" class="btn btn-soft-primary mb-1">Ver menos</button>
-                </div>
-            </div>
+            @if ($mods->isEmpty())
+                <div class="row mt-3">
+                    <div class="offset-3 col-md-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email">Digita owner para ingresar:</label>
+                            <input type="text" class="form-control" id="owner" wire:model="newOwner" value="{{ $newOwner }}">
+                        </div>
+                        <button type="submit" class="btn btn-primary" wire:click="addOwner">Insertar</button>
+                    </div>
+                @else
+                    <div class="row mt-3">
+                        <div class="offset-4 col-md-4 text-center">
+                            <button type="button" wire:click="moreLimit" class="btn btn-soft-primary mb-1">Ver
+                                más</button>
+                            <button type="button" wire:click="lessLimit" class="btn btn-soft-primary mb-1">Ver
+                                menos</button>
+                        </div>
+                    </div>
+            @endif
         </div>
     </div>
 </div>

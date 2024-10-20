@@ -47,6 +47,10 @@ trait SyncData
         } catch (\Throwable $th) {
             if (strpos($th->getMessage(), '"code":"500"')) {
                 $owner = Owner::where('username', $username)->first();
+                if (!$owner) {
+                    $owner = new Owner();
+                    $owner->username = $username;
+                }
                 $owner->isError = true;
                 $owner->save();
             }

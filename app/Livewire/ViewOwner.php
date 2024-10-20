@@ -8,20 +8,18 @@ use App\Models\Intro;
 use App\Models\Log;
 use App\Models\Owner;
 use App\Models\Panel;
-use App\Models\Photos;
 use App\Models\Video;
 use App\Traits\SyncData;
-use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
-class ViewMod extends Component
+class ViewOwner extends Component
 {
     use SyncData;
 
-    public $mod;
+    public $username;
 
     public $id_mod;
 
@@ -33,53 +31,110 @@ class ViewMod extends Component
     public $status_panel = false;
     public $status_photos = false;
 
-    public function mount($mod)
+    public $showError = false;
+    public $showFeed = true;
+    public $showInformation = false;
+    public $showAlbums = false;
+    public $showVideos = false;
+
+    public function mount($username)
     {
-        $this->mod = $mod;
+        $this->username = $username;
+    }
+
+    public function loadComponent($component)
+    {
+        switch ($component) {
+            case 'feed':
+                $this->showFeed = true;
+                $this->showInformation = false;
+                $this->showAlbums = false;
+                $this->showVideos = false;
+                break;
+            case 'information':
+                $this->showFeed = false;
+                $this->showInformation = true;
+                $this->showAlbums = false;
+                $this->showVideos = false;
+                break;
+            case 'albums':
+                $this->showFeed = false;
+                $this->showInformation = false;
+                $this->showAlbums = true;
+                $this->showVideos = false;
+                break;
+            case 'videos':
+                $this->showFeed = false;
+                $this->showInformation = false;
+                $this->showAlbums = false;
+                $this->showVideos = true;
+            case 'insert':
+                $this->showFeed = false;
+                $this->showInformation = false;
+                $this->showAlbums = false;
+                $this->showVideos = false;
+                break;
+            default:
+                $this->showError = true;
+                $this->showFeed = false;
+                $this->showInformation = false;
+                $this->showAlbums = false;
+                $this->showVideos = false;
+                break;
+        }
     }
 
     public function render()
     {
-        $result = Owner::where('username', $this->mod)->first();
-        $result->data = json_decode($result->data);
-        if (!isset($result->data->user)) {
-            $this->syncOwnerByUsername($this->mod);
+        $owner = Owner::whereRaw("MATCH(username) AGAINST(? IN BOOLEAN MODE)", ['"' . $this->username . '"'])->first();
+        $owner->data = json_decode($owner->data);
+        if (!isset($owner->data->user)) {
+            $this->syncOwnerByUsername($this->username);
         }
-        $this->id_mod = $result->id;
-        $intro = Intro::where('owner_id', $result->id)->first();
-        $albums = Album::with('photos')->where('owner_id', $result->id)->get();
-        $videos = Video::where('owner_id', $result->id)->limit($this->limitVideos)->get();
-        $panels = Panel::where('owner_id', $result->id)->limit($this->limitPanels)->get();
+        $this->id_mod = $owner->id;
+        $intro = Intro::where('owner_id', $owner->id)->first();
+        $albums = Album::with('photos')->where('owner_id', $owner->id)->get();
+        $videos = Video::where('owner_id', $owner->id)->limit($this->limitVideos)->get();
+        $panels = Panel::where('owner_id', $owner->id)->limit($this->limitPanels)->get();
 
-        // dd($result->data);
+        // dd($owner->data);
         // dd($intro);
         if ($intro) {
             $intro->data = json_decode($intro->data);
             // dd($intro);
         } else {
-            $intro->type = 'image';
-            $intro->url = 'https://placehold.co/1000x300?text=Cover+Photo';
+            $intro = new Intro();
+            $intro->type = 'avatar';
+            $intro->url = ($owner->avatar !== "") ? $owner->avatar : $owner->preview;
+        }
+
+        if ($owner->avatar !== "") {
+            $owner->pic_profile = $owner->avatar;
+        } elseif ($owner->preview !== "") {
+            $owner->pic_profile = $owner->preview;
+        } else {
+            $owner->pic_profile = 'https://placehold.co/150x150?text=Profile+Pic';
         }
 
         if (Auth::guard('customer')->check()) {
             $is_fav = DB::table('customer_owner_favorites')
-                ->where('owner_id', $result->id)
+                ->where('owner_id', $owner->id)
                 ->where('customer_id', Auth::guard('customer')->user()->id)
                 ->exists();
 
-            return view('livewire.view-mod', [
-                'data_mod' => $result,
+            return view('livewire.view-owner', [
+                'owner' => $owner,
                 'intro' => $intro,
                 'albums' => $albums,
                 'videos' => $videos,
                 'panels' => $panels,
                 'status_owner' => $this->status_owner,
                 'status_panel' => $this->status_panel,
-                'is_fav' => $is_fav
+                'is_fav' => $is_fav,
             ]);
         } else {
-            return view('livewire.view-mod', [
-                'data_mod' => $result,
+            return view('livewire.view-owner', [
+                'owner' => $owner,
                 'intro' => $intro,
                 'albums' => $albums,
                 'panels' => $panels,
@@ -92,11 +147,11 @@ class ViewMod extends Component
 
     public function updateDataMod()
     {
-        $this->status_owner = $this->syncOwnerByUsername($this->mod);
+        $this->status_owner = $this->syncOwnerByUsername($this->username);
 
         $this->status_panel = $this->syncPanelByOwnerId($this->id_mod);
 
-        $this->status_photos = $this->syncAlbumByUsername($this->mod);
+        $this->status_photos = $this->syncAlbumByUsername($this->username);
 
         // $this->updateDataVideo();
     }
@@ -106,7 +161,7 @@ class ViewMod extends Component
         $client = new Client();
 
         try {
-            $response = $client->request('GET', env('API_PROXY') . env('API_SERVER') . '/api/front/users/username/' . $this->mod . '/videos');
+            $response = $client->request('GET', env('API_PROXY') . env('API_SERVER') . '/api/front/users/username/' . $this->username . '/videos');
 
             $statusCode = $response->getStatusCode();
 

@@ -4,7 +4,7 @@ use App\Http\Controllers\AuthCustomerController;
 use App\Livewire\About;
 use App\Livewire\Contact;
 use App\Livewire\Home;
-use App\Livewire\ViewMod;
+use App\Livewire\ViewOwner;
 use Illuminate\Support\Facades\Route;
 
 
@@ -17,7 +17,7 @@ Route::get('/', Home::class)->name('home');
 Route::get('/about', About::class);
 Route::get('/contact', Contact::class);
 
-Route::get('/mod/{mod}', ViewMod::class)->name('view.owner');
+Route::get('/owner/{username}', ViewOwner::class)->name('view.owner');
 
 
 Route::get('/dashboard', function () {
