@@ -12,21 +12,27 @@
                         <div class="col-sm-12">
                             <div class="event-post position-relative">
                                 <div class="card-body">
-                                    @if ($description !== false)
-                                        <p>{{ $description }}</p>
-                                        <hr>
-                                    @endif
-                                    @if ($country !== false)
-                                        <p><i class="las la-home"></i>  Vive en <strong>{{ $country }}</strong></p>
-                                    @endif
-                                    @if ($languages !== false)
-                                        <p><i class="las la-globe"></i> Mis idiomas {{ $languages }}</p>
-                                    @endif
-                                    @if ($gender !== false)
-                                        <p><i class="las la-users"></i> Mi genero {!! $gender !!}</p>
-                                    @endif
-                                    @if ($age !== false)
-                                        <p><i class="las la-gifts"></i> Tengo {{ $age }} años</p>
+                                    @if (isset($owner->data))
+
+                                        @if ($description !== false)
+                                            <p>{{ $description }}</p>
+                                            <hr>
+                                        @endif
+                                        @if ($country !== false)
+                                            <p><i class="las la-home"></i> Vive en <strong>{{ $country }}</strong>
+                                            </p>
+                                        @endif
+                                        @if ($languages !== false)
+                                            <p><i class="las la-globe"></i> Mis idiomas {{ $languages }}</p>
+                                        @endif
+                                        @if ($gender !== false)
+                                            <p><i class="las la-users"></i> Mi genero {!! $gender !!}</p>
+                                        @endif
+                                        @if ($age !== false)
+                                            <p><i class="las la-gifts"></i> Tengo {{ $age }} años</p>
+                                        @endif
+                                    @else
+                                        <h5 class="text-center">No disponible :(</h5>
                                     @endif
                                 </div>
                             </div>
@@ -49,8 +55,7 @@
                             @foreach ($photos as $photo)
                                 <li class="feed-bg-lists container-overlay">
                                     <a href="#">
-                                        <img src="{{ $photo->url }}"
-                                            alt="gallary-image" class="img-fluid _overlay" />
+                                        <img src="{{ $photo->url }}" alt="gallary-image" class="img-fluid _overlay" />
                                     </a>
                                 </li>
                             @endforeach
@@ -73,9 +78,9 @@
                             @foreach ($videos as $video)
                                 <li class="feed-bg-lists container-overlay">
                                     <a href="#">
-                                        <img src="{{ $video->coverUrl }}" alt="gallary-image"
-                                            class="img-fluid _overlay" data-bs-toggle="tooltip"
-                                            data-bs-placement="top" data-bs-original-title="{{$video->title}}"/>
+                                        <img src="{{ $video->coverUrl }}" alt="gallary-image" class="img-fluid _overlay"
+                                            data-bs-toggle="tooltip" data-bs-placement="top"
+                                            data-bs-original-title="{{ $video->title }}" />
                                     </a>
                                 </li>
                             @endforeach

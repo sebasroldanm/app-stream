@@ -3,27 +3,20 @@
 namespace App\Livewire\Owner;
 
 use App\Models\Album;
+use App\Models\Owner;
 use Livewire\Component;
 
 class Albums extends Component
 {
-    public $idOwner;
-
-    public $id_selected;
-
-    public function mount($idOwner = false)
-    {
-        $this->idOwner = $idOwner;
-    }
+    public Owner $owner;
 
     public function render()
     {
         $albums = Album::with('photos')
-            ->where('owner_id', $this->idOwner)
+            ->where('owner_id', $this->owner->id)
             ->orderBy('createdAt', 'desc')
             ->orderBy('accessMode', 'asc')
             ->get();
-        $this->id_selected = $albums->first()->id;
 
         return view('livewire.owner.albums', [
             'albums' => $albums,

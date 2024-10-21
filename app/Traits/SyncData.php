@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Models\Album;
+use App\Models\Intro;
 use App\Models\Log;
 use App\Models\Owner;
 use App\Models\Panel;
@@ -63,7 +64,8 @@ trait SyncData
         return false;
     }
 
-    public function syncPanelByOwnerId($id) {
+    public function syncPanelByOwnerId($id)
+    {
         $client = new Client();
         try {
             $response = $client->request('GET', env('API_PROXY') . env('API_SERVER') . '/api/front/users/' . $id . '/panels');
@@ -86,8 +88,11 @@ trait SyncData
                             $panel->title = $data['title'];
                             $panel->body = $data['body'];
                             $panel->imageUrl = $data['imageUrl'];
-                            $panel->data = $response;
                             $panel->owner_id = $id;
+                            $panel->order = $data['position']['order'];
+                            $panel->column = $data['position']['column'];
+                            $panel->data = json_encode($data);
+                            $panel->createdAt = Carbon::parse($data['createdAt']);
                             $panel->save();
 
                             // if (!empty($panel->imageUrl)) {
@@ -108,7 +113,8 @@ trait SyncData
         return false;
     }
 
-    public function syncAlbumByUsername($username) {
+    public function syncAlbumByUsername($username)
+    {
         $client = new Client();
 
         try {
@@ -173,6 +179,43 @@ trait SyncData
             $log->trace = $th->getTraceAsString();
             $log->save();
             return false;
+        }
+    }
+
+    public function syncIntroByOwnerId($id)
+    {
+        $client = new Client();
+        try {
+            $response = $client->request('GET', env('API_PROXY') . env('API_SERVER') . '/api/front/users/' . $id . '/intros');
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode === 200) {
+                $response = $response->getBody()->getContents();
+                $data = json_decode($response, true);
+                $intro = Intro::find($data["id"]);
+                if (!$intro) {
+                    $intro = new Intro();
+                    $intro->id = $data["id"];
+                }
+                $intro->type = $data["type"];
+                $intro->url = $data[$data["type"]]["url"];
+                $intro->data = $response;
+                $intro->owner_id = $id;
+                $intro->save();
+
+                // if ($intro->type == 'image') {
+                //     $this->saveImage($data['image']['url'], $username, 'intro');
+                // } else {
+                //     $this->saveVideo($data['video']['url'], $username, 'intro');
+                // }
+            }
+        } catch (\Throwable $th) {
+            $log = new Log();
+            $log->type = 'error';
+            $log->message = $th->getMessage();
+            $log->trace = $th->getTraceAsString();
+            $log->save();
         }
     }
 }

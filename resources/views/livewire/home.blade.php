@@ -17,7 +17,7 @@
                 <div class="col-md-4">
                     <label>Username:</label>
                     <div class="col-sm-12">
-                        <input wire:model="search" wire:keyup.debounce.500ms="searchByText" class="form-control"
+                        <input wire:model="search" wire:input.debounce.500ms="searchByText" class="form-control"
                             type="search" placeholder="Ingresa el username">
                     </div>
                 </div>

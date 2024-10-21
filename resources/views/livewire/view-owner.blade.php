@@ -154,7 +154,7 @@
                                         role="button">Albums</a>
                                 </li>
                                 <li class="nav-item col-12 col-sm-3 p-0">
-                                    <a class="nav-link @if ($showVideos) active @endif"
+                                    <a class="nav-link @if ($showVideos_) active @endif"
                                         href="#pills-videos-tab" data-bs-toggle="pill"
                                         wire:click="loadComponent('videos')" data-bs-target="#videos"
                                         role="button">Videos</a>
@@ -169,25 +169,25 @@
                     <div wire:loading.remove class="tab-pane fade @if ($showFeed) show active @endif" id="feed"
                         role="tabpanel">
                         @if ($showFeed)
-                            @livewire('owner.feed', ['idOwner' => $owner->id])
+                            @livewire('owner.feed', ['owner' => $owner])
                         @endif
                     </div>
                     <div wire:loading.remove class="tab-pane fade @if ($showInformation) show active @endif" id="infomation"
                         role="tabpanel">
                         @if ($showInformation)
-                            @livewire('owner.information', ['idOwner' => $owner->id])
+                            @livewire('owner.information', ['owner' => $owner])
                         @endif
                     </div>
                     <div wire:loading.remove class="tab-pane fade @if ($showAlbums) show active @endif" id="albums"
                         role="tabpanel">
                         @if ($showAlbums)
-                            @livewire('owner.albums', ['idOwner' => $owner->id])
+                            @livewire('owner.albums', ['owner' => $owner])
                         @endif
                     </div>
-                    <div wire:loading.remove class="tab-pane fade @if ($showVideos) show active @endif" id="videos"
+                    <div wire:loading.remove class="tab-pane fade @if ($showVideos_) show active @endif" id="videos"
                         role="tabpanel">
-                        @if ($showVideos)
-                            @livewire('owner.videos', ['idOwner' => $owner->id])
+                        @if ($showVideos_)
+                            @livewire('owner.videos', ['owner' => $owner])
                         @endif
                     </div>
                 </div>

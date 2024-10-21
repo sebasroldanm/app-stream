@@ -6,14 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Login</title>
 
-    <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}" />
+    <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}" />
     <link rel="stylesheet" href="{{ asset('css/frontend/libs.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/frontend/socialv.css?v=4.0.0') }}">
-    <link rel="stylesheet" href="{{ asset('vendor/@fortawesome/fontawesome-free/css/all.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendor/remixicon/fonts/remixicon.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendor/vanillajs-datepicker/dist/css/datepicker.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendor/font-awesome-line-awesome/css/all.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendor/line-awesome/dist/line-awesome/css/line-awesome.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('vendor/@fortawesome/fontawesome-free/css/all.min.css') }}"> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('vendor/remixicon/fonts/remixicon.css') }}"> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('vendor/vanillajs-datepicker/dist/css/datepicker.min.css') }}"> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('vendor/font-awesome-line-awesome/css/all.min.css') }}"> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('vendor/line-awesome/dist/line-awesome/css/line-awesome.min.css') }}"> --}}
 
 </head>
 
@@ -107,17 +107,17 @@
     <script src="{{ asset('/js/frontend/libs.min.js') }}"></script>
     <!-- slider JavaScript -->
     <script src="{{ asset('/js/frontend/slider.js') }}"></script>
-    <!-- masonry JavaScript -->
-    <script src="{{ asset('/js/frontend/masonry.pkgd.min.js') }}"></script>
-    <!-- SweetAlert JavaScript -->
-    <script src="{{ asset('/js/frontend/enchanter.js') }}"></script>
-    <!-- SweetAlert JavaScript -->
-    <script src="{{ asset('/js/frontend/sweetalert.js') }}"></script>
-    <!-- app JavaScript -->
-    <script src="{{ asset('/js/frontend/charts/weather-chart.js') }}"></script>
+    {{-- <!-- masonry JavaScript -->
+    <script src="{{ asset('/js/frontend/masonry.pkgd.min.js') }}"></script> --}}
+    {{-- <!-- SweetAlert JavaScript -->
+    <script src="{{ asset('/js/frontend/enchanter.js') }}"></script> --}}
+    {{-- <!-- SweetAlert JavaScript -->
+    <script src="{{ asset('/js/frontend/sweetalert.js') }}"></script> --}}
+    {{-- <!-- app JavaScript -->
+    <script src="{{ asset('/js/frontend/charts/weather-chart.js') }}"></script> --}}
     <script src="{{ asset('/js/frontend/app.js') }}"></script>
-    <script src="{{ asset('vendor/vanillajs-datepicker/dist/js/datepicker.min.js') }}"></script>
-    <script src="{{ asset('/js/frontend/lottie.js') }}"></script>
+    {{-- <script src="{{ asset('vendor/vanillajs-datepicker/dist/js/datepicker.min.js') }}"></script> --}}
+    {{-- <script src="{{ asset('/js/frontend/lottie.js') }}"></script> --}}
 
 </body>
 
