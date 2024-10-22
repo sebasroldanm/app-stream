@@ -47,3 +47,12 @@
 .video-play-button:active svg {
     transform: rotate(-90deg) scale(.95);
 }
+
+ul.header-nav li a.username_reported {
+    background: #ffffff61;
+    backdrop-filter: blur(14px);
+}
+
+ul.header-nav li a.username_reported i {
+    color: red;
+}

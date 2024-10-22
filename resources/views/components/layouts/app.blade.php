@@ -9,11 +9,13 @@
     <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}" />
     <link rel="stylesheet" href="{{ asset('/css/frontend/libs.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/css/frontend/socialv.css?v=4.0.0') }}">
+    <link rel="stylesheet" href="{{ asset('/css/frontend/custom.css?v=1.0.0') }}">
     <link rel="stylesheet" href="{{ asset('/vendor/fortawesome/fontawesome-free/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/vendor/remixicon/fonts/remixicon.css') }}">
     <link rel="stylesheet" href="{{ asset('/vendor/vanillajs-datepicker/dist/css/datepicker.min.css') }}">
     {{-- <link rel="stylesheet" href="{{ asset('/vendor/font-awesome-line-awesome/css/all.min.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('/vendor/line-awesome/dist/line-awesome/css/line-awesome.min.css') }}">
+    <link href="https://vjs.zencdn.net/7.17.0/video-js.css" rel="stylesheet" />
 
     @stack('styles')
     @livewireStyles
@@ -42,6 +44,7 @@
 
     @livewire('footer')
 
+    @livewireScripts
     <!-- Backend Bundle JavaScript -->
     <script src="{{ asset('js/frontend/libs.min.js') }}"></script>
     <!-- slider JavaScript -->
@@ -58,7 +61,12 @@
     <script src="{{ asset('vendor/vanillajs-datepicker/dist/js/datepicker.min.js') }}"></script>
     <script src="{{ asset('js/frontend/lottie.js') }}"></script>
 
-    @livewireScripts
+    <script src="https://vjs.zencdn.net/7.17.0/video.min.js"></script>
+
+
+    <script src="{{ asset('js/frontend/custom.js') }}"></script>
+
+
 </body>
 
 </html>

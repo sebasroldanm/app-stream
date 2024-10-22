@@ -18,8 +18,8 @@ class ViewOwner extends Component
     use SyncData;
 
     public $username;
-
     public $id_owner;
+    public $error_search = false;
 
     public $limitAlbums = 6;
     public $limitVideos = 50;
@@ -83,7 +83,12 @@ class ViewOwner extends Component
     {
         $escapedOwner = str_replace('-', '\\-', $this->username);
         $owner = Owner::whereRaw("MATCH(username) AGAINST(? IN BOOLEAN MODE)", ['"' . $escapedOwner . '"'])->first();
-        // $owner = Owner::where('username', $this->username)->first();
+
+        if (strcasecmp($owner->username, $this->username) !== 0) {
+            $this->error_search = true;
+            $owner = Owner::where('username', $this->username)->first();
+        }
+
         $owner->data = json_decode($owner->data);
         if (!isset($owner->data->user)) {
             $this->syncOwnerByUsername($this->username);
@@ -146,11 +151,11 @@ class ViewOwner extends Component
 
         $this->status_panel = $this->syncPanelByOwnerId($this->id_owner);
 
-        $this->status_photos = $this->syncAlbumByUsername($this->username);
+        $this->status_photos = $this->syncAlbum($this->id_owner, $this->username);
 
         $this->status_intro = $this->syncIntroByOwnerId($this->id_owner);
 
-        $this->status_video = $this->syncVideoByUsername($this->username);
+        $this->status_video = $this->syncVideo($this->id_owner, $this->username);
     }
 
     public function toggleFavorite()

@@ -11,7 +11,7 @@
                             <div class="position-relative intro-owner container-overlay">
                                 @if (in_array($intro->type, ['image', 'avatar']))
                                     <img src="{{ $intro->url }}" alt="profile-bg"
-                                    class="rounded img-fluid _overlay @if ($intro->type == 'avatar') blur_avatar @endif">
+                                        class="rounded img-fluid _overlay @if ($intro->type == 'avatar') blur_avatar @endif">
                                 @else
                                     <video autoplay loop muted class="rounded _overlay">
                                         <source src="{{ $intro->url }}" type="video/mp4">
@@ -20,9 +20,19 @@
 
 
                                 <ul class="header-nav list-inline d-flex flex-wrap justify-end p-0 m-0">
+                                    @if ($error_search)
+                                        <li>
+                                            <a href="javascript:void(0);" data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                data-bs-original-title="Reportado por lentitud"
+                                                class="username_reported">
+                                                <i class="las la-exclamation-triangle"></i>
+                                            </a>
+                                        </li>
+                                    @endif
                                     <li>
-                                        <a wire:click="toggleFavorite" href="#" data-bs-toggle="tooltip"
-                                            data-bs-placement="top"
+                                        <a wire:click="toggleFavorite" href="javascript:void(0);"
+                                            data-bs-toggle="tooltip" data-bs-placement="top"
                                             data-bs-original-title="@if ($is_fav) Eliminar de favoritos @else Agregar a favoritos @endif"
                                             @if ($is_fav) class="delete_favorite" @endif>
                                             <i
@@ -30,24 +40,27 @@
                                         </a>
                                     </li>
                                     @if ($owner->isError)
-                                        <li><a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                                                data-bs-original-title="Username no válido">
+                                        <li><a href="javascript:void(0);" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" data-bs-original-title="Username no válido">
                                                 <i class="ri-alert-line"></i>
                                             </a></li>
                                     @else
-                                        <li><a wire:click="updateDataMod" href="#" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" data-bs-original-title="Actualizar">
+                                        <li><a wire:click="updateDataMod" href="javascript:void(0);"
+                                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                                data-bs-original-title="Actualizar">
                                                 <i class="ri-refresh-line"></i>
                                             </a></li>
                                     @endif
                                     @if (isset($owner->data->user->modelTopPosition) && $owner->data->user->modelTopPosition->position !== 0)
-                                        <li><a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
+                                        <li><a href="javascript:void(0);" data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
                                                 data-bs-original-title="Posición: {{ $owner->data->user->modelTopPosition->position }}">
                                                 <i class="las la-trophy"></i>
                                             </a></li>
                                     @else
                                         @if (isset($owner->data->usercurrPosition) && $owner->data->usercurrPosition !== 0)
-                                            <li><a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
+                                            <li><a href="javascript:void(0);" data-bs-toggle="tooltip"
+                                                    data-bs-placement="top"
                                                     data-bs-original-title="Posición: {{ $owner->data->user->modelTopPosition->position }}">
                                                     <i class="las la-trophy"></i>
                                                 </a></li>
@@ -57,8 +70,8 @@
                             </div>
                             <div class="user-detail text-center mb-3">
                                 <div class="profile-img">
-                                    <img src="{{ $owner->pic_profile }}"
-                                        alt="profile-img" class="avatar-130 img-fluid" />
+                                    <img src="{{ $owner->pic_profile }}" alt="profile-img"
+                                        class="avatar-130 img-fluid" />
                                 </div>
                                 <div class="profile-detail">
                                     <h3 class="">{{ $owner->username }}</h3>
@@ -166,25 +179,29 @@
             </div>
             <div class="col-sm-12">
                 <div class="tab-content">
-                    <div wire:loading.remove class="tab-pane fade @if ($showFeed) show active @endif" id="feed"
+                    <div wire:loading.remove
+                        class="tab-pane fade @if ($showFeed) show active @endif" id="feed"
                         role="tabpanel">
                         @if ($showFeed)
                             @livewire('owner.feed', ['owner' => $owner])
                         @endif
                     </div>
-                    <div wire:loading.remove class="tab-pane fade @if ($showInformation) show active @endif" id="infomation"
+                    <div wire:loading.remove
+                        class="tab-pane fade @if ($showInformation) show active @endif" id="infomation"
                         role="tabpanel">
                         @if ($showInformation)
                             @livewire('owner.information', ['owner' => $owner])
                         @endif
                     </div>
-                    <div wire:loading.remove class="tab-pane fade @if ($showAlbums) show active @endif" id="albums"
+                    <div wire:loading.remove
+                        class="tab-pane fade @if ($showAlbums) show active @endif" id="albums"
                         role="tabpanel">
                         @if ($showAlbums)
                             @livewire('owner.albums', ['owner' => $owner])
                         @endif
                     </div>
-                    <div wire:loading.remove class="tab-pane fade @if ($showVideos_) show active @endif" id="videos"
+                    <div wire:loading.remove
+                        class="tab-pane fade @if ($showVideos_) show active @endif" id="videos"
                         role="tabpanel">
                         @if ($showVideos_)
                             @livewire('owner.videos', ['owner' => $owner])

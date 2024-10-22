@@ -80,13 +80,6 @@ class Home extends Component
 
     public function addOwner()
     {
-        $insertOwwer = $this->syncOwnerByUsername($this->newOwner);
-        if ($insertOwwer) {
-            // $escapedOwner = str_replace('-', '\\-', $this->newOwner);
-            // $owner = Owner::whereRaw("MATCH(username) AGAINST(? IN BOOLEAN MODE)", ['"' . $escapedOwner . '"'])->first();
-            $owner = Owner::where('username', $this->newOwner)->first();
-            $this->syncPanelByOwnerId($owner->id);
-            $this->syncAlbumByUsername($this->newOwner);
-        }
+        $this->syncOwnerByUsername($this->newOwner);
     }
 }

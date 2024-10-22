@@ -114,7 +114,7 @@ trait SyncData
         return false;
     }
 
-    public function syncAlbumByUsername($username)
+    public function syncAlbum($id_owner, $username)
     {
         $client = new Client();
 
@@ -129,8 +129,6 @@ trait SyncData
                 if (isset($data['albums'])) {
                     $albums = $data['albums'];
                     if (count($albums) > 0) {
-                        $escapedOwner = str_replace('-', '\\-', $username);
-                        $owner = Owner::whereRaw("MATCH(username) AGAINST(? IN BOOLEAN MODE)", ['"' . $escapedOwner . '"'])->first();
                         foreach ($albums as $data) {
                             $album = Album::find($data['id']);
                             if (!$album) {
@@ -139,7 +137,7 @@ trait SyncData
                             }
                             $data_album = $data;
                             unset($data_album['photos']);
-                            $album->owner_id = $owner->id;
+                            $album->owner_id = $id_owner;
                             $album->name = $data['name'];
                             $album->description = $data['description'];
                             $album->accessMode = $data['accessMode'];
@@ -157,7 +155,7 @@ trait SyncData
                                         $photo->id = $ph['id'];
                                     }
                                     $photo->albumId = $album->id;
-                                    $photo->ownerId = $owner->id;
+                                    $photo->ownerId = $id_owner;
                                     $photo->order = $ph['order'];
                                     $photo->isNew = $ph['isNew'];
                                     $photo->url = isset($ph['url']) ? $ph['url'] : '';
@@ -222,7 +220,7 @@ trait SyncData
     }
 
 
-    public function syncVideoByUsername($username)
+    public function syncVideo($id_owner, $username)
     {
         $client = new Client();
 
@@ -235,8 +233,6 @@ trait SyncData
                 $response = $response->getBody()->getContents();
                 $data = json_decode($response, true);
                 if (isset($data['videos']) && count($data['videos']) > 0) {
-                    $escapedOwner = str_replace('-', '\\-', $username);
-                    $owner = Owner::whereRaw("MATCH(username) AGAINST(? IN BOOLEAN MODE)", ['"' . $escapedOwner . '"'])->first();
                     $videos = $data['videos'];
                     foreach ($videos as $data) {
                         $video = Video::find($data['id']);
@@ -245,7 +241,7 @@ trait SyncData
                             $video = new Video();
                             $video->id = $data['id'];
                         }
-                        $video->owner_id = $owner->id;
+                        $video->owner_id = $id_owner;
                         $video->title = $data['title'];
                         $video->description = $data['description'];
                         $video->accessMode = $data['accessMode'];
