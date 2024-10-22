@@ -5,12 +5,10 @@ namespace App\Livewire;
 use App\Models\Album;
 use App\Models\Customer;
 use App\Models\Intro;
-use App\Models\Log;
 use App\Models\Owner;
 use App\Models\Panel;
 use App\Models\Video;
 use App\Traits\SyncData;
-use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -31,6 +29,7 @@ class ViewOwner extends Component
     public $status_panel = false;
     public $status_photos = false;
     public $status_intro = false;
+    public $status_video = false;
 
     public $showError = false;
     public $showFeed = true;
@@ -82,7 +81,9 @@ class ViewOwner extends Component
 
     public function render()
     {
-        $owner = Owner::whereRaw("MATCH(username) AGAINST(? IN BOOLEAN MODE)", ['"' . $this->username . '"'])->first();
+        $escapedOwner = str_replace('-', '\\-', $this->username);
+        $owner = Owner::whereRaw("MATCH(username) AGAINST(? IN BOOLEAN MODE)", ['"' . $escapedOwner . '"'])->first();
+        // $owner = Owner::where('username', $this->username)->first();
         $owner->data = json_decode($owner->data);
         if (!isset($owner->data->user)) {
             $this->syncOwnerByUsername($this->username);
@@ -149,49 +150,7 @@ class ViewOwner extends Component
 
         $this->status_intro = $this->syncIntroByOwnerId($this->id_owner);
 
-        // $this->updateDataVideo();
-    }
-
-    public function updateDataVideo()
-    {
-        $client = new Client();
-
-        try {
-            $response = $client->request('GET', env('API_PROXY') . env('API_SERVER') . '/api/front/users/username/' . $this->username . '/videos');
-
-            $statusCode = $response->getStatusCode();
-
-            if ($statusCode === 200) {
-                $response = $response->getBody()->getContents();
-                $data = json_decode($response, true);
-                if (isset($data['videos']) && count($data['videos']) > 0) {
-                    $owner = Owner::where('username', $this->username)->first();
-                    $videos = $data['videos'];
-                    foreach ($videos as $data) {
-                        $video = Video::find($data['id']);
-                        if (!$video) {
-                            $video = new Video();
-                            $video->id = $data['id'];
-                        }
-                        $video->owner_id = $owner->id;
-                        $video->title = $data['title'];
-                        $video->description = $data['description'];
-                        $video->accessMode = $data['accessMode'];
-                        $video->duration = $data['duration'];
-                        $video->coverUrl = $data['coverUrl'];
-                        $video->trailerUrl = $data['trailerUrl'];
-                        $video->data = $response;
-                        $video->save();
-                    }
-                }
-            }
-        } catch (\Throwable $th) {
-            $log = new Log();
-            $log->type = 'error';
-            $log->message = $th->getMessage();
-            $log->trace = $th->getTraceAsString();
-            $log->save();
-        }
+        $this->status_video = $this->syncVideoByUsername($this->username);
     }
 
     public function toggleFavorite()

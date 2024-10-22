@@ -57,7 +57,7 @@ class UpdateSnapshots extends Command
                             Storage::disk('public')->makeDirectory('snapshots/' . $fav->username);
                         }
                         Storage::disk('public')->put($filePath, $test_url->body());
-                        $newSnap->local_url = Storage::disk('public')->url($filePath);
+                        $newSnap->local_url = '/storage/' . $filePath;
                         $newSnap->save();
                     }
                 }

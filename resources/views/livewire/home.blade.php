@@ -91,14 +91,14 @@
                         <button type="submit" class="btn btn-primary d-block w-100">Join</button>
                     </div>
                 </div> --}}
-                @foreach ($mods as $mod)
+                @foreach ($owners as $owner)
                     @php
-                        $mod->data = json_decode($mod->data);
+                        $owner->data = json_decode($owner->data);
                     @endphp
                     <div class="card mb-0 card_owner_home">
                         <div class="top-bg-image top-bg-list-owner container-overlay">
-                            @if ($mod->data)
-                                <img src="{{ $mod->data->user->user->previewUrlThumbSmall }}"
+                            @if ($owner->data)
+                                <img src="{{ $owner->data->user->user->previewUrlThumbSmall }}"
                                     class="img-fluid w-100 _overlay" alt="group-bg">
                             @else
                                 <img src="https://placehold.co/320x110?text=No+Imagen" class="img-fluid w-100 _overlay"
@@ -107,8 +107,8 @@
                         </div>
                         <div class="card-body text-center">
                             <div class="group-icon">
-                                @if ($mod->avatar)
-                                    <img src="{{ $mod->avatar }}" alt="profile-img"
+                                @if ($owner->avatar)
+                                    <img src="{{ $owner->avatar }}" alt="profile-img"
                                         class="rounded-circle img-fluid avatar-120">
                                 @else
                                     <img src="https://placehold.co/300x300?text=No+Imagen" alt="profile-img"
@@ -116,9 +116,9 @@
                                 @endif
                             </div>
                             <div class="group-info pt-3 pb-3">
-                                <h4><a href="../app/group-detail.html">{{ $mod->username }}</a></h4>
-                                @if ($mod->name)
-                                    <p>{{ $mod->name }}</p>
+                                <h4><a href="{{ route('view.owner', $owner->username) }}">{{ $owner->username }}</a></h4>
+                                @if ($owner->name)
+                                    <p>{{ $owner->name }}</p>
                                 @else
                                     <p>&nbsp;</p>
                                 @endif
@@ -127,25 +127,25 @@
                                 <ul class="d-flex align-items-center justify-content-between list-inline m-0 p-0">
                                     <li class="pe-3 ps-3">
                                         <p class="mb-0">Fotos</p>
-                                        @if ($mod->data)
-                                            <h6>{{ $mod->data->user->photosCount }}</h6>
+                                        @if ($owner->data)
+                                            <h6>{{ $owner->data->user->photosCount }}</h6>
                                         @else
                                             <h6>-</h6>
                                         @endif
                                     </li>
                                     <li class="pe-3 ps-3">
                                         <p class="mb-0">Videos</p>
-                                        @if ($mod->data)
-                                            <h6>{{ $mod->data->user->videosCount }}</h6>
+                                        @if ($owner->data)
+                                            <h6>{{ $owner->data->user->videosCount }}</h6>
                                         @else
                                             <h6>-</h6>
                                         @endif
                                     </li>
                                     <li class="pe-3 ps-3">
                                         <p class="mb-0">Ranking</p>
-                                        @if ($mod->data)
-                                            @if (isset($mod->data->user->modelTopPosition->position) && $mod->data->user->modelTopPosition->position !== 0)
-                                                <h6>{{ $mod->data->user->modelTopPosition->position }}</h6>
+                                        @if ($owner->data)
+                                            @if (isset($owner->data->user->modelTopPosition->position) && $owner->data->user->modelTopPosition->position !== 0)
+                                                <h6>{{ $owner->data->user->modelTopPosition->position }}</h6>
                                             @else
                                                 <h6>-</h6>
                                             @endif
@@ -155,30 +155,30 @@
                                     </li>
                                 </ul>
                             </div>
-                            @if ($mod->latestSnapshots->count() > 0)
+                            @if ($owner->latestSnapshots->count() > 0)
                                 <div class="group-member mb-3">
                                     <div class="iq-media-group">
-                                        @foreach ($mod->latestSnapshots as $snapshot)
-                                            <a href="#" class="iq-media">
+                                        @foreach ($owner->latestSnapshots as $snapshot)
+                                            <a href="{{ route('view.owner', $owner->username) }}" class="iq-media">
                                                 <img class="img-fluid avatar-40 rounded-circle"
-                                                    src="{{ $snapshot->local_url }}" onerror="this.onerror=null; this.src='https://placehold.co/50x50.jpg?text=:(';" alt="">
+                                                    src="{{ URL::to('/').$snapshot->local_url }}" onerror="this.onerror=null; this.src='https://placehold.co/50x50.jpg?text=:(';" alt="">
                                             </a>
                                         @endforeach
                                     </div>
                                 </div>
                             @endif
-                            @if ($mod->isError)
+                            @if ($owner->isError)
                                 <button class="btn btn-danger d-block w-100"><i class="las la-exclamation-triangle"></i>
                                     No encontrado</button>
                             @else
-                                <a href="{{ route('view.owner', $mod->username) }}" type="submit"
+                                <a href="{{ route('view.owner', $owner->username) }}" type="submit"
                                     class="btn btn-primary d-block w-100">Ver detalle</a>
                             @endif
                         </div>
                     </div>
                 @endforeach
             </div>
-            @if ($mods->isEmpty())
+            @if ($owners->isEmpty())
                 <div class="row mt-3">
                     <div class="offset-3 col-md-6">
                         <div class="form-group">

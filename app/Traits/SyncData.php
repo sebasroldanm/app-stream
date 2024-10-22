@@ -8,6 +8,7 @@ use App\Models\Log;
 use App\Models\Owner;
 use App\Models\Panel;
 use App\Models\Photos;
+use App\Models\Video;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 
@@ -128,7 +129,8 @@ trait SyncData
                 if (isset($data['albums'])) {
                     $albums = $data['albums'];
                     if (count($albums) > 0) {
-                        $owner = Owner::where('username', $username)->first();
+                        $escapedOwner = str_replace('-', '\\-', $username);
+                        $owner = Owner::whereRaw("MATCH(username) AGAINST(? IN BOOLEAN MODE)", ['"' . $escapedOwner . '"'])->first();
                         foreach ($albums as $data) {
                             $album = Album::find($data['id']);
                             if (!$album) {
@@ -209,6 +211,52 @@ trait SyncData
                 // } else {
                 //     $this->saveVideo($data['video']['url'], $username, 'intro');
                 // }
+            }
+        } catch (\Throwable $th) {
+            $log = new Log();
+            $log->type = 'error';
+            $log->message = $th->getMessage();
+            $log->trace = $th->getTraceAsString();
+            $log->save();
+        }
+    }
+
+
+    public function syncVideoByUsername($username)
+    {
+        $client = new Client();
+
+        try {
+            $response = $client->request('GET', env('API_PROXY') . env('API_SERVER') . '/api/front/users/username/' . $username . '/videos');
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode === 200) {
+                $response = $response->getBody()->getContents();
+                $data = json_decode($response, true);
+                if (isset($data['videos']) && count($data['videos']) > 0) {
+                    $escapedOwner = str_replace('-', '\\-', $username);
+                    $owner = Owner::whereRaw("MATCH(username) AGAINST(? IN BOOLEAN MODE)", ['"' . $escapedOwner . '"'])->first();
+                    $videos = $data['videos'];
+                    foreach ($videos as $data) {
+                        $video = Video::find($data['id']);
+                        // dd($data);
+                        if (!$video) {
+                            $video = new Video();
+                            $video->id = $data['id'];
+                        }
+                        $video->owner_id = $owner->id;
+                        $video->title = $data['title'];
+                        $video->description = $data['description'];
+                        $video->accessMode = $data['accessMode'];
+                        $video->duration = $data['duration'];
+                        $video->coverUrl = $data['coverUrl'];
+                        $video->trailerUrl = $data['trailerUrl'];
+                        $video->videoUrl = isset($data['videoUrl']) ? $data['videoUrl'] : null;
+                        $video->data = json_encode($data);
+                        $video->save();
+                    }
+                }
             }
         } catch (\Throwable $th) {
             $log = new Log();

@@ -93,18 +93,18 @@
             <div id="post-modal-data" class="card">
                 <div class="card-header d-flex justify-content-between">
                     <div class="header-title">
-                        <h4 class="card-title">Create Post</h4>
+                        <h4 class="card-title">Crear Post</h4>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="user-img">
-                            <img src="{{ asset('/images/user/1.jpg') }}" alt="userimg"
+                            <img src="{{ URL::to("/") . auth()->guard('customer')->user()->avatar }}" alt="userimg"
                                 class="avatar-60 rounded-circle">
                         </div>
                         <form class="post-text ms-3 w-100 " data-bs-toggle="modal" data-bs-target="#post-modal"
                             action="#">
-                            <input type="text" class="form-control rounded" placeholder="Write something here..."
+                            <input type="text" class="form-control rounded" placeholder="Escribe algo aquí..."
                                 style="border:none;">
                         </form>
                     </div>
@@ -112,17 +112,17 @@
                     <ul class=" post-opt-block d-flex list-inline m-0 p-0 flex-wrap">
                         <li class="bg-soft-primary rounded p-2 pointer d-flex align-items-center me-3 mb-md-0 mb-2">
                             <img src="{{ asset('/images/small/07.png') }}" alt="icon" class="img-fluid me-2">
-                            Photo/Video
+                            Foto/Video
                         </li>
                         <li class="bg-soft-primary rounded p-2 pointer d-flex align-items-center me-3 mb-md-0 mb-2">
                             <img src="{{ asset('/images/small/08.png') }}" alt="icon" class="img-fluid me-2">
-                            Tag Friend
+                            Mencioa un amigo
                         </li>
                         <li class="bg-soft-primary rounded p-2 pointer d-flex align-items-center me-3">
                             <img src="{{ asset('/images/small/09.png') }}" alt="icon" class="img-fluid me-2">
-                            Feeling/Activity
+                            Estado/Actividad
                         </li>
-                        <li class="bg-soft-primary rounded p-2 pointer text-center">
+                        {{-- <li class="bg-soft-primary rounded p-2 pointer text-center">
                             <div class="card-header-toolbar d-flex align-items-center">
                                 <div class="dropdown">
                                     <div class="dropdown-toggle" id="post-option" data-bs-toggle="dropdown">
@@ -143,7 +143,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </li>
+                        </li> --}}
                     </ul>
                 </div>
                 <div class="modal fade" id="post-modal" tabindex="-1" aria-labelledby="post-modalLabel"

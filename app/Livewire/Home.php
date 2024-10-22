@@ -12,7 +12,7 @@ class Home extends Component
 {
     use SyncData;
 
-    public $mods;
+    public $owners;
 
     public $orderBy = 'created_at';
     public $orderDir = 'asc';
@@ -57,14 +57,18 @@ class Home extends Component
     public function render()
     {
         if ($this->search != '') {
-            $this->mods = Owner::select('*')
+            $this->owners = Owner::whereRaw("MATCH(username) AGAINST(? IN BOOLEAN MODE)", ['"' . $this->search . '"'])->get();
+            if ($this->owners->count() == 1) {
+                return view('livewire.home');
+            }
+            $this->owners = Owner::select('*')
                 ->with('latestSnapshots')
                 ->where('username', 'like', '%' . $this->search . '%')
                 ->orderBy($this->orderBy, $this->orderDir)
                 ->limit($this->limit)
                 ->get();
         } else {
-            $this->mods = Owner::select('*')
+            $this->owners = Owner::select('*')
                 ->with('latestSnapshots')
                 ->orderBy($this->orderBy, $this->orderDir)
                 ->limit($this->limit)
@@ -78,6 +82,8 @@ class Home extends Component
     {
         $insertOwwer = $this->syncOwnerByUsername($this->newOwner);
         if ($insertOwwer) {
+            // $escapedOwner = str_replace('-', '\\-', $this->newOwner);
+            // $owner = Owner::whereRaw("MATCH(username) AGAINST(? IN BOOLEAN MODE)", ['"' . $escapedOwner . '"'])->first();
             $owner = Owner::where('username', $this->newOwner)->first();
             $this->syncPanelByOwnerId($owner->id);
             $this->syncAlbumByUsername($this->newOwner);
