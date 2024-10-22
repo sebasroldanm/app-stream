@@ -1,7 +1,10 @@
 window.Livewire.on("playVideo", function (data) {
-    console.log(data[0]); // Muestra el objeto completo en la consola
 
-    initializeVideoPlayer(data[0]); // Usa data.url directamente
+    initializeVideoPlayer(data[0]);
+});
+
+window.Livewire.on("initMasonry", function (data) {
+    initializeMasonry();
 });
 
 function initializeVideoPlayer(video) {
@@ -26,10 +29,18 @@ function initializeVideoPlayer(video) {
         });
     } else {
         console.error("Formato de video no soportado:", format);
-        return; // Termina la ejecución si el formato no es soportado
+        return;
     }
 
     player.poster(video.cover);
-    player.muted(true); // Mute como booleano, no como string
+    player.muted(true);
     player.play();
+}
+
+function initializeMasonry(item) {
+    setTimeout(() => {
+        $('.masonry').masonry({
+            itemSelector: ".masonry-item",
+        });
+    }, 100);
 }

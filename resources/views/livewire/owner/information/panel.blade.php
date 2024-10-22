@@ -1,9 +1,9 @@
 <div class="row">
     <div class="col-sm-12">
         <h4 class="mb-3">Pannels</h4>
-        <div class="row">
+        <div class="row masonry">
             @foreach ($panels as $panel)
-                <div class="col-sm-6 col-lg-6">
+                <div class="col-sm-6 col-lg-6 masonry-item">
                     <div class="card mb-3" style="break-inside: avoid;">
                         @if ($panel->imageUrl !== '')
                             <img src="{{ $panel->imageUrl }}" class="rounded" alt="Panel owner image">

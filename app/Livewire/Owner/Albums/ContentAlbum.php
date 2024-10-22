@@ -13,6 +13,8 @@ class ContentAlbum extends Component
 
     public function render()
     {
+        $this->dispatch('initMasonry');
+
         $this->album->data = json_decode($this->album->data, true);
         return view('livewire.owner.albums.content-album');
     }
