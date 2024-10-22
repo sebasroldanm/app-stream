@@ -13887,7 +13887,8 @@ fieldset:disabled .btn {
     width: 100%;
     display: inline-block;
     z-index: 1000;
-    background: #fff;
+    background: #ffffff66;
+    backdrop-filter: blur(14px);
     margin: 0;
     -webkit-transition: all .3s ease-in-out;
     -o-transition: all .3s ease-in-out;
@@ -14119,7 +14120,8 @@ fieldset:disabled .btn {
     -webkit-border-radius: 5px;
     border-radius: 5px;
     border: none;
-    border: 1px solid #f1f1f1;
+    border: 1px solid #50b5ff4d;
+    backdrop-filter: blur(14px);
     background: rgba(80, 181, 255, .2)
 }
 
@@ -14632,7 +14634,8 @@ fieldset:disabled .btn {
     top: 4.688rem;
     width: 250px;
     height: 100%;
-    background: #fff;
+    background: #ffffff66;
+    backdrop-filter: blur(14px);
     -webkit-transition: all .3s ease-in-out;
     -o-transition: all .3s ease-in-out;
     transition: all .3s ease-in-out
@@ -15135,9 +15138,14 @@ body.sidebar-main .iq-menu-bt-sidebar .iq-menu-bt {
 }
 
 .right-sidebar-panel {
-    background-color: #fff;
+    background: #ffffff66;
+    backdrop-filter: blur(14px);
     height: 100vh;
     padding: .938rem
+}
+
+.right-sidebar-panel > div {
+    background-color: transparent;
 }
 
 .right-sidebar-panel .media-height {

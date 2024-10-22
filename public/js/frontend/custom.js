@@ -42,5 +42,5 @@ function initializeMasonry(item) {
         $('.masonry').masonry({
             itemSelector: ".masonry-item",
         });
-    }, 100);
+    }, 300);
 }

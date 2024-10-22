@@ -56,3 +56,7 @@ ul.header-nav li a.username_reported {
 ul.header-nav li a.username_reported i {
     color: red;
 }
+
+.min-vh-60 {
+    min-height: 60vh;
+}

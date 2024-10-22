@@ -10,6 +10,8 @@ class Albums extends Component
 {
     public Owner $owner;
 
+    public $id_active = false;
+
     public function render()
     {
         $albums = Album::with('photos')
@@ -21,5 +23,10 @@ class Albums extends Component
         return view('livewire.owner.albums', [
             'albums' => $albums,
         ]);
+    }
+
+    public function refreshMasonry($id) {
+        $this->id_active = $id;
+        $this->dispatch('initMasonry');
     }
 }
