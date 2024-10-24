@@ -83,6 +83,6 @@ trait OwnerProp
     {
         $urlWithoutQuery = strtok($url, '?');
         $extension = pathinfo($urlWithoutQuery, PATHINFO_EXTENSION);
-        return $extension ? '.' . $extension : null;
+        return $extension ? $extension : null;
     }
 }

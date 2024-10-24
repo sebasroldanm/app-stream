@@ -22,7 +22,8 @@ class RightSidebar extends Component
 
     public function loadData()
     {
-        $this->owners = Cache::remember('owners_right_sidebar', 300, function () {
+        // Cache::forget('owners_right_sidebar');
+        $this->owners = Cache::remember('owners_right_sidebar', 20, function () {
             return Owner::with('latestSnapshots')
                 ->orderBy('isLive', 'DESC')
                 ->orderBy('isOnline', 'DESC')

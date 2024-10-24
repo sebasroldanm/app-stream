@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="{{ asset('/vendor/vanillajs-datepicker/dist/css/datepicker.min.css') }}">
     {{-- <link rel="stylesheet" href="{{ asset('/vendor/font-awesome-line-awesome/css/all.min.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('/vendor/line-awesome/dist/line-awesome/css/line-awesome.min.css') }}">
-    <link href="https://vjs.zencdn.net/7.17.0/video-js.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
 
     @stack('styles')
     @livewireStyles
@@ -61,7 +61,10 @@
     <script src="{{ asset('vendor/vanillajs-datepicker/dist/js/datepicker.min.js') }}"></script>
     <script src="{{ asset('js/frontend/lottie.js') }}"></script>
 
-    <script src="https://vjs.zencdn.net/7.17.0/video.min.js"></script>
+    <!-- plyr -->
+    <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+    <!-- hls.js -->
+    <script src="https://cdn.rawgit.com/video-dev/hls.js/18bb552/dist/hls.min.js"></script>
 
 
     <script src="{{ asset('js/frontend/custom.js') }}"></script>

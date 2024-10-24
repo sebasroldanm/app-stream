@@ -19,9 +19,9 @@ class Live extends Component
         $this->dispatch('playVideo', [
             'url' => $url,
             'cover' => $owner->previewUrl,
-            'format' => ".m3u8",
+            'format' => "live",
         ]);
 
-        return view('livewire.owner.live');
+        return view('livewire.owner.live', ['url' => $url]);
     }
 }

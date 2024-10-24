@@ -80,6 +80,11 @@
                         </div>
                     @endforeach
                 </div>
+                <div class="right-sidebar-toggle bg-primary text-white mt-3">
+                    <i class="ri-arrow-left-line side-left-icon"></i>
+                    <i class="ri-arrow-right-line side-right-icon"><span class="ms-3 d-inline-block">Close
+                            Menu</span></i>
+                </div>
             </div>
         </div>
     </div>

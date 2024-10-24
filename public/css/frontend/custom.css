@@ -48,6 +48,16 @@
     transform: rotate(-90deg) scale(.95);
 }
 
+/* Player video */
+#player {
+    min-height: 300px;
+    min-width: 300px;
+    width: 100%;
+    max-height: 60vh;
+}
+
+/* Player video */
+
 ul.header-nav li a {
     background: #ffffff99;
     backdrop-filter: blur(14px);

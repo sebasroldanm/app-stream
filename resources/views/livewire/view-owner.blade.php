@@ -1,4 +1,4 @@
-<div id="content-page" class="content-page" data-id_owner="{{ $owner->id }}">
+<div id="content-page" class="content-page" data-id_owner="{{ $owner->id }}" @if ($owner->isLive) wire:init="verifyAsync" @endif >
     {{-- @php
         $owner->data = json_decode($owner->data, true);
     @endphp --}}
@@ -17,7 +17,6 @@
                                         <source src="{{ $intro->url }}" type="video/mp4">
                                     </video>
                                 @endif
-
 
                                 <ul class="header-nav list-inline d-flex flex-wrap justify-end p-0 m-0">
                                     @if ($error_search)
@@ -188,7 +187,7 @@
                                         role="button">Albums</a>
                                 </li>
                                 <li class="nav-item col-12 col-sm-3 p-0">
-                                    <a class="nav-link @if ($showVideos_) active @endif"
+                                    <a class="nav-link @if ($showVideos) active @endif"
                                         href="#pills-videos-tab" data-bs-toggle="pill"
                                         wire:click="loadComponent('videos')" data-bs-target="#videos"
                                         role="button">Videos</a>
@@ -229,9 +228,9 @@
                         @endif
                     </div>
                     <div wire:loading.remove
-                        class="tab-pane fade @if ($showVideos_) show active @endif" id="videos"
+                        class="tab-pane fade @if ($showVideos) show active @endif" id="videos"
                         role="tabpanel">
-                        @if ($showVideos_)
+                        @if ($showVideos)
                             @livewire('owner.videos', ['owner' => $owner])
                         @endif
                     </div>

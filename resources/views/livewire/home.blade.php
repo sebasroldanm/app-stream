@@ -120,7 +120,7 @@
                                         @if ($owner->isOnline) > @endif {{ $owner->username }}
                                         @if ($owner->isLive) <div class="live-icon"></div>
                                         @else
-                                        @if ($owner->isOnline) <i class="ri-checkbox-blank-circle-fill online"></i> @endif
+                                        @if ($owner->isOnline) <i class="ri-checkbox-blank-circle-fill online m-1"></i> @endif
                                         @endif
                                     </a>
                                 </h4>

@@ -35,7 +35,7 @@ class ViewOwner extends Component
     public $showFeed = true;
     public $showInformation = false;
     public $showAlbums = false;
-    public $showVideos_ = false;
+    public $showVideos = false;
     public $showLive = false;
 
     public function mount($username)
@@ -50,42 +50,37 @@ class ViewOwner extends Component
                 $this->showFeed = true;
                 $this->showInformation = false;
                 $this->showAlbums = false;
-                $this->showVideos_ = false;
+                $this->showVideos = false;
                 $this->showLive = false;
                 break;
             case 'information':
                 $this->showFeed = false;
                 $this->showInformation = true;
                 $this->showAlbums = false;
-                $this->showVideos_ = false;
+                $this->showVideos = false;
                 $this->showLive = false;
                 break;
             case 'albums':
                 $this->showFeed = false;
                 $this->showInformation = false;
                 $this->showAlbums = true;
-                $this->showVideos_ = false;
+                $this->showVideos = false;
                 $this->showLive = false;
                 break;
             case 'videos':
                 $this->showFeed = false;
                 $this->showInformation = false;
                 $this->showAlbums = false;
-                $this->showVideos_ = true;
+                $this->showVideos = true;
                 $this->showLive = false;
+                break;
             case 'live':
                 $this->showFeed = false;
                 $this->showInformation = false;
                 $this->showAlbums = false;
-                $this->showVideos_ = false;
+                $this->showVideos = false;
                 $this->showLive = true;
-            // default:
-            //     $this->showError = true;
-            //     $this->showFeed = false;
-            //     $this->showInformation = false;
-            //     $this->showAlbums = false;
-            //     $this->showVideos = false;
-            //     break;
+                break;
         }
     }
 
@@ -109,8 +104,6 @@ class ViewOwner extends Component
         $videos = Video::where('owner_id', $owner->id)->limit($this->limitVideos)->get();
         $panels = Panel::where('owner_id', $owner->id)->limit($this->limitPanels)->get();
 
-        // dd($owner->data);
-        // dd($intro);
         if ($intro) {
             $intro->data = json_decode($intro->data);
             if ($intro->type == 'video') {
@@ -175,5 +168,10 @@ class ViewOwner extends Component
 
         $customer = Customer::find($auth_customer->id);
         $customer->toggleOwnerFavorite($owner);
+    }
+
+    public function verifyAsync()
+    {
+        $this->status_owner = $this->syncOwnerByUsername($this->username);
     }
 }
