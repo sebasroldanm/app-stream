@@ -36,7 +36,7 @@ class ViewOwner extends Component
     public $showInformation = false;
     public $showAlbums = false;
     public $showVideos_ = false;
-    public $showVideos = false;
+    public $showLive = false;
 
     public function mount($username)
     {
@@ -51,24 +51,34 @@ class ViewOwner extends Component
                 $this->showInformation = false;
                 $this->showAlbums = false;
                 $this->showVideos_ = false;
+                $this->showLive = false;
                 break;
             case 'information':
                 $this->showFeed = false;
                 $this->showInformation = true;
                 $this->showAlbums = false;
                 $this->showVideos_ = false;
+                $this->showLive = false;
                 break;
             case 'albums':
                 $this->showFeed = false;
                 $this->showInformation = false;
                 $this->showAlbums = true;
                 $this->showVideos_ = false;
+                $this->showLive = false;
                 break;
             case 'videos':
                 $this->showFeed = false;
                 $this->showInformation = false;
                 $this->showAlbums = false;
                 $this->showVideos_ = true;
+                $this->showLive = false;
+            case 'live':
+                $this->showFeed = false;
+                $this->showInformation = false;
+                $this->showAlbums = false;
+                $this->showVideos_ = false;
+                $this->showLive = true;
             // default:
             //     $this->showError = true;
             //     $this->showFeed = false;

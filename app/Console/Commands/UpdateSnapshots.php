@@ -40,7 +40,11 @@ class UpdateSnapshots extends Command
             $this->syncOwnerByUsername($fav->username);
             $fav = Owner::find($fav->id);
             $fav->data = json_decode($fav->data);
-            if (isset($fav->data->user->user->snapshotTimestamp)) {
+            if (
+                isset($fav->data->user->user->snapshotTimestamp) &&
+                $fav->isLive == true &&
+                $fav->isError !== true
+                ) {
                 $snap_time = $fav->data->user->user->snapshotTimestamp;
                 $snapshot = Snapshot::where("owner_id", $fav->id)
                     ->where("snapshotTimestamp", $snap_time)

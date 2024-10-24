@@ -23,8 +23,7 @@
                                     @if ($error_search)
                                         <li>
                                             <a href="javascript:void(0);" data-bs-toggle="tooltip"
-                                                data-bs-placement="top"
-                                                data-bs-original-title="Reportado por lentitud"
+                                                data-bs-placement="top" data-bs-original-title="Reportado por lentitud"
                                                 class="username_reported">
                                                 <i class="las la-exclamation-triangle"></i>
                                             </a>
@@ -70,11 +69,26 @@
                             </div>
                             <div class="user-detail text-center mb-3">
                                 <div class="profile-img">
-                                    <img src="{{ $owner->pic_profile }}" alt="profile-img"
-                                        class="avatar-130 img-fluid" />
+                                    <a href="javascript:void(0);">
+                                        <img src="{{ $owner->pic_profile }}" alt="profile-img"
+                                            class="avatar-130 img-fluid @if ($owner->isLive) live @endif" />
+                                    </a>
                                 </div>
                                 <div class="profile-detail">
-                                    <h3 class="">{{ $owner->username }}</h3>
+                                    <h3 class="">{{ $owner->username }}
+                                        @if ($owner->isOnline)
+                                            <i class="ri-checkbox-blank-circle-fill online m-2" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" data-bs-original-title="Online"></i>
+                                        @else
+                                            @if ($owner->isDelete)
+                                                <i class="ri-close-circle-fill disable" data-bs-toggle="tooltip"
+                                                    data-bs-placement="top" data-bs-original-title="Desactivado"></i>
+                                            @else
+                                                <i class="ri-indeterminate-circle-fill offline" data-bs-toggle="tooltip"
+                                                    data-bs-placement="top" data-bs-original-title="Offline"></i>
+                                            @endif
+                                        @endif
+                                    </h3>
                                 </div>
                             </div>
                             <div
@@ -150,7 +164,14 @@
                         <div class="user-tabing">
                             <ul
                                 class="nav nav-pills d-flex align-items-center justify-content-center profile-feed-items p-0 m-0">
-                                <li class="nav-item col-12 col-sm-3 p-0">
+                                @if ($owner->isLive)
+                                    <li class="nav-item col-12 col-sm-2 p-0">
+                                        <a class="nav-link live @if ($showLive) active @endif "
+                                            href="#pills-live-tab" data-bs-toggle="pill" data-bs-target="#live"
+                                            role="button" wire:click="loadComponent('live')">Live<div class="live-icon"></div></a>
+                                    </li>
+                                @endif
+                                <li class="nav-item col-12 @if ($owner->isLive) col-sm-2 @else col-sm-3 @endif p-0">
                                     <a class="nav-link @if ($showFeed) active @endif"
                                         href="#pills-feed-tab" data-bs-toggle="pill" data-bs-target="#feed"
                                         role="button" wire:click="loadComponent('feed')">Feed</a>
@@ -160,7 +181,7 @@
                                         href="#pills-info-tab" data-bs-toggle="pill" data-bs-target="#infomation"
                                         role="button" wire:click="loadComponent('information')">Información</a>
                                 </li>
-                                <li class="nav-item col-12 col-sm-3 p-0">
+                                <li class="nav-item col-12 @if ($owner->isLive) col-sm-2 @else col-sm-3 @endif p-0">
                                     <a class="nav-link @if ($showAlbums) active @endif"
                                         href="#pills-albums-tab" data-bs-toggle="pill"
                                         wire:click="loadComponent('albums')" data-bs-target="#albums"
@@ -179,6 +200,13 @@
             </div>
             <div class="col-sm-12">
                 <div class="tab-content">
+                    <div wire:loading.remove
+                        class="tab-pane fade @if ($showLive) show active @endif" id="live"
+                        role="tabpanel">
+                        @if ($showLive)
+                            @livewire('owner.live', ['owner' => $owner])
+                        @endif
+                    </div>
                     <div wire:loading.remove
                         class="tab-pane fade @if ($showFeed) show active @endif" id="feed"
                         role="tabpanel">

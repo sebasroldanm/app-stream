@@ -39,6 +39,8 @@ trait SyncData
                     $owner->preview = $dataUser['previewUrl'];
                     $owner->gender = $dataUser['gender'];
                     $owner->country = $dataUser['country'];
+                    $owner->isOnline = $dataUser['isOnline'];
+                    $owner->isLive = $dataUser['isLive'];
                     $owner->isMobile = $dataUser['isMobile'];
                     $owner->statusChangedAt = Carbon::parse($dataUser['statusChangedAt']);
                     $owner->data = $response;

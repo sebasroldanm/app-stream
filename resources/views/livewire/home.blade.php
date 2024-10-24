@@ -116,7 +116,15 @@
                                 @endif
                             </div>
                             <div class="group-info pt-3 pb-3">
-                                <h4><a href="{{ route('view.owner', $owner->username) }}">{{ $owner->username }}</a></h4>
+                                <h4><a href="{{ route('view.owner', $owner->username) }}"
+                                        @if ($owner->isOnline)> @endif
+                                        {{ $owner->username }}
+                                        @if ($owner->isLive) <div class="live-icon"></div>
+                                        @else
+                                        @if ($owner->isOnline) <i class="ri-checkbox-blank-circle-fill online"></i> @endif
+                                        @endif
+                                        </a>
+                                </h4>
                                 @if ($owner->name)
                                     <p>{{ $owner->name }}</p>
                                 @else
@@ -161,7 +169,9 @@
                                         @foreach ($owner->latestSnapshots as $snapshot)
                                             <a href="{{ route('view.owner', $owner->username) }}" class="iq-media">
                                                 <img class="img-fluid avatar-40 rounded-circle"
-                                                    src="{{ URL::to('/').$snapshot->local_url }}" onerror="this.onerror=null; this.src='https://placehold.co/50x50.jpg?text=:(';" alt="">
+                                                    src="{{ URL::to('/') . $snapshot->local_url }}"
+                                                    onerror="this.onerror=null; this.src='https://placehold.co/50x50.jpg?text=:(';"
+                                                    alt="">
                                             </a>
                                         @endforeach
                                     </div>
@@ -183,7 +193,8 @@
                     <div class="offset-3 col-md-6">
                         <div class="form-group">
                             <label class="form-label" for="email">Digita owner para ingresar:</label>
-                            <input type="text" class="form-control" id="owner" wire:model="newOwner" value="{{ $newOwner }}">
+                            <input type="text" class="form-control" id="owner" wire:model="newOwner"
+                                value="{{ $newOwner }}">
                         </div>
                         <button type="submit" class="btn btn-primary" wire:click="addOwner">Insertar</button>
                     </div>
