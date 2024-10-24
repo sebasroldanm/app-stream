@@ -42,7 +42,7 @@ trait SyncData
                     $owner->isOnline = $dataUser['isOnline'];
                     $owner->isLive = $dataUser['isLive'];
                     $owner->isMobile = $dataUser['isMobile'];
-                    $owner->statusChangedAt = Carbon::parse($dataUser['statusChangedAt']);
+                    $owner->statusChangedAt = Carbon::parse($dataUser['statusChangedAt'])->subHours(5);
                     $owner->data = $response;
                     $owner->save();
                 }

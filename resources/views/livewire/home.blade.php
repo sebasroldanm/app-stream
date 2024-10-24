@@ -117,13 +117,12 @@
                             </div>
                             <div class="group-info pt-3 pb-3">
                                 <h4><a href="{{ route('view.owner', $owner->username) }}"
-                                        @if ($owner->isOnline)> @endif
-                                        {{ $owner->username }}
+                                        @if ($owner->isOnline) > @endif {{ $owner->username }}
                                         @if ($owner->isLive) <div class="live-icon"></div>
                                         @else
                                         @if ($owner->isOnline) <i class="ri-checkbox-blank-circle-fill online"></i> @endif
                                         @endif
-                                        </a>
+                                    </a>
                                 </h4>
                                 @if ($owner->name)
                                     <p>{{ $owner->name }}</p>
@@ -198,15 +197,16 @@
                         </div>
                         <button type="submit" class="btn btn-primary" wire:click="addOwner">Insertar</button>
                     </div>
-                @else
-                    <div class="row mt-3">
-                        <div class="offset-4 col-md-4 text-center">
-                            <button type="button" wire:click="moreLimit" class="btn btn-soft-primary mb-1">Ver
-                                más</button>
-                            <button type="button" wire:click="lessLimit" class="btn btn-soft-primary mb-1">Ver
-                                menos</button>
-                        </div>
+                </div>
+            @else
+                <div class="row mt-3">
+                    <div class="offset-4 col-md-4 text-center">
+                        <button type="button" wire:click="moreLimit" class="btn btn-soft-primary mb-1">Ver
+                            más</button>
+                        <button type="button" wire:click="lessLimit" class="btn btn-soft-primary mb-1">Ver
+                            menos</button>
                     </div>
+                </div>
             @endif
         </div>
     </div>

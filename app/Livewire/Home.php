@@ -14,7 +14,7 @@ class Home extends Component
 
     public $owners;
 
-    public $orderBy = 'updated_at';
+    public $orderBy = 'statusChangedAt';
     public $orderDir = 'desc';
 
     public $limit = 24;
@@ -69,8 +69,8 @@ class Home extends Component
         } else {
             $this->owners = Owner::select('*')
                 ->with('latestSnapshots')
-                // ->orderByRaw('isLive DESC')
-                // ->orderByRaw('isOnline DESC')
+                // ->orderBy('isLive', 'DESC')
+                // ->orderBy('isOnline', 'DESC')
                 ->orderBy($this->orderBy, $this->orderDir)
                 ->limit($this->limit)
                 ->get();
