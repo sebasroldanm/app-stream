@@ -18,7 +18,7 @@ class Live extends Component
 
         $this->dispatch('playVideo', [
             'url' => $url,
-            'cover' => $owner->previewUrl,
+            'cover' => $owner->preview,
             'format' => "live",
         ]);
 

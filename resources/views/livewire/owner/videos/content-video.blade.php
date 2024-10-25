@@ -53,7 +53,7 @@
                 </div>
                 {{-- {{ dd($video) }} --}}
                 <button id="event_trailer" class="d-none" data-bs-toggle="modal"
-                    data-bs-target=".bd-example-modal-xl"></button>
+                    data-bs-target=".modal-video-owner"></button>
                 <div class="row my-4 d-flex justify-content-center">
                     <div class="col-md-4">
                         @if ($video->videoUrl)

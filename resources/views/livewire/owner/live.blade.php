@@ -1,4 +1,4 @@
-<div>
-    <video id="player" class="live">
+<div class="content-video-player">
+    <video id="player" >
     </video>
 </div>

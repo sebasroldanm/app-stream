@@ -36,8 +36,8 @@
                         @endforeach
                     </div>
                 </div>
-                <div class="modal fade bd-example-modal-xl" tabindex="-1" style="display: none;" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
+                <div class="modal fade modal-video-owner" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
                                 {{-- <h5 class="modal-title">Video</h5> --}}
@@ -45,7 +45,7 @@
 
                                 </button>
                             </div>
-                            <div class="modal-body p-0 d-flex justify-content-center">
+                            <div class="modal-body p-0">
                                 <video id="player">
                                 </video>
                             </div>

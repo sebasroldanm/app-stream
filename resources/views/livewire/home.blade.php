@@ -21,8 +21,15 @@
                             type="search" placeholder="Ingresa el username">
                     </div>
                 </div>
-                <div class="offset-5 col-md-3">
-                    <label>Ordenar nuevos owners: </label>
+                <div class="offset-4 col-md-1">
+                    <label>Live:</label>
+                    <select class="form-select" wire:change="listLivesChange">
+                        <option value="desc">No</option>
+                        <option value="asc">Si</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label>Ordenar nuevos owners:</label>
                     <select class="form-select" wire:change="order" wire:model="orderDir">
                         <option value="asc">Asecdendente</option>
                         <option value="desc">Descendente</option>
@@ -116,8 +123,9 @@
                                 @endif
                             </div>
                             <div class="group-info pt-3 pb-3">
-                                <h4><a href="{{ route('view.owner', $owner->username) }}"
-                                        @if ($owner->isOnline) > @endif {{ $owner->username }}
+                                <h4>
+                                    <a href="{{ route('view.owner', $owner->username) }}">
+                                        {{ $owner->username }}
                                         @if ($owner->isLive) <div class="live-icon"></div>
                                         @else
                                         @if ($owner->isOnline) <i class="ri-checkbox-blank-circle-fill online m-1"></i> @endif

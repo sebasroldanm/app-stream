@@ -16,6 +16,7 @@ class Home extends Component
 
     public $orderBy = 'statusChangedAt';
     public $orderDir = 'desc';
+    public $listLives = false;
 
     public $limit = 24;
 
@@ -41,6 +42,10 @@ class Home extends Component
         if ($this->limit < 6) {
             $this->limit = 6;
         }
+    }
+
+    public function listLivesChange() {
+        $this->listLives = !$this->listLives;
     }
 
     public function order()
@@ -69,6 +74,9 @@ class Home extends Component
         } else {
             $this->owners = Owner::select('*')
                 ->with('latestSnapshots')
+                ->when($this->listLives, function ($query) {
+                    $query->where('isLive', true);
+                })
                 // ->orderBy('isLive', 'DESC')
                 // ->orderBy('isOnline', 'DESC')
                 ->orderBy($this->orderBy, $this->orderDir)

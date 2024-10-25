@@ -33,6 +33,7 @@ function initializeVideoPlayer(video) {
         muted: true,
         volume: 1,
         seekTime: 10,
+        ratio: "16:9",
         storage: {
             enabled: true,
             key: "plyr",

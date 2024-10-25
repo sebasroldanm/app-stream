@@ -49,11 +49,9 @@
 }
 
 /* Player video */
-#player {
-    min-height: 300px;
-    min-width: 300px;
-    width: 100%;
-    max-height: 60vh;
+html {
+    --plyr-color-main: #50b5ff;
+    --plyr-video-background: transparent;
 }
 
 /* Player video */
