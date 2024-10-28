@@ -6,6 +6,11 @@
         <hr>
         <div class="row">
             <div class="col-3">
+                <h6>ID</h6>
+            </div>
+            <div class="col-9"><code>{{ $owner->id }}</code></div>
+
+            <div class="col-3">
                 <h6>Nombre</h6>
             </div>
             <div class="col-9">{{ $owner->data->user->user->name }}</div>

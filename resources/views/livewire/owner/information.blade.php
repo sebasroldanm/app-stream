@@ -13,6 +13,11 @@
                             wire:click="loadComponent('detail')"
                             data-bs-toggle="pill" data-bs-target="#v-pills-details-tab" role="button">Detalles</a>
                     </li>
+                    <li>
+                        <a class="nav-link @if ($showSnapshots) active @endif" href="#v-pills-snapshots-tab"
+                            wire:click="loadComponent('snapshots')"
+                            data-bs-toggle="pill" data-bs-target="#v-pills-snapshots-tab" role="button">Instantáneas</a>
+                    </li>
                     @if ($owner->isInfoCustom)
                         <li>
                             <a class="nav-link @if ($showInfoCustom) active @endif" href="#v-infocustom-tab"
@@ -44,6 +49,13 @@
                         role="tabpanel" aria-labelledby="v-pills-details">
                         @if ($showDetail)
                             @livewire('owner.information.detail', ['owner' => $owner])
+                        @endif
+                    </div>
+
+                    <div class="tab-pane fade @if ($showSnapshots) show active @endif" id="v-pills-snapshots"
+                        role="tabpanel" aria-labelledby="v-pills-snapshots">
+                        @if ($showSnapshots)
+                            @livewire('owner.information.snapshots', ['owner' => $owner])
                         @endif
                     </div>
 

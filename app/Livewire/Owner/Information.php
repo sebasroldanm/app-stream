@@ -12,6 +12,7 @@ class Information extends Component
 
     public $showPanel = true;
     public $showDetail = false;
+    public $showSnapshots = false;
     public $showInfoCustom = false;
     public $showMediaCustom = false;
 
@@ -23,24 +24,35 @@ class Information extends Component
             case 'panel':
                 $this->showPanel = true;
                 $this->showDetail = false;
+                $this->showSnapshots = false;
                 $this->showInfoCustom = false;
                 $this->showMediaCustom = false;
                 break;
             case 'detail':
                 $this->showPanel = false;
                 $this->showDetail = true;
+                $this->showSnapshots = false;
                 $this->showInfoCustom = false;
+                $this->showMediaCustom = false;
+                break;
+            case 'snapshots':
+                $this->showPanel = false;
+                $this->showDetail = false;
+                $this->showSnapshots = true;
+                $this->showInfoCustom = true;
                 $this->showMediaCustom = false;
                 break;
             case 'info-custom':
                 $this->showPanel = false;
                 $this->showDetail = false;
+                $this->showSnapshots = false;
                 $this->showInfoCustom = true;
                 $this->showMediaCustom = false;
                 break;
             case 'media-custom':
                 $this->showPanel = false;
                 $this->showDetail = false;
+                $this->showSnapshots = false;
                 $this->showInfoCustom = false;
                 $this->showMediaCustom = true;
                 break;

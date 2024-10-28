@@ -27,7 +27,7 @@ class RightSidebar extends Component
             return Owner::with('latestSnapshots')
                 ->orderBy('isLive', 'DESC')
                 ->orderBy('isOnline', 'DESC')
-                ->limit(10)
+                ->limit(20)
                 ->get();
         });
     }
