@@ -30,7 +30,7 @@ function initializeVideoPlayer(video) {
             "volume",
             "fullscreen",
         ],
-        debug: true,
+        debug: false,
         autoplay: true,
         muted: true,
         volume: 1,

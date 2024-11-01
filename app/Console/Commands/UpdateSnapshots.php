@@ -56,10 +56,25 @@ class UpdateSnapshots extends Command
                     $newSnap->snapshotUrl = "https://img.strpst.com/thumbs/" . $snap_time . "/" . $fav->id . "_webp";
                     $test_url = $response = Http::get($newSnap->snapshotUrl);
                     if ($test_url->successful()) {
+
+                        if (!Storage::disk('public')->exists('snapshots/' . $fav->username)) {
+                            Storage::disk('public')->makeDirectory('snapshots/' . $fav->username);
+                        }
+                        
                         $filePath = 'snapshots/' . $fav->username . '/' . $snap_time . '.webp';
                         if (!Storage::disk('public')->exists('snapshots/' . $fav->username)) {
                             Storage::disk('public')->makeDirectory('snapshots/' . $fav->username);
                         }
+
+                        if (Storage::disk('public')->exists($filePath)) {
+                            $existingImage = Storage::disk('public')->get($filePath);
+                            $newImage = $test_url->body();
+                    
+                            if (md5($existingImage) === md5($newImage)) {
+                                continue;
+                            }
+                        }
+
                         Storage::disk('public')->put($filePath, $test_url->body());
                         $newSnap->local_url = '/storage/' . $filePath;
                         $newSnap->save();
@@ -68,13 +83,13 @@ class UpdateSnapshots extends Command
             }
         }
 
-        $clear = Owner::all();
-        foreach ($clear as $cl) {
-            $test_url = $response = Http::get($cl->snapshotUrl);
-            if (!$test_url->successful()) {
-                Owner::destroy($cl->id);
-            }
-        }
+        // $clear = Owner::all();
+        // foreach ($clear as $cl) {
+        //     $test_url = $response = Http::get($cl->snapshotUrl);
+        //     if (!$test_url->successful()) {
+        //         Owner::destroy($cl->id);
+        //     }
+        // }
         return true;
     }
 }

@@ -15,6 +15,7 @@ class Home extends Component
     public $owners;
 
     public $orderBy = 'statusChangedAt';
+    // public $orderBy = 'created_at';
     public $orderDir = 'desc';
     public $listLives = false;
 
