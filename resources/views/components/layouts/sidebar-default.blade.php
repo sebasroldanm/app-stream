@@ -7,11 +7,12 @@
                         <i class="las la-users"></i><span>Home</span>
                     </a>
                 </li>
-                <li class="">
-                    <a href="#" class=" ">
-                        <i class="las la-newspaper"></i><span>Feed</span>
+                <li class="@if (Route::is('explore')) active @endif">
+                    <a href="{{ route('explore') }}" class=" ">
+                        <i class="las la-globe"></i><span>Explorar</span>
                     </a>
                 </li>
+
                 <li class="">
                     <a href="#" class=" ">
                         <i class="las la-user"></i><span>Perfil</span>

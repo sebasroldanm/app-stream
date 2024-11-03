@@ -212,3 +212,54 @@ i.online {
 }
 
 /* Skeleton Loader */
+
+
+/** Explorer */
+
+.image-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1/1;
+}
+
+.primary-image,
+.secondary-image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transition: opacity 0.3s ease;
+}
+
+.secondary-image {
+    opacity: 0;
+}
+
+.image-container:hover .primary-image {
+    opacity: 0;
+}
+
+.image-container:hover .secondary-image {
+    opacity: 1;
+}
+
+.s_icon {
+    position: absolute;
+}
+
+.s_icon.right {
+    right: 0;
+}
+
+.s_icon.left {
+    left: 0;
+}
+
+.s_icon.top {
+    top: 0;
+}
+
+.s_icon.bottom {
+    bottom: 0;
+}
+
+/** Explorer */

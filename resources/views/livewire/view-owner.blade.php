@@ -84,7 +84,7 @@
                                                     data-bs-placement="top" data-bs-original-title="Desactivado"></i>
                                             @else
                                                 <i class="ri-indeterminate-circle-fill offline" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" data-bs-original-title="Offline"></i>
+                                                    data-bs-placement="top" data-bs-original-title="{{ \Carbon\Carbon::parse($owner->statusChangedAt)->diffForHumans() }}"></i>
                                             @endif
                                         @endif
                                     </h3>

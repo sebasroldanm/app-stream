@@ -89,6 +89,11 @@ class ViewOwner extends Component
         $escapedOwner = str_replace('-', '\\-', $this->username);
         $owner = Owner::whereRaw("MATCH(username) AGAINST(? IN BOOLEAN MODE)", ['"' . $escapedOwner . '"'])->first();
 
+        if (empty($owner)) {
+            $this->syncOwnerByUsername($this->username);
+            $owner = Owner::whereRaw("MATCH(username) AGAINST(? IN BOOLEAN MODE)", ['"' . $escapedOwner . '"'])->first();
+        }
+
         if (strcasecmp($owner->username, $this->username) !== 0) {
             $this->error_search = true;
             $owner = Owner::where('username', $this->username)->first();

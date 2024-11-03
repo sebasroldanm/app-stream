@@ -85,7 +85,6 @@ function initializeVideoPlayer(video) {
                 player.play();
             });
         } else if (player.media.canPlayType("application/vnd.apple.mpegurl")) {
-
             player.source = {
                 type: "video",
                 sources: [
