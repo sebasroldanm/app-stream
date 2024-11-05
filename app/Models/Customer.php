@@ -38,6 +38,11 @@ class Customer extends Authenticatable implements AuthenticatableContract
         return $this->belongsToMany(Owner::class, 'customer_owner_favorites');
     }
 
+    public function getOwnerFavoriteIds()
+    {
+        return $this->ownerFavorites()->pluck('owner_id');
+    }
+
     public function isOwnerFavorite() {
         return $this->ownerFavorites()->where('owner_id', $this->id)->exists();
     }

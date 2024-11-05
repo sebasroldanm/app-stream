@@ -2,27 +2,32 @@
 
 namespace App\Livewire\Explore;
 
+use App\Models\Customer;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class NewCO extends Component
 {
     
     public $data;
+    public $owners = [];
     public $limit = 60;
     public $offset = 0;
+    public $endResults = false;
 
 
     public function render()
     {
         $this->loadData();
 
-        return view('livewire.explore.new-c-o');
-    }
+        $favs = Customer::find(Auth::guard('customer')->user()->id)->getOwnerFavoriteIds()->toArray();
 
-    public function prevPage()
-    {
-        $this->offset -= 60;
+        $this->dispatch('initExplorer');
+
+        return view('livewire.explore.new-c-o', [
+            'favs' => $favs
+        ]);
     }
 
     public function nextPage()
@@ -55,6 +60,10 @@ class NewCO extends Component
             if ($statusCode === 200) {
                 $response = $response->getBody()->getContents();
                 $this->data = json_decode($response, false);
+                array_push($this->owners, ...$this->data->models);
+                if (count($this->data->models) !== 60) {
+                    $this->endResults = true;
+                }
             } else {
                 $this->data = false;
             }

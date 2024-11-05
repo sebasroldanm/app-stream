@@ -14,25 +14,33 @@
         <div class="container">
             <div class="row">
                 @if ($data !== false)
-                    @foreach ($data->models as $owner)
+                    @foreach ($owners as $owner)
                         <div class="col-3 col-sm-2">
                             <a href="{{ route('view.owner', $owner->username) }}" class="card mb-3">
-                                <div class="image-container container-overlay">
-                                    @if (isset($owner->avatarUrl))
-                                        <img src="{{ $owner->avatarUrl }}" class="card-img-top primary-image"
-                                            alt="#">
-                                    @endif
-                                    <img src="https://img.strpst.com/thumbs/{{ $owner->popularSnapshotTimestamp }}/{{ $owner->id }}_webp";
-                                        class="card-img-top secondary-image _overlay" alt="#">
-                                </div>
-                                <div class="card-body p-1">
-                                    <p class="m-0">{{ $owner->username }}</p>
-                                </div>
-                                @if ($owner->isNew)
-                                    <div class="s_icon top right">
-                                        <span class="badge badge-pill bg-warning">New</span>
+                                <div class="card_explorer_image">
+                                    <div class="image-container container-overlay">
+                                        @if (isset($owner->avatarUrl))
+                                            <img src="{{ $owner->avatarUrl }}" class="card-img-top secondary-image"
+                                                alt="#">
+                                        @endif
+                                        <img src="https://img.strpst.com/thumbs/{{ $owner->popularSnapshotTimestamp }}/{{ $owner->id }}_webp"
+                                            class="card-img-top primary-image _overlay" alt="#">
+                                        <img src="{{ $owner->previewUrlThumbSmall }}"
+                                            class="card-img-top tertiary-image _overlay" alt="#">
                                     </div>
-                                @endif
+                                    <div class="card-body p-1">
+                                        <p class="m-0 see_pic_exp">{{ $owner->username }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="s_icon top right">
+                                    @if ($owner->isNew)
+                                        <span class="badge badge-pill bg-warning">New</span>
+                                    @endif
+                                    @if (in_array($owner->id, $favs))
+                                        <i class="las la-heart favorite_icon"></i>
+                                    @endif
+                                </div>
                                 <div class="s_icon top left">
                                     <span class="badge badge-pill bg-dark">
                                         @if ($owner->isMobile)
@@ -51,12 +59,10 @@
                         </div>
                     @endforeach
                     <div class="col-12">
-                        @if ($offset !== 0)
-                            <button type="button" wire:click="prevPage"
-                                class="btn btn-soft-primary mb-1">Anterior</button>
+                        @if (!$endResults)
+                            <button type="button" wire:click="nextPage"
+                                class="btn btn-soft-primary mb-1">Siguiente</button>
                         @endif
-                        <button type="button" wire:click="nextPage"
-                            class="btn btn-soft-primary mb-1">Siguiente</button>
                         Saltados: {{ $offset }} del limite {{ $limit }} y {{ count($data->models) }} en
                         total.
                     @else

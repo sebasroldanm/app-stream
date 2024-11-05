@@ -6,6 +6,12 @@ window.Livewire.on("initMasonry", function (data) {
     initializeMasonry();
 });
 
+window.Livewire.on("initExplorer", function (data) {
+    setTimeout(() => {
+        reloadExplorer();
+    }, 500);
+});
+
 function initializeVideoPlayer(video) {
     console.log("Livewire emitió el evento videoLoaded");
     $("#event_trailer").click();
@@ -109,4 +115,29 @@ function initializeMasonry(item) {
             itemSelector: ".masonry-item",
         });
     }, 300);
+}
+
+function reloadExplorer() {
+    console.log("reloadExplorer");
+    
+    const cards = document.querySelectorAll(".card_explorer_image");
+
+    cards.forEach((card) => {
+        const imageContainer = card.querySelector(".image-container");
+        const seePicExp = card.querySelector(".see_pic_exp");
+
+        imageContainer.addEventListener("mouseenter", () => {
+            imageContainer.classList.add("show-secondary");
+        });
+        imageContainer.addEventListener("mouseleave", () => {
+            imageContainer.classList.remove("show-secondary");
+        });
+
+        seePicExp.addEventListener("mouseenter", () => {
+            imageContainer.classList.add("show-tertiary");
+        });
+        seePicExp.addEventListener("mouseleave", () => {
+            imageContainer.classList.remove("show-tertiary");
+        });
+    });
 }
