@@ -1,4 +1,7 @@
 <footer class="iq-footer bg-white">
+    <button id="scrollToTop" class="btn btn-primary" style="position: fixed; bottom: 20px; display: none;">
+        Ir al Top
+    </button>
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-6">

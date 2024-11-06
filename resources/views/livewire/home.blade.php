@@ -108,8 +108,8 @@
                                 <img src="{{ $owner->data->user->user->previewUrlThumbSmall }}" oading="lazy"
                                     class="img-fluid w-100 _overlay" alt="group-bg">
                             @else
-                                <img src="https://placehold.co/320x110?text=No+Imagen" class="img-fluid w-100 _overlay" oading="lazy"
-                                    alt="group-bg">
+                                <img src="https://placehold.co/320x110?text=No+Imagen" class="img-fluid w-100 _overlay"
+                                    oading="lazy" alt="group-bg">
                             @endif
                         </div>
                         <div class="card-body text-center">
@@ -118,24 +118,41 @@
                                     <img src="{{ $owner->avatar }}" alt="profile-img" oading="lazy"
                                         class="rounded-circle img-fluid avatar-120">
                                 @else
-                                    <img src="https://placehold.co/300x300?text=No+Imagen" alt="profile-img" oading="lazy"
-                                        class="rounded-circle img-fluid avatar-120">
+                                    <img src="https://placehold.co/300x300?text=No+Imagen" alt="profile-img"
+                                        oading="lazy" class="rounded-circle img-fluid avatar-120">
                                 @endif
                             </div>
                             <div class="group-info pt-3 pb-3">
                                 <h4>
                                     <a href="{{ route('view.owner', $owner->username) }}">
                                         {{ $owner->username }}
-                                        @if ($owner->isLive) <div class="live-icon"></div>
+                                        @if ($owner->isLive)
+                                            <div class="live-icon"></div>
                                         @else
-                                        @if ($owner->isOnline) <i class="ri-checkbox-blank-circle-fill online m-1"></i> @endif
+                                            @if ($owner->isOnline)
+                                                <i class="ri-checkbox-blank-circle-fill online m-1"></i>
+                                            @endif
                                         @endif
                                     </a>
                                 </h4>
                                 @if ($owner->name)
-                                    <p>{{ $owner->name }}</p>
+                                    <p>
+                                        @if (in_array($owner->id, $favs))
+                                            <span class="badge bg-danger"><i
+                                                    class="las la-heart"></i></span> {{ $owner->name }}
+                                        @else
+                                            {{ $owner->name }}
+                                        @endif
+                                    </p>
                                 @else
-                                    <p>&nbsp;</p>
+                                    <p>
+                                        @if (in_array($owner->id, $favs))
+                                            <span class="badge bg-danger"><i
+                                                    class="las la-heart"></i></span>&nbsp;
+                                        @else
+                                            &nbsp;
+                                        @endif
+                                    </p>
                                 @endif
                             </div>
                             <div class="group-details d-inline-block pb-3">

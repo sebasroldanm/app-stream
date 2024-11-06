@@ -4,7 +4,7 @@
             <img src="{{ asset('/images/page-img/profile-bg3.jpg') }}" class="img-fluid w-100" alt="header-bg">
             <div class="title-on-header">
                 <div class="data-block">
-                    <h2>Explorar</h2>
+                    <h2>Explorar Mobile CO</h2>
                 </div>
             </div>
         </div>
@@ -24,7 +24,8 @@
                                                 alt="#">
                                         @endif
                                         <img src="https://img.strpst.com/thumbs/{{ $owner->popularSnapshotTimestamp }}/{{ $owner->id }}_webp"
-                                            class="card-img-top primary-image _overlay" alt="#">
+                                            class="card-img-top primary-image _overlay" alt="#"
+                                            onerror="this.onerror=null; this.src='https://img.strpst.com/thumbs/{{ $owner->snapshotTimestamp }}/{{ $owner->id }}_webp';">
                                         <img src="{{ $owner->previewUrlThumbSmall }}"
                                             class="card-img-top tertiary-image _overlay" alt="#">
                                     </div>

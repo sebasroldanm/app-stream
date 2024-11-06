@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Customer;
 use App\Models\Owner;
 use App\Traits\SyncData;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +14,8 @@ class Home extends Component
     use SyncData;
 
     public $owners;
+
+    public $favs;
 
     public $orderBy = 'statusChangedAt';
     // public $orderBy = 'created_at';
@@ -61,6 +64,8 @@ class Home extends Component
 
     public function render()
     {
+        $this->favs = Customer::find(Auth::guard('customer')->user()->id)->getOwnerFavoriteIds()->toArray();
+        
         if ($this->search != '') {
             $this->owners = Owner::whereRaw("MATCH(username) AGAINST(? IN BOOLEAN MODE)", ['"' . $this->search . '"'])->get();
             if ($this->owners->count() == 1) {

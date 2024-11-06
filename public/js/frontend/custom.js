@@ -12,6 +12,8 @@ window.Livewire.on("initExplorer", function (data) {
     }, 500);
 });
 
+scrollToTop();
+
 function initializeVideoPlayer(video) {
     console.log("Livewire emitió el evento videoLoaded");
     $("#event_trailer").click();
@@ -140,4 +142,22 @@ function reloadExplorer() {
             imageContainer.classList.remove("show-tertiary");
         });
     });
+}
+
+function scrollToTop() {
+    const scrollToTopButton = document.getElementById('scrollToTop');
+
+    // Mostrar el botón solo si el usuario ha hecho scroll hacia abajo
+    window.onscroll = function() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            scrollToTopButton.style.display = "block";  // Mostrar el botón
+        } else {
+            scrollToTopButton.style.display = "none";  // Ocultar el botón
+        }
+    };
+
+    // Cuando el usuario haga clic en el botón, desplazarse al principio de la página
+    scrollToTopButton.onclick = function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 }
