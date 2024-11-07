@@ -13,6 +13,13 @@ window.Livewire.on("initExplorer", function (data) {
     }, 500);
 });
 
+window.addEventListener('initFullviewer', () => {
+    setTimeout(() => {
+        initFullviewer();
+    }, 500);
+});
+    
+
 scrollToTop();
 
 initFullviewer();

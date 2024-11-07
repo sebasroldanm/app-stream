@@ -6,7 +6,7 @@
                 <div class="col-sm-6 col-lg-6 masonry-item">
                     <div class="card mb-3" style="break-inside: avoid;">
                         @if ($panel->imageUrl !== '')
-                            <img src="{{ $panel->imageUrl }}" class="rounded" alt="Panel owner image">
+                            <img src="{{ $panel->imageUrl }}" class="rounded fullviewer" alt="Panel owner image">
                         @endif
                         @if ($panel->body !== '' || $panel->title !== '')
                             <div class="card-body">

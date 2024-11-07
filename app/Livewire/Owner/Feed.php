@@ -41,6 +41,8 @@ class Feed extends Component
         $photos = Photos::where('ownerId', $owner->id)->where('url', '!=', '')->limit(9)->get();
         $videos = Video::where('owner_id', $owner->id)->where('coverUrl', '!=', '')->limit(9)->get();
 
+        $this->dispatch('initFullviewer');
+
         return view('livewire.owner.feed', [
             'owner' => $owner,
             'photos' => $photos,
