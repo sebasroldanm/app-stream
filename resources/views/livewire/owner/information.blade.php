@@ -18,6 +18,11 @@
                             wire:click="loadComponent('snapshots')"
                             data-bs-toggle="pill" data-bs-target="#v-pills-snapshots-tab" role="button">Instantáneas</a>
                     </li>
+                    <li>
+                        <a class="nav-link @if ($showSimilarity) active @endif" href="#v-pills-similarity-tab"
+                            wire:click="loadComponent('similarity')"
+                            data-bs-toggle="pill" data-bs-target="#v-pills-similarity-tab" role="button">Similitud IA</a>
+                    </li>
                     @if ($owner->isInfoCustom)
                         <li>
                             <a class="nav-link @if ($showInfoCustom) active @endif" href="#v-infocustom-tab"
@@ -56,6 +61,13 @@
                         role="tabpanel" aria-labelledby="v-pills-snapshots">
                         @if ($showSnapshots)
                             @livewire('owner.information.snapshots', ['owner' => $owner])
+                        @endif
+                    </div>
+
+                    <div class="tab-pane fade @if ($showSimilarity) show active @endif" id="v-pills-similarity"
+                        role="tabpanel" aria-labelledby="v-pills-similarity">
+                        @if ($showSimilarity)
+                            @livewire('owner.information.similarity', ['owner' => $owner])
                         @endif
                     </div>
 

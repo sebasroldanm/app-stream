@@ -13,6 +13,7 @@ class Information extends Component
     public $showPanel = false;
     public $showDetail = true;
     public $showSnapshots = false;
+    public $showSimilarity = false;
     public $showInfoCustom = false;
     public $showMediaCustom = false;
 
@@ -25,6 +26,7 @@ class Information extends Component
                 $this->showPanel = true;
                 $this->showDetail = false;
                 $this->showSnapshots = false;
+                $this->showSimilarity = false;
                 $this->showInfoCustom = false;
                 $this->showMediaCustom = false;
                 break;
@@ -32,6 +34,7 @@ class Information extends Component
                 $this->showPanel = false;
                 $this->showDetail = true;
                 $this->showSnapshots = false;
+                $this->showSimilarity = false;
                 $this->showInfoCustom = false;
                 $this->showMediaCustom = false;
                 break;
@@ -39,13 +42,23 @@ class Information extends Component
                 $this->showPanel = false;
                 $this->showDetail = false;
                 $this->showSnapshots = true;
+                $this->showSimilarity = false;
                 $this->showInfoCustom = true;
+                $this->showMediaCustom = false;
+                break;
+            case 'similarity':
+                $this->showPanel = false;
+                $this->showDetail = false;
+                $this->showSnapshots = false;
+                $this->showSimilarity = true;
+                $this->showInfoCustom = false;
                 $this->showMediaCustom = false;
                 break;
             case 'info-custom':
                 $this->showPanel = false;
                 $this->showDetail = false;
                 $this->showSnapshots = false;
+                $this->showSimilarity = false;
                 $this->showInfoCustom = true;
                 $this->showMediaCustom = false;
                 break;
@@ -53,6 +66,7 @@ class Information extends Component
                 $this->showPanel = false;
                 $this->showDetail = false;
                 $this->showSnapshots = false;
+                $this->showSimilarity = false;
                 $this->showInfoCustom = false;
                 $this->showMediaCustom = true;
                 break;
