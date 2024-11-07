@@ -54,7 +54,7 @@
                         <ul class="profile-img-gallary p-0 m-0 list-unstyled">
                             @foreach ($photos as $photo)
                                 <li class="feed-bg-lists container-overlay">
-                                    <img src="{{ $photo->url }}" alt="gallary-image"
+                                    <img src="{{ $photo->urlThumb }}" data-image_vh="{{ $photo->url }}" alt="gallary-image"
                                         class="img-fluid _overlay fullviewer" />
                                 </li>
                             @endforeach

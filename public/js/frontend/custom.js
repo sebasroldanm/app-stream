@@ -177,7 +177,8 @@ function initFullviewer() {
     imagenes.forEach(imagen => {
         imagen.addEventListener("click", () => {
             // Asignar la fuente de la imagen en miniatura al modal
-            imagenModal.src = imagen.src;
+            const imageSrc = imagen.getAttribute("data-image_vh") || imagen.src;
+            imagenModal.src = imageSrc;
             
             // Mostrar el modal
             modal.style.display = "block";

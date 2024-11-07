@@ -44,7 +44,7 @@ class Similarity extends Component
                 }
             }
 
-            $this->similarity = $this->similarity->sortBy('distance')->take(50);
+            $this->similarity = $this->similarity->sortBy('distance')->take(200);
         } catch (\Throwable $th) {
             $this->similarity = false;
         }

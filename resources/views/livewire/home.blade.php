@@ -206,7 +206,7 @@
                                     No encontrado</button>
                             @else
                                 <a href="{{ route('view.owner', $owner->username) }}" type="submit"
-                                    class="btn btn-primary d-block w-100">Ver detalle</a>
+                                    class="btn btn-primary d-block w-100">Ver perfil</a>
                             @endif
                         </div>
                     </div>
