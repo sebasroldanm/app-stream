@@ -39,7 +39,7 @@
 
         <div id="viewer_photo" class="modal_vp">
             <span class="cerrar">&times;</span>
-            <img id="imagenModal" class="modal-content">
+            <img id="imagenModal" class="modal_vp-content">
         </div>
 
         <main>

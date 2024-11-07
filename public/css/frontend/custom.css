@@ -307,7 +307,7 @@ i.online {
 }
 
 /* Imagen en el modal centrada */
-.modal-content {
+.modal_vp-content {
     display: block;
     margin: auto;
     position: relative;

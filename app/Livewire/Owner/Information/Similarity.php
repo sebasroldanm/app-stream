@@ -20,7 +20,8 @@ class Similarity extends Component
         return view('livewire.owner.information.similarity');
     }
 
-    public function seeFull() {
+    public function seeFull()
+    {
         $this->see_full = !$this->see_full;
     }
 
@@ -30,18 +31,22 @@ class Similarity extends Component
 
         $this->similarity = collect();
 
-        $response = $client->request('GET', env('API_IA_SIMILARITY') . $this->owner->username . '/similar');
-        $statusCode = $response->getStatusCode();
-        if ($statusCode === 200) {
-            $response = $response->getBody()->getContents();
-            $data = json_decode($response, false);
-            foreach ($data as $key => $lote) {
-                foreach ($lote as $key => $result) {
-                    $this->similarity->push((object) $result);
+        try {
+            $response = $client->request('GET', env('API_IA_SIMILARITY') . $this->owner->username . '/similar');
+            $statusCode = $response->getStatusCode();
+            if ($statusCode === 200) {
+                $response = $response->getBody()->getContents();
+                $data = json_decode($response, false);
+                foreach ($data as $key => $lote) {
+                    foreach ($lote as $key => $result) {
+                        $this->similarity->push((object) $result);
+                    }
                 }
             }
-        }
 
-        $this->similarity = $this->similarity->sortBy('distance')->take(50);
+            $this->similarity = $this->similarity->sortBy('distance')->take(50);
+        } catch (\Throwable $th) {
+            $this->similarity = false;
+        }
     }
 }

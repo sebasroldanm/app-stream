@@ -1,6 +1,13 @@
 <div class="row">
+    <div class="col-md-12">
+        <h4 class="mb-3">Instantáneas</h4>
+    </div>
+    @if (count($snapshots) == 0)
+        <div class="col-md-12">
+            <h5 class="mb-3 text-center">No hay Instantáneas :(</h5>
+        </div>
+    @endif
     @foreach ($snapshots as $day)
-        {{-- {{ dd($day) }} --}}
         <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
