@@ -28,7 +28,7 @@
             <div class="col-sm-6 col-lg-6 masonry-item">
                 <div class="card mb-3 user-images position-relative overflow-hidden">
                     @if (!empty($photo->url))
-                        <img loading="lazy" src="{{ $photo->url }}" class="img-fluid rounded" alt="Responsive image">
+                        <img loading="lazy" src="{{ $photo->url }}" class="img-fluid rounded fullviewer" alt="Responsive image">
                     @else
                         <img loading="lazy" src="{{ $photo->urlThumbMicro }}" class="img-fluid rounded w-100 blur_avatar"
                             alt="Responsive image">

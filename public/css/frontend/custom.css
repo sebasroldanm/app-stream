@@ -232,11 +232,12 @@ i.online {
 }
 
 .primary-image {
-    opacity: 1; /* Visible inicialmente */
+    opacity: 1;
 }
+
 .secondary-image,
 .tertiary-image {
-    opacity: 0; /* Ocultas inicialmente */
+    opacity: 0;
 }
 
 /* Clases adicionales para mostrar/ocultar imágenes */
@@ -279,4 +280,56 @@ i.online {
     padding: 5px;
     margin: 1px;
 }
+
 /** Explorer */
+
+
+/* Estilo de la imagen en miniatura */
+.fullviewer {
+    cursor: pointer;
+}
+
+/* Estilos del modal (inicialmente oculto) */
+.modal_vp {
+    display: none;
+    /* Oculto por defecto */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+    /* Fondo oscuro semitransparente */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Imagen en el modal centrada */
+.modal-content {
+    display: block;
+    margin: auto;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    object-fit: cover;
+    width: auto;
+    max-height: 90%;
+    max-width: 90%;
+}
+
+/* Botón de cierre en la esquina superior derecha */
+.cerrar {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.no-scroll {
+    overflow: hidden;
+}

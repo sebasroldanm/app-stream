@@ -11,7 +11,7 @@
                             <div class="position-relative intro-owner container-overlay">
                                 @if (in_array($intro->type, ['image', 'avatar']))
                                     <img src="{{ $intro->url }}" alt="profile-bg"
-                                        class="rounded img-fluid _overlay @if ($intro->type == 'avatar') blur_avatar @endif">
+                                        class="rounded img-fluid _overlay @if ($intro->type == 'avatar') blur_avatar @endif fullviewer">
                                 @else
                                     <video autoplay loop muted class="rounded _overlay">
                                         <source src="{{ $intro->url }}" type="video/mp4">
@@ -70,7 +70,7 @@
                                 <div class="profile-img">
                                     <a href="javascript:void(0);">
                                         <img src="{{ $owner->pic_profile }}" alt="profile-img"
-                                            class="avatar-130 img-fluid @if ($owner->isLive) live @endif" />
+                                            class="avatar-130 img-fluid @if ($owner->isLive) live @endif fullviewer" />
                                     </a>
                                 </div>
                                 <div class="profile-detail">

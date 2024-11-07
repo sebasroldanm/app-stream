@@ -4,6 +4,7 @@ window.Livewire.on("playVideo", function (data) {
 
 window.Livewire.on("initMasonry", function (data) {
     initializeMasonry();
+    initFullviewer();
 });
 
 window.Livewire.on("initExplorer", function (data) {
@@ -13,6 +14,8 @@ window.Livewire.on("initExplorer", function (data) {
 });
 
 scrollToTop();
+
+initFullviewer();
 
 function initializeVideoPlayer(video) {
     console.log("Livewire emitió el evento videoLoaded");
@@ -116,7 +119,7 @@ function initializeMasonry(item) {
         $(".masonry").masonry({
             itemSelector: ".masonry-item",
         });
-    }, 300);
+    }, 500);
 }
 
 function reloadExplorer() {
@@ -160,4 +163,39 @@ function scrollToTop() {
     scrollToTopButton.onclick = function() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
+}
+
+function initFullviewer() {
+    
+    // Seleccionar la imagen en miniatura y el modal
+    const imagenes = document.querySelectorAll(".fullviewer");
+    const modal = document.getElementById("viewer_photo");
+    const imagenModal = document.getElementById("imagenModal");
+    const cerrarBtn = document.querySelector(".cerrar");
+    
+    // Añadir un evento de clic a cada imagen en miniatura
+    imagenes.forEach(imagen => {
+        imagen.addEventListener("click", () => {
+            // Asignar la fuente de la imagen en miniatura al modal
+            imagenModal.src = imagen.src;
+            
+            // Mostrar el modal
+            modal.style.display = "block";
+            document.body.classList.add("no-scroll");
+        });
+    });
+    
+    // Añadir un evento de clic al botón de cierre
+    cerrarBtn.addEventListener("click", () => {
+        modal.style.display = "none";
+        document.body.classList.remove("no-scroll");
+    });
+    
+    // Cerrar el modal si se hace clic fuera de la imagen
+    modal.addEventListener("click", (event) => {
+        if (event.target === modal) {
+            modal.style.display = "none";
+            document.body.classList.remove("no-scroll");
+        }
+    });
 }

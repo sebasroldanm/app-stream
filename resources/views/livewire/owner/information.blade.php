@@ -4,14 +4,14 @@
             <div class="col-md-3">
                 <ul class="nav nav-pills basic-info-items list-inline d-block p-0 m-0">
                     <li>
-                        <a class="nav-link @if ($showPanel) active @endif" href="#v-pills-profile"
-                            wire:click="loadComponent('panel')"
-                            data-bs-toggle="pill" data-bs-target="#v-profile" role="button">Pannels (Perfil)</a>
-                    </li>
-                    <li>
                         <a class="nav-link @if ($showDetail) active @endif" href="#v-pills-details-tab"
                             wire:click="loadComponent('detail')"
                             data-bs-toggle="pill" data-bs-target="#v-pills-details-tab" role="button">Detalles</a>
+                    </li>
+                    <li>
+                        <a class="nav-link @if ($showPanel) active @endif" href="#v-pills-profile"
+                            wire:click="loadComponent('panel')"
+                            data-bs-toggle="pill" data-bs-target="#v-profile" role="button">Pannels (Perfil)</a>
                     </li>
                     <li>
                         <a class="nav-link @if ($showSnapshots) active @endif" href="#v-pills-snapshots-tab"
@@ -38,17 +38,17 @@
             </div>
             <div class="col-md-9 ps-4">
                 <div class="tab-content">
-                    <div class="tab-pane fade @if ($showPanel) show active @endif" id="v-pills-profile"
-                        role="tabpanel" aria-labelledby="v-pills-profile">
-                        @if ($showPanel)
-                            @livewire('owner.information.panel', ['owner' => $owner])
-                        @endif
-                    </div>
-
                     <div class="tab-pane fade @if ($showDetail) show active @endif" id="v-pills-details"
                         role="tabpanel" aria-labelledby="v-pills-details">
                         @if ($showDetail)
                             @livewire('owner.information.detail', ['owner' => $owner])
+                        @endif
+                    </div>
+
+                    <div class="tab-pane fade @if ($showPanel) show active @endif" id="v-pills-profile"
+                        role="tabpanel" aria-labelledby="v-pills-profile">
+                        @if ($showPanel)
+                            @livewire('owner.information.panel', ['owner' => $owner])
                         @endif
                     </div>
 

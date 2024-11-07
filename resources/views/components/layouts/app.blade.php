@@ -37,6 +37,11 @@
         @livewire('top-navbar')
         @livewire('right-sidebar')
 
+        <div id="viewer_photo" class="modal_vp">
+            <span class="cerrar">&times;</span>
+            <img id="imagenModal" class="modal-content">
+        </div>
+
         <main>
             {{ $slot }} <!-- Contenido de la vista -->
         </main>

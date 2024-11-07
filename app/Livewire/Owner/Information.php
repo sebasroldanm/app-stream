@@ -10,8 +10,8 @@ class Information extends Component
 
     public Owner $owner;
 
-    public $showPanel = true;
-    public $showDetail = false;
+    public $showPanel = false;
+    public $showDetail = true;
     public $showSnapshots = false;
     public $showInfoCustom = false;
     public $showMediaCustom = false;

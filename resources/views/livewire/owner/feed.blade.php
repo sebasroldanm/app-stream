@@ -47,16 +47,15 @@
                             <h4 class="card-title">Fotos ({{ $owner->data->user->photosCount }})</h4>
                         </div>
                         <div class="card-header-toolbar d-flex align-items-center">
-                            <p class="m-0"><a href="#">Ver Albums</a></p>
+                            <p class="m-0"><a href="javascript:void(0);">Ver Albums</a></p>
                         </div>
                     </div>
                     <div class="card-body">
                         <ul class="profile-img-gallary p-0 m-0 list-unstyled">
                             @foreach ($photos as $photo)
                                 <li class="feed-bg-lists container-overlay">
-                                    <a href="#">
-                                        <img src="{{ $photo->url }}" alt="gallary-image" class="img-fluid _overlay" />
-                                    </a>
+                                    <img src="{{ $photo->url }}" alt="gallary-image"
+                                        class="img-fluid _overlay fullviewer" />
                                 </li>
                             @endforeach
                         </ul>
@@ -70,18 +69,16 @@
                             <h4 class="card-title">Videos ({{ $owner->data->user->videosCount }})</h4>
                         </div>
                         <div class="card-header-toolbar d-flex align-items-center">
-                            <p class="m-0"><a href="#">Ver Videos</a></p>
+                            <p class="m-0"><a href="javascript:void(0);">Ver Videos</a></p>
                         </div>
                     </div>
                     <div class="card-body">
                         <ul class="profile-img-gallary p-0 m-0 list-unstyled">
                             @foreach ($videos as $video)
                                 <li class="feed-bg-lists container-overlay">
-                                    <a href="#">
-                                        <img src="{{ $video->coverUrl }}" alt="gallary-image" class="img-fluid _overlay"
-                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                            data-bs-original-title="{{ $video->title }}" />
-                                    </a>
+                                    <img src="{{ $video->coverUrl }}" alt="gallary-image" class="img-fluid _overlay"
+                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                        data-bs-original-title="{{ $video->title }}" />
                                 </li>
                             @endforeach
                         </ul>
@@ -99,7 +96,7 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="user-img">
-                            <img src="{{ URL::to("/") . auth()->guard('customer')->user()->avatar }}" alt="userimg"
+                            <img src="{{ URL::to('/') . auth()->guard('customer')->user()->avatar }}" alt="userimg"
                                 class="avatar-60 rounded-circle">
                         </div>
                         <form class="post-text ms-3 w-100 " data-bs-toggle="modal" data-bs-target="#post-modal"
