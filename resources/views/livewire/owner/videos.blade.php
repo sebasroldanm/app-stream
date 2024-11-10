@@ -5,7 +5,7 @@
                 <h4 class="mb-3">Videos</h4>
             </div>
             @if (count($videos) > 0)
-                <div class="col-md-3">
+                <div class="col-md-3 list_medias">
                     <ul class="nav nav-pills basic-info-items list-inline d-block p-0 m-0">
                         @foreach ($videos as $tab => $video)
                             <li>

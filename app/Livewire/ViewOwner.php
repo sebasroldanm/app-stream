@@ -30,6 +30,7 @@ class ViewOwner extends Component
     public $status_photos = false;
     public $status_intro = false;
     public $status_video = false;
+    public $status_feed = false;
 
     public $showError = false;
     public $showFeed = true;
@@ -94,7 +95,7 @@ class ViewOwner extends Component
             $owner = Owner::whereRaw("MATCH(username) AGAINST(? IN BOOLEAN MODE)", ['"' . $escapedOwner . '"'])->first();
         }
 
-        if (strcasecmp($owner->username, $this->username) !== 0) {
+        if (is_null($owner) || strcasecmp($owner->username, $this->username) !== 0) {
             $this->error_search = true;
             $owner = Owner::where('username', $this->username)->first();
         }
@@ -164,6 +165,8 @@ class ViewOwner extends Component
         $this->status_intro = $this->syncIntroByOwnerId($this->id_owner);
 
         $this->status_video = $this->syncVideo($this->id_owner, $this->username);
+
+        $this->status_feed = $this->syncFeedByOwnerId($this->id_owner);
     }
 
     public function toggleFavorite()

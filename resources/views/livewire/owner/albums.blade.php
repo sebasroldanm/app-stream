@@ -5,7 +5,7 @@
                 <h4>Albumes</h4>
             </div>
             @if (count($albums) > 0)
-                <div class="col-md-3">
+                <div class="col-md-3 list_medias">
                     <ul class="nav nav-pills list-inline p-0 m-0 flex-column">
                         @foreach ($albums as $tab => $album)
                             <li>

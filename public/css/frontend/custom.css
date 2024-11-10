@@ -79,6 +79,10 @@ ul.header-nav li a.username_reported i {
     min-height: 60vh;
 }
 
+.max-vh-60 {
+    max-height: 60vh;
+}
+
 i.disable {
     color: #777d74;
     font-size: small;
@@ -133,6 +137,20 @@ i.online {
     -webkit-animation: live 2s ease-in-out infinite;
     animation: live 2s ease-in-out infinite;
     z-index: -1;
+}
+
+.overlay-text {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo semitransparente */
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
 }
 
 @-webkit-keyframes live {
@@ -332,4 +350,11 @@ i.online {
 
 .no-scroll {
     overflow: hidden;
+}
+
+
+
+.list_medias {
+    max-height: 60vh;
+    overflow-y: auto;
 }

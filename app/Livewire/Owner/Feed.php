@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Owner;
 
+use App\Models\Feed as ModelsFeed;
 use App\Models\Owner;
 use App\Models\Photos;
 use App\Models\Video;
@@ -41,12 +42,22 @@ class Feed extends Component
         $photos = Photos::where('ownerId', $owner->id)->where('url', '!=', '')->limit(9)->get();
         $videos = Video::where('owner_id', $owner->id)->where('coverUrl', '!=', '')->limit(9)->get();
 
+        $feeds = ModelsFeed::with(["albumFeed.photos", "videoFeed", "postFeed.mediaPostFeeds"])
+            ->orderBy("updatedAt", "desc")
+            ->where("owner_id", $owner->id)
+            // ->where("id", 12062136)
+            // ->limit(3)
+            ->get();
+
         $this->dispatch('initFullviewer');
 
+        $this->dispatch('initVideosFeed');
+
         return view('livewire.owner.feed', [
-            'owner' => $owner,
-            'photos' => $photos,
-            'videos' => $videos
+            'owner'     => $owner,
+            'photos'    => $photos,
+            'videos'    => $videos,
+            'feeds'     => $feeds
         ]);
     }
 }
