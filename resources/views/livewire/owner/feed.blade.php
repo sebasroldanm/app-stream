@@ -285,6 +285,13 @@
             </div>
 
             @foreach ($feeds as $feed)
+            @if (
+                $feed->type === 'offlineStatusChanged' || 
+                ($feed->type !== 'offlineStatusChanged' && 
+                $feed->postFeed->count() > 0 || 
+                $feed->albumFeed->count() > 0 || 
+                $feed->videoFeed->count() > 0)
+            )
                 <div class="card">
                     <div class="card-body">
                         <div class="post-item">
@@ -317,7 +324,7 @@
                                                             Nuevo estado
                                                     @endswitch
                                                 </p>
-                                                <p class="mb-0">
+                                                <p class="mb-0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="{{ Carbon\Carbon::parse($feed->updatedAt)->format('d M, Y - H:i:s') }}">
                                                     {{ \Carbon\Carbon::parse($feed->updatedAt)->diffForHumans() }}</p>
                                             </div>
                                         </div>
@@ -439,7 +446,7 @@
                                                                 alt="{{ $album->body }}">
                                                         </div>
                                                     @else
-                                                        <div class="col-lg-2">
+                                                        <div class="col-2">
                                                             <img src="{{ $photo->urlThumbMicro }}"
                                                                 class="img-fluid rounded w-100"
                                                                 alt="{{ $album->body }}">
@@ -529,6 +536,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
             @endforeach
         </div>
     </div>
