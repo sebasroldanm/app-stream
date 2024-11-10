@@ -405,6 +405,8 @@ trait SyncData
             if (isset($ph->urlPreview)) {
                 $photo->urlPreview  = $ph->urlPreview;
             }
+            $photo->urlThumbMicro = $ph->urlThumbMicro;
+            $photo->save();
         }
     }
 

@@ -11,7 +11,7 @@ class PhotoAlbumFeed extends Model
 
     protected $fillable = [
         'album_feed_id', 'createdAt', 'isDeleted', 'album_id', 'order', 'status', 
-        'isNew', 'primaryColor', 'source', 'url', 'urlThumb', 'urlPreview'
+        'isNew', 'primaryColor', 'source', 'url', 'urlThumb', 'urlPreview', 'urlThumbMicro'
     ];
 
     public function albumFeed()

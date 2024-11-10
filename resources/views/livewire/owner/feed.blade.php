@@ -399,12 +399,11 @@
                                 @endforeach
 
                                 @foreach ($feed->albumFeed as $album)
-                                    {{-- {{ dd($album) }} --}}
                                     <div class="user-post">
                                         @if (!empty($album->name))
                                             <p>{{ $album->name }}</p>
                                         @endif
-                                        <div class="row">
+                                        <div class="row @if ($feed->accessMode !== 'free') justify-content-center @endif">
                                             @foreach ($album->photos as $photo)
                                                 @if ($feed->accessMode == 'free')
                                                     @switch($album->photosCount)
@@ -437,6 +436,12 @@
                                                         <div class="col-lg-12 text-center">
                                                             <img src="{{ $photo->url }}"
                                                                 class="img-fluid rounded fullviewer max-vh-60"
+                                                                alt="{{ $album->body }}">
+                                                        </div>
+                                                    @else
+                                                        <div class="col-lg-2">
+                                                            <img src="{{ $photo->urlThumbMicro }}"
+                                                                class="img-fluid rounded w-100"
                                                                 alt="{{ $album->body }}">
                                                         </div>
                                                     @endif

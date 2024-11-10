@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('url')->nullable();
             $table->string('urlThumb')->nullable();
             $table->string('urlPreview')->nullable();
+            $table->string('urlThumbMicro')->nullable();
             $table->timestamps();
         });
     }

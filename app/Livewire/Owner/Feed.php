@@ -45,7 +45,6 @@ class Feed extends Component
         $feeds = ModelsFeed::with(["albumFeed.photos", "videoFeed", "postFeed.mediaPostFeeds"])
             ->orderBy("updatedAt", "desc")
             ->where("owner_id", $owner->id)
-            // ->where("id", 12062136)
             // ->limit(3)
             ->get();
 
