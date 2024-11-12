@@ -9,3 +9,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote')->hourly();
 
 Schedule::command('app:update-snapshots')->everyTwoMinutes();
+Schedule::command('app:update-online')->everyMinute();

@@ -352,9 +352,11 @@ i.online {
     overflow: hidden;
 }
 
-
-
 .list_medias {
     max-height: 60vh;
     overflow-y: auto;
+}
+
+.filter_blur_10 {
+    filter: blur(10px);
 }

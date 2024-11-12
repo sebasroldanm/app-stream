@@ -42,8 +42,8 @@ class UpdateSnapshots extends Command
             $fav->data = json_decode($fav->data);
             if (
                 isset($fav->data->user->user->snapshotTimestamp) &&
-                $fav->isLive == true &&
-                $fav->isError == false
+                $fav->isLive == 1 &&
+                $fav->isError == 0
                 ) {
                 $snap_time = $fav->data->user->user->snapshotTimestamp;
                 $snapshot = Snapshot::where("owner_id", $fav->id)

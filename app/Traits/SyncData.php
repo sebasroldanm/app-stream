@@ -63,7 +63,7 @@ trait SyncData
                     $owner = new Owner();
                     $owner->username = $username;
                 }
-                $owner->isError = true;
+                // $owner->isError = true;
                 $owner->save();
             }
             $log = new Log();
