@@ -345,7 +345,7 @@
 
                                 @if ($feed->type == 'offlineStatusChanged')
                                     <div class="user-post">
-                                        <h5>{{ json_decode($feed->data)->data->offlineStatus }}</h5>
+                                        <h5 class="text-center my-5">{{ json_decode($feed->data)->data->offlineStatus }}</h5>
                                     </div>
                                 @else
                                     @foreach ($feed->postFeed as $pst)
@@ -365,9 +365,9 @@
                                                         @break
 
                                                         @case(2)
-                                                            <div class="col-lg-6">
+                                                            <div class="col-lg-6 container-overlay">
                                                                 <img src="{{ $media->url }}"
-                                                                    class="img-fluid rounded fullviewer max-vh-60"
+                                                                    class="img-fluid rounded fullviewer max-vh-60 _overlay"
                                                                     alt="{{ $pst->body }}">
                                                             </div>
                                                         @break
@@ -440,7 +440,8 @@
 
                                                             @default
                                                                 <div class="col-lg-4 mb-2 container-overlay">
-                                                                    <img src="{{ $photo->url }}"
+                                                                    <img src="{{ $photo->urlThumb }}"
+                                                                        data-image_vh="{{ $photo->url }}"
                                                                         class="img-fluid rounded fullviewer max-vh-60 _overlay"
                                                                         alt="{{ $album->body }}">
                                                                 </div>
@@ -546,6 +547,11 @@
                     </div>
                 @endif
             @endforeach
+
+            @if ($feeds->count() % 12 == 0 && $feeds->count() !==0)
+                    <button type="submit" class="btn btn-primary d-block w-100 mt-3" wire:click="loadMore">Cargar mas publicaciones</button>
+                </div>
+            @endif
         </div>
     </div>
 </div>

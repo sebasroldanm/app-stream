@@ -22,6 +22,8 @@ class Snapshots extends Component
                 return Carbon::parse($snapshot->created_at)->format('Y-m-d');
             });
 
+        $this->dispatch('initFullviewer');
+
         return view('livewire.owner.information.snapshots', [
             'snapshots' => $snapshots
         ]);

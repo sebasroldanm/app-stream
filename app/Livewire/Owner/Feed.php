@@ -7,12 +7,13 @@ use App\Models\Owner;
 use App\Models\Photos;
 use App\Models\Video;
 use App\Traits\OwnerProp;
+use App\Traits\SyncData;
 use Carbon\Carbon;
 use Livewire\Component;
 
 class Feed extends Component
 {
-    use OwnerProp;
+    use OwnerProp, SyncData;
 
     public Owner $owner;
 
@@ -24,10 +25,16 @@ class Feed extends Component
     public $birthDate = false;
     public $age = false;
     public $gender = false; // If exist
+    public $feeds = [];
+    public $limit = 12;
 
     public function render()
     {
         $owner = $this->owner;
+        
+        if (is_string($this->owner->data)) {
+            $this->owner->data = json_decode($this->owner->data, false);
+        }
 
         $this->country = $this->flagCountry($owner->country);
         $this->city = 'Medellin';
@@ -42,10 +49,10 @@ class Feed extends Component
         $photos = Photos::where('ownerId', $owner->id)->where('url', '!=', '')->limit(9)->get();
         $videos = Video::where('owner_id', $owner->id)->where('coverUrl', '!=', '')->limit(9)->get();
 
-        $feeds = ModelsFeed::with(["albumFeed.photos", "videoFeed", "postFeed.mediaPostFeeds"])
+        $this->feeds = ModelsFeed::with(["albumFeed.photos", "videoFeed", "postFeed.mediaPostFeeds"])
             ->orderBy("updatedAt", "desc")
             ->where("owner_id", $owner->id)
-            // ->limit(3)
+            ->limit($this->limit)
             ->get();
 
         $this->dispatch('initFullviewer');
@@ -56,7 +63,11 @@ class Feed extends Component
             'owner'     => $owner,
             'photos'    => $photos,
             'videos'    => $videos,
-            'feeds'     => $feeds
         ]);
+    }
+
+    public function loadMore()
+    {
+        $this->limit += 12;
     }
 }

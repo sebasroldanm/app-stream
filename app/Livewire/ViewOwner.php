@@ -167,6 +167,8 @@ class ViewOwner extends Component
         $this->status_video = $this->syncVideo($this->id_owner, $this->username);
 
         $this->status_feed = $this->syncFeedByOwnerId($this->id_owner);
+
+        return redirect()->route('view.owner', ['username' => $this->username]);
     }
 
     public function toggleFavorite()

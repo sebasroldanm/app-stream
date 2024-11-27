@@ -1,5 +1,5 @@
 <footer class="iq-footer bg-white">
-    <button id="scrollToTop" class="btn btn-primary" style="position: fixed; bottom: 20px; display: none;">
+    <button id="scrollToTop" class="btn btn-primary" style="position: fixed; right: 50%; bottom: 5px; display: none;">
         Ir al Top
     </button>
     <div class="container-fluid">

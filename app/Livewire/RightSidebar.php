@@ -24,8 +24,8 @@ class RightSidebar extends Component
     {
         // Cache::forget('owners_right_sidebar');
         $this->owners = Cache::remember('owners_right_sidebar', 20, function () {
-            return Owner::with('latestSnapshots')
-                ->orderBy('isLive', 'DESC')
+            // return Owner::with('latestSnapshots')
+            return Owner::orderBy('isLive', 'DESC')
                 ->orderBy('isOnline', 'DESC')
                 ->limit(20)
                 ->get();

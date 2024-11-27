@@ -105,21 +105,26 @@
                     <div class="card mb-0 card_owner_home">
                         <div class="top-bg-image top-bg-list-owner container-overlay">
                             @if ($owner->data)
-                                <img src="{{ $owner->data->user->user->previewUrlThumbSmall }}" oading="lazy"
+                                <img src="{{ $owner->data->user->user->previewUrlThumbSmall }}" loading="lazy"
                                     class="img-fluid w-100 _overlay" alt="group-bg">
                             @else
                                 <img src="https://placehold.co/320x110?text=No+Imagen" class="img-fluid w-100 _overlay"
-                                    oading="lazy" alt="group-bg">
+                                    loading="lazy" alt="group-bg">
                             @endif
                         </div>
                         <div class="card-body text-center">
                             <div class="group-icon">
-                                @if ($owner->avatar)
-                                    <img src="{{ $owner->avatar }}" alt="profile-img" oading="lazy"
+                                @if ($owner->pic_profile)
+                                    <img src="{{ $owner->pic_profile }}" alt="profile-img" loading="lazy"
                                         class="rounded-circle img-fluid avatar-120">
                                 @else
-                                    <img src="https://placehold.co/300x300?text=No+Imagen" alt="profile-img"
-                                        oading="lazy" class="rounded-circle img-fluid avatar-120">
+                                    @if ($owner->avatar)
+                                        <img src="{{ $owner->avatar }}" alt="profile-img" loading="lazy"
+                                            class="rounded-circle img-fluid avatar-120">
+                                    @else
+                                        <img src="https://placehold.co/300x300?text=No+Imagen" alt="profile-img"
+                                            loading="lazy" class="rounded-circle img-fluid avatar-120">
+                                    @endif
                                 @endif
                             </div>
                             <div class="group-info pt-3 pb-3">
@@ -138,8 +143,8 @@
                                 @if ($owner->name)
                                     <p>
                                         @if (in_array($owner->id, $favs))
-                                            <span class="badge bg-danger"><i
-                                                    class="las la-heart"></i></span> {{ $owner->name }}
+                                            <span class="badge bg-danger"><i class="las la-heart"></i></span>
+                                            {{ $owner->name }}
                                         @else
                                             {{ $owner->name }}
                                         @endif
@@ -147,8 +152,7 @@
                                 @else
                                     <p>
                                         @if (in_array($owner->id, $favs))
-                                            <span class="badge bg-danger"><i
-                                                    class="las la-heart"></i></span>&nbsp;
+                                            <span class="badge bg-danger"><i class="las la-heart"></i></span>&nbsp;
                                         @else
                                             &nbsp;
                                         @endif
