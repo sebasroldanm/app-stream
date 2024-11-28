@@ -83,6 +83,10 @@ ul.header-nav li a.username_reported i {
     max-height: 60vh;
 }
 
+.pics_feed {
+    height: 300px;
+}
+
 i.disable {
     color: #777d74;
     font-size: small;

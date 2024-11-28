@@ -367,7 +367,7 @@
                                                         @case(2)
                                                             <div class="col-lg-6 container-overlay">
                                                                 <img src="{{ $media->url }}"
-                                                                    class="img-fluid rounded fullviewer max-vh-60 _overlay"
+                                                                    class="img-fluid rounded fullviewer max-vh-60 _overlay pics_feed"
                                                                     alt="{{ $pst->body }}">
                                                             </div>
                                                         @break
@@ -433,7 +433,7 @@
                                                             @case(2)
                                                                 <div class="col-lg-6 container-overlay">
                                                                     <img src="{{ $photo->url }}"
-                                                                        class="img-fluid rounded fullviewer max-vh-60 _overlay"
+                                                                        class="img-fluid rounded fullviewer max-vh-60 _overlay pics_feed"
                                                                         alt="{{ $album->body }}">
                                                                 </div>
                                                             @break
@@ -442,7 +442,7 @@
                                                                 <div class="col-lg-4 mb-2 container-overlay">
                                                                     <img src="{{ $photo->urlThumb }}"
                                                                         data-image_vh="{{ $photo->url }}"
-                                                                        class="img-fluid rounded fullviewer max-vh-60 _overlay"
+                                                                        class="img-fluid rounded fullviewer max-vh-60 _overlay pics_feed"
                                                                         alt="{{ $album->body }}">
                                                                 </div>
                                                             @break
