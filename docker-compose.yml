@@ -1,0 +1,105 @@
+
+
+services:
+  laravel_app:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile
+    image: laravel_app
+    ports:
+      - "8081:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - mysql
+    restart: no  # Desactiva el inicio automático
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=laravel
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+    deploy:
+      resources:
+        limits:
+          cpus: '4'          # Limitar a 4 CPUs
+          memory: 512M       # Limitar a 512 MB de memoria
+        reservations:
+          cpus: '1'          # Reservar 1 CPUs
+          memory: 256M       # Reservar 256 MB de memoria
+    networks:
+      - laravel_network
+
+  mysql:
+    image: mysql:8
+    ports:
+      - "30661:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/my.cnf:/etc/mysql/conf.d/my.cnf
+    restart: no  # Desactiva el inicio automático
+    deploy:
+      resources:
+        limits:
+          cpus: '3'           # Limitar a 3 CPUs
+          memory: 700M        # Limitar a 700 MB de memoria
+        reservations:
+          cpus: '1'           # Reservar 1 CPU
+          memory: 128M        # Reservar 128 MB de memoria
+    networks:
+      - laravel_network
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "63791:6379"
+    restart: no  # Desactiva el inicio automático
+    deploy:
+      resources:
+        limits:
+          cpus: '1'           # Limitar a 1 CPUs
+          memory: 256M        # Limitar a 256 MB de memoria
+        reservations:
+          cpus: '1'           # Reservar 1 CPU
+          memory: 128M        # Reservar 128 MB de memoria
+    networks:
+      - laravel_network
+
+  scheduler:
+    image: laravel_app  # Usa la misma imagen de tu aplicación Laravel
+    volumes:
+      - .:/var/www/html
+    entrypoint: ["php", "/var/www/html/artisan", "schedule:work"]
+    depends_on:
+      - laravel_app
+    restart: no  # Desactiva el inicio automático
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=laravel
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+    deploy:
+      resources:
+        limits:
+          cpus: '2'           # Limitar a 2 CPUs
+          memory: 256M        # Limitar a 256 MB de memoria
+        reservations:
+          cpus: '1'           # Reservar 1 CPU
+          memory: 128M        # Reservar 128 MB de memoria
+    networks:
+      - laravel_network
+
+volumes:
+  mysql_data:
+
+networks:
+  laravel_network:
+    driver: bridge
