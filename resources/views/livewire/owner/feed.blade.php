@@ -372,6 +372,14 @@
                                                             </div>
                                                         @break
 
+                                                        @case(3)
+                                                            <div class="col-lg-4 mb-2 container-overlay">
+                                                                <img src="{{ $media->url }}"
+                                                                    class="img-fluid rounded fullviewer max-vh-60 _overlay pics_feed"
+                                                                    alt="{{ $pst->body }}">
+                                                            </div>
+                                                        @break
+
                                                         @default
                                                             <div class="col-lg-4 mb-2">
                                                                 <img src="{{ $media->url }}"

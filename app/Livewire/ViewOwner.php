@@ -95,14 +95,18 @@ class ViewOwner extends Component
             $owner = Owner::whereRaw("MATCH(username) AGAINST(? IN BOOLEAN MODE)", ['"' . $escapedOwner . '"'])->first();
         }
 
+        
         if (is_null($owner) || strcasecmp($owner->username, $this->username) !== 0) {
             $this->error_search = true;
-            $owner = Owner::where('username', $this->username)->first();
+            $own_id = $this->syncOwnerByUsername($this->username);
+            $owner = Owner::find($own_id);
+            // $owner = Owner::where('username', $this->username)->first();
         }
 
         $owner->data = json_decode($owner->data);
         if (!isset($owner->data->user)) {
-            $this->syncOwnerByUsername($this->username);
+            $own_id = $this->syncOwnerByUsername($this->username);
+            $owner = Owner::find($own_id);
         }
         $this->id_owner = $owner->id;
         $intro = Intro::where('owner_id', $owner->id)->orderBy('id', 'desc')->first();

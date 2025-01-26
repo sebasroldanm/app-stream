@@ -54,7 +54,7 @@ trait SyncData
                     $owner->data = $response;
                     $owner->save();
                 }
-                return true;
+                return $owner->id;
             }
         } catch (\Throwable $th) {
             if (strpos($th->getMessage(), '"code":"500"')) {

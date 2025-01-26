@@ -44,7 +44,11 @@ class Similarity extends Component
                 }
             }
 
-            $this->similarity = $this->similarity->sortBy('distance')->take(200);
+            $this->similarity = $this->similarity
+                ->unique('model')
+                ->sortBy('distance')
+                ->take(200);
+
         } catch (\Throwable $th) {
             $this->similarity = false;
         }
