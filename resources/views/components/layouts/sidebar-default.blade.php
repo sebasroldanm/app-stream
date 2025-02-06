@@ -9,13 +9,13 @@
                 </li>
                 <li class="@if (Route::is('explore')) active @endif">
                     <a href="{{ route('explore') }}" class=" ">
-                        <i class="las la-globe"></i><span>Explorar</span>
+                        <i class="las la-search-location"></i><span>Explorar</span>
                     </a>
                 </li>
 
-                <li class="">
-                    <a href="#" class=" ">
-                        <i class="las la-user"></i><span>Perfil</span>
+                <li class="@if (Route::is('timeline')) active @endif">
+                    <a href="{{ route('timeline') }}" class=" ">
+                        <i class="las la-globe"></i><span>Timeline</span>
                     </a>
                 </li>
                 {{-- <li class=" ">

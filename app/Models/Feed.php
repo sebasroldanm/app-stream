@@ -13,6 +13,10 @@ class Feed extends Model
         'likes', 'accessMode', 'owner_id', 'type', 'data'
     ];
 
+    public function owner() {
+        return $this->hasOne(Owner::class, 'id', 'owner_id');
+    }
+
     public function videoFeed()
     {
         return $this->hasMany(VideoFeed::class);
