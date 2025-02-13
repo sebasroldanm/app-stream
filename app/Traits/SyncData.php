@@ -339,7 +339,7 @@ trait SyncData
         $feed->type = $post->type;
         $feed->data = json_encode($post_);
         $updatedAt = str_replace('Z.', '.', $post->updatedAt);
-        $feed->updatedAt = Carbon::parse($updatedAt);
+        $feed->updatedAt = Carbon::parse($updatedAt, 'UTC')->setTimezone(config('app.timezone'));
         $feed->save();
 
         if ($feed->type == 'albumUpdated') {

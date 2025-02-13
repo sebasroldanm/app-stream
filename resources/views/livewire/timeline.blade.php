@@ -222,7 +222,7 @@
                             <div class="col-sm-12">
                                 <div class="card card-block card-stretch card-height">
                                     <div class="card-body">
-                                        <div class="user-post-data">
+                                        <div class="user-post-data" data-id="{{ $feed->id }}">
                                             <div class="d-flex justify-content-between">
                                                 <div class="me-3">
                                                     <a href="{{ route('view.owner', $feed->owner->username) }}">
@@ -531,7 +531,8 @@
                                                                 <span class="dropdown-toggle"
                                                                     data-bs-toggle="dropdown" aria-haspopup="true"
                                                                     aria-expanded="false" role="button">
-                                                                    {{ $pst->likes }} Likes
+                                                                    {{-- {{ $pst->likes }} Likes --}}
+                                                                    00 Likes
                                                                 </span>
                                                             </div>
                                                         </div>
