@@ -1,0 +1,366 @@
+.video-play-button {
+    display: block;
+    width: 104px;
+    height: 104px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -52px 0 0 -52px;
+    cursor: pointer;
+}
+
+.video-play-outline {
+    display: block;
+    width: 96px;
+    height: 96px;
+    border: #FFF 4px solid;
+    border-radius: 50%;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    opacity: .7;
+    transition: all .5s;
+}
+
+.video-play-circle {
+    stroke-dasharray: 315;
+    stroke-dashoffset: 315;
+    transition: stroke-dashoffset .5s;
+}
+
+.video-play-button svg {
+    display: block;
+    transform: rotate(-90deg);
+    transition: transform .3s;
+}
+
+.video-play-button:hover .video-play-circle {
+    stroke-dashoffset: 0;
+}
+
+.video-play-button:active .video-play-outline {
+    transform: scale(1.5);
+    opacity: 0;
+}
+
+.video-play-button:active svg {
+    transform: rotate(-90deg) scale(.95);
+}
+
+/* Player video */
+html {
+    --plyr-color-main: #50b5ff;
+    --plyr-video-background: transparent;
+}
+
+/* Player video */
+
+ul.header-nav li a {
+    background: #ffffff99;
+    backdrop-filter: blur(14px);
+    transition: all 0.3s;
+}
+
+ul.header-nav li a:hover {
+    background: #ffffffcc;
+}
+
+ul.header-nav li a.username_reported {
+    background: #ffffff61;
+    backdrop-filter: blur(14px);
+}
+
+ul.header-nav li a.username_reported i {
+    color: red;
+}
+
+.min-vh-60 {
+    min-height: 60vh;
+}
+
+.max-vh-60 {
+    max-height: 60vh;
+}
+
+.pics_feed {
+    height: 300px;
+}
+
+i.disable {
+    color: #777d74;
+    font-size: small;
+    position: absolute;
+    z-index: 1;
+}
+
+i.offline {
+    color: #ffba68;
+    font-size: small;
+    position: absolute;
+    z-index: 1;
+}
+
+i.online {
+    color: #2dcdb2;
+    font-size: small;
+    position: absolute;
+    z-index: 1;
+}
+
+.profile-img img.live {
+    border: 5px solid #ff000096;
+    padding: 2px;
+    background-color: #ffffff4d;
+    backdrop-filter: blur(14px);
+    width: 150px;
+}
+
+
+.live-icon {
+    display: inline-block;
+    position: relative;
+    top: calc(50% - 5px);
+    background-color: red;
+    width: 10px;
+    height: 10px;
+    margin-left: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.live-icon:before {
+    content: "";
+    display: block;
+    position: absolute;
+    background-color: rgba(255, 0, 0, 0.6);
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    -webkit-animation: live 2s ease-in-out infinite;
+    animation: live 2s ease-in-out infinite;
+    z-index: -1;
+}
+
+.overlay-text {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo semitransparente */
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+@-webkit-keyframes live {
+    0% {
+        transform: scale(1, 1);
+    }
+
+    100% {
+        transform: scale(3.5, 3.5);
+        background-color: rgba(255, 0, 0, 0);
+    }
+}
+
+@keyframes live {
+    0% {
+        transform: scale(1, 1);
+    }
+
+    100% {
+        transform: scale(3.5, 3.5);
+        background-color: rgba(255, 0, 0, 0);
+    }
+}
+
+.nav-pills.profile-feed-items li a.active.live {
+    color: #000000;
+    background: #50b5ff54;
+}
+
+.status-live:before {
+    background-color: rgba(255, 0, 0, 0.6);
+}
+
+/* Skeleton Loader */
+:root {
+    --loader-background-color: #EEEEEE;
+    --loader-highlight-color: #DEDEDE;
+}
+
+.skeleton-loader {
+    width: 300px;
+    height: 15px;
+    background: linear-gradient(90deg, var(--loader-background-color) 25%, var(--loader-highlight-color) 50%, var(--loader-background-color) 75%);
+    background-size: 200% 100%;
+    animation: loading 2s infinite ease-in-out;
+    border-radius: 8px;
+}
+
+.avatar-skeleton {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(90deg, var(--loader-background-color) 25%, var(--loader-highlight-color) 50%, var(--loader-background-color) 75%);
+    background-size: 200% 100%;
+    animation: loading 2s infinite ease-in-out;
+    border-radius: 50%;
+    margin-bottom: 20px;
+}
+
+.cover-image-skeleton {
+    width: 130px;
+    height: 150px;
+    background: linear-gradient(90deg, var(--loader-background-color) 25%, var(--loader-highlight-color) 50%, var(--loader-background-color) 75%);
+    background-size: 200% 100%;
+    animation: loading 2s infinite ease-in-out;
+    border-radius: 8px;
+    margin: 10px;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Skeleton Loader */
+
+
+/** Explorer */
+
+.image-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1/1;
+}
+
+.primary-image,
+.secondary-image,
+.tertiary-image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transition: opacity 0.3s ease;
+}
+
+.primary-image {
+    opacity: 1;
+}
+
+.secondary-image,
+.tertiary-image {
+    opacity: 0;
+}
+
+/* Clases adicionales para mostrar/ocultar imágenes */
+.show-secondary .primary-image,
+.show-tertiary .primary-image,
+.show-tertiary .secondary-image {
+    opacity: 0;
+}
+
+.show-secondary .secondary-image,
+.show-tertiary .tertiary-image {
+    opacity: 1;
+}
+
+
+.s_icon {
+    position: absolute;
+}
+
+.s_icon.right {
+    right: 0;
+}
+
+.s_icon.left {
+    left: 0;
+}
+
+.s_icon.top {
+    top: 0;
+}
+
+.s_icon.bottom {
+    bottom: 0;
+}
+
+.favorite_icon {
+    color: red;
+    background-color: white;
+    border-radius: 25px;
+    padding: 5px;
+    margin: 1px;
+}
+
+/** Explorer */
+
+
+/* Estilo de la imagen en miniatura */
+.fullviewer {
+    cursor: pointer;
+}
+
+/* Estilos del modal (inicialmente oculto) */
+.modal_vp {
+    display: none;
+    /* Oculto por defecto */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+    /* Fondo oscuro semitransparente */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Imagen en el modal centrada */
+.modal_vp-content {
+    display: block;
+    margin: auto;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    object-fit: cover;
+    width: auto;
+    max-height: 90%;
+    max-width: 90%;
+}
+
+/* Botón de cierre en la esquina superior derecha */
+.cerrar {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.no-scroll {
+    overflow: hidden;
+}
+
+.list_medias {
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.filter_blur_10 {
+    filter: blur(10px);
+}
