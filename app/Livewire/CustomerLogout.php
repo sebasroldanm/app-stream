@@ -12,7 +12,7 @@ class CustomerLogout extends Component
         Auth::guard('customer')->logout();  // Cierra la sesión del usuario
 
         // Redirige al usuario a la página de login
-        return redirect()->route('customer.login');
+        return redirect()->route('login');
     }
 
     public function render()

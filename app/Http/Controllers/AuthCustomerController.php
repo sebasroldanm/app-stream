@@ -42,6 +42,6 @@ class AuthCustomerController extends Controller
     public function logout()
     {
         Auth::guard('customer')->logout();  // Cierra la sesión del usuario
-        return redirect()->route('customer.login');
+        return redirect()->route('login');
     }
 }

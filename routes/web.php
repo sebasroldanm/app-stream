@@ -13,21 +13,22 @@ use App\Livewire\ViewOwner;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/login', [AuthCustomerController::class, 'index'])->name('customer.login');
+Route::get('/login', [AuthCustomerController::class, 'index'])->name('login');
 Route::post('/login', [AuthCustomerController::class, 'login'])->name('customer.login.submit');
 Route::get('/logout', [AuthCustomerController::class, 'logout'])->name('customer.logout');
 
+Route::middleware(['auth:customer'])->group(function () {
+    Route::get('/', Home::class)->name('home');
+    Route::get('/timeline', Timeline::class)->name('timeline');
+    Route::get('/about', About::class);
+    Route::get('/contact', Contact::class);
 
-Route::get('/', Home::class)->name('home');
-Route::get('/timeline', Timeline::class)->name('timeline');
-Route::get('/about', About::class);
-Route::get('/contact', Contact::class);
-
-Route::get('/owner/{username}', ViewOwner::class)->name('view.owner');
-Route::get('/explore', Explore::class)->name('explore');
-Route::get('/explore/new-co', NewCO::class)->name('explore.new-co');
-Route::get('/explore/mobile-co', MobileCO::class)->name('explore.mobile-co');
-Route::get('/explore/new-mobile-co', NewMobileCO::class)->name('explore.new-mobile-co');
+    Route::get('/owner/{username}', ViewOwner::class)->name('view.owner');
+    Route::get('/explore', Explore::class)->name('explore');
+    Route::get('/explore/new-co', NewCO::class)->name('explore.new-co');
+    Route::get('/explore/mobile-co', MobileCO::class)->name('explore.mobile-co');
+    Route::get('/explore/new-mobile-co', NewMobileCO::class)->name('explore.new-mobile-co');
+});
 
 
 Route::get('/dashboard', function () {
