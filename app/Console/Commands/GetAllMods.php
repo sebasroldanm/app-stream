@@ -29,7 +29,7 @@ class GetAllMods extends Command
     public function handle()
     {
         echo "\nIniciando proceso...";
-        $proxy = env('API_PROXY');
+        
         $server = env('API_SERVER');
 
         $endpoint = $server . '/api/front/models?improveTs=false&limit=60&offset=0&primaryTag=girls&filterGroupTags=%5B%5B%22tagLanguageColombian%22%5D%2C%5B%22autoTagNew%22%5D%2C%5B%22mobile%22%5D%5D&sortBy=stripRanking&parentTag=autoTagNew';
@@ -39,9 +39,15 @@ class GetAllMods extends Command
         $date_now = Carbon::now();
 
         $client = new Client();
-
-        $response = $client->request('GET', $endpoint, [
-            'verify' => false
+        $data = [
+            's' => $endpoint
+        ];
+        $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
+            'verify' => false,
+            'json' => $data,
+            'headers' => [
+                'Content-Type' => 'application/json',
+            ],
         ]);
 
         $body = $response->getBody();
