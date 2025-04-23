@@ -18,7 +18,7 @@
                     <div class="card mb-3">
                         <div class="card-body">
                             <h4 class="card-title">New CO</h4>
-                            <a href="{{ route('explore.new-co') }}" class="btn btn-primary btn-block">Explorar</a>
+                            <a href="{{ route('explore.new-co') }}" wire:navigate class="btn btn-primary btn-block">Explorar</a>
                         </div>
                     </div>
                 </div>
@@ -27,7 +27,7 @@
                     <div class="card mb-3">
                         <div class="card-body">
                             <h4 class="card-title">New Mobile CO</h4>
-                            <a href="{{ route('explore.new-mobile-co') }}" class="btn btn-primary btn-block">Explorar</a>
+                            <a href="{{ route('explore.new-mobile-co') }}" wire:navigate class="btn btn-primary btn-block">Explorar</a>
                         </div>
                     </div>
                 </div>
@@ -36,7 +36,7 @@
                     <div class="card mb-3">
                         <div class="card-body">
                             <h4 class="card-title">Mobile CO</h4>
-                            <a href="{{ route('explore.mobile-co') }}" class="btn btn-primary btn-block">Explorar</a>
+                            <a href="{{ route('explore.mobile-co') }}" wire:navigate class="btn btn-primary btn-block">Explorar</a>
                         </div>
                     </div>
                 </div>

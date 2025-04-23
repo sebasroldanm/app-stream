@@ -129,7 +129,7 @@
                             </div>
                             <div class="group-info pt-3 pb-3">
                                 <h4>
-                                    <a href="{{ route('view.owner', $owner->username) }}">
+                                    <a href="{{ route('view.owner', $owner->username) }}" wire:navigate>
                                         {{ $owner->username }}
                                         @if ($owner->isLive)
                                             <div class="live-icon"></div>

@@ -3,18 +3,18 @@
         <nav class="iq-sidebar-menu">
             <ul id="iq-sidebar-toggle" class="iq-menu">
                 <li class="@if (Route::is('home')) active @endif">
-                    <a href="{{ route('home') }}" class=" ">
+                    <a href="{{ route('home') }}"  wire:navigate class=" ">
                         <i class="las la-users"></i><span>Home</span>
                     </a>
                 </li>
                 <li class="@if (Route::is('explore')) active @endif">
-                    <a href="{{ route('explore') }}" class=" ">
+                    <a href="{{ route('explore') }}" wire:navigate class=" ">
                         <i class="las la-search-location"></i><span>Explorar</span>
                     </a>
                 </li>
 
                 <li class="@if (Route::is('timeline')) active @endif">
-                    <a href="{{ route('timeline') }}" class=" ">
+                    <a href="{{ route('timeline') }}"  wire:navigate class=" ">
                         <i class="las la-globe"></i><span>Timeline</span>
                     </a>
                 </li>
