@@ -225,7 +225,7 @@
                                         <div class="user-post-data" data-id="{{ $feed->id }}">
                                             <div class="d-flex justify-content-between">
                                                 <div class="me-3">
-                                                    <a href="{{ route('view.owner', $feed->owner->username) }}">
+                                                    <a href="{{ route('view.owner', $feed->owner->username) }}" wire:navigate>
                                                         <img class="avatar-60 rounded-circle"
                                                             src="{{ $feed->owner->avatar }}" alt="">
                                                     </a>
@@ -233,7 +233,7 @@
                                                 <div class="w-100">
                                                     <div class=" d-flex  justify-content-between">
                                                         <div class="">
-                                                            <a href="{{ route('view.owner', $feed->owner->username) }}">
+                                                            <a href="{{ route('view.owner', $feed->owner->username) }}" wire:navigate>
                                                                 <h5 class="mb-0 d-inline-block">
                                                                     {{ $feed->owner->username }}</h5>
                                                             </a>
@@ -549,7 +549,7 @@
                 </div>
 
                 <div class="col-lg-4">
-                    <div class="card">
+                    {{-- <div class="card">
                         <div class="card-header d-flex justify-content-between">
                             <div class="header-title">
                                 <h4 class="card-title">Stories</h4>
@@ -591,8 +591,8 @@
                             </ul>
                             <a href="#" class="btn btn-primary d-block mt-3">See All</a>
                         </div>
-                    </div>
-                    <div class="card">
+                    </div> --}}
+                    {{-- <div class="card">
                         <div class="card-header d-flex justify-content-between">
                             <div class="header-title">
                                 <h4 class="card-title">Events</h4>
@@ -639,31 +639,49 @@
                                 </li>
                             </ul>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
                             <div class="header-title">
-                                <h4 class="card-title">Upcoming Birthday</h4>
+                                <h4 class="card-title">Favoritos</h4>
                             </div>
                         </div>
                         <div class="card-body">
                             <ul class="media-story list-inline m-0 p-0">
-                                <li class="d-flex mb-4 align-items-center">
-                                    <img src="{{ asset('/images/user/01.jpg"') }} alt="story-img"
-                                        class="rounded-circle img-fluid">
-                                    <div class="stories-data ms-3">
-                                        <h5>Anna Sthesia</h5>
-                                        <p class="mb-0">Today</p>
-                                    </div>
-                                </li>
-                                <li class="d-flex align-items-center">
-                                    <img src="{{ asset('/images/user/02.jpg"') }} alt="story-img"
-                                        class="rounded-circle img-fluid">
-                                    <div class="stories-data ms-3">
-                                        <h5>Paul Molive</h5>
-                                        <p class="mb-0">Tomorrow</p>
-                                    </div>
-                                </li>
+                                @foreach ($owner_fav as $own_fav)
+                                    <li class="d-flex mb-4 align-items-center">
+                                        <img src="{{ $own_fav->avatar }}" alt="story-img"
+                                            class="rounded-circle img-fluid">
+                                        <div class="stories-data ms-3">
+                                            <h5>{{ $own_fav->username }}</h5>
+                                            <p class="mb-0">{{ \Carbon\Carbon::parse($own_fav->statusChangedAt)->diffForHumans() }}</p>
+                                        </div>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="header-title">
+                                <h4 class="card-title">Próximo cumpleaños</h4>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <ul class="media-story list-inline m-0 p-0">
+                                @foreach ($owner_birthday as $ownr_b)
+                                    <li class="d-flex mb-4 align-items-center">
+                                        <img src="{{ $ownr_b->avatar }}" alt="story-img"
+                                            class="rounded-circle img-fluid">
+                                        <div class="stories-data ms-3">
+                                            <h5>{{ $ownr_b->username }}</h5>
+                                            @php
+                                                $birthday = \Carbon\Carbon::parse(json_decode($ownr_b->data)->user->user->birthDate)->format('d/m');
+                                            @endphp
+                                            <p class="mb-0">{{ $birthday }}</p>
+                                        </div>
+                                    </li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>
