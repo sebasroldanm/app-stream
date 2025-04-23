@@ -27,7 +27,17 @@ trait SyncData
         $client = new Client();
 
         try {
-            $response = $client->request('GET', env('API_PROXY') . env('API_SERVER') . '/api/front/v2/models/username/' . $username . '/cam');
+            $url = env('API_SERVER') . '/api/front/v2/models/username/' . $username . '/cam';
+            $data = [
+                's' => $url
+            ];
+            $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
+                'verify' => false,
+                'json' => $data,
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ],
+            ]);
 
             $statusCode = $response->getStatusCode();
 
@@ -50,6 +60,7 @@ trait SyncData
                     $owner->isOnline = $dataUser['isOnline'];
                     $owner->isLive = $dataUser['isLive'];
                     $owner->isMobile = $dataUser['isMobile'];
+                    $owner->isDelete = $dataUser['isDeleted'];
                     $owner->statusChangedAt = Carbon::parse($dataUser['statusChangedAt'])->subHours(5);
                     $owner->data = $response;
                     $owner->save();
@@ -79,7 +90,17 @@ trait SyncData
     {
         $client = new Client();
         try {
-            $response = $client->request('GET', env('API_PROXY') . env('API_SERVER') . '/api/front/users/' . $id . '/panels');
+            $url = env('API_SERVER') . '/api/front/users/' . $id . '/panels';
+            $data = [
+                's' => $url
+            ];
+            $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
+                'verify' => false,
+                'json' => $data,
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ],
+            ]);
 
             $statusCode = $response->getStatusCode();
 
@@ -129,7 +150,17 @@ trait SyncData
         $client = new Client();
 
         try {
-            $response = $client->request('GET', env('API_PROXY') . env('API_SERVER') . '/api/front/users/username/' . $username . '/albums');
+            $url = env('API_SERVER') . '/api/front/users/username/' . $username . '/albums';
+            $data = [
+                's' => $url
+            ];
+            $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
+                'verify' => false,
+                'json' => $data,
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ],
+            ]);
 
             $statusCode = $response->getStatusCode();
 
@@ -196,7 +227,17 @@ trait SyncData
     {
         $client = new Client();
         try {
-            $response = $client->request('GET', env('API_PROXY') . env('API_SERVER') . '/api/front/users/' . $id . '/intros');
+            $url = env('API_SERVER') . '/api/front/users/' . $id . '/intros';
+            $data = [
+                's' => $url
+            ];
+            $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
+                'verify' => false,
+                'json' => $data,
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ],
+            ]);
 
             $statusCode = $response->getStatusCode();
 
@@ -235,7 +276,17 @@ trait SyncData
         $client = new Client();
 
         try {
-            $response = $client->request('GET', env('API_PROXY') . env('API_SERVER') . '/api/front/users/username/' . $username . '/videos');
+            $url = env('API_SERVER') . '/api/front/users/username/' . $username . '/videos';
+            $data = [
+                's' => $url
+            ];
+            $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
+                'verify' => false,
+                'json' => $data,
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ],
+            ]);
 
             $statusCode = $response->getStatusCode();
 
@@ -278,7 +329,17 @@ trait SyncData
         $client = new Client();
 
         try {
-            $response = $client->request('GET', env('API_PROXY') . env('API_SERVER') . '/api/front/feed/model/' . $id);
+            $url = env('API_SERVER') . '/api/front/feed/model/' . $id;
+            $data = [
+                's' => $url
+            ];
+            $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
+                'verify' => false,
+                'json' => $data,
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ],
+            ]);
 
             $statusCode = $response->getStatusCode();
 
@@ -298,9 +359,18 @@ trait SyncData
                         foreach ($data->posts as $key => $post) {
                             $this->saveFeed($post);
                         }
-                        $url = '/api/front/feed/model/' . $id . '?createdAt=' . $nextParams->createdAt . '&excludeIds=' . $nextParams->excludeIds;
+                        $url = env('API_SERVER') . '/api/front/feed/model/' . $id . '?createdAt=' . $nextParams->createdAt . '&excludeIds=' . $nextParams->excludeIds;
 
-                        $response = $client->request('GET', env('API_PROXY') . env('API_SERVER') . $url);
+                        $data = [
+                            's' => $url
+                        ];
+                        $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
+                            'verify' => false,
+                            'json' => $data,
+                            'headers' => [
+                                'Content-Type' => 'application/json',
+                            ],
+                        ]);
                         $response = $response->getBody()->getContents();
                         $data = json_decode($response, false);
                         $initNextParams = $nextParams;
