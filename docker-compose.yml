@@ -23,7 +23,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '4'          # Limitar a 4 CPUs
+          cpus: '3'          # Limitar a 4 CPUs
           memory: 512M       # Limitar a 512 MB de memoria
         reservations:
           cpus: '1'          # Reservar 1 CPUs
@@ -47,8 +47,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '3'           # Limitar a 3 CPUs
-          memory: 700M        # Limitar a 700 MB de memoria
+          cpus: '4'           # Limitar a 3 CPUs
+          memory: 1200M        # Limitar a 700 MB de memoria
         reservations:
           cpus: '1'           # Reservar 1 CPU
           memory: 128M        # Reservar 128 MB de memoria
@@ -84,8 +84,8 @@ services:
       - DB_HOST=mysql
       - DB_PORT=3306
       - DB_DATABASE=laravel
-      - DB_USERNAME=root
-      - DB_PASSWORD=root
+      - DB_USERNAME=laravel
+      - DB_PASSWORD=laravel
     deploy:
       resources:
         limits:
