@@ -5,6 +5,7 @@ namespace App\Livewire\Explore;
 use App\Models\Customer;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class MobileCO extends Component
@@ -73,6 +74,7 @@ class MobileCO extends Component
             }
         } catch (\Throwable $th) {
             $this->data = false;
+            Log::error($th->getMessage());
         }
     }
 }
