@@ -19,11 +19,15 @@
                     <div class="row">
                         @foreach ($day as $snapshot)
                             <div class="col-3">
-                                @if ($snapshot->local_url !== '')
-                                    <img loading="lazy" src="{{ URL::to('/') . $snapshot->local_url }}" class="rounded ms-3 mb-3 img-fluid fullviewer"
-                                        alt="Snapshot">
+                                @if ($snapshot->picture_upload_id !== '')
+                                    <img loading="lazy" src="{{ $snapshot->picture->url }}" class="rounded ms-3 mb-3 img-fluid fullviewer" alt="Snapshot">
                                 @else
-                                    <img loading="lazy" src="{{ $snapshot->snapshotUrl }}" class="rounded ms-3 mb-3 img-fluid fullviewer" alt="Snapshot">
+                                    @if ($snapshot->local_url !== '')
+                                        <img loading="lazy" src="{{ URL::to('/') . $snapshot->local_url }}" class="rounded ms-3 mb-3 img-fluid fullviewer"
+                                            alt="Snapshot">
+                                    @else
+                                        <img loading="lazy" src="{{ $snapshot->snapshotUrl }}" class="rounded ms-3 mb-3 img-fluid fullviewer" alt="Snapshot">
+                                    @endif
                                 @endif
                             </div>
                         @endforeach
