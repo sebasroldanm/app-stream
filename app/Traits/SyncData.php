@@ -20,7 +20,7 @@ use GuzzleHttp\Client;
 
 trait SyncData
 {
-    use OwnerProp;
+    use OwnerProp, UploadImageService;
 
     public function syncOwnerByUsername($username)
     {
@@ -200,6 +200,11 @@ trait SyncData
                                     $photo->order = $ph['order'];
                                     $photo->isNew = $ph['isNew'];
                                     $photo->url = isset($ph['url']) ? $ph['url'] : '';
+                                    if (!empty($photo->url)) {
+                                        // Upload photo into ServiceImage & return ID
+                                        $id_picture = $this->uploadImageByUrl($photo->url);
+                                        $photo->picture_upload_id = $id_picture;
+                                    }
                                     $photo->urlThumb = isset($ph['urlThumb']) ? $ph['urlThumb'] : '';
                                     $photo->urlPreview = isset($ph['urlPreview']) ? $ph['urlPreview'] : '';
                                     $photo->urlThumbMicro = $ph['urlThumbMicro'] ? $ph['urlThumbMicro'] : '';
@@ -445,6 +450,11 @@ trait SyncData
         $album->likes = $album_->likes;
         if (isset($album_->preview)) {
             $album->preview = $album_->preview;
+            // Upload photo into ServiceImage & return ID
+            if (empty($album->picture_upload_id)) {
+                $id_picture = $this->uploadImageByUrl($album->preview);
+                $album->picture_upload_id = $id_picture;
+            }
         }
         $createdAt = str_replace('Z.', '.', $album_->createdAt);
         $album->createdAt = Carbon::parse($createdAt);
@@ -455,6 +465,9 @@ trait SyncData
             if (!$photo) {
                 $photo = new PhotoAlbumFeed();
                 $photo->id = $ph->id;
+            }
+            if ($photo->picture_upload_id) {
+                continue;
             }
             $photo->album_feed_id = $album->id;
             $createdAt = str_replace('Z.', '.', $album_->createdAt);
@@ -468,6 +481,9 @@ trait SyncData
             $photo->source = $ph->source;
             if (isset($ph->url)) {
                 $photo->url = $ph->url;
+                // Upload photo into ServiceImage & return ID
+                $id_picture = $this->uploadImageByUrl($photo->url);
+                $photo->picture_upload_id = $id_picture;
             }
             if (isset($ph->urlThumb)) {
                 $photo->urlThumb = $ph->urlThumb;
@@ -532,6 +548,11 @@ trait SyncData
         $post->likes = $data->likes;
         $post->accessMode = $data->accessMode;
         $post->imageUrl = $data->imageUrl;
+        if (!empty($post->imageUrl)) {
+            // Upload photo into ServiceImage & return ID
+            $id_picture = $this->uploadImageByUrl($post->imageUrl);
+            $post->picture_upload_id = $id_picture;
+        }
         $post->save();
 
         foreach ($data->media as $key => $med) {
