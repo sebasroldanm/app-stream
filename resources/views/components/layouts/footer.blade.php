@@ -1,4 +1,4 @@
-<footer class="iq-footer bg-white">
+<footer class="iq-footer">
     <button id="scrollToTop" class="btn btn-primary" style="position: fixed; right: 50%; bottom: 5px; display: none;">
         Ir al Top
     </button>

@@ -62,6 +62,11 @@ body {
     -webkit-tap-highlight-color: transparent
 }
 
+html[data-theme='dark'] body {
+    background-color: #252525;
+    color: white;
+}
+
 hr {
     margin: 1.25rem 0;
     color: inherit;
@@ -92,6 +97,21 @@ h6 {
     font-weight: 400;
     line-height: 1.5;
     color: #3f414d
+}
+
+html[data-theme='dark'] .h1,
+html[data-theme='dark'] .h2,
+html[data-theme='dark'] .h3,
+html[data-theme='dark'] .h4,
+html[data-theme='dark'] .h5,
+html[data-theme='dark'] .h6,
+html[data-theme='dark'] h1,
+html[data-theme='dark'] h2,
+html[data-theme='dark'] h3,
+html[data-theme='dark'] h4,
+html[data-theme='dark'] h5,
+html[data-theme='dark'] h6 {
+    color: white;
 }
 
 .h1,
@@ -4672,6 +4692,11 @@ fieldset:disabled .btn {
     border-radius: 5px
 }
 
+html[data-theme='dark'] .dropdown-menu {
+    background-color: #00000066;
+    backdrop-filter: blur(14px);
+}
+
 .dropdown-menu[data-bs-popper] {
     top: 100%;
     left: 0;
@@ -4902,6 +4927,10 @@ fieldset:disabled .btn {
     border: 0
 }
 
+html[data-theme='dark'] .dropdown-item {
+    color: white;
+}
+
 .dropdown-item:first-child {
     -webkit-border-top-left-radius: 4px;
     border-top-left-radius: 4px;
@@ -4920,6 +4949,12 @@ fieldset:disabled .btn {
 .dropdown-item:hover {
     color: #48a3e6;
     background-color: #e9ecef
+}
+
+html[data-theme='dark'] .dropdown-item:focus,
+html[data-theme='dark'] .dropdown-item:hover {
+    background-color: #00000066;
+    backdrop-filter: blur(14px);
 }
 
 .dropdown-item.active,
@@ -5811,6 +5846,10 @@ fieldset:disabled .btn {
     border-radius: 5px
 }
 
+html[data-theme='dark'] .card {
+    background-color: #181818;
+}
+
 .card>hr {
     margin-right: 0;
     margin-left: 0
@@ -5876,6 +5915,10 @@ fieldset:disabled .btn {
     margin-bottom: 0;
     background-color: #fff;
     border-bottom: 0 solid rgba(0, 0, 0, .125)
+}
+
+html[data-theme='dark'] .card-header {
+    background-color: #181818;
 }
 
 .card-header:first-child {
@@ -13895,6 +13938,10 @@ fieldset:disabled .btn {
     transition: all .3s ease-in-out
 }
 
+html[data-theme='dark'] .iq-top-navbar {
+    background: #00000066;
+}
+
 .iq-top-navbar .navbar-expand-lg {
     -webkit-box-pack: justify !important;
     -webkit-justify-content: space-between !important;
@@ -14125,6 +14172,11 @@ fieldset:disabled .btn {
     background: rgba(80, 181, 255, .2)
 }
 
+html[data-theme='dark'] .iq-search-bar .search-input {
+    border: 1px solid #50b5fffc;
+    background: rgb(141 207 255 / 60%)
+}
+
 .iq-navbar-logo {
     padding: 0;
     width: auto;
@@ -14160,6 +14212,10 @@ fieldset:disabled .btn {
     -webkit-transition: all .3s ease-in-out;
     -o-transition: all .3s ease-in-out;
     transition: all .3s ease-in-out
+}
+
+html[data-theme='dark'] .iq-navbar-logo a span {
+    color: #fff
 }
 
 .iq-navbar-logo a:hover {
@@ -14273,6 +14329,10 @@ fieldset:disabled .btn {
     padding: 1.25rem;
     -webkit-border-radius: 5px;
     border-radius: 5px
+}
+
+html[data-theme='dark'] .header-for-bg .data-block {
+    background: rgba(0, 0, 0, .9)
 }
 
 .profile-header-image .profile-img {
@@ -14530,6 +14590,10 @@ fieldset:disabled .btn {
     border-bottom: 1px solid #f1f1f1
 }
 
+html[data-theme='dark'] .card .card-header {
+    border-bottom: 1px solid #242424;
+}
+
 .card .card-header .header-title .card-title {
     margin-bottom: 0
 }
@@ -14641,6 +14705,12 @@ fieldset:disabled .btn {
     transition: all .3s ease-in-out
 }
 
+html[data-theme='dark'] .iq-sidebar {
+    background: #00000066;
+}
+
+
+
 .iq-sidebar .iq-sidebar-logo {
     float: none;
     width: 100%
@@ -14706,6 +14776,10 @@ fieldset:disabled .btn {
     overflow: hidden;
     -webkit-border-radius: 5px;
     border-radius: 5px
+}
+
+html[data-theme='dark'] .iq-sidebar-menu .iq-menu li a {
+    color: white;
 }
 
 .iq-sidebar-menu .iq-menu li a i {
@@ -14811,6 +14885,10 @@ fieldset:disabled .btn {
 
 .iq-sidebar-menu .iq-menu li.active {
     background: rgba(80, 181, 255, .1)
+}
+
+html[data-theme='dark'] .iq-sidebar-menu .iq-menu li.active {
+    background: rgb(80 181 255 / 50%)
 }
 
 .iq-sidebar-menu .iq-menu li.active>a {
@@ -14945,6 +15023,10 @@ body.sidebar-main .iq-menu-bt-sidebar .iq-menu-bt {
     -webkit-transition: all .3s ease-in-out;
     -o-transition: all .3s ease-in-out;
     transition: all .3s ease-in-out
+}
+
+html[data-theme='dark'] .wrapper-menu {
+    color: white;
 }
 
 @media (min-width:1500px) {
@@ -16453,6 +16535,10 @@ body.sidebar-main .iq-menu-bt-sidebar .iq-menu-bt {
     cursor: pointer
 }
 
+html[data-theme='dark'] .like-block span {
+    color: white;
+}
+
 .like-block span:hover {
     color: #50b5ff
 }
@@ -16569,6 +16655,10 @@ body.sidebar-main .iq-menu-bt-sidebar .iq-menu-bt {
     z-index: 1080
 }
 
+html[data-theme='dark'] #loading {
+    background-color: #242424;
+}
+
 #loading-center {
     background: url(/images/loader.png) no-repeat scroll center center;
     -webkit-background-size: 20% 20%;
@@ -16576,6 +16666,12 @@ body.sidebar-main .iq-menu-bt-sidebar .iq-menu-bt {
     width: 100%;
     height: 100%;
     position: relative
+}
+
+html[data-theme='dark'] #loading-center {
+    background: url(/images/loader-dark.png) no-repeat scroll center center;
+    -webkit-background-size: 20% 20%;
+    background-size: 20%;
 }
 
 .loader {
@@ -20418,11 +20514,20 @@ ul.iq-edit-profile li:last-child a {
     width: calc(100vw - 505px);
     -webkit-transition: all .3s ease-in-out;
     -o-transition: all .3s ease-in-out;
-    transition: all .3s ease-in-out
+    transition: all .3s ease-in-out;
+    background-color: white;
+}
+
+html[data-theme='dark'] .iq-footer {
+    background-color: #00000066;
 }
 
 .iq-footer ul li a {
     color: #777d74
+}
+
+html[data-theme='dark'] .iq-footer ul li a {
+    color: white;
 }
 
 .iq-footer ul li a:hover {
