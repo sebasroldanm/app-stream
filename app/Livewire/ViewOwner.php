@@ -87,20 +87,30 @@ class ViewOwner extends Component
 
     public function render()
     {
+        // //PROV
+        // $this->syncOwnerByUsername($this->username);
+        // //PROV
         $escapedOwner = str_replace('-', '\\-', $this->username);
         $owner = Owner::whereRaw("MATCH(username) AGAINST(? IN BOOLEAN MODE)", ['"' . $escapedOwner . '"'])->first();
-
+        $new_username = "";
         if (empty($owner)) {
-            $this->syncOwnerByUsername($this->username);
+            $new_username = $this->syncOwnerByUsername($this->username);
             $owner = Owner::whereRaw("MATCH(username) AGAINST(? IN BOOLEAN MODE)", ['"' . $escapedOwner . '"'])->first();
         }
-
+        
+        if (!empty($new_username) && is_string($new_username)) {
+            $this->username = $new_username;
+        }
         
         if (is_null($owner) || strcasecmp($owner->username, $this->username) !== 0) {
             $this->error_search = true;
             $own_id = $this->syncOwnerByUsername($this->username);
             $owner = Owner::find($own_id);
             // $owner = Owner::where('username', $this->username)->first();
+        }
+
+        if (is_null($owner)) {
+            return view('livewire.404');
         }
 
         $owner->data = json_decode($owner->data);

@@ -21,7 +21,14 @@
                             type="search" placeholder="Ingresa el username">
                     </div>
                 </div>
-                <div class="offset-4 col-md-1">
+                <div class="offset-2 col-md-2">
+                    <label>Favoritas:</label>
+                    <select class="form-select" wire:change="ListFavorites">
+                        <option value="true">No</option>
+                        <option value="false">Si</option>
+                    </select>
+                </div>
+                <div class="col-md-1">
                     <label>Live:</label>
                     <select class="form-select" wire:change="listLivesChange">
                         <option value="desc">No</option>

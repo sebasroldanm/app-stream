@@ -38,5 +38,11 @@ return [
         'key' => env('IMGBB_API_KEY'),
         'endpoint' => env('IMGBB_API_URL'),
     ],
+    'imgur' => [
+        'client_id'     => env('IMGUR_CLIENT_ID'),
+        'client_secret' => env('IMGUR_CLIENT_SECRET'),
+        'access_token'  => env('IMGUR_ACCESS_TOKEN'),
+        'refresh_token' => env('IMGUR_REFRESH_TOKEN'),
+    ],
 
 ];

@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Jobs\UploadImageService;
 use App\Models\Album;
 use App\Models\AlbumFeed;
 use App\Models\Feed;
@@ -20,27 +21,31 @@ use GuzzleHttp\Client;
 
 trait SyncData
 {
-    use OwnerProp, UploadImageService;
+    use OwnerProp;
 
     public function syncOwnerByUsername($username)
     {
         $client = new Client();
 
         try {
-            $url = env('API_SERVER') . '/api/front/v2/models/username/' . $username . '/cam';
-            $data = [
-                's' => $url
-            ];
-            $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
-                'verify' => false,
-                'json' => $data,
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                ],
-            ]);
+            if (env('ENABLE_PROXY', false)) {
+                $url = env('API_SERVER') . '/api/front/v2/models/username/' . $username . '/cam';
+                $data = [
+                    's' => $url
+                ];
+                $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
+                    'verify' => false,
+                    'json' => $data,
+                    'headers' => [
+                        'Content-Type' => 'application/json',
+                    ],
+                ]);
+            } else {
+                $response = $client->get(env('API_SERVER') . '/api/front/v2/models/username/' . $username . '/cam');
+            }
 
             $statusCode = $response->getStatusCode();
-
+            
             if ($statusCode === 200) {
                 $response = $response->getBody()->getContents();
                 $data = json_decode($response, true);
@@ -51,8 +56,15 @@ trait SyncData
                         $owner = new Owner();
                         $owner->id = $dataUser['id'];
                     }
+                    if (empty($dataUser['username'])) {
+                        $owner->username = $username;
+                        $owner->lastUsername = $this->addUsernameToHistory($owner->lastUsername, $username);
+                    } else {
+                        $owner->username = $dataUser['username'];
+                        $owner->lastUsername = $this->addUsernameToHistory($owner->lastUsername, $dataUser['username']);
+                    }
                     $owner->name = $dataUser['name'];
-                    $owner->username = $dataUser['username'];
+                    $owner->previousUsername = $dataUser['previousUsername'];
                     $owner->avatar = (isset($dataUser['avatarUrlOriginal']) && !empty($dataUser['avatarUrlOriginal'])) ? $dataUser['avatarUrlOriginal'] : $dataUser['avatarUrl'];
                     $owner->preview = $dataUser['previewUrl'];
                     $owner->gender = $dataUser['gender'];
@@ -61,13 +73,22 @@ trait SyncData
                     $owner->isLive = $dataUser['isLive'];
                     $owner->isMobile = $dataUser['isMobile'];
                     $owner->isDelete = $dataUser['isDeleted'];
-                    $owner->statusChangedAt = Carbon::parse($dataUser['statusChangedAt'])->subHours(5);
+                    // Date update platform
+                    $statusRaw = $dataUser['statusChangedAt'] ?? null;
+                    if (empty($statusRaw) || $statusRaw === '0000-00-00' || $statusRaw === '0000-00-00 00:00:00') {
+                        $owner->statusChangedAt = Carbon::parse('1970-01-01 00:00:01');
+                    } else {
+                        $owner->statusChangedAt = Carbon::parse($statusRaw)->subHours(5);
+                    }
                     $owner->data = $response;
                     $owner->save();
+
+
+                    return $owner->id;
                 }
-                return $owner->id;
             }
         } catch (\Throwable $th) {
+            // dd($th);
             if (strpos($th->getMessage(), '"code":"500"')) {
                 $owner = Owner::where('username', $username)->first();
                 if (!$owner) {
@@ -76,6 +97,14 @@ trait SyncData
                 }
                 // $owner->isError = true;
                 $owner->save();
+            }
+            if (strpos($th->getMessage(), '"newUsername"')) {
+                $body = (string) $th->getMessage();
+                $body = trim($body);
+                $body = explode("\n", $body);
+                $json = json_decode($body[1], true);
+                $newUsername = $json['data']['newUsername'] ?? null;
+                return $newUsername;
             }
             $log = new Log();
             $log->type = 'error';
@@ -86,21 +115,59 @@ trait SyncData
         return false;
     }
 
+    /**
+     * Actualiza un historial JSON de usuarios con fecha.
+     *
+     * @param string|null $jsonHistory  El JSON actual (puede ser cadena vacía o null).
+     * @param string      $username     El nombre de usuario a añadir.
+     * @return string                   El JSON actualizado.
+     */
+    function addUsernameToHistory(?string $jsonHistory, string $username): string
+    {
+        // Si viene null o cadena vacía, lo consideramos como historial vacío
+        if (empty($jsonHistory)) {
+            $history = [];
+        } else {
+            // Decodificamos el JSON, y si falla (invalid JSON), también iniciamos array vacío
+            $decoded = json_decode($jsonHistory, true);
+            $history = (is_array($decoded) ? $decoded : []);
+        }
+        // Comprobamos duplicados
+        foreach ($history as $entry) {
+            if (isset($entry['username']) && $entry['username'] === $username) {
+                // Ya existe: devolvemos el JSON tal cual (normalizado)
+                return json_encode($history, JSON_UNESCAPED_UNICODE);
+            }
+        }
+
+        // No existía: lo añadimos con la fecha de hoy (YYYY-MM-DD)
+        $history[] = [
+            'username' => $username,
+            'date'     => date('Y-m-d'),
+        ];
+
+        return json_encode($history, JSON_UNESCAPED_UNICODE);
+    }
+
     public function syncPanelByOwnerId($id)
     {
         $client = new Client();
         try {
-            $url = env('API_SERVER') . '/api/front/users/' . $id . '/panels';
-            $data = [
-                's' => $url
-            ];
-            $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
-                'verify' => false,
-                'json' => $data,
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                ],
-            ]);
+            if (env('ENABLE_PROXY', false)) {
+                $url = env('API_SERVER') . '/api/front/users/' . $id . '/panels';
+                $data = [
+                    's' => $url
+                ];
+                $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
+                    'verify' => false,
+                    'json' => $data,
+                    'headers' => [
+                        'Content-Type' => 'application/json',
+                    ],
+                ]);
+            } else {
+                $response = $client->get(env('API_SERVER') . '/api/front/users/' . $id . '/panels');
+            }
 
             $statusCode = $response->getStatusCode();
 
@@ -150,17 +217,21 @@ trait SyncData
         $client = new Client();
 
         try {
-            $url = env('API_SERVER') . '/api/front/users/username/' . $username . '/albums';
-            $data = [
-                's' => $url
-            ];
-            $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
-                'verify' => false,
-                'json' => $data,
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                ],
-            ]);
+            if (env('ENABLE_PROXY', false)) {
+                $url = env('API_SERVER') . '/api/front/v2/users/username/' . $username . '/albums';
+                $data = [
+                    's' => $url
+                ];
+                $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
+                    'verify' => false,
+                    'json' => $data,
+                    'headers' => [
+                        'Content-Type' => 'application/json',
+                    ],
+                ]);
+            } else {
+                $response = $client->get(env('API_SERVER') . '/api/front/v2/users/username/' . $username . '/albums');
+            }
 
             $statusCode = $response->getStatusCode();
 
@@ -200,17 +271,18 @@ trait SyncData
                                     $photo->order = $ph['order'];
                                     $photo->isNew = $ph['isNew'];
                                     $photo->url = isset($ph['url']) ? $ph['url'] : '';
-                                    if (!empty($photo->url)) {
-                                        // Upload photo into ServiceImage & return ID
-                                        $id_picture = $this->uploadImageByUrl($photo->url);
-                                        $photo->picture_upload_id = $id_picture;
-                                    }
                                     $photo->urlThumb = isset($ph['urlThumb']) ? $ph['urlThumb'] : '';
                                     $photo->urlPreview = isset($ph['urlPreview']) ? $ph['urlPreview'] : '';
                                     $photo->urlThumbMicro = $ph['urlThumbMicro'] ? $ph['urlThumbMicro'] : '';
                                     $photo->createdAt = Carbon::parse($ph['createdAt']);
                                     $photo->data = json_encode($ph);
                                     $photo->save();
+
+                                    if (!empty($photo->url) && empty($photo->picture_upload_id)) {
+                                        // Upload photo into ServiceImage Job
+                                        UploadImageService::dispatch('Photos', $photo->id, $photo->url, $id_owner);
+                                    }
+                                    
                                 }
                             }
                         }
@@ -232,17 +304,21 @@ trait SyncData
     {
         $client = new Client();
         try {
-            $url = env('API_SERVER') . '/api/front/users/' . $id . '/intros';
-            $data = [
-                's' => $url
-            ];
-            $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
-                'verify' => false,
-                'json' => $data,
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                ],
-            ]);
+            if (env('ENABLE_PROXY', false)) {
+                $url = env('API_SERVER') . '/api/front/users/' . $id . '/intros';
+                $data = [
+                    's' => $url
+                ];
+                $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
+                    'verify' => false,
+                    'json' => $data,
+                    'headers' => [
+                        'Content-Type' => 'application/json',
+                    ],
+                ]);
+            } else {
+                $response = $client->get(env('API_SERVER') . '/api/front/users/' . $id . '/intros');
+            }
 
             $statusCode = $response->getStatusCode();
 
@@ -281,17 +357,22 @@ trait SyncData
         $client = new Client();
 
         try {
-            $url = env('API_SERVER') . '/api/front/users/username/' . $username . '/videos';
-            $data = [
-                's' => $url
-            ];
-            $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
-                'verify' => false,
-                'json' => $data,
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                ],
-            ]);
+            if (env('ENABLE_PROXY', false)) {
+                $url = env('API_SERVER') . '/api/front/v2/users/username/' . $username . '/videos';
+                $data = [
+                    's' => $url
+                ];
+                $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
+                    'verify' => false,
+                    'json' => $data,
+                    'headers' => [
+                        'Content-Type' => 'application/json',
+                    ],
+                ]);
+            } else {
+                $response = $client->get(env('API_SERVER') . '/api/front/v2/users/username/' . $username . '/videos');
+            }
+            
 
             $statusCode = $response->getStatusCode();
 
@@ -334,17 +415,21 @@ trait SyncData
         $client = new Client();
 
         try {
-            $url = env('API_SERVER') . '/api/front/feed/model/' . $id;
-            $data = [
-                's' => $url
-            ];
-            $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
-                'verify' => false,
-                'json' => $data,
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                ],
-            ]);
+            if (env('ENABLE_PROXY', false)) {
+                $url = env('API_SERVER') . '/api/front/feed/model/' . $id;
+                $data = [
+                    's' => $url
+                ];
+                $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
+                    'verify' => false,
+                    'json' => $data,
+                    'headers' => [
+                        'Content-Type' => 'application/json',
+                    ],
+                ]);
+            } else {
+                $response = $client->get(env('API_SERVER') . '/api/front/feed/model/' . $id);
+            }
 
             $statusCode = $response->getStatusCode();
 
@@ -365,7 +450,6 @@ trait SyncData
                             $this->saveFeed($post);
                         }
                         $url = env('API_SERVER') . '/api/front/feed/model/' . $id . '?createdAt=' . $nextParams->createdAt . '&excludeIds=' . $nextParams->excludeIds;
-
                         $data = [
                             's' => $url
                         ];
@@ -426,7 +510,7 @@ trait SyncData
         }
 
         if ($feed->type == 'postAdded') {
-            $this->postAdded($feed->id, $post->post);
+            $this->postAdded($feed->id, $post->post, $feed->owner_id);
         }
     }
 
@@ -450,15 +534,15 @@ trait SyncData
         $album->likes = $album_->likes;
         if (isset($album_->preview)) {
             $album->preview = $album_->preview;
-            // Upload photo into ServiceImage & return ID
-            if (empty($album->picture_upload_id)) {
-                $id_picture = $this->uploadImageByUrl($album->preview);
-                $album->picture_upload_id = $id_picture;
-            }
         }
         $createdAt = str_replace('Z.', '.', $album_->createdAt);
         $album->createdAt = Carbon::parse($createdAt);
         $album->save();
+
+        // Upload photo into ServiceImage & return ID
+        if (empty($album->picture_upload_id)) {
+            UploadImageService::dispatch('AlbumFeed', $album->id, $album->preview, $album->owner_id);
+        }
 
         foreach ($data->photos as $ph) {
             $photo = PhotoAlbumFeed::find($ph->id);
@@ -479,12 +563,6 @@ trait SyncData
             $photo->isNew = $ph->isNew;
             $photo->primaryColor = $ph->primaryColor;
             $photo->source = $ph->source;
-            if (isset($ph->url)) {
-                $photo->url = $ph->url;
-                // Upload photo into ServiceImage & return ID
-                $id_picture = $this->uploadImageByUrl($photo->url);
-                $photo->picture_upload_id = $id_picture;
-            }
             if (isset($ph->urlThumb)) {
                 $photo->urlThumb = $ph->urlThumb;
             }
@@ -493,6 +571,11 @@ trait SyncData
             }
             $photo->urlThumbMicro = $ph->urlThumbMicro;
             $photo->save();
+
+            if (isset($ph->url) && empty($photo->picture_upload_id)) {
+                // Upload photo into ServiceImage Job
+                UploadImageService::dispatch('PhotoAlbumFeed', $photo->id, $photo->url, $album->owner_id);
+            }
         }
     }
 
@@ -532,7 +615,7 @@ trait SyncData
         }
     }
 
-    private function postAdded($feed_id, $data)
+    private function postAdded($feed_id, $data, $owner_id)
     {
         // $post_ = clone $data;
         $post = PostFeed::find($data->id);
@@ -548,13 +631,13 @@ trait SyncData
         $post->likes = $data->likes;
         $post->accessMode = $data->accessMode;
         $post->imageUrl = $data->imageUrl;
-        if (!empty($post->imageUrl)) {
-            // Upload photo into ServiceImage & return ID
-            $id_picture = $this->uploadImageByUrl($post->imageUrl);
-            $post->picture_upload_id = $id_picture;
-        }
         $post->save();
 
+        if (!empty($post->imageUrl) && empty($post->image_upload_id)) {
+            // Upload photo into ServiceImage Job
+            UploadImageService::dispatch('PostFeed', $post->id, $post->imageUrl, $owner_id);
+        }
+        
         foreach ($data->media as $key => $med) {
             $media = MediaPostFeed::find($med->recordId);
             if (!$media) {

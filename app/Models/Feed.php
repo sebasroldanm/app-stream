@@ -31,4 +31,9 @@ class Feed extends Model
     {
         return $this->hasMany(AlbumFeed::class, 'post_id');
     }
+
+    public function picture()
+    {
+        return $this->hasOne(PictureUpload::class, 'id', 'picture_upload_id');
+    }
 }

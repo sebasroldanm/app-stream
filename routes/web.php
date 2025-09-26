@@ -12,10 +12,14 @@ use App\Livewire\Timeline;
 use App\Livewire\ViewOwner;
 use Illuminate\Support\Facades\Route;
 
+use App\Traits\SyncData;
+
 
 Route::get('/login', [AuthCustomerController::class, 'index'])->name('login');
 Route::post('/login', [AuthCustomerController::class, 'login'])->name('customer.login.submit');
 Route::get('/logout', [AuthCustomerController::class, 'logout'])->name('customer.logout');
+
+Route::get('/test', [AuthCustomerController::class, 'test']);
 
 Route::middleware(['auth:customer'])->group(function () {
     Route::get('/', Home::class)->name('home');

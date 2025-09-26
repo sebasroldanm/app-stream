@@ -10,8 +10,20 @@ class PhotoAlbumFeed extends Model
     use HasFactory;
 
     protected $fillable = [
-        'album_feed_id', 'createdAt', 'isDeleted', 'album_id', 'order', 'status', 
-        'isNew', 'primaryColor', 'source', 'url', 'urlThumb', 'urlPreview', 'urlThumbMicro'
+        'album_feed_id',
+        'createdAt',
+        'isDeleted',
+        'album_id',
+        'order',
+        'status',
+        'isNew',
+        'primaryColor',
+        'source',
+        'url',
+        'urlThumb',
+        'urlPreview',
+        'urlThumbMicro',
+        'picture_upload_id'
     ];
 
     public function albumFeed()

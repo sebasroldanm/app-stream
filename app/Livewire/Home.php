@@ -21,6 +21,7 @@ class Home extends Component
     // public $orderBy = 'created_at';
     public $orderDir = 'desc';
     public $listLives = false;
+    public $listFavs = null;
 
     public $limit = 24;
 
@@ -50,6 +51,10 @@ class Home extends Component
 
     public function listLivesChange() {
         $this->listLives = !$this->listLives;
+    }
+
+    public function ListFavorites() {
+        $this->listFavs = !$this->listFavs;
     }
 
     public function order()
@@ -82,6 +87,10 @@ class Home extends Component
                 ->with('latestSnapshots')
                 ->when($this->listLives, function ($query) {
                     $query->where('isLive', true);
+                })
+                ->when($this->listFavs !== null && $this->listFavs != false, function ($query) {
+                    $favs = Customer::find(Auth::guard('customer')->user()->id)->getOwnerFavoriteIds()->toArray();
+                    $query->whereIn('id', $favs);
                 })
                 // ->orderBy('isLive', 'DESC')
                 // ->orderBy('isOnline', 'DESC')

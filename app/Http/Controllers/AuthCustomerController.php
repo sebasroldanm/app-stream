@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Traits\SyncData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthCustomerController extends Controller
 {
+    use SyncData;
+
     public function index() {
         return view('login');
     }
@@ -43,5 +46,10 @@ class AuthCustomerController extends Controller
     {
         Auth::guard('customer')->logout();  // Cierra la sesión del usuario
         return redirect()->route('login');
+    }
+
+    public function test()
+    {
+        dd($this->syncFeedByOwnerId(191226603));
     }
 }

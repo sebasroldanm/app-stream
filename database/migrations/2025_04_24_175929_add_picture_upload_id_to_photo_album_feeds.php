@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('photo_album_feeds', function (Blueprint $table) {
-            $table->string('picture_upload_id', 10);
+            $table->string('picture_upload_id', 10)->nullable();
             $table->index('picture_upload_id');
         });
     }

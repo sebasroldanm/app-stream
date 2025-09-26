@@ -39,16 +39,21 @@ class GetAllMods extends Command
         $date_now = Carbon::now();
 
         $client = new Client();
-        $data = [
-            's' => $endpoint
-        ];
-        $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
-            'verify' => false,
-            'json' => $data,
-            'headers' => [
-                'Content-Type' => 'application/json',
-            ],
-        ]);
+
+        if (env('ENABLE_PROXY', false)) {
+            $data = [
+                's' => $endpoint
+            ];
+            $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
+                'verify' => false,
+                'json' => $data,
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ],
+            ]);
+        } else {
+            $response = $client->get($endpoint);
+        }
 
         $body = $response->getBody();
         $json = json_decode($body);
