@@ -1,0 +1,16 @@
+/**
+* Parental control
+*/
+
+img {
+    filter: blur(5px);
+}
+.iq-navbar-logo img,
+.avatar-60,
+.me-2 {
+    filter: none;
+}
+
+/**
+* Parental control
+*/

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme='dark'>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme='{{ env('THEME_APP') }}'>
 
 <head>
     <meta charset="utf-8">
@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="{{ asset('/css/frontend/libs.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/css/frontend/socialv.css?v=4.0.0') }}">
     <link rel="stylesheet" href="{{ asset('/css/frontend/custom.css?v=1.0.0') }}">
+    @if (env('PARENTAL_CONTROL') == 'production')
+        <link rel="stylesheet" href="{{ asset('/css/frontend/parental.css?v=1.0.0') }}">
+    @endif
     <link rel="stylesheet" href="{{ asset('/vendor/fortawesome/fontawesome-free/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/vendor/remixicon/fonts/remixicon.css') }}">
     <link rel="stylesheet" href="{{ asset('/vendor/vanillajs-datepicker/dist/css/datepicker.min.css') }}">
