@@ -1,4 +1,4 @@
-FROM php:8.3-fpm-alpine
+FROM php:8.4-cli-alpine
 
 # Install system dependencies
 RUN apk add --no-cache \
@@ -14,6 +14,7 @@ RUN apk add --no-cache \
     libjpeg-turbo-dev \
     libpng-dev \
     postgresql-dev \
+    linux-headers \
     && rm -rf /var/cache/apk/*
 
 # Install PHP extensions
@@ -30,22 +31,28 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     exif \
     pcntl \
     bcmath \
-    opcache
+    opcache \
+    sockets
 
-# Install Composer
+# Install Composer 2.x
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Install Redis extension and other PECL extensions
-RUN pecl install redis \
-    && docker-php-ext-enable redis
+# Install Redis and Swoole extensions
+RUN pecl install redis swoole \
+    && docker-php-ext-enable redis swoole
 
-# Configure PHP settings for production
-RUN echo "opcache.enable=1" >> /usr/local/etc/php/conf.d/opcache.ini \
-    && echo "opcache.memory_consumption=128" >> /usr/local/etc/php/conf.d/opcache.ini \
-    && echo "opcache.interned_strings_buffer=8" >> /usr/local/etc/php/conf.d/opcache.ini \
-    && echo "opcache.max_accelerated_files=4000" >> /usr/local/etc/php/conf.d/opcache.ini \
-    && echo "opcache.revalidate_freq=2" >> /usr/local/etc/php/conf.d/opcache.ini \
-    && echo "opcache.fast_shutdown=1" >> /usr/local/etc/php/conf.d/opcache.ini
+# Configure PHP settings optimized for PHP 8.4 and Octane
+RUN echo "opcache.enable=1" >> /usr/local/etc/php/conf.d/octane.ini \
+    && echo "opcache.enable_cli=1" >> /usr/local/etc/php/conf.d/octane.ini \
+    && echo "opcache.memory_consumption=256" >> /usr/local/etc/php/conf.d/octane.ini \
+    && echo "opcache.interned_strings_buffer=16" >> /usr/local/etc/php/conf.d/octane.ini \
+    && echo "opcache.max_accelerated_files=10000" >> /usr/local/etc/php/conf.d/octane.ini \
+    && echo "opcache.revalidate_freq=60" >> /usr/local/etc/php/conf.d/octane.ini \
+    && echo "opcache.fast_shutdown=1" >> /usr/local/etc/php/conf.d/octane.ini \
+    && echo "opcache.jit_buffer_size=100M" >> /usr/local/etc/php/conf.d/octane.ini \
+    && echo "opcache.jit=tracing" >> /usr/local/etc/php/conf.d/octane.ini \
+    && echo "memory_limit=512M" >> /usr/local/etc/php/conf.d/octane.ini \
+    && echo "max_execution_time=300" >> /usr/local/etc/php/conf.d/octane.ini
 
 # Create user for running the application
 RUN addgroup -g 1000 -S www && \
@@ -60,7 +67,8 @@ RUN chown -R www:www /var/www/html
 # Switch to non-root user
 USER www
 
-# Expose port 9000 for PHP-FPM
-EXPOSE 9000
+# Expose port 8000 for Octane
+EXPOSE 8000
 
-CMD ["php-fpm"]
+# Default command for Octane
+CMD ["php", "artisan", "octane:start", "--host=0.0.0.0", "--port=8000"]
