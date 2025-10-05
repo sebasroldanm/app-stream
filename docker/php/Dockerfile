@@ -1,74 +1,75 @@
-FROM php:8.4-cli-alpine
+FROM php:8.4-fpm-alpine
 
 # Install system dependencies
 RUN apk add --no-cache \
-    $PHPIZE_DEPS \
-    git \
-    mysql-client \
+    bash \
     curl \
-    libxml2-dev \
-    oniguruma-dev \
-    icu-dev \
+    libpng-dev \
     libzip-dev \
+    zip \
+    unzip \
+    git \
+    oniguruma-dev \
     freetype-dev \
     libjpeg-turbo-dev \
-    libpng-dev \
+    libwebp-dev \
     postgresql-dev \
+    icu-dev \
     linux-headers \
-    && rm -rf /var/cache/apk/*
+    fcgi
 
 # Install PHP extensions
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) \
-    mbstring \
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+    && docker-php-ext-install \
     pdo \
     pdo_mysql \
     pdo_pgsql \
-    xml \
+    mbstring \
     zip \
-    intl \
-    gd \
     exif \
     pcntl \
     bcmath \
-    opcache \
-    sockets
+    gd \
+    intl \
+    opcache
 
-# Install Composer 2.x
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Install Redis extension
+RUN apk add --no-cache pcre-dev $PHPIZE_DEPS \
+    && pecl install redis \
+    && docker-php-ext-enable redis \
+    && apk del pcre-dev $PHPIZE_DEPS
 
-# Install Redis and Swoole extensions
-RUN pecl install redis swoole \
-    && docker-php-ext-enable redis swoole
+# Install Xdebug
+RUN apk add --no-cache $PHPIZE_DEPS \
+    && pecl install xdebug-3.4.0 \
+    && docker-php-ext-enable xdebug \
+    && apk del $PHPIZE_DEPS
 
-# Configure PHP settings optimized for PHP 8.4 and Octane
-RUN echo "opcache.enable=1" >> /usr/local/etc/php/conf.d/octane.ini \
-    && echo "opcache.enable_cli=1" >> /usr/local/etc/php/conf.d/octane.ini \
-    && echo "opcache.memory_consumption=256" >> /usr/local/etc/php/conf.d/octane.ini \
-    && echo "opcache.interned_strings_buffer=16" >> /usr/local/etc/php/conf.d/octane.ini \
-    && echo "opcache.max_accelerated_files=10000" >> /usr/local/etc/php/conf.d/octane.ini \
-    && echo "opcache.revalidate_freq=60" >> /usr/local/etc/php/conf.d/octane.ini \
-    && echo "opcache.fast_shutdown=1" >> /usr/local/etc/php/conf.d/octane.ini \
-    && echo "opcache.jit_buffer_size=100M" >> /usr/local/etc/php/conf.d/octane.ini \
-    && echo "opcache.jit=tracing" >> /usr/local/etc/php/conf.d/octane.ini \
-    && echo "memory_limit=512M" >> /usr/local/etc/php/conf.d/octane.ini \
-    && echo "max_execution_time=300" >> /usr/local/etc/php/conf.d/octane.ini
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Create user for running the application
-RUN addgroup -g 1000 -S www && \
-    adduser -u 1000 -S www -G www
+# Create PHP-FPM healthcheck script
+RUN echo '#!/bin/sh' > /usr/local/bin/php-fpm-healthcheck \
+    && echo 'SCRIPT_NAME=/ping SCRIPT_FILENAME=/ping REQUEST_METHOD=GET cgi-fcgi -bind -connect 127.0.0.1:9000' >> /usr/local/bin/php-fpm-healthcheck \
+    && chmod +x /usr/local/bin/php-fpm-healthcheck
 
 # Set working directory
 WORKDIR /var/www/html
 
-# Change ownership of the working directory
-RUN chown -R www:www /var/www/html
+# Copy PHP configuration
+COPY ./php.ini /usr/local/etc/php/conf.d/custom.ini
 
-# Switch to non-root user
-USER www
+# Copy Xdebug configuration
+COPY ./xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
-# Expose port 8000 for Octane
-EXPOSE 8000
+# Copy PHP-FPM pool configuration
+COPY ./www.conf /usr/local/etc/php-fpm.d/www.conf
 
-# Default command for Octane
-CMD ["php", "artisan", "octane:start", "--host=0.0.0.0", "--port=8000"]
+# Create www-data user with proper permissions
+RUN addgroup -g 1000 -S www-data 2>/dev/null || true \
+    && adduser -u 1000 -D -S -G www-data www-data 2>/dev/null || true
+
+# Expose port 9000 for PHP-FPM
+EXPOSE 9000
+
+CMD ["php-fpm"]
