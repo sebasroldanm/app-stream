@@ -280,7 +280,7 @@ trait SyncData
 
                                     if (!empty($photo->url) && empty($photo->picture_upload_id)) {
                                         // Upload photo into ServiceImage Job
-                                        UploadImageService::dispatch('Photos', $photo->id, $photo->url, $id_owner);
+                                        // UploadImageService::dispatch('Photos', $photo->id, $photo->url, $id_owner);
                                     }
                                     
                                 }
@@ -541,7 +541,7 @@ trait SyncData
 
         // Upload photo into ServiceImage & return ID
         if (empty($album->picture_upload_id)) {
-            UploadImageService::dispatch('AlbumFeed', $album->id, $album->preview, $album->owner_id);
+            // UploadImageService::dispatch('AlbumFeed', $album->id, $album->preview, $album->owner_id);
         }
 
         foreach ($data->photos as $ph) {
@@ -574,7 +574,7 @@ trait SyncData
 
             if (isset($ph->url) && empty($photo->picture_upload_id)) {
                 // Upload photo into ServiceImage Job
-                UploadImageService::dispatch('PhotoAlbumFeed', $photo->id, $photo->url, $album->owner_id);
+                // UploadImageService::dispatch('PhotoAlbumFeed', $photo->id, $photo->url, $album->owner_id);
             }
         }
     }
@@ -635,7 +635,7 @@ trait SyncData
 
         if (!empty($post->imageUrl) && empty($post->image_upload_id)) {
             // Upload photo into ServiceImage Job
-            UploadImageService::dispatch('PostFeed', $post->id, $post->imageUrl, $owner_id);
+            // UploadImageService::dispatch('PostFeed', $post->id, $post->imageUrl, $owner_id);
         }
         
         foreach ($data->media as $key => $med) {
