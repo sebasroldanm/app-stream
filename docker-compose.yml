@@ -1,5 +1,40 @@
 services:
-  # Nginx service (opcional con Octane, pero útil para archivos estáticos)
+  # Laravel PHP-FPM service (primero para que inicie antes)
+  app:
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile
+    container_name: laravel_app
+    restart: unless-stopped
+    volumes:
+      - .:/var/www/html
+    working_dir: /var/www/html
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - laravel_network
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=app_stream
+      - DB_USERNAME=admin
+      - DB_PASSWORD=password
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - XDEBUG_MODE=debug,develop
+    healthcheck:
+      test: ["CMD-SHELL", "php-fpm-healthcheck || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 40s
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  # Nginx service
   nginx:
     image: nginx:stable-alpine
     container_name: laravel_nginx
@@ -7,34 +42,18 @@ services:
       - "8065:80"
     volumes:
       - .:/var/www/html
-      - ./docker/nginx/octane.conf:/etc/nginx/conf.d/default.conf
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
-      - app
+      app:
+        condition: service_healthy
     networks:
       - laravel_network
-
-  # Laravel Octane service
-  app:
-    build:
-      context: ./docker/php
-      dockerfile: Dockerfile
-    container_name: laravel_octane
     restart: unless-stopped
-    ports:
-      - "8000:8000"  # Puerto directo de Octane
-    volumes:
-      - .:/var/www/html
-    working_dir: /var/www/html
-    depends_on:
-      - mysql
-      - redis
-    networks:
-      - laravel_network
-    environment:
-      - OCTANE_WORKERS=4
-      - OCTANE_TASK_WORKERS=6
-      - OCTANE_MAX_REQUESTS=1000
-    command: ["php", "artisan", "octane:start", "--host=0.0.0.0", "--port=8000", "--workers=4", "--task-workers=6", "--max-requests=1000"]
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
 
   # MySQL service
   mysql:
@@ -48,12 +67,18 @@ services:
       MYSQL_PASSWORD: password
       MYSQL_ALLOW_EMPTY_PASSWORD: "no"
     volumes:
-      - ./docker/mysql/data:/var/lib/mysql
-      - ./docker/my.cnf:/etc/mysql/conf.d/my.cnf
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
     ports:
       - "33061:3306"
     networks:
       - laravel_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot123"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 30s
 
   # Redis service
   redis:
