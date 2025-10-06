@@ -40,18 +40,23 @@ class NewCO extends Component
         $client = new Client();
 
         try {
-            $url = "models?limit=" . $this->limit . "&offset=" . $this->offset . "&primaryTag=girls&filterGroupTags=%5B%5B%22tagLanguageColombian%22%5D%2C%5B%22autoTagNew%22%5D%5D&sortBy=trending&parentTag=autoTagNew";
-            $url = env('API_SERVER') . '/api/front/' . $url;
+            $url = env('API_SERVER') . '/api/front/models';
 
-            $data = [
-                's' => $url
-            ];
-
-            $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
+            $response = $client->get($url, [
                 'verify' => false,
-                'json' => $data,
                 'headers' => [
-                    'Content-Type' => 'application/json',
+                    'User-Agent' => 'PostmanRuntime/7.39.0',
+                    'Accept' => '*/*',
+                    'Accept-Encoding' => 'gzip, deflate, br',
+                    'Connection' => 'keep-alive'
+                ],
+                'query' => [
+                    'limit' => 60,
+                    'offset' => 0,
+                    'primaryTag' => 'girls',
+                    'filterGroupTags' => '[["tagLanguageColombian"],["autoTagNew"]]',
+                    'sortBy' => 'trending',
+                    'parentTag' => 'autoTagNew',
                 ],
             ]);
 
