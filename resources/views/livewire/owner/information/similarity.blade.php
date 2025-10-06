@@ -39,7 +39,7 @@
                             </div>
                             <div class="col-12 py-2 text-center">
                                 @if ($result->platform == 'sc')
-                                    <a href="{{ route('view.owner', $result->model) }}" class="btn btn-success">Ver
+                                    <a href="{{ route('owner.feed', $result->model) }}" class="btn btn-success">Ver
                                         aquí</a>
                                 @else
                                     <a href="{{ $result->urls->externalProfile }}" target="_blank"

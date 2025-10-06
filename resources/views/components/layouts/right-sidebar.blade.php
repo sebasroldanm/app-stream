@@ -21,12 +21,12 @@
                             <div class="d-flex align-items-center mb-4">
                                 <div
                                     class="iq-profile-avatar @if ($owner->isLive) status-live @else @if ($owner->isOnline) status-online @endif @endif">
-                                    <a href="{{ route('view.owner', $owner->username) }}">
+                                    <a href="{{ route('owner.feed', $owner->username) }}">
                                         <img class="rounded-circle avatar-50" src="{{ $owner->avatar }}" alt="">
                                     </a>
                                 </div>
                                 <div class="ms-3">
-                                    <a href="{{ route('view.owner', $owner->username) }}">
+                                    <a href="{{ route('owner.feed', $owner->username) }}">
                                         <h6 class="mb-0">{{ $owner->username }}</h6>
                                     </a>
                                     <p class="mb-0">
@@ -61,12 +61,12 @@
                         <div class="d-flex align-items-center mb-4">
                             <div
                                 class="iq-profile-avatar @if ($owner->isLive) status-live @else @if ($owner->isOnline) status-online @endif @endif">
-                                <a href="{{ route('view.owner', $owner->username) }}">
+                                <a href="{{ route('owner.feed', $owner->username) }}">
                                     <img class="rounded-circle avatar-50" src="{{ $owner->avatar }}" alt="">
                                 </a>
                             </div>
                             <div class="ms-3">
-                                <a href="{{ route('view.owner', $owner->username) }}">
+                                <a href="{{ route('owner.feed', $owner->username) }}">
                                     <h6 class="mb-0">{{ $owner->username }}</h6>
                                 </a>
                                 <p class="mb-0">

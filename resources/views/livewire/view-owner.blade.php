@@ -161,36 +161,62 @@
                 <div class="card">
                     <div class="card-body p-0">
                         <div class="user-tabing">
-                            <ul
-                                class="nav nav-pills d-flex align-items-center justify-content-center profile-feed-items p-0 m-0">
+                            <ul class="nav nav-pills d-flex align-items-center justify-content-center profile-feed-items p-0 m-0">
                                 @if ($owner->isLive)
                                     <li class="nav-item col-12 col-sm-2 p-0">
-                                        <a class="nav-link live @if ($showLive) active @endif "
-                                            href="#pills-live-tab" data-bs-toggle="pill" data-bs-target="#live"
-                                            role="button" wire:click="loadComponent('live')">Live<div class="live-icon"></div></a>
+                                        <a wire:navigate
+                                        href="{{ route('owner.live', ['username' => $owner->username]) }}"
+                                        class="nav-link live @if ($showLive) active @endif"
+                                        data-bs-toggle="pill"
+                                        data-bs-target="#live"
+                                        role="button">
+                                        Live <div class="live-icon"></div>
+                                        </a>
                                     </li>
                                 @endif
+
                                 <li class="nav-item col-12 @if ($owner->isLive) col-sm-2 @else col-sm-3 @endif p-0">
-                                    <a class="nav-link @if ($showFeed) active @endif"
-                                        href="#pills-feed-tab" data-bs-toggle="pill" data-bs-target="#feed"
-                                        role="button" wire:click="loadComponent('feed')">Feed</a>
+                                    <a wire:navigate
+                                    href="{{ route('owner.feed', ['username' => $owner->username]) }}"
+                                    class="nav-link @if ($showFeed) active @endif"
+                                    data-bs-toggle="pill"
+                                    data-bs-target="#feed"
+                                    role="button">
+                                    Feed
+                                    </a>
                                 </li>
+
                                 <li class="nav-item col-12 col-sm-3 p-0">
-                                    <a class="nav-link @if ($showInformation) active @endif"
-                                        href="#pills-info-tab" data-bs-toggle="pill" data-bs-target="#infomation"
-                                        role="button" wire:click="loadComponent('information')">Información</a>
+                                    <a wire:navigate
+                                    href="{{ route('owner.information', ['username' => $owner->username]) }}"
+                                    class="nav-link @if ($showInformation) active @endif"
+                                    data-bs-toggle="pill"
+                                    data-bs-target="#infomation"
+                                    role="button">
+                                    Información
+                                    </a>
                                 </li>
+
                                 <li class="nav-item col-12 @if ($owner->isLive) col-sm-2 @else col-sm-3 @endif p-0">
-                                    <a class="nav-link @if ($showAlbums) active @endif"
-                                        href="#pills-albums-tab" data-bs-toggle="pill"
-                                        wire:click="loadComponent('albums')" data-bs-target="#albums"
-                                        role="button">Albums</a>
+                                    <a wire:navigate
+                                    href="{{ route('owner.albums', ['username' => $owner->username]) }}"
+                                    class="nav-link @if ($showAlbums) active @endif"
+                                    data-bs-toggle="pill"
+                                    data-bs-target="#albums"
+                                    role="button">
+                                    Albums
+                                    </a>
                                 </li>
+
                                 <li class="nav-item col-12 col-sm-3 p-0">
-                                    <a class="nav-link @if ($showVideos) active @endif"
-                                        href="#pills-videos-tab" data-bs-toggle="pill"
-                                        wire:click="loadComponent('videos')" data-bs-target="#videos"
-                                        role="button">Videos</a>
+                                    <a wire:navigate
+                                    href="{{ route('owner.videos', ['username' => $owner->username]) }}"
+                                    class="nav-link @if ($showVideos) active @endif"
+                                    data-bs-toggle="pill"
+                                    data-bs-target="#videos"
+                                    role="button">
+                                    Videos
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -203,35 +229,35 @@
                         class="tab-pane fade @if ($showLive) show active @endif" id="live"
                         role="tabpanel">
                         @if ($showLive)
-                            @livewire('owner.live', ['owner' => $owner])
+                            <livewire:owner.live :owner="$owner" lazy />
                         @endif
                     </div>
                     <div wire:loading.remove
                         class="tab-pane fade @if ($showFeed) show active @endif" id="feed"
                         role="tabpanel">
                         @if ($showFeed)
-                            @livewire('owner.feed', ['owner' => $owner])
+                            <livewire:owner.feed :owner="$owner" lazy />
                         @endif
                     </div>
                     <div wire:loading.remove
                         class="tab-pane fade @if ($showInformation) show active @endif" id="infomation"
                         role="tabpanel">
                         @if ($showInformation)
-                            @livewire('owner.information', ['owner' => $owner])
+                            <livewire:owner.information :owner="$owner" lazy />
                         @endif
                     </div>
                     <div wire:loading.remove
                         class="tab-pane fade @if ($showAlbums) show active @endif" id="albums"
                         role="tabpanel">
                         @if ($showAlbums)
-                            @livewire('owner.albums', ['owner' => $owner])
+                            <livewire:owner.albums :owner="$owner" lazy />
                         @endif
                     </div>
                     <div wire:loading.remove
                         class="tab-pane fade @if ($showVideos) show active @endif" id="videos"
                         role="tabpanel">
                         @if ($showVideos)
-                            @livewire('owner.videos', ['owner' => $owner])
+                            <livewire:owner.videos :owner="$owner" lazy />
                         @endif
                     </div>
                 </div>

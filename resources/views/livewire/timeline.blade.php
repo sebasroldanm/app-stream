@@ -225,7 +225,7 @@
                                         <div class="user-post-data" data-id="{{ $feed->id }}">
                                             <div class="d-flex justify-content-between">
                                                 <div class="me-3">
-                                                    <a href="{{ route('view.owner', $feed->owner->username) }}" wire:navigate>
+                                                    <a href="{{ route('owner.feed', $feed->owner->username) }}" wire:navigate>
                                                         <img class="avatar-60 rounded-circle"
                                                             src="{{ $feed->owner->avatar }}" alt="">
                                                     </a>
@@ -233,7 +233,7 @@
                                                 <div class="w-100">
                                                     <div class=" d-flex  justify-content-between">
                                                         <div class="">
-                                                            <a href="{{ route('view.owner', $feed->owner->username) }}" wire:navigate>
+                                                            <a href="{{ route('owner.feed', $feed->owner->username) }}" wire:navigate>
                                                                 <h5 class="mb-0 d-inline-block">
                                                                     {{ $feed->owner->username }}</h5>
                                                             </a>

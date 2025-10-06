@@ -42,6 +42,17 @@ class ViewOwner extends Component
     public function mount($username)
     {
         $this->username = $username;
+
+        $routeName = request()->route()->getName();
+
+        match ($routeName) {
+            'owner.feed' => $this->loadComponent('feed'),
+            'owner.albums' => $this->loadComponent('albums'),
+            'owner.videos' => $this->loadComponent('videos'),
+            'owner.information' => $this->loadComponent('information'),
+            'owner.live' => $this->loadComponent('live'),
+            default => $this->loadComponent('feed'),
+        };
     }
 
     public function loadComponent($component)
@@ -182,7 +193,7 @@ class ViewOwner extends Component
 
         $this->status_feed = $this->syncFeedByOwnerId($this->id_owner);
 
-        return redirect()->route('view.owner', ['username' => $this->username]);
+        return redirect()->route('owner.feed', ['username' => $this->username]);
     }
 
     public function toggleFavorite()

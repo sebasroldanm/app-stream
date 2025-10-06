@@ -136,7 +136,7 @@
                             </div>
                             <div class="group-info pt-3 pb-3">
                                 <h4>
-                                    <a href="{{ route('view.owner', $owner->username) }}" wire:navigate>
+                                    <a href="{{ route('owner.feed', $owner->username) }}" wire:navigate>
                                         {{ $owner->username }}
                                         @if ($owner->isLive)
                                             <div class="live-icon"></div>
@@ -202,7 +202,7 @@
                                 <div class="group-member mb-3">
                                     <div class="iq-media-group">
                                         @foreach ($owner->latestSnapshots as $snapshot)
-                                            <a href="{{ route('view.owner', $owner->username) }}" class="iq-media">
+                                            <a href="{{ route('owner.feed', $owner->username) }}" class="iq-media">
                                                 <img class="img-fluid avatar-40 rounded-circle"
                                                     src="{{ URL::to('/') . $snapshot->local_url }}"
                                                     onerror="this.onerror=null; this.src='https://placehold.co/50x50.jpg?text=:(';"
@@ -216,7 +216,7 @@
                                 <button class="btn btn-danger d-block w-100"><i class="las la-exclamation-triangle"></i>
                                     No encontrado</button>
                             @else
-                                <a href="{{ route('view.owner', $owner->username) }}" type="submit"
+                                <a href="{{ route('owner.feed', $owner->username) }}" type="submit"
                                     class="btn btn-primary d-block w-100">Ver perfil</a>
                             @endif
                         </div>

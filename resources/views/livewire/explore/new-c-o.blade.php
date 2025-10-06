@@ -16,7 +16,7 @@
                 @if ($data !== false)
                     @foreach ($owners as $owner)
                         <div class="col-3 col-sm-2">
-                            <a href="{{ route('view.owner', $owner->username) }}" class="card mb-3">
+                            <a href="{{ route('owner.feed', $owner->username) }}" class="card mb-3">
                                 <div class="card_explorer_image">
                                     <div class="image-container container-overlay">
                                         @if (isset($owner->avatarUrl))

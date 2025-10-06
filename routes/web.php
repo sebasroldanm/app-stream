@@ -27,7 +27,14 @@ Route::middleware(['auth:customer'])->group(function () {
     Route::get('/about', About::class);
     Route::get('/contact', Contact::class);
 
-    Route::get('/owner/{username}', ViewOwner::class)->name('view.owner');
+    Route::prefix('owner/{username}')->group(function () {
+        Route::get('/', ViewOwner::class)->name('owner.feed');
+        Route::get('/feed', ViewOwner::class)->name('owner.feed');
+        Route::get('/information', ViewOwner::class)->name('owner.information');
+        Route::get('/albums', ViewOwner::class)->name('owner.albums');
+        Route::get('/videos', ViewOwner::class)->name('owner.videos');
+        Route::get('/live', ViewOwner::class)->name('owner.live');
+    });
     Route::get('/explore', Explore::class)->name('explore');
     Route::get('/explore/new-co', NewCO::class)->name('explore.new-co');
     Route::get('/explore/mobile-co', MobileCO::class)->name('explore.mobile-co');
