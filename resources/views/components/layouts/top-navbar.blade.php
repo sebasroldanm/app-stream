@@ -204,10 +204,17 @@
                         </div>
                     </li>
                     <li class="nav-item dropdown">
-                        <a href="#" class="dropdown-toggle" id="mail-drop" data-bs-toggle="dropdown"
+                        <a href="#" wire:click="togglethemeApp">
+                            @if ($themeApp === 'dark')
+                                <i data-theme="dark" class="ri-sun-fill"></i>
+                            @else
+                                <i data-theme="light" class="ri-contrast-2-line"></i>
+                            @endif
+                        </a>
+                        {{-- <a href="#" class="dropdown-toggle" id="mail-drop" data-bs-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
                             <i class="ri-mail-line"></i>
-                        </a>
+                        </a> --}}
                         <div class="sub-drop dropdown-menu" aria-labelledby="mail-drop">
                             <div class="card shadow-none m-0">
                                 <div class="card-header d-flex justify-content-between bg-primary">

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme='{{ env('THEME_APP') }}'>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme='{{ session('themeApp') ?? 'light' }}'>
 
 <head>
     <meta charset="utf-8">
@@ -36,9 +36,9 @@
     <!-- Wrapper Start -->
     <div class="wrapper">
 
-        @livewire('sidebar-default')
-        @livewire('top-navbar')
-        @livewire('right-sidebar')
+        <livewire:sidebar-default />
+        <livewire:top-navbar />
+        <livewire:right-sidebar />
 
         <div id="viewer_photo" class="modal_vp">
             <span class="cerrar">&times;</span>

@@ -9,6 +9,14 @@ class Snapshot extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'owner_id',
+        'snapshotTimestamp',
+        'snapshotUrl',
+        'local_url',
+        'status',
+    ];
+
     public function picture()
     {
         return $this->hasOne(PictureUpload::class, 'id', 'picture_upload_id');

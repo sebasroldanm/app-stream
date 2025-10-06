@@ -26,6 +26,11 @@ window.addEventListener("initVideosFeed", () => {
     }, 500);
 });
 
+Livewire.on('themeApp', ({ theme }) => {
+    console.log("Nuevo tema:", theme);
+    document.documentElement.dataset.theme = theme;
+});
+
 scrollToTop();
 
 initFullviewer();
