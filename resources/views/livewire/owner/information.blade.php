@@ -1,90 +1,68 @@
 <div class="card">
     <div class="card-body">
         <div class="row">
+            {{-- Sidebar con tabs --}}
             <div class="col-md-3">
-                <ul class="nav nav-pills basic-info-items list-inline d-block p-0 m-0">
-                    <li>
-                        <a class="nav-link @if ($showDetail) active @endif" href="#v-pills-details-tab"
-                            wire:click="loadComponent('detail')"
-                            data-bs-toggle="pill" data-bs-target="#v-pills-details-tab" role="button">Detalles</a>
+                <ul class="nav nav-pills flex-column gap-2">
+                    <li class="nav-item">
+                        <a class="nav-link {{ $activeTab === 'detail' ? 'active' : '' }}"
+                           wire:click="loadComponent('detail')" role="button">
+                            Detalles
+                        </a>
                     </li>
-                    <li>
-                        <a class="nav-link @if ($showPanel) active @endif" href="#v-pills-profile"
-                            wire:click="loadComponent('panel')"
-                            data-bs-toggle="pill" data-bs-target="#v-profile" role="button">Pannels (Perfil)</a>
+                    <li class="nav-item">
+                        <a class="nav-link {{ $activeTab === 'panel' ? 'active' : '' }}"
+                           wire:click="loadComponent('panel')" role="button">
+                            Panel (Perfil)
+                        </a>
                     </li>
-                    <li>
-                        <a class="nav-link @if ($showSnapshots) active @endif" href="#v-pills-snapshots-tab"
-                            wire:click="loadComponent('snapshots')"
-                            data-bs-toggle="pill" data-bs-target="#v-pills-snapshots-tab" role="button">Instantáneas</a>
+                    <li class="nav-item">
+                        <a class="nav-link {{ $activeTab === 'snapshots' ? 'active' : '' }}"
+                           wire:click="loadComponent('snapshots')" role="button">
+                            Instantáneas
+                        </a>
                     </li>
-                    <li>
-                        <a class="nav-link @if ($showSimilarity) active @endif" href="#v-pills-similarity-tab"
-                            wire:click="loadComponent('similarity')"
-                            data-bs-toggle="pill" data-bs-target="#v-pills-similarity-tab" role="button">Similitud IA</a>
+                    <li class="nav-item">
+                        <a class="nav-link {{ $activeTab === 'similarity' ? 'active' : '' }}"
+                           wire:click="loadComponent('similarity')" role="button">
+                            Similitud IA
+                        </a>
                     </li>
                     @if ($owner->isInfoCustom)
-                        <li>
-                            <a class="nav-link @if ($showInfoCustom) active @endif" href="#v-infocustom-tab"
-                                wire:click="loadComponent('info-custom')"
-                                data-bs-toggle="pill" data-bs-target="#v-infocustom" role="button">Información
-                                personalizada</a>
+                        <li class="nav-item">
+                            <a class="nav-link {{ $activeTab === 'info-custom' ? 'active' : '' }}"
+                               wire:click="loadComponent('info-custom')" role="button">
+                                Información personalizada
+                            </a>
                         </li>
                     @endif
                     @if ($owner->isMediaCustom)
-                        <li>
-                            <a class="nav-link @if ($showMediaCustom) active @endif"
-                                wire:click="loadComponent('media-custom')"
-                                href="#v-pills-mediacustom-tab" data-bs-toggle="pill"
-                                data-bs-target="#v-pills-mediacustom-tab" role="button">Multimedia personalizada</a>
+                        <li class="nav-item">
+                            <a class="nav-link {{ $activeTab === 'media-custom' ? 'active' : '' }}"
+                               wire:click="loadComponent('media-custom')" role="button">
+                                Multimedia personalizada
+                            </a>
                         </li>
                     @endif
                 </ul>
             </div>
+
+            {{-- Contenido de tabs --}}
             <div class="col-md-9 ps-4">
                 <div class="tab-content">
-                    <div class="tab-pane fade @if ($showDetail) show active @endif" id="v-pills-details"
-                        role="tabpanel" aria-labelledby="v-pills-details">
-                        @if ($showDetail)
-                            @livewire('owner.information.detail', ['owner' => $owner])
-                        @endif
-                    </div>
-
-                    <div class="tab-pane fade @if ($showPanel) show active @endif" id="v-pills-profile"
-                        role="tabpanel" aria-labelledby="v-pills-profile">
-                        @if ($showPanel)
-                            @livewire('owner.information.panel', ['owner' => $owner])
-                        @endif
-                    </div>
-
-                    <div class="tab-pane fade @if ($showSnapshots) show active @endif" id="v-pills-snapshots"
-                        role="tabpanel" aria-labelledby="v-pills-snapshots">
-                        @if ($showSnapshots)
-                            @livewire('owner.information.snapshots', ['owner' => $owner])
-                        @endif
-                    </div>
-
-                    <div class="tab-pane fade @if ($showSimilarity) show active @endif" id="v-pills-similarity"
-                        role="tabpanel" aria-labelledby="v-pills-similarity">
-                        @if ($showSimilarity)
-                            @livewire('owner.information.similarity', ['owner' => $owner])
-                        @endif
-                    </div>
-
-                    <div class="tab-pane fade @if ($showInfoCustom) show active @endif"
-                        id="v-pills-infocustom" role="tabpanel" aria-labelledby="v-pills-infocustom">
-                        @if ($showInfoCustom)
-                            @livewire('owner.information.info-custom', ['owner' => $owner])
-                        @endif
-                    </div>
-
-                    <div class="tab-pane fade @if ($showMediaCustom) show active @endif"
-                        id="v-pills-mediacustom" role="tabpanel" aria-labelledby="v-pills-mediacustom">
-                        @if ($showMediaCustom)
-                            @livewire('owner.information.media-custom', ['owner' => $owner])
-                        @endif
-                    </div>
-
+                    @if ($activeTab === 'detail')
+                        @livewire('owner.information.detail', ['owner' => $owner], key('detail-'.$owner->id))
+                    @elseif ($activeTab === 'panel')
+                        @livewire('owner.information.panel', ['owner' => $owner], key('panel-'.$owner->id))
+                    @elseif ($activeTab === 'snapshots')
+                        @livewire('owner.information.snapshots', ['owner' => $owner], key('snapshots-'.$owner->id))
+                    @elseif ($activeTab === 'similarity')
+                        @livewire('owner.information.similarity', ['owner' => $owner], key('similarity-'.$owner->id))
+                    @elseif ($activeTab === 'info-custom' && $owner->isInfoCustom)
+                        @livewire('owner.information.info-custom', ['owner' => $owner], key('info-custom-'.$owner->id))
+                    @elseif ($activeTab === 'media-custom' && $owner->isMediaCustom)
+                        @livewire('owner.information.media-custom', ['owner' => $owner], key('media-custom-'.$owner->id))
+                    @endif
                 </div>
             </div>
         </div>
