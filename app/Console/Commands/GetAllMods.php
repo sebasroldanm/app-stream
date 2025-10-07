@@ -28,32 +28,37 @@ class GetAllMods extends Command
      */
     public function handle()
     {
-        echo "\nIniciando proceso...";
-        
-        $server = env('API_SERVER');
-
-        $endpoint = $server . '/api/front/models?improveTs=false&limit=60&offset=0&primaryTag=girls&filterGroupTags=%5B%5B%22tagLanguageColombian%22%5D%2C%5B%22autoTagNew%22%5D%2C%5B%22mobile%22%5D%5D&sortBy=stripRanking&parentTag=autoTagNew';
+        $this->info('Iniciando proceso...');
 
         $insert = 0;
         $errors = 0;
         $date_now = Carbon::now();
 
         $client = new Client();
-
-        if (env('ENABLE_PROXY', false)) {
-            $data = [
-                's' => $endpoint
-            ];
-            $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
-                'verify' => false,
-                'json' => $data,
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                ],
-            ]);
-        } else {
-            $response = $client->get($endpoint);
-        }
+        
+        $url = env('API_SERVER') . '/api/front/models';
+        $response = $client->get($url, [
+            'verify' => false,
+            'headers' => [
+                'User-Agent' => 'PostmanRuntime/7.39.0',
+                'Accept' => '*/*',
+                'Accept-Encoding' => 'gzip, deflate, br',
+                'Connection' => 'keep-alive'
+            ],
+            'query' => [
+                'improveTs' => 'false',
+                'limit' => 60,
+                'offset' => 0,
+                'primaryTag' => 'girls',
+                'filterGroupTags' => json_encode([
+                    ['tagLanguageColombian'],
+                    ['autoTagNew'],
+                    ['mobile'],
+                ]),
+                'sortBy' => 'stripRanking',
+                'parentTag' => 'autoTagNew',
+            ],
+        ]);
 
         $body = $response->getBody();
         $json = json_decode($body);
@@ -120,7 +125,6 @@ class GetAllMods extends Command
 
         }
 
-        echo "\nInserted: $insert, Errors: $errors";
-        echo "\n";
+        $this->info('Inserted: ' . $insert . ', Errors: ' . $errors);
     }
 }

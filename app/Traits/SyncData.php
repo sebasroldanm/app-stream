@@ -28,21 +28,17 @@ trait SyncData
         $client = new Client();
 
         try {
-            if (env('ENABLE_PROXY', false)) {
-                $url = env('API_SERVER') . '/api/front/v2/models/username/' . $username . '/cam';
-                $data = [
-                    's' => $url
-                ];
-                $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
-                    'verify' => false,
-                    'json' => $data,
-                    'headers' => [
-                        'Content-Type' => 'application/json',
-                    ],
-                ]);
-            } else {
-                $response = $client->get(env('API_SERVER') . '/api/front/v2/models/username/' . $username . '/cam');
-            }
+            $url = env('API_SERVER') . '/api/front/v2/models/username/' . $username . '/cam';
+
+            $response = $client->get($url, [
+                'verify' => false,
+                'headers' => [
+                    'User-Agent' => 'PostmanRuntime/7.39.0',
+                    'Accept' => '*/*',
+                    'Accept-Encoding' => 'gzip, deflate, br',
+                    'Connection' => 'keep-alive'
+                ]
+            ]);
 
             $statusCode = $response->getStatusCode();
             
@@ -153,21 +149,17 @@ trait SyncData
     {
         $client = new Client();
         try {
-            if (env('ENABLE_PROXY', false)) {
-                $url = env('API_SERVER') . '/api/front/users/' . $id . '/panels';
-                $data = [
-                    's' => $url
-                ];
-                $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
-                    'verify' => false,
-                    'json' => $data,
-                    'headers' => [
-                        'Content-Type' => 'application/json',
-                    ],
-                ]);
-            } else {
-                $response = $client->get(env('API_SERVER') . '/api/front/users/' . $id . '/panels');
-            }
+            $url = env('API_SERVER') . '/api/front/users/' . $id . '/panels';
+            
+            $response = $client->get($url, [
+                'verify' => false,
+                'headers' => [
+                    'User-Agent' => 'PostmanRuntime/7.39.0',
+                    'Accept' => '*/*',
+                    'Accept-Encoding' => 'gzip, deflate, br',
+                    'Connection' => 'keep-alive'
+                ]
+            ]);
 
             $statusCode = $response->getStatusCode();
 
@@ -217,21 +209,18 @@ trait SyncData
         $client = new Client();
 
         try {
-            if (env('ENABLE_PROXY', false)) {
-                $url = env('API_SERVER') . '/api/front/v2/users/username/' . $username . '/albums';
-                $data = [
-                    's' => $url
-                ];
-                $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
-                    'verify' => false,
-                    'json' => $data,
-                    'headers' => [
-                        'Content-Type' => 'application/json',
-                    ],
-                ]);
-            } else {
-                $response = $client->get(env('API_SERVER') . '/api/front/v2/users/username/' . $username . '/albums');
-            }
+
+            $url = env('API_SERVER') . '/api/front/v2/users/username/' . $username . '/albums';
+    
+            $response = $client->get($url, [
+                'verify' => false,
+                'headers' => [
+                    'User-Agent' => 'PostmanRuntime/7.39.0',
+                    'Accept' => '*/*',
+                    'Accept-Encoding' => 'gzip, deflate, br',
+                    'Connection' => 'keep-alive'
+                ]
+            ]);
 
             $statusCode = $response->getStatusCode();
 
@@ -304,21 +293,17 @@ trait SyncData
     {
         $client = new Client();
         try {
-            if (env('ENABLE_PROXY', false)) {
-                $url = env('API_SERVER') . '/api/front/users/' . $id . '/intros';
-                $data = [
-                    's' => $url
-                ];
-                $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
-                    'verify' => false,
-                    'json' => $data,
-                    'headers' => [
-                        'Content-Type' => 'application/json',
-                    ],
-                ]);
-            } else {
-                $response = $client->get(env('API_SERVER') . '/api/front/users/' . $id . '/intros');
-            }
+            $url = env('API_SERVER') . '/api/front/users/' . $id . '/intros';
+
+            $response = $client->get($url, [
+                'verify' => false,
+                'headers' => [
+                    'User-Agent' => 'PostmanRuntime/7.39.0',
+                    'Accept' => '*/*',
+                    'Accept-Encoding' => 'gzip, deflate, br',
+                    'Connection' => 'keep-alive'
+                ]
+            ]);
 
             $statusCode = $response->getStatusCode();
 
@@ -357,23 +342,18 @@ trait SyncData
         $client = new Client();
 
         try {
-            if (env('ENABLE_PROXY', false)) {
-                $url = env('API_SERVER') . '/api/front/v2/users/username/' . $username . '/videos';
-                $data = [
-                    's' => $url
-                ];
-                $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
-                    'verify' => false,
-                    'json' => $data,
-                    'headers' => [
-                        'Content-Type' => 'application/json',
-                    ],
-                ]);
-            } else {
-                $response = $client->get(env('API_SERVER') . '/api/front/v2/users/username/' . $username . '/videos');
-            }
+            $url = env('API_SERVER') . '/api/front/v2/users/username/' . $username . '/videos';
             
-
+            $response = $client->get($url, [
+                'verify' => false,
+                'headers' => [
+                    'User-Agent' => 'PostmanRuntime/7.39.0',
+                    'Accept' => '*/*',
+                    'Accept-Encoding' => 'gzip, deflate, br',
+                    'Connection' => 'keep-alive'
+                ]
+            ]);
+            
             $statusCode = $response->getStatusCode();
 
             if ($statusCode === 200) {
@@ -415,22 +395,18 @@ trait SyncData
         $client = new Client();
 
         try {
-            if (env('ENABLE_PROXY', false)) {
-                $url = env('API_SERVER') . '/api/front/feed/model/' . $id;
-                $data = [
-                    's' => $url
-                ];
-                $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
-                    'verify' => false,
-                    'json' => $data,
-                    'headers' => [
-                        'Content-Type' => 'application/json',
-                    ],
-                ]);
-            } else {
-                $response = $client->get(env('API_SERVER') . '/api/front/feed/model/' . $id);
-            }
-
+            $url = env('API_SERVER') . '/api/front/feed/model/' . $id;
+            
+            $response = $client->get($url, [
+                'verify' => false,
+                'headers' => [
+                    'User-Agent' => 'PostmanRuntime/7.39.0',
+                    'Accept' => '*/*',
+                    'Accept-Encoding' => 'gzip, deflate, br',
+                    'Connection' => 'keep-alive'
+                ]
+            ]);
+            
             $statusCode = $response->getStatusCode();
 
             $initNextParams = new class {
@@ -450,14 +426,17 @@ trait SyncData
                             $this->saveFeed($post);
                         }
                         $url = env('API_SERVER') . '/api/front/feed/model/' . $id . '?createdAt=' . $nextParams->createdAt . '&excludeIds=' . $nextParams->excludeIds;
-                        $data = [
-                            's' => $url
-                        ];
-                        $response = $client->post(env('API_PROXY_SERVER') . 'testOTP', [
+                        $response = $client->get($url, [
                             'verify' => false,
-                            'json' => $data,
                             'headers' => [
-                                'Content-Type' => 'application/json',
+                                'User-Agent' => 'PostmanRuntime/7.39.0',
+                                'Accept' => '*/*',
+                                'Accept-Encoding' => 'gzip, deflate, br',
+                                'Connection' => 'keep-alive'
+                            ],
+                            'query' => [
+                                'createdAt' => $nextParams->createdAt,
+                                'excludeIds' => $nextParams->excludeIds,
                             ],
                         ]);
                         $response = $response->getBody()->getContents();
