@@ -449,7 +449,7 @@
                                                             @default
                                                                 <div class="col-lg-4 mb-2 container-overlay">
                                                                     <img src="{{ $photo->urlThumb }}"
-                                                                        data-image_vh="{{ $photo->url }}"
+                                                                        data-image_vh="{{ ($photo->urlPreview) ? $photo->urlPreview : $photo->urlPreview }}"
                                                                         class="img-fluid rounded fullviewer max-vh-60 _overlay pics_feed"
                                                                         alt="{{ $album->body }}">
                                                                 </div>
