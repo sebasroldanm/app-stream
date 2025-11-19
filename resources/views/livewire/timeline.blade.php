@@ -535,7 +535,7 @@
                                                                 <span class="dropdown-toggle"
                                                                     data-bs-toggle="dropdown" aria-haspopup="true"
                                                                     aria-expanded="false" role="button">
-                                                                    {{ $pst->likes }} Likes
+                                                                    {{ $feed->likes }} Likes
                                                                     {{-- 00 Likes --}}
                                                                 </span>
                                                             </div>
