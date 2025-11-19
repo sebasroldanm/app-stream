@@ -302,7 +302,8 @@
                                 <div class="user-post-data pb-3">
                                     <div class="d-flex justify-content-between">
                                         <div class="me-3">
-                                            <img class="rounded-circle  avatar-60" src="{{ $owner->avatar }}"
+                                            <img class="rounded-circle avatar-60" src="{{ $owner->avatar }}"
+                                                onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ $owner->username }}';"
                                                 alt="">
                                         </div>
                                         <div class="w-100">

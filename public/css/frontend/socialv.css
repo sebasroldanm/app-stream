@@ -14036,6 +14036,11 @@ html[data-theme='dark'] .iq-top-navbar {
     font-size: 1rem
 }
 
+.navbar-list li>.item-link {
+    cursor: pointer;
+}
+
+.navbar-list li>.item-link ,
 .navbar-list li>a {
     font-size: 1.125rem;
     padding: 0 .938rem;
@@ -14045,6 +14050,7 @@ html[data-theme='dark'] .iq-top-navbar {
     min-height: 4.688rem
 }
 
+.navbar-list li>.item-link>img,
 .navbar-list li>a>img {
     width: 3.125rem;
     height: 3.125rem

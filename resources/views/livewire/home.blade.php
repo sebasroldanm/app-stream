@@ -129,7 +129,7 @@
                                         <img src="{{ $owner->avatar }}" alt="profile-img" loading="lazy"
                                             class="rounded-circle img-fluid avatar-120">
                                     @else
-                                        <img src="https://placehold.co/300x300?text=No+Imagen" alt="profile-img"
+                                        <img src="https://ui-avatars.com/api/?name={{ $owner->username }}" alt="profile-img"
                                             loading="lazy" class="rounded-circle img-fluid avatar-120">
                                     @endif
                                 @endif

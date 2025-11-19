@@ -62,7 +62,9 @@
                             <div
                                 class="iq-profile-avatar @if ($owner->isLive) status-live @else @if ($owner->isOnline) status-online @endif @endif">
                                 <a href="{{ route('owner.feed', $owner->username) }}">
-                                    <img class="rounded-circle avatar-50" src="{{ $owner->avatar }}" alt="">
+                                    <img class="rounded-circle avatar-50" src="{{ $owner->avatar }}" 
+                                    onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ $owner->username }}';"
+                                    alt="">
                                 </a>
                             </div>
                             <div class="ms-3">

@@ -12,7 +12,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <div class="header-title">
-                        <h4 class="card-title">{{ Carbon\Carbon::parse($day[0]->created_at)->format('d M, Y') }}</h4>
+                        <h4 class="card-title">{{ Carbon\Carbon::parse($day[0]->date_created)->format('d M, Y') }}</h4>
                     </div>
                 </div>
                 <div class="card-body">

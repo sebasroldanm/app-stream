@@ -227,16 +227,20 @@
                                                 <div class="me-3">
                                                     <a href="{{ route('owner.feed', $feed->owner->username) }}" wire:navigate>
                                                         <img class="avatar-60 rounded-circle"
+                                                            data-user-name="{{ strtolower($feed->owner->name) }}"
+                                                            data-user-username="{{ $feed->owner->username }}"
+                                                            onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ $feed->owner->username }}';"
                                                             src="{{ $feed->owner->avatar }}" alt="">
                                                     </a>
                                                 </div>
                                                 <div class="w-100">
                                                     <div class=" d-flex  justify-content-between">
                                                         <div class="">
-                                                            <a href="{{ route('owner.feed', $feed->owner->username) }}" wire:navigate>
-                                                                <h5 class="mb-0 d-inline-block">
-                                                                    {{ $feed->owner->username }}</h5>
-                                                            </a>
+                                                            <h5 class="mb-0 d-inline-block">
+                                                                <a href="{{ route('owner.feed', $feed->owner->username) }}" wire:navigate>
+                                                                    {{ $feed->owner->username }}
+                                                                </a>
+                                                            </h5>
                                                             <p class="mb-0 d-inline-block">
                                                                 @switch($feed->type)
                                                                     @case('postAdded')
@@ -255,7 +259,7 @@
                                                                         Nuevo estado
                                                                 @endswitch
                                                             </p>
-                                                            <p class="mb-0 text-primary" data-bs-toggle="tooltip"
+                                                            <p class="mb-0" data-bs-toggle="tooltip"
                                                                 data-bs-placement="top"
                                                                 data-bs-original-title="{{ Carbon\Carbon::parse($feed->updatedAt)->format('d M, Y - H:i:s') }}">
                                                                 {{ \Carbon\Carbon::parse($feed->updatedAt)->diffForHumans() }}
@@ -531,8 +535,8 @@
                                                                 <span class="dropdown-toggle"
                                                                     data-bs-toggle="dropdown" aria-haspopup="true"
                                                                     aria-expanded="false" role="button">
-                                                                    {{-- {{ $pst->likes }} Likes --}}
-                                                                    00 Likes
+                                                                    {{ $pst->likes }} Likes
+                                                                    {{-- 00 Likes --}}
                                                                 </span>
                                                             </div>
                                                         </div>
