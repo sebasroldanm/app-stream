@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\Owner;
 use App\Models\Snapshot;
 use App\Traits\SyncData;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Http;
@@ -53,6 +54,7 @@ class UpdateSnapshots extends Command
                     $newSnap = new Snapshot();
                     $newSnap->owner_id = $fav->id;
                     $newSnap->snapshotTimestamp = $snap_time;
+                    $newSnap->date_created = Carbon::createFromTimestamp($snap_time);
                     $newSnap->snapshotUrl = "https://img.strpst.com/thumbs/" . $snap_time . "/" . $fav->id . "_webp";
                     $test_url = $response = Http::get($newSnap->snapshotUrl);
                     if ($test_url->successful()) {
