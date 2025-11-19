@@ -22,7 +22,7 @@ class Snapshots extends Component
             ->get()
             ->groupBy(function ($snapshot) {
                 // Agrupa por día usando solo la fecha (sin la hora)
-                return Carbon::parse($snapshot->created_at)->format('Y-m-d');
+                return Carbon::parse($snapshot->date_created)->format('Y-m-d');
             });
 
         $this->dispatch('initFullviewer');
@@ -88,6 +88,7 @@ class Snapshots extends Component
 
         if (! $snapshot->exists) {
             $snapshot->snapshotUrl = $snapshotUrl;
+            $snapshot->date_created = Carbon::createFromTimestamp($snap_time);
             $snapshot->local_url = "/storage/" . $filePath;
             $snapshot->save();
         }
