@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('snapshotUrl');
             $table->string('local_url')->nullable();
 
+            $table->timestamp('date_created')->nullable();
+
             $table->foreign('owner_id')->references('id')->on('owners')->onDelete('cascade');
             $table->unique(['owner_id', 'snapshotTimestamp']);
 
