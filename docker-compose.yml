@@ -86,7 +86,7 @@ services:
     container_name: laravel_redis
     restart: unless-stopped
     ports:
-      - "63791:6379"
+      - "6313:6379"
     volumes:
       - redis_data:/data
     networks:
