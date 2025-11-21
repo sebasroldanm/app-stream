@@ -55,6 +55,25 @@ services:
       timeout: 3s
       retries: 3
 
+  # Horizon
+  horizon:
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile
+    container_name: laravel_horizon
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+    command: php artisan horizon
+    depends_on:
+      redis:
+        condition: service_healthy
+      app:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - laravel_network
+
   # MySQL service
   mysql:
     image: mysql:8.4
