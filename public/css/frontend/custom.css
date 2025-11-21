@@ -391,3 +391,14 @@ i.online {
 .filter_blur_10 {
     filter: blur(10px);
 }
+
+.searchbox > .card {
+    max-height: 300px;
+    overflow-y: auto;
+    position: absolute;
+    width: 100%;
+}
+
+.searchbox > .card > .card-body > .media-story > li > .stories-data > p {
+    line-height: normal;
+}

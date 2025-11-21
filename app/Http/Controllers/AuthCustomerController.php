@@ -52,4 +52,19 @@ class AuthCustomerController extends Controller
     {
         dd($this->syncFeedByOwnerId(191226603));
     }
+
+    public function search(Request $request)
+    {
+        $echo = $request->all();
+
+        $request->validate([
+            'q' => 'required',
+        ]);
+
+        $keyword = $request->q;
+
+        $response = $this->searchGlobal($keyword);
+        
+        return response()->json($response);
+    }
 }

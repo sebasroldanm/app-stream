@@ -39,9 +39,11 @@ Route::middleware(['auth:customer'])->group(function () {
     Route::get('/explore/new-co', NewCO::class)->name('explore.new-co');
     Route::get('/explore/mobile-co', MobileCO::class)->name('explore.mobile-co');
     Route::get('/explore/new-mobile-co', NewMobileCO::class)->name('explore.new-mobile-co');
+
+    
 });
 
-
+Route::get('/search', [AuthCustomerController::class, 'search'])->name('searchGlobal');
 Route::get('/dashboard', function () {
     return 'Welcome to the customer dashboard!';
 })->name('customer.dashboard')->middleware('auth');
