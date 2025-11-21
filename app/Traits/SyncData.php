@@ -69,6 +69,19 @@ trait SyncData
                     $owner->isLive = $dataUser['isLive'];
                     $owner->isMobile = $dataUser['isMobile'];
                     $owner->isDelete = $dataUser['isDeleted'];
+                    $owner->bodyType = $dataUser['bodyType'];
+                    $owner->eyeColor = $dataUser['eyeColor'];
+                    if (is_numeric($dataUser['age'])) {
+                        $owner->age = $dataUser['age'];
+                        $owner->birthDate = $dataUser['birthDate'];
+                    }
+                    $owner->favoritedCount = $dataUser['favoritedCount'];
+                    $offLineRaw = $dataUser['offlineStatusUpdatedAt'] ?? null;
+                    if (empty($offLineRaw) || $offLineRaw === '0000-00-00' || $offLineRaw === '0000-00-00 00:00:00') {
+                        $owner->offlineStatusUpdatedAt = Carbon::parse('1970-01-01 00:00:01');
+                    } else {
+                        $owner->offlineStatusUpdatedAt = Carbon::parse($offLineRaw)->subHours(5);
+                    }
                     // Date update platform
                     $statusRaw = $dataUser['statusChangedAt'] ?? null;
                     if (empty($statusRaw) || $statusRaw === '0000-00-00' || $statusRaw === '0000-00-00 00:00:00') {
@@ -456,6 +469,35 @@ trait SyncData
             $log->message = $th->getMessage();
             $log->trace = $th->getTraceAsString();
             $log->save();
+        }
+    }
+
+    public function searchGlobal($keyword)
+    {
+        $client = new Client();
+
+        try {
+            $url = env('API_SERVER') . '/api/front/v4/models/search/suggestion?query=' . $keyword . '&primaryTag=girls';
+
+            $response = $client->get($url, [
+                'verify' => false,
+                'headers' => [
+                    'User-Agent' => 'PostmanRuntime/7.39.0',
+                    'Accept' => '*/*',
+                    'Accept-Encoding' => 'gzip, deflate, br',
+                    'Connection' => 'keep-alive'
+                ]
+            ]);
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode === 200) {
+                $response = $response->getBody()->getContents();
+                $data = json_decode($response, false);
+                return $data;
+            }
+        } catch (\Throwable $th) {
+            
         }
     }
 
