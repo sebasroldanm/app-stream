@@ -24,11 +24,14 @@
     </div>
     <hr>
     <div class="row masonry">
-        @foreach ($album->photos as $photo)
+        @foreach ($album->photos as $key => $photo)
             <div class="col-sm-6 col-lg-6 masonry-item">
                 <div class="card mb-3 user-images position-relative overflow-hidden">
                     @if (!empty($photo->urlThumb))
-                        <img loading="lazy" src="{{ $photo->urlThumb }}" data-image_vh="{{ $photo->url }}" class="img-fluid rounded fullviewer" alt="Responsive image">
+                        <img loading="lazy" src="{{ $photo->urlThumb }}" data-image_vh="{{ $photo->url }}" 
+                            data-images-full='@json($album->photos->pluck("url"))'
+                            data-images-thumb='@json($album->photos->pluck("urlThumb"))'
+                            class="img-fluid rounded fullviewer" alt="Responsive image">
                     @else
                         <img loading="lazy" src="{{ $photo->urlThumbMicro }}" class="img-fluid rounded w-100 blur_avatar"
                             alt="Responsive image">

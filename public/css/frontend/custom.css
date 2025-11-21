@@ -339,6 +339,33 @@ i.online {
     width: auto;
     max-height: 90%;
     max-width: 90%;
+    padding-bottom: 15px;
+}
+
+.modal_vp-thumbs {
+    position: absolute;
+    width: 100%;
+    bottom: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.modal_vp-thumbs > img {
+    height: 50px;
+    width: auto;
+    transition: transform 0.2s ease; 
+    cursor: pointer;
+}
+
+.modal_vp-thumbs > img:hover {
+    transform: scale(1.15);
+}
+
+.modal_vp-thumbs > img.active {
+    transform: scale(1.15);
+    border: 2px solid #fff;
 }
 
 /* Botón de cierre en la esquina superior derecha */

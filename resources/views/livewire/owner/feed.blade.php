@@ -438,10 +438,11 @@
                                                                         alt="{{ $album->body }}">
                                                                 </div>
                                                             @break
-
                                                             @case(2)
                                                                 <div class="col-lg-6 container-overlay">
                                                                     <img src="{{ $photo->url }}"
+                                                                        data-images-full='@json($album->photos->pluck("urlPreview"))'
+                                                                        data-images-thumb='@json($album->photos->pluck("urlThumb"))'
                                                                         class="img-fluid rounded fullviewer max-vh-60 _overlay pics_feed"
                                                                         alt="{{ $album->body }}">
                                                                 </div>
@@ -450,6 +451,8 @@
                                                             @default
                                                                 <div class="col-lg-4 mb-2 container-overlay">
                                                                     <img src="{{ $photo->urlThumb }}"
+                                                                        data-images-full='@json($album->photos->pluck("urlPreview"))'
+                                                                        data-images-thumb='@json($album->photos->pluck("urlThumb"))'
                                                                         data-image_vh="{{ ($photo->urlPreview) ? $photo->urlPreview : $photo->urlPreview }}"
                                                                         class="img-fluid rounded fullviewer max-vh-60 _overlay pics_feed"
                                                                         alt="{{ $album->body }}">
