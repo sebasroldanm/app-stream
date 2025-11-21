@@ -3,6 +3,10 @@
         <h4 class="mb-3">Pannels</h4>
         <div class="row masonry">
             @foreach ($panels as $panel)
+            {{-- {{ dd($panels) }} --}}
+            @php
+                $panel->data = json_decode($panel->data);
+            @endphp
                 <div class="col-sm-6 col-lg-6 masonry-item">
                     <div class="card mb-3" style="break-inside: avoid;">
                         @if ($panel->imageUrl !== '')
@@ -15,6 +19,9 @@
                                 @endif
                                 @if ($panel->body !== '')
                                     <p class="card-text">{{ $panel->body }}</p>
+                                @endif
+                                @if (!empty($panel->data->imageLink))
+                                    <a href="{{  $panel->data->imageLink }}" class="btn btn-primary w-100" target="_blank">Ir al sitio</a>
                                 @endif
                             </div>
                         @endif

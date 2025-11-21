@@ -50,7 +50,7 @@
                             </h4>
                         </div>
                         <div class="card-header-toolbar d-flex align-items-center">
-                            <p class="m-0"><a href="javascript:void(0);">Ver Albums</a></p>
+                            <p class="m-0"><a href="/owner/{{ $owner->username}}/albums">Ver Albums</a></p>
                         </div>
                     </div>
                     <div class="card-body">
@@ -75,7 +75,7 @@
                             </h4>
                         </div>
                         <div class="card-header-toolbar d-flex align-items-center">
-                            <p class="m-0"><a href="javascript:void(0);">Ver Videos</a></p>
+                            <p class="m-0"><a href="/owner/{{ $owner->username}}/videos">Ver Videos</a></p>
                         </div>
                     </div>
                     <div class="card-body">
