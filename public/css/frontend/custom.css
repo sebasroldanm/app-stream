@@ -342,14 +342,17 @@ i.online {
     padding-bottom: 15px;
 }
 
-.modal_vp-thumbs {
+.modal_vp-footer {
     position: absolute;
+    left: 10vw;
+    bottom: 2px;
+    width: 80vw;
+}
+
+.modal_vp-footer > .modal_vp-thumbs {
     width: 100%;
-    bottom: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+    overflow: auto hidden;
+    text-align: center;
 }
 
 .modal_vp-thumbs > img {
@@ -357,6 +360,7 @@ i.online {
     width: auto;
     transition: transform 0.2s ease; 
     cursor: pointer;
+    margin: 5px;
 }
 
 .modal_vp-thumbs > img:hover {
