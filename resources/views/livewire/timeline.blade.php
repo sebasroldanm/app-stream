@@ -663,7 +663,7 @@
                                         <img src="{{ $own_fav->avatar }}" alt="story-img"
                                             class="rounded-circle img-fluid">
                                         <div class="stories-data ms-3">
-                                            <h5>{{ $own_fav->username }}</h5>
+                                            <h5><a href="/owner/{{ $own_fav->username }}">{{ $own_fav->username }}</a></h5>
                                             <p class="mb-0">{{ \Carbon\Carbon::parse($own_fav->statusChangedAt)->diffForHumans() }}</p>
                                         </div>
                                     </li>
@@ -682,13 +682,51 @@
                                 @foreach ($owner_birthday as $ownr_b)
                                     <li class="d-flex mb-4 align-items-center">
                                         <img src="{{ $ownr_b->avatar }}" alt="story-img"
+                                            onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ $ownr_b->username }}';"
                                             class="rounded-circle img-fluid">
                                         <div class="stories-data ms-3">
-                                            <h5>{{ $ownr_b->username }}</h5>
+                                            <h5>
+                                                <a href="/owner/{{ $ownr_b->username }}">{{ $ownr_b->username }}</a>
+                                            </h5>
+
                                             @php
-                                                $birthday = \Carbon\Carbon::parse(json_decode($ownr_b->data)->user->user->birthDate)->format('d/m');
+                                                $birth = \Carbon\Carbon::parse($ownr_b->birthDate);
+                                                $today = \Carbon\Carbon::today();
+
+                                                // Próximo cumpleaños
+                                                $nextBirthday = $birth->copy()->year($today->year);
+
+                                                // Manejo de 29/02 en años no bisiestos
+                                                if ($birth->format('m-d') === '02-29' && !$nextBirthday->isLeapYear()) {
+                                                    $nextBirthday->day(28);
+                                                }
+
+                                                // Si ya pasó este año, usamos el próximo año
+                                                if ($nextBirthday->lt($today)) {
+                                                    $nextBirthday->addYear();
+                                                    if ($birth->format('m-d') === '02-29' && !$nextBirthday->isLeapYear()) {
+                                                        $nextBirthday->day(28);
+                                                    }
+                                                }
+
+                                                // Días que faltan (entero)
+                                                $days = $today->diffInDays($nextBirthday, false);
+
+                                                // Edad que va a cumplir
+                                                $age = $nextBirthday->year - $birth->year;
+
+                                                // Mensaje final
+                                                if ($days == 0) {
+                                                    $message = "Hoy cumple {$age} años";
+                                                } elseif ($days == 1) {
+                                                    $message = "Mañana cumple {$age} años";
+                                                } else {
+                                                    $message = "Faltan {$days} días para su cumpleaños ({$age} años) " . $ownr_b->birthDate;
+                                                }
                                             @endphp
-                                            <p class="mb-0">{{ $birthday }}</p>
+
+                                            <p class="mb-0">{{ $message }}</p>
+
                                         </div>
                                     </li>
                                 @endforeach

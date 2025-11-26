@@ -25,23 +25,84 @@ class Timeline extends Component
             ->orderBy("updatedAt", "desc")
             ->limit($this->limit)
             ->get();
-            
+
         $today = Carbon::now();
         // Cache::forget('timeline_birthdays');
-        $this->owner_birthday = Cache::remember('timeline_birthdays', 20, function() use($today) {
-            return Owner::whereNotNull('data->user->user->birthDate')
-            ->limit(5)
-            ->get();
+        $this->owner_birthday = Cache::remember('timeline_birthdays', 20, function () use ($today) {
+            return $owners = Owner::select("username", "avatar", "birthDate", "age")
+                ->whereNotNull("birthDate")
+                ->orderByRaw(
+                    "
+                        CASE
+                            -- Manejo especial para 29/02
+                            WHEN DATE_FORMAT(birthDate, '%m-%d') = '02-29' THEN
+                                CASE
+                                    -- Si el año objetivo es bisiesto, usar 29/02
+                                    WHEN (
+                                        MOD(
+                                            (YEAR(CURDATE()) +
+                                                (DATE_FORMAT(birthDate, '%m-%d') < DATE_FORMAT(CURDATE(), '%m-%d'))
+                                            ),
+                                            400
+                                        ) = 0
+                                        OR (
+                                            MOD(
+                                                (YEAR(CURDATE()) +
+                                                    (DATE_FORMAT(birthDate, '%m-%d') < DATE_FORMAT(CURDATE(), '%m-%d'))
+                                                ),
+                                                4
+                                            ) = 0
+                                            AND MOD(
+                                                (YEAR(CURDATE()) +
+                                                    (DATE_FORMAT(birthDate, '%m-%d') < DATE_FORMAT(CURDATE(), '%m-%d'))
+                                                ),
+                                                100
+                                            ) <> 0
+                                        )
+                                    )
+                                    THEN STR_TO_DATE(
+                                        CONCAT(
+                                            YEAR(CURDATE()) +
+                                                (DATE_FORMAT(birthDate, '%m-%d') < DATE_FORMAT(CURDATE(), '%m-%d')),
+                                            DATE_FORMAT(birthDate, '-%m-%d')
+                                        ),
+                                        '%Y-%m-%d'
+                                    )
+                                    -- Si NO es bisiesto → usar 28/02
+                                    ELSE STR_TO_DATE(
+                                        CONCAT(
+                                            YEAR(CURDATE()) +
+                                                (DATE_FORMAT(birthDate, '%m-%d') < DATE_FORMAT(CURDATE(), '%m-%d')),
+                                            '-02-28'
+                                        ),
+                                        '%Y-%m-%d'
+                                    )
+                                END
+
+                            -- Fechas normales
+                            ELSE STR_TO_DATE(
+                                CONCAT(
+                                    YEAR(CURDATE()) +
+                                        (DATE_FORMAT(birthDate, '%m-%d') < DATE_FORMAT(CURDATE(), '%m-%d')),
+                                    DATE_FORMAT(birthDate, '-%m-%d')
+                                ),
+                                '%Y-%m-%d'
+                            )
+                        END
+                    "
+                )
+                ->limit(30)
+                ->get();
         });
-        
+
         // Cache::forget('timeline_favs');
-        $this->owner_fav = Cache::remember('timeline_favs', 20, function() use($favs) {
+        $this->owner_fav = Cache::remember('timeline_favs', 20, function () use ($favs) {
             return Owner::whereIn('id', $favs)
                 ->where('isOnline', true)
                 ->limit(6)
                 ->get();
         });
-        
+
         return view('livewire.timeline');
     }
 }
