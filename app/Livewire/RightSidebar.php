@@ -10,6 +10,7 @@ class RightSidebar extends Component
 {
 
     public $owners = [];
+    public $countOnline = 0;
     public $limit = 10;
 
     public function render()
@@ -22,12 +23,17 @@ class RightSidebar extends Component
 
     public function loadData()
     {
+        // Cache::forget('online_right_sidebar');
+        $this->countOnline = Cache::remember('online_right_sidebar', 20, function () {
+            return Owner::where('isOnline', true)->count();
+        });
+
         // Cache::forget('owners_right_sidebar');
         $this->owners = Cache::remember('owners_right_sidebar', 20, function () {
             // return Owner::with('latestSnapshots')
             return Owner::orderBy('isLive', 'DESC')
                 ->orderBy('isOnline', 'DESC')
-                ->limit(20)
+                ->limit($this->limit + $this->countOnline)
                 ->get();
         });
     }
