@@ -5,17 +5,16 @@ namespace App\Console\Commands;
 use App\Jobs\SyncOwner;
 use App\Models\Customer;
 use App\Models\Owner;
-use App\Traits\SyncData;
 use Illuminate\Console\Command;
-class UpdateOnline extends Command
+
+class UpdateOwnersData extends Command
 {
-    use SyncData;
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:update-online';
+    protected $signature = 'app:update-owners-data';
 
     /**
      * The console command description.
@@ -24,6 +23,9 @@ class UpdateOnline extends Command
      */
     protected $description = 'Command description';
 
+    /**
+     * Execute the console command.
+     */
     public function handle()
     {
         $favs = Customer::find(1)->getOwnerFavoriteIds()->toArray();
@@ -32,8 +34,7 @@ class UpdateOnline extends Command
             ->get();
 
         foreach ($owners as $owner) {
-            SyncOwner::dispatch($owner, 'owner');
+            SyncOwner::dispatch($owner, 'all');
         }
     }
-
 }
