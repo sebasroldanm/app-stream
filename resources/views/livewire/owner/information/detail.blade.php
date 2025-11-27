@@ -68,6 +68,56 @@
             </div>
         </div>
         <h4 class="mt-4">
+            Perfil
+        </h4>
+        <hr>
+        <div class="row">
+            @php
+                $statusChangedAt = \Carbon\Carbon::parse($owner->statusChangedAt);
+                $offlineStatusUpdatedAt = \Carbon\Carbon::parse($owner->offlineStatusUpdatedAt);
+
+                $lastActive = $statusChangedAt->copy()->diffForHumans();
+                $lastOffline = $offlineStatusUpdatedAt->copy()->diffForHumans();
+
+                $activeHuman = $statusChangedAt->copy()->calendar();
+                $offlineHuman = $offlineStatusUpdatedAt->copy()->calendar();
+
+                $wentIdleAt = \Carbon\Carbon::parse($owner->data->user->user->wentIdleAt);
+
+                $lasSnapshot = \Carbon\Carbon::parse($owner->data->user->user->snapshotTimestamp);
+            @endphp
+            <div class="col-3">
+                <h6>Último estado</h6>
+            </div>
+            <div class="col-9">{{  $offlineHuman }} - {{ $lastOffline }}</div>
+
+            <div class="col-3">
+                <h6>Última conexión</h6>
+            </div>
+            <div class="col-9">{{ $activeHuman }} - {{ $lastActive }}</div>
+
+            <div class="col-3">
+                <h6>Inactivo</h6>
+            </div>
+            <div class="col-9">
+                {{$wentIdleAt->copy()->addHours(5)->calendar()}} - {{ $wentIdleAt->copy()->diffForHumans() }}
+            </div>
+
+            <div class="col-3">
+                <h6>Evaluation Private</h6>
+            </div>
+            <div class="col-9">
+                {{ $owner->data->user->user->ratingPrivate }}
+            </div>
+
+            <div class="col-3">
+                Last Snapshot
+            </div>
+            <div class="col-9">
+                {{ $lasSnapshot->copy()->addHours(5)->calendar() }} - {{ $lasSnapshot->copy()->diffForHumans() }}
+            </div>
+        </div>
+        <h4 class="mt-4">
             Actividades
         </h4>
         <hr>
