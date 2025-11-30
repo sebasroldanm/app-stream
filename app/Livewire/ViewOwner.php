@@ -127,7 +127,9 @@ class ViewOwner extends Component
         $owner->data = json_decode($owner->data);
         if (!isset($owner->data->user)) {
             $own_id = $this->syncOwnerByUsername($this->username);
-            $owner = Owner::find($own_id);
+            if ($own_id) {
+                $owner = Owner::find($own_id);
+            }
         }
         $this->id_owner = $owner->id;
         $intro = Intro::where('owner_id', $owner->id)->orderBy('id', 'desc')->first();
