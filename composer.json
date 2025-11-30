@@ -8,6 +8,7 @@
         "php": "^8.4",
         "filament/filament": "^3.2",
         "laravel/framework": "^12.0",
+        "laravel/horizon": "^5.40",
         "laravel/pulse": "^1.3",
         "laravel/tinker": "^2.10",
         "livewire/livewire": "^3.5"
