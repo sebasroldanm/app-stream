@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthCustomerController;
+use App\Http\Controllers\UtilController;
 use App\Livewire\About;
 use App\Livewire\Contact;
 use App\Livewire\Explore;
@@ -40,7 +41,7 @@ Route::middleware(['auth:customer'])->group(function () {
     Route::get('/explore/mobile-co', MobileCO::class)->name('explore.mobile-co');
     Route::get('/explore/new-mobile-co', NewMobileCO::class)->name('explore.new-mobile-co');
 
-    
+    Route::get('/metadata/{model}/{id}', [UtilController::class, 'viewMetadata'])->name('metadata');
 });
 
 Route::get('/search', [AuthCustomerController::class, 'search'])->name('searchGlobal');

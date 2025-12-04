@@ -292,10 +292,16 @@
 
             @foreach ($feeds as $feed)
                 @if (
-                    $feed->type === 'offlineStatusChanged' ||
-                        (($feed->type !== 'offlineStatusChanged' && $feed->postFeed->count() > 0) ||
+                        $feed->type === 'offlineStatusChanged' ||
+                        (
+                            (
+                                $feed->type !== 'offlineStatusChanged' &&
+                                $feed->postFeed->count() > 0
+                            ) ||
                             $feed->albumFeed->count() > 0 ||
-                            $feed->videoFeed->count() > 0))
+                            $feed->videoFeed->count() > 0
+                        )
+                    )
                     <div class="card">
                         <div class="card-body">
                             <div class="post-item">
@@ -335,6 +341,70 @@
                                                         {{ \Carbon\Carbon::parse($feed->updatedAt)->diffForHumans() }}
                                                     </p>
                                                 </div>
+                                                <div class="card-post-toolbar">
+                                                    <div class="dropdown">
+                                                        <span class="dropdown-toggle"
+                                                            data-bs-toggle="dropdown" aria-haspopup="true"
+                                                            aria-expanded="false" role="button">
+                                                            <i class="ri-more-fill"></i>
+                                                        </span>
+                                                        <div class="dropdown-menu m-0 p-0">
+                                                            <a class="dropdown-item p-3" href="{{ route('metadata', ['model' => 'feed', 'id' => $feed->id]) }}" target="_blank">
+                                                                <div class="d-flex align-items-top">
+                                                                    <i class="ri-user-unfollow-line h4"></i>
+                                                                    <div class="data ms-2">
+                                                                        <h6>Ver Meta datos</h6>
+                                                                        <p class="mb-0">Ver metadatos en formato Json.</p>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            {{-- <a class="dropdown-item p-3" href="#">
+                                                                <div class="d-flex align-items-top">
+                                                                    <i class="ri-save-line h4"></i>
+                                                                    <div class="data ms-2">
+                                                                        <h6>Save Post</h6>
+                                                                        <p class="mb-0">Add this to your
+                                                                            saved items
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            <a class="dropdown-item p-3" href="#">
+                                                                <div class="d-flex align-items-top">
+                                                                    <i class="ri-close-circle-line h4"></i>
+                                                                    <div class="data ms-2">
+                                                                        <h6>Hide Post</h6>
+                                                                        <p class="mb-0">See fewer posts like
+                                                                            this.
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            <a class="dropdown-item p-3" href="#">
+                                                                <div class="d-flex align-items-top">
+                                                                    <i class="ri-user-unfollow-line h4"></i>
+                                                                    <div class="data ms-2">
+                                                                        <h6>Unfollow User</h6>
+                                                                        <p class="mb-0">Stop seeing posts but
+                                                                            stay
+                                                                            friends.</p>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            <a class="dropdown-item p-3" href="#">
+                                                                <div class="d-flex align-items-top">
+                                                                    <i class="ri-notification-line h4"></i>
+                                                                    <div class="data ms-2">
+                                                                        <h6>Notifications</h6>
+                                                                        <p class="mb-0">Turn on notifications
+                                                                            for
+                                                                            this post</p>
+                                                                    </div>
+                                                                </div>
+                                                            </a> --}}
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -368,6 +438,8 @@
                                                         @case(2)
                                                             <div class="col-lg-6 container-overlay">
                                                                 <img src="{{ $media->url }}"
+                                                                    data-images-full='@json($pst->mediaPostFeeds->pluck("url"))'
+                                                                    data-images-thumb='@json($pst->mediaPostFeeds->pluck("urlThumb"))'
                                                                     class="img-fluid rounded fullviewer max-vh-60 _overlay pics_feed"
                                                                     alt="{{ $pst->body }}">
                                                             </div>
@@ -376,6 +448,8 @@
                                                         @case(3)
                                                             <div class="col-lg-4 mb-2 container-overlay">
                                                                 <img src="{{ $media->url }}"
+                                                                    data-images-full='@json($pst->mediaPostFeeds->pluck("url"))'
+                                                                    data-images-thumb='@json($pst->mediaPostFeeds->pluck("urlThumb"))'
                                                                     class="img-fluid rounded fullviewer max-vh-60 _overlay pics_feed"
                                                                     alt="{{ $pst->body }}">
                                                             </div>
@@ -430,17 +504,17 @@
                                                 class="row @if ($feed->accessMode !== 'free') justify-content-center @endif">
                                                 @foreach ($album->photos as $photo)
                                                     @if ($feed->accessMode == 'free')
-                                                        @switch($album->photosCount)
+                                                        @switch($album->photos->count())
                                                             @case(1)
                                                                 <div class="col-lg-12 text-center">
-                                                                    <img src="{{ $photo->url }}"
+                                                                    <img src="{{ $photo->urlPreview }}"
                                                                         class="img-fluid rounded fullviewer max-vh-60"
                                                                         alt="{{ $album->body }}">
                                                                 </div>
                                                             @break
                                                             @case(2)
                                                                 <div class="col-lg-6 container-overlay">
-                                                                    <img src="{{ $photo->url }}"
+                                                                    <img src="{{ $photo->urlPreview }}"
                                                                         data-images-full='@json($album->photos->pluck("urlPreview"))'
                                                                         data-images-thumb='@json($album->photos->pluck("urlThumb"))'
                                                                         class="img-fluid rounded fullviewer max-vh-60 _overlay pics_feed"
