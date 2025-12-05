@@ -29,7 +29,7 @@ Route::middleware(['auth:customer'])->group(function () {
     Route::get('/contact', Contact::class);
 
     Route::prefix('owner/{username}')->group(function () {
-        Route::get('/', ViewOwner::class)->name('owner.feed');
+        Route::get('/', ViewOwner::class)->name('owner');
         Route::get('/feed', ViewOwner::class)->name('owner.feed');
         Route::get('/information', ViewOwner::class)->name('owner.information');
         Route::get('/albums', ViewOwner::class)->name('owner.albums');

@@ -14,8 +14,8 @@
                             <div class="card-body">
                                 <div class="d-flex align-items-center">
                                     <div class="user-img">
-                                        <img src="{{ URL::to("/") . auth()->guard('customer')->user()->avatar }}" alt="userimg"
-                                            class="avatar-60 rounded-circle">
+                                        <img src="{{ URL::to('/') . auth()->guard('customer')->user()->avatar }}"
+                                            alt="userimg" class="avatar-60 rounded-circle">
                                     </div>
                                     <form class="post-text ms-3 w-100 " data-bs-toggle="modal"
                                         data-bs-target="#post-modal" action="javascript:void();">
@@ -82,8 +82,8 @@
                                         <div class="modal-body">
                                             <div class="d-flex align-items-center">
                                                 <div class="user-img">
-                                                    <img src="{{ URL::to("/") . auth()->guard('customer')->user()->avatar }}" alt="userimg"
-                                                        class="avatar-60 rounded-circle img-fluid">
+                                                    <img src="{{ URL::to('/') . auth()->guard('customer')->user()->avatar }}"
+                                                        alt="userimg" class="avatar-60 rounded-circle img-fluid">
                                                 </div>
                                                 <form class="post-text ms-3 w-100" action="javascript:void();">
                                                     <input type="text" class="form-control rounded"
@@ -146,7 +146,7 @@
                                                 <div class="d-flex align-items-center justify-content-between">
                                                     <div class="d-flex align-items-center">
                                                         <div class="user-img me-3">
-                                                            <img src="{{ URL::to("/") . auth()->guard('customer')->user()->avatar }}"
+                                                            <img src="{{ URL::to('/') . auth()->guard('customer')->user()->avatar }}"
                                                                 alt="userimg"
                                                                 class="avatar-60 rounded-circle img-fluid">
                                                         </div>
@@ -214,346 +214,7 @@
                     </div>
 
                     @foreach ($feeds as $feed)
-                        @if (
-                            $feed->type === 'offlineStatusChanged' ||
-                                (($feed->type !== 'offlineStatusChanged' && $feed->postFeed->count() > 0) ||
-                                    $feed->albumFeed->count() > 0 ||
-                                    $feed->videoFeed->count() > 0))
-                            <div class="col-sm-12">
-                                <div class="card card-block card-stretch card-height">
-                                    <div class="card-body">
-                                        <div class="user-post-data" data-id="{{ $feed->id }}">
-                                            <div class="d-flex justify-content-between">
-                                                <div class="me-3">
-                                                    <a href="{{ route('owner.feed', $feed->owner->username) }}" wire:navigate>
-                                                        <img class="avatar-60 rounded-circle"
-                                                            data-user-name="{{ strtolower($feed->owner->name) }}"
-                                                            data-user-username="{{ $feed->owner->username }}"
-                                                            onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ $feed->owner->username }}';"
-                                                            src="{{ $feed->owner->avatar }}" alt="">
-                                                    </a>
-                                                </div>
-                                                <div class="w-100">
-                                                    <div class=" d-flex  justify-content-between">
-                                                        <div class="">
-                                                            <h5 class="mb-0 d-inline-block">
-                                                                <a href="{{ route('owner.feed', $feed->owner->username) }}" wire:navigate>
-                                                                    {{ $feed->owner->username }}
-                                                                </a>
-                                                            </h5>
-                                                            <p class="mb-0 d-inline-block">
-                                                                @switch($feed->type)
-                                                                    @case('postAdded')
-                                                                        Nueva publicación
-                                                                    @break
-
-                                                                    @case('albumUpdated')
-                                                                        Album actualizado
-                                                                    @break
-
-                                                                    @case('videoAdded')
-                                                                        Nuevo video
-                                                                    @break
-
-                                                                    @default
-                                                                        Nuevo estado
-                                                                @endswitch
-                                                            </p>
-                                                            <p class="mb-0" data-bs-toggle="tooltip"
-                                                                data-bs-placement="top"
-                                                                data-bs-original-title="{{ Carbon\Carbon::parse($feed->updatedAt)->format('d M, Y - H:i:s') }}">
-                                                                {{ \Carbon\Carbon::parse($feed->updatedAt)->diffForHumans() }}
-                                                            </p>
-                                                        </div>
-                                                        <div class="card-post-toolbar">
-                                                            <div class="dropdown">
-                                                                <span class="dropdown-toggle"
-                                                                    data-bs-toggle="dropdown" aria-haspopup="true"
-                                                                    aria-expanded="false" role="button">
-                                                                    <i class="ri-more-fill"></i>
-                                                                </span>
-                                                                <div class="dropdown-menu m-0 p-0">
-                                                                    <a class="dropdown-item p-3" href="#">
-                                                                        <div class="d-flex align-items-top">
-                                                                            <i class="ri-save-line h4"></i>
-                                                                            <div class="data ms-2">
-                                                                                <h6>Save Post</h6>
-                                                                                <p class="mb-0">Add this to your
-                                                                                    saved items
-                                                                                </p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </a>
-                                                                    <a class="dropdown-item p-3" href="#">
-                                                                        <div class="d-flex align-items-top">
-                                                                            <i class="ri-close-circle-line h4"></i>
-                                                                            <div class="data ms-2">
-                                                                                <h6>Hide Post</h6>
-                                                                                <p class="mb-0">See fewer posts like
-                                                                                    this.
-                                                                                </p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </a>
-                                                                    <a class="dropdown-item p-3" href="#">
-                                                                        <div class="d-flex align-items-top">
-                                                                            <i class="ri-user-unfollow-line h4"></i>
-                                                                            <div class="data ms-2">
-                                                                                <h6>Unfollow User</h6>
-                                                                                <p class="mb-0">Stop seeing posts but
-                                                                                    stay
-                                                                                    friends.</p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </a>
-                                                                    <a class="dropdown-item p-3" href="#">
-                                                                        <div class="d-flex align-items-top">
-                                                                            <i class="ri-notification-line h4"></i>
-                                                                            <div class="data ms-2">
-                                                                                <h6>Notifications</h6>
-                                                                                <p class="mb-0">Turn on notifications
-                                                                                    for
-                                                                                    this post</p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mt-3">
-                                            @if ($feed->type == 'offlineStatusChanged')
-                                                <h5 class="text-center my-5">
-                                                    {{ json_decode($feed->data)->data->offlineStatus }}
-                                                </h5>
-                                            @else
-                                                @foreach ($feed->postFeed as $pst)
-                                                    <div class="user-post">
-                                                        @if (!empty($pst->body))
-                                                            <p>{{ $pst->body }}</p>
-                                                        @endif
-                                                        <div class="row">
-                                                            @foreach ($pst->mediaPostFeeds as $media)
-                                                                @switch($pst->mediaPostFeeds->count())
-                                                                    @case(1)
-                                                                        <div class="col-lg-12 text-center">
-                                                                            <img src="{{ $media->url }}"
-                                                                                class="img-fluid rounded fullviewer max-vh-60"
-                                                                                alt="{{ $pst->body }}">
-                                                                        </div>
-                                                                    @break
-
-                                                                    @case(2)
-                                                                        <div class="col-lg-6 container-overlay other">
-                                                                            <img src="{{ $media->url }}"
-                                                                                data-images-full='@json($pst->mediaPostFeeds->pluck("url"))'
-                                                                                data-images-thumb='@json($pst->mediaPostFeeds->pluck("urlThumb"))'
-                                                                                class="img-fluid rounded fullviewer max-vh-60 _overlay pics_feed"
-                                                                                alt="{{ $pst->body }}">
-                                                                        </div>
-                                                                    @break
-
-                                                                    @case(3)
-                                                                        <div class="col-lg-4 mb-2 container-overlay">
-                                                                            <img src="{{ $media->url }}"
-                                                                                data-images-full='@json($pst->mediaPostFeeds->pluck("url"))'
-                                                                                data-images-thumb='@json($pst->mediaPostFeeds->pluck("urlThumb"))'
-                                                                                class="img-fluid rounded fullviewer max-vh-60 _overlay pics_feed"
-                                                                                alt="{{ $pst->body }}">
-                                                                        </div>
-                                                                    @break
-
-                                                                    @default
-                                                                        <div class="col-lg-4 mb-2">
-                                                                            <img src="{{ $media->url }}"
-                                                                                data-images-full='@json($pst->mediaPostFeeds->pluck("url"))'
-                                                                                data-images-thumb='@json($pst->mediaPostFeeds->pluck("urlThumb"))'
-                                                                                class="img-fluid rounded fullviewer max-vh-60"
-                                                                                alt="{{ $pst->body }}">
-                                                                        </div>
-                                                                    @break
-                                                                @endswitch
-                                                            @endforeach
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-
-                                                @foreach ($feed->albumFeed as $album)
-                                                    <div class="user-post">
-                                                        @if (!empty($album->name))
-                                                            <p>{{ $album->name }}</p>
-                                                        @endif
-                                                        <div
-                                                            class="row @if ($feed->accessMode !== 'free') justify-content-center @endif">
-                                                            @foreach ($album->photos as $photo)
-                                                                @if ($feed->accessMode == 'free')
-                                                                    @switch($album->photosCount)
-                                                                        @case(1)
-                                                                            <div class="col-lg-12 text-center">
-                                                                                <img src="{{ $photo->url }}"
-                                                                                    class="img-fluid rounded fullviewer max-vh-60"
-                                                                                    alt="{{ $album->body }}">
-                                                                            </div>
-                                                                        @break
-
-                                                                        @case(2)
-                                                                            <div class="col-lg-6 container-overlay photo">
-                                                                                <img src="{{ $photo->url }}"
-                                                                                    class="img-fluid rounded fullviewer max-vh-60 _overlay pics_feed"
-                                                                                    alt="{{ $album->body }}">
-                                                                            </div>
-                                                                        @break
-
-                                                                        @default
-                                                                            <div class="col-lg-4 mb-2 container-overlay">
-                                                                                <img src="{{ $photo->urlThumb }}"
-                                                                                    data-image_vh="{{ $photo->url }}"
-                                                                                    class="img-fluid rounded fullviewer max-vh-60 _overlay pics_feed"
-                                                                                    alt="{{ $album->body }}">
-                                                                            </div>
-                                                                        @break
-                                                                    @endswitch
-                                                                @else
-                                                                    @if ($photo->url)
-                                                                        <div class="col-lg-12 text-center">
-                                                                            <img src="{{ $photo->url }}"
-                                                                                class="img-fluid rounded fullviewer max-vh-60"
-                                                                                alt="{{ $album->body }}">
-                                                                        </div>
-                                                                    @else
-                                                                        <div
-                                                                            class="col-2 my-2 container-overlay rounded">
-                                                                            <img src="{{ $photo->urlThumbMicro }}"
-                                                                                class="img-fluid w-100 _overlay filter_blur_10"
-                                                                                alt="{{ $album->body }}">
-                                                                        </div>
-                                                                    @endif
-                                                                @endif
-                                                            @endforeach
-                                                        </div>
-                                                    </div>
-                                                    <div class="comment-area mt-3">
-                                                        <div
-                                                            class="d-flex justify-content-between align-items-center flex-wrap">
-                                                            <div
-                                                                class="like-block position-relative d-flex align-items-center">
-                                                                <div class="d-flex align-items-center">
-                                                                    {{-- <div class="like-data">
-                                                                        <div class="dropdown">
-                                                                            <span class="dropdown-toggle"
-                                                                                data-bs-toggle="dropdown"
-                                                                                aria-haspopup="true"
-                                                                                aria-expanded="false" role="button">
-                                                                                <img src="{{ asset('/images/icon/01.png') }}"
-                                                                                    class="img-fluid" alt="">
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="total-like-block ms-2 me-3">
-                                                                        <div class="dropdown">
-                                                                            <span class="dropdown-toggle"
-                                                                                data-bs-toggle="dropdown"
-                                                                                aria-haspopup="true"
-                                                                                aria-expanded="false" role="button">
-                                                                                {{ $album->likes }} Likes
-                                                                            </span>
-                                                                        </div>
-                                                                    </div> --}}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                                {{-- {{dd($feed)}} --}}
-                                                @foreach ($feed->videoFeed as $video)
-                                                    <div class="user-post">
-                                                        @if (!empty($video->title))
-                                                            <p>{{ $video->title }}</p>
-                                                        @endif
-                                                        <div class="row">
-
-                                                            <div class="col-lg-12">
-                                                                <video class="video_feed"
-                                                                    data-poster="{{ $video->coverUrl }}"
-                                                                    @if ($video->videoUrl) data-video="{{ $video->videoUrl }}"
-                                                    data-format="{{ $video->format_video }}"
-                                                @else
-                                                    data-video="{{ $video->trailerUrl }}"
-                                                    data-format="{{ $video->format_trailer }}" @endif>
-                                                                </video>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                    <div class="comment-area mt-3">
-                                                        <div
-                                                            class="d-flex justify-content-between align-items-center flex-wrap">
-                                                            <div
-                                                                class="like-block position-relative d-flex align-items-center">
-                                                                {{-- <div class="d-flex align-items-center">
-                                                                    <div class="like-data">
-                                                                        <div class="dropdown">
-                                                                            <span class="dropdown-toggle"
-                                                                                data-bs-toggle="dropdown"
-                                                                                aria-haspopup="true"
-                                                                                aria-expanded="false" role="button">
-                                                                                <img src="{{ asset('/images/icon/01.png') }}"
-                                                                                    class="img-fluid" alt="">
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="total-like-block ms-2 me-3">
-                                                                        <div class="dropdown">
-                                                                            <span class="dropdown-toggle"
-                                                                                data-bs-toggle="dropdown"
-                                                                                aria-haspopup="true"
-                                                                                aria-expanded="false" role="button">
-                                                                                {{ $video->likes }} Likes
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div> --}}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                            @endif
-                                        </div>
-                                        <div class="comment-area mt-3">
-                                            <div class="d-flex justify-content-between align-items-center flex-wrap">
-                                                <div class="like-block position-relative d-flex align-items-center">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="like-data">
-                                                            <div class="dropdown">
-                                                                <span class="dropdown-toggle"
-                                                                    data-bs-toggle="dropdown" aria-haspopup="true"
-                                                                    aria-expanded="false" role="button">
-                                                                    <img src="{{ asset('/images/icon/01.png') }}"
-                                                                        class="img-fluid" alt="">
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="total-like-block ms-2 me-3">
-                                                            <div class="dropdown">
-                                                                <span class="dropdown-toggle"
-                                                                    data-bs-toggle="dropdown" aria-haspopup="true"
-                                                                    aria-expanded="false" role="button">
-                                                                    {{ $feed->likes }} Likes
-                                                                    {{-- 00 Likes --}}
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
+                        @include('components.feed', ['feed' => $feed])
                     @endforeach
 
                 </div>
@@ -663,8 +324,12 @@
                                         <img src="{{ $own_fav->avatar }}" alt="story-img"
                                             class="rounded-circle img-fluid">
                                         <div class="stories-data ms-3">
-                                            <h5><a href="/owner/{{ $own_fav->username }}">{{ $own_fav->username }}</a></h5>
-                                            <p class="mb-0">{{ \Carbon\Carbon::parse($own_fav->statusChangedAt)->diffForHumans() }}</p>
+                                            <h5><a
+                                                    href="{{ route('owner', $own_fav->username) }}">{{ $own_fav->username }}</a>
+                                            </h5>
+                                            <p class="mb-0">
+                                                {{ \Carbon\Carbon::parse($own_fav->statusChangedAt)->diffForHumans() }}
+                                            </p>
                                         </div>
                                     </li>
                                 @endforeach
@@ -686,7 +351,7 @@
                                             class="rounded-circle img-fluid">
                                         <div class="stories-data ms-3">
                                             <h5>
-                                                <a href="/owner/{{ $ownr_b->username }}">{{ $ownr_b->username }}</a>
+                                                <a href="{{ route('owner', $ownr_b->username) }}">{{ $ownr_b->username }}</a>
                                             </h5>
 
                                             @php
@@ -704,7 +369,10 @@
                                                 // Si ya pasó este año, usamos el próximo año
                                                 if ($nextBirthday->lt($today)) {
                                                     $nextBirthday->addYear();
-                                                    if ($birth->format('m-d') === '02-29' && !$nextBirthday->isLeapYear()) {
+                                                    if (
+                                                        $birth->format('m-d') === '02-29' &&
+                                                        !$nextBirthday->isLeapYear()
+                                                    ) {
                                                         $nextBirthday->day(28);
                                                     }
                                                 }
@@ -721,7 +389,9 @@
                                                 } elseif ($days == 1) {
                                                     $message = "Mañana cumple {$age} años";
                                                 } else {
-                                                    $message = "Faltan {$days} días para su cumpleaños ({$age} años) " . $ownr_b->birthDate;
+                                                    $message =
+                                                        "Faltan {$days} días para su cumpleaños ({$age} años) " .
+                                                        $ownr_b->birthDate;
                                                 }
                                             @endphp
 

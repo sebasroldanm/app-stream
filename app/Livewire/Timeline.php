@@ -103,6 +103,10 @@ class Timeline extends Component
                 ->get();
         });
 
+        $this->dispatch('initFullviewer');
+
+        $this->dispatch('initVideosFeed');
+
         return view('livewire.timeline');
     }
 }
