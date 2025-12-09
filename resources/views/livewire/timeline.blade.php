@@ -314,7 +314,7 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
                             <div class="header-title">
-                                <h4 class="card-title">Favoritos</h4>
+                                <h4 class="card-title">Favoritos famosos</h4>
                             </div>
                         </div>
                         <div class="card-body">
@@ -328,7 +328,7 @@
                                                     href="{{ route('owner', $own_fav->username) }}">{{ $own_fav->username }}</a>
                                             </h5>
                                             <p class="mb-0">
-                                                {{ \Carbon\Carbon::parse($own_fav->statusChangedAt)->diffForHumans() }}
+                                                {{ number_format($own_fav->favoritedCount, 0, ',', '.') }} seguidores
                                             </p>
                                         </div>
                                     </li>

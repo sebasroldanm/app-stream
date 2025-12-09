@@ -21,15 +21,18 @@ class Timeline extends Component
     {
         $favs = Customer::find(Auth::guard('customer')->user()->id)->getOwnerFavoriteIds()->toArray();
 
-        $this->feeds = Feed::with(["owner", "albumFeed.photos", "videoFeed", "postFeed.mediaPostFeeds"])
-            ->orderBy("updatedAt", "desc")
-            ->limit($this->limit)
-            ->get();
+        // Cache::forget('timeline');
+        $this->feeds = Cache::remember('timeline', 1, function () {
+            return Feed::with(["owner", "albumFeed.photos", "videoFeed", "postFeed.mediaPostFeeds"])
+                ->orderBy("updatedAt", "desc")
+                ->limit($this->limit)
+                ->get();
+        });
 
         $today = Carbon::now();
         // Cache::forget('timeline_birthdays');
         $this->owner_birthday = Cache::remember('timeline_birthdays', 1440, function () use ($today) {
-            return $owners = Owner::select("username", "avatar", "birthDate", "age")
+            return Owner::select("username", "avatar", "birthDate", "age")
                 ->whereNotNull("birthDate")
                 ->orderByRaw(
                     "
@@ -96,11 +99,11 @@ class Timeline extends Component
         });
 
         // Cache::forget('timeline_favs');
-        $this->owner_fav = Cache::remember('timeline_favs', 2, function () use ($favs) {
+        $this->owner_fav = Cache::remember('timeline_favs', 20, function () use ($favs) {
             return Owner::whereIn('id', $favs)
                 ->where('isOnline', true)
-                ->inRandomOrder()
                 ->limit(6)
+                ->orderBy('favoritedCount', 'desc')
                 ->get();
         });
 
