@@ -3,11 +3,118 @@
 namespace App\Livewire\Owner\Information;
 
 use Livewire\Component;
+use Livewire\WithFileUploads;
+use App\Models\Owner;
+use App\Models\OwnerInfoType;
+use App\Models\OwnerInfoSource;
+use App\Models\OwnerCustomInfo;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class InfoCustom extends Component
 {
+    use WithFileUploads;
+
+    public Owner $owner;
+    
+    public $info_type_id = '';
+    public $source_id = '';
+    public $data_value;
+
+    public function mount(Owner $owner)
+    {
+        $this->owner = $owner;
+    }
+
+    public function getSelectedTypeModelProperty()
+    {
+        if (!$this->info_type_id) {
+            return null;
+        }
+        return OwnerInfoType::find($this->info_type_id);
+    }
+
+    public function updatedInfoTypeId()
+    {
+        $this->reset('data_value');
+    }
+
+    protected function rules()
+    {
+        $rules = [
+            'info_type_id' => 'required|exists:owner_info_types,id',
+            'source_id' => 'nullable|exists:owner_info_sources,id',
+        ];
+
+        $type = $this->selectedTypeModel;
+
+        if ($type) {
+            if ($type->data_type === 'url') {
+                $rules['data_value'] = 'required|url';
+            } elseif ($type->data_type === 'number') {
+                $rules['data_value'] = 'required|numeric';
+            } elseif ($type->data_type === 'file') {
+                // Adjust max size as needed, e.g., 2MB
+                $rules['data_value'] = 'required|file|max:10240'; 
+            } else {
+                $rules['data_value'] = 'required|string';
+            }
+        }
+
+        return $rules;
+    }
+
     public function render()
     {
-        return view('livewire.owner.information.info-custom');
+        $types = OwnerInfoType::where('is_active', true)->get();
+        $sources = OwnerInfoSource::all();
+        $customInfos = $this->owner->customInfos()->with(['type', 'source'])->get();
+
+        return view('livewire.owner.information.info-custom', compact('types', 'sources', 'customInfos'));
+    }
+
+    public function save()
+    {
+        $this->validate();
+
+        $valueToStore = $this->data_value;
+        $type = $this->selectedTypeModel;
+
+        if ($type && $type->data_type === 'file') {
+            $user = auth()->user();
+            $username = $user->username ?? 'default';
+            // Store in specific path: storage/app/public/customer/{username}/uploads
+            $path = $this->data_value->storeAs(
+                "customer/{$username}/uploads", 
+                $this->data_value->getClientOriginalName(), 
+                'public'
+            );
+            $valueToStore = $path;
+        }
+
+        OwnerCustomInfo::create([
+            'owner_id' => $this->owner->id,
+            'info_type_id' => $this->info_type_id,
+            'source_id' => $this->source_id ?: null,
+            'data_info' => ['value' => $valueToStore],
+        ]);
+
+        $this->reset(['info_type_id', 'source_id', 'data_value']);
+    }
+
+    public function delete($id)
+    {
+        $info = OwnerCustomInfo::findOrFail($id);
+        
+        // Ensure the info belongs to the current owner
+        if ($info->owner_id === $this->owner->id) {
+            // Optional: Delete file from storage if it exists
+            if ($info->type && $info->type->data_type === 'file') {
+                 if (isset($info->data_info['value'])) {
+                     Storage::disk('public')->delete($info->data_info['value']);
+                 }
+            }
+            $info->delete();
+        }
     }
 }

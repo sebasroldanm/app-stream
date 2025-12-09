@@ -33,4 +33,9 @@ class Owner extends Model
     {
         return $this->hasMany(Snapshot::class)->orderBy('created_at', 'desc')->limit(10);
     }
+
+    public function customInfos()
+    {
+        return $this->hasMany(OwnerCustomInfo::class);
+    }
 }

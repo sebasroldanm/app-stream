@@ -28,14 +28,14 @@
                             Similitud IA
                         </a>
                     </li>
-                    @if ($owner->isInfoCustom)
+                    {{-- @if ($owner->isInfoCustom) --}}
                         <li class="nav-item">
                             <a class="nav-link {{ $activeTab === 'info-custom' ? 'active' : '' }}"
                                wire:click="loadComponent('info-custom')" role="button">
                                 Información personalizada
                             </a>
                         </li>
-                    @endif
+                    {{-- @endif --}}
                     @if ($owner->isMediaCustom)
                         <li class="nav-item">
                             <a class="nav-link {{ $activeTab === 'media-custom' ? 'active' : '' }}"
@@ -58,7 +58,7 @@
                         @livewire('owner.information.snapshots', ['owner' => $owner], key('snapshots-'.$owner->id))
                     @elseif ($activeTab === 'similarity')
                         @livewire('owner.information.similarity', ['owner' => $owner], key('similarity-'.$owner->id))
-                    @elseif ($activeTab === 'info-custom' && $owner->isInfoCustom)
+                    @elseif ($activeTab === 'info-custom')
                         @livewire('owner.information.info-custom', ['owner' => $owner], key('info-custom-'.$owner->id))
                     @elseif ($activeTab === 'media-custom' && $owner->isMediaCustom)
                         @livewire('owner.information.media-custom', ['owner' => $owner], key('media-custom-'.$owner->id))
