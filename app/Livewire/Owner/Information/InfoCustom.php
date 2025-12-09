@@ -10,6 +10,7 @@ use App\Models\OwnerInfoSource;
 use App\Models\OwnerCustomInfo;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 class InfoCustom extends Component
 {
@@ -81,7 +82,7 @@ class InfoCustom extends Component
         $type = $this->selectedTypeModel;
 
         if ($type && $type->data_type === 'file') {
-            $user = auth()->user();
+            $user = Auth::user();
             $username = $user->username ?? 'default';
             // Store in specific path: storage/app/public/customer/{username}/uploads
             $path = $this->data_value->storeAs(
