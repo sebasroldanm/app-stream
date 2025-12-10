@@ -78,7 +78,7 @@
                             </thead>
                             <tbody>
                                 @forelse($customInfos as $info)
-                                    <tr>
+                                    <tr wire:key="item-{{ $info->id }}" wire:transition.fade>
                                         <td>{{ $info->type->label }}</td>
                                         <td>{{ $info->source ? $info->source->name : '-' }}</td>
                                         <td>
@@ -100,8 +100,11 @@
                                         </td>
                                         <td>
                                             <button wire:click="delete({{ $info->id }})"
+                                                wire:loading.attr="disabled"
+                                                wire:target="delete({{ $info->id }})"
                                                 class="btn btn-sm btn-danger">
-                                                <i class="ri-delete-bin-line"></i>
+                                                <i class="ri-delete-bin-line" wire:loading.remove wire:target="delete({{ $info->id }})"></i>
+                                                <i class="ri-loader-4-line ri-spin" wire:loading wire:target="delete({{ $info->id }})"></i>
                                             </button>
                                         </td>
                                     </tr>
