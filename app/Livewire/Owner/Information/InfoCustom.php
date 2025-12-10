@@ -100,6 +100,18 @@ class InfoCustom extends Component
             'data_info' => ['value' => $valueToStore],
         ]);
 
+        if ($type && $type->data_type === 'file') {
+            if (!$this->owner->isMediaCustom) {
+                $this->owner->isMediaCustom = true;
+                $this->owner->save();
+            }
+        } else {
+            if (!$this->owner->isInfoCustom) {
+                $this->owner->isInfoCustom = true;
+                $this->owner->save();
+            }
+        }
+
         $this->reset(['info_type_id', 'source_id', 'data_value']);
     }
 

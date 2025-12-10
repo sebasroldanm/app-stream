@@ -90,7 +90,7 @@
                                                         Ver Archivo
                                                     </a>
                                                     {{-- Optional: Preview if image --}}
-                                                    {{-- <img src="{{ Storage::url($info->data_info['value']) }}" width="50" /> --}}
+                                                    <img src="{{ Storage::url($info->data_info['value']) }}" width="50" />
                                                 @else
                                                     {{ Str::limit($info->data_info['value'], 50) }}
                                                 @endif
