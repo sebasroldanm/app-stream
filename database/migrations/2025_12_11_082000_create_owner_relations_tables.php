@@ -10,16 +10,19 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('owner_relations', function (Blueprint $table) {
+        Schema::create('owner_relation_groups', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('owner_id')->constrained('owners')->onDelete('cascade');
-            $table->foreignId('related_owner_id')->constrained('owners')->onDelete('cascade');
             $table->boolean('verified')->default(false);
             $table->text('description')->nullable();
             $table->json('attributes')->nullable();
             $table->timestamps();
+        });
 
-            $table->unique(['owner_id', 'related_owner_id']);
+        Schema::create('owner_relations', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('owner_id')->constrained('owners')->onDelete('cascade');
+            $table->foreignId('owner_relation_group_id')->constrained('owner_relation_groups')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
@@ -29,6 +32,6 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::dropIfExists('owner_relations');
+        Schema::dropIfExists('owner_relation_groups');
     }
 };
-?>

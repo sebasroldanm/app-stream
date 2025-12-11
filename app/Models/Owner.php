@@ -45,8 +45,35 @@ class Owner extends Model
 
     public function relatedOwners()
     {
-        return $this->belongsToMany(Owner::class, 'owner_relations', 'owner_id', 'related_owner_id')
-                    ->withPivot(['verified', 'description', 'attributes'])
-                    ->withTimestamps();
+        // This is a bit complex in pure Eloquent for "Many Groups -> Many Owners", 
+        // but assuming for "same person" typically one group.
+        // We can use a custom accessor or a complex relationship.
+        // For simplicity and compatibility with standard usage:
+        
+        return $this->hasOneThrough(
+            OwnerRelationGroup::class,
+            OwnerRelation::class,
+            'owner_id', // Foreign key on owner_relations table...
+            'id', // Foreign key on owner_relation_groups table...
+            'id', // Local key on owners table...
+            'owner_relation_group_id' // Local key on owner_relations table...
+        ); 
+        // Wait, hasOneThrough gets ONE group.
+        // If we want the OWNERS, it's harder.
+        // Let's keep `relations` as the hasMany to the pivot-like model.
+        // And `activeGroup` to get the group if we assume 1.
+    }
+
+    public function getRelationGroupAttribute()
+    {
+        return $this->relations()->with('group')->first()?->group;
+    }
+
+    public function getRelatedOwnersAttribute()
+    {
+        $group = $this->relation_group;
+        if (!$group) return collect();
+        
+        return $group->owners()->where('owners.id', '!=', $this->id)->get();
     }
 }

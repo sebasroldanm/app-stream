@@ -13,25 +13,16 @@ class OwnerRelation extends Model
 
     protected $fillable = [
         'owner_id',
-        'related_owner_id',
-        'verified',
-        'description',
-        'attributes',
+        'owner_relation_group_id',
     ];
 
-    protected $casts = [
-        'verified' => 'boolean',
-        'attributes' => 'array',
-    ];
+    public function group()
+    {
+        return $this->belongsTo(OwnerRelationGroup::class, 'owner_relation_group_id');
+    }
 
     public function owner()
     {
         return $this->belongsTo(Owner::class, 'owner_id');
     }
-
-    public function relatedOwner()
-    {
-        return $this->belongsTo(Owner::class, 'related_owner_id');
-    }
 }
-?>
