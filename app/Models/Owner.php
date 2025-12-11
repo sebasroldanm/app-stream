@@ -38,4 +38,15 @@ class Owner extends Model
     {
         return $this->hasMany(OwnerCustomInfo::class);
     }
+    public function relations()
+    {
+        return $this->hasMany(OwnerRelation::class, 'owner_id');
+    }
+
+    public function relatedOwners()
+    {
+        return $this->belongsToMany(Owner::class, 'owner_relations', 'owner_id', 'related_owner_id')
+                    ->withPivot(['verified', 'description', 'attributes'])
+                    ->withTimestamps();
+    }
 }

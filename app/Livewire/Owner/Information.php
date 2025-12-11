@@ -12,7 +12,7 @@ class Information extends Component
     public string $activeTab = 'detail';
 
     private array $validTabs = [
-        'detail', 'panel', 'snapshots', 'similarity', 'info-custom', 'media-custom',
+        'detail', 'panel', 'snapshots', 'similarity', 'info-custom', 'relations',
     ];
 
     public function loadComponent(string $tab)

@@ -34,6 +34,12 @@
                             Información personalizada
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ $activeTab === 'relations' ? 'active' : '' }}"
+                           wire:click="loadComponent('relations')" role="button">
+                            Relacionadas
+                        </a>
+                    </li>
                 </ul>
             </div>
 
@@ -50,6 +56,8 @@
                         @livewire('owner.information.similarity', ['owner' => $owner], key('similarity-'.$owner->id))
                     @elseif ($activeTab === 'info-custom')
                         @livewire('owner.information.info-custom', ['owner' => $owner], key('info-custom-'.$owner->id))
+                    @elseif ($activeTab === 'relations')
+                        @livewire('owner.information.relations', ['owner' => $owner], key('relations-'.$owner->id))
                     @endif
                 </div>
             </div>
