@@ -85,4 +85,34 @@ trait OwnerProp
         $extension = pathinfo($urlWithoutQuery, PATHINFO_EXTENSION);
         return $extension ? $extension : null;
     }
+
+    public function continent($continent)
+    {
+        switch ($continent) {
+            case 'af':
+                return 'Africa';
+                break;
+            case 'an':
+                return 'Antártida';
+                break;
+            case 'as':
+                return 'Asia';
+                break;
+            case 'eu':
+                return 'Europa';
+                break;
+            case 'na':
+                return 'America del Norte';
+                break;
+            case 'oc':
+                return 'Oceanía';
+                break;
+            case 'sa':
+                return 'America del Sur';
+                break;
+            default:
+                return '';
+                break;
+        }
+    }
 }

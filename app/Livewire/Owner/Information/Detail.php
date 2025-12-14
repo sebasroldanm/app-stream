@@ -23,6 +23,9 @@ class Detail extends Component
             $offlineStatusUpdatedAt = Carbon::parse($this->owner->offlineStatusUpdatedAt);
             $wentIdleAt = Carbon::parse($this->owner->data->user->user->wentIdleAt);
             $lasSnapshot = Carbon::parse($this->owner->data->user->user->snapshotTimestamp);
+            $ratingPrivate = $this->owner->data->user->user->ratingPrivate ?? false;
+
+            $this->dispatch('initFullviewer');
 
             return view('livewire.owner.information.detail', [
                 'age' => $age,
@@ -34,6 +37,7 @@ class Detail extends Component
                 'idleDiff' => $wentIdleAt->copy()->diffForHumans(),
                 'snapshotCalendar' => $lasSnapshot->copy()->addHours(5)->calendar(),
                 'snapshotDiff' => $lasSnapshot->copy()->diffForHumans(),
+                'ratingPrivate' => $ratingPrivate,
             ]);
         }
 

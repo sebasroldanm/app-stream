@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\OwnerProp;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Owner extends Model
 {
-    use HasFactory;
+    use HasFactory, OwnerProp;
 
     public function intro()
     {
@@ -75,5 +76,18 @@ class Owner extends Model
         if (!$group) return collect();
         
         return $group->owners()->where('owners.id', '!=', $this->id)->get();
+    }
+
+    public function getGenderIcon()
+    {
+        return $this->iconGender($this->data->user->user->gender);
+    }
+
+    public function getContinent()
+    {
+        if (!isset($this->data->user->modelTopPosition)) {
+            return '';
+        }
+        return $this->continent($this->data->user->modelTopPosition->continent);
     }
 }
