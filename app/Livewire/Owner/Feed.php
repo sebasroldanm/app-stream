@@ -25,8 +25,7 @@ class Feed extends Component
     public $birthDate = false;
     public $age = false;
     public $gender = false; // If exist
-    public $feeds = [];
-    public $limit = 12;
+    public $limit = 6;
 
     public function render()
     {
@@ -49,9 +48,10 @@ class Feed extends Component
         $photos = Photos::where('ownerId', $owner->id)->where('url', '!=', '')->limit(9)->get();
         $videos = Video::where('owner_id', $owner->id)->where('coverUrl', '!=', '')->limit(9)->get();
 
-        $this->feeds = ModelsFeed::with(["albumFeed.photos", "videoFeed", "postFeed.mediaPostFeeds"])
-            ->orderBy("updatedAt", "desc")
+        $feeds = ModelsFeed::with(["owner", "albumFeed.photos", "videoFeed", "postFeed.mediaPostFeeds"])
             ->where("owner_id", $owner->id)
+            ->orderBy("updatedAt", "desc")
+            ->orderBy("id", "desc")
             ->limit($this->limit)
             ->get();
 
@@ -63,11 +63,12 @@ class Feed extends Component
             'owner'     => $owner,
             'photos'    => $photos,
             'videos'    => $videos,
+            'feeds'     => $feeds,
         ]);
     }
 
     public function loadMore()
     {
-        $this->limit += 12;
+        $this->limit += 6;
     }
 }

@@ -12,19 +12,25 @@ use Livewire\Component;
 
 class Timeline extends Component
 {
-    public $feeds = [];
+    // public $feeds = []; // Removed to prevent large payload
     public $owner_birthday = [];
     public $owner_fav = [];
-    public $limit = 30;
+    public $limit = 10;
+
+    public function loadMore()
+    {
+        $this->limit += 10;
+    }
 
     public function render()
     {
         $favs = Customer::find(Auth::guard('customer')->user()->id)->getOwnerFavoriteIds()->toArray();
 
-        // Cache::forget('timeline');
-        $this->feeds = Cache::remember('timeline', 1, function () {
+        // Cache depends on limit now
+        $feeds = Cache::remember('timeline_limit_' . $this->limit, 1, function () {
             return Feed::with(["owner", "albumFeed.photos", "videoFeed", "postFeed.mediaPostFeeds"])
                 ->orderBy("updatedAt", "desc")
+                ->orderBy("id", "desc")
                 ->limit($this->limit)
                 ->get();
         });
@@ -111,6 +117,8 @@ class Timeline extends Component
 
         $this->dispatch('initVideosFeed');
 
-        return view('livewire.timeline');
+        return view('livewire.timeline', [
+            'feeds' => $feeds
+        ]);
     }
 }

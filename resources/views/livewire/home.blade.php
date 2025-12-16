@@ -235,12 +235,11 @@
                     </div>
                 </div>
             @else
-                <div class="row mt-3">
-                    <div class="offset-4 col-md-4 text-center">
-                        <button type="button" wire:click="moreLimit" class="btn btn-soft-primary mb-1">Ver
-                            más</button>
-                        <button type="button" wire:click="lessLimit" class="btn btn-soft-primary mb-1">Ver
-                            menos</button>
+                <div x-intersect="$wire.loadMore()" class="col-sm-12 text-center p-4">
+                    <div wire:loading wire:target="loadMore">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
                     </div>
                 </div>
             @endif

@@ -214,8 +214,18 @@
                     </div>
 
                     @foreach ($feeds as $feed)
-                        @include('components.feed', ['feed' => $feed])
+                        <div wire:key="feed-{{ $feed->id }}">
+                            @include('components.feed', ['feed' => $feed])
+                        </div>
                     @endforeach
+
+                    <div x-intersect="$wire.loadMore()" class="col-sm-12 text-center p-4">
+                        <div wire:loading wire:target="loadMore">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
 

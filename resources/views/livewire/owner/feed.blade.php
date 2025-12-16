@@ -291,13 +291,18 @@
             </div>
 
             @foreach ($feeds as $feed)
-                @include('components.feed', ['feed' => $feed])
-            @endforeach
-
-            @if ($feeds->count() % 12 == 0 && $feeds->count() !==0)
-                    <button type="submit" class="btn btn-primary d-block w-100 mt-3" wire:click="loadMore">Cargar mas publicaciones</button>
+                <div wire:key="feed-{{ $feed->id }}">
+                    @include('components.feed', ['feed' => $feed])
                 </div>
-            @endif
+            @endforeach
+            
+            <div x-intersect="$wire.loadMore()" class="col-sm-12 text-center p-4">
+                <div wire:loading wire:target="loadMore">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
