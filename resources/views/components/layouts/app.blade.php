@@ -1,7 +1,16 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme='{{ session('themeApp') ?? 'light' }}'>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="{{ session('themeApp') }}">
 
 <head>
+    <script>
+        (function() {
+            const savedTheme = "{{ session('themeApp') }}";
+            if (!savedTheme) {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+            }
+        })();
+    </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{{ $title ?? env('APP_NAME') }}</title>

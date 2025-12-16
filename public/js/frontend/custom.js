@@ -31,6 +31,23 @@ Livewire.on('themeApp', ({ theme }) => {
     document.documentElement.dataset.theme = theme;
 });
 
+// Listen for system theme changes if no user preference is set
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+    // Only update if the user hasn't manually set a theme (we assume manual set creates a session/cookie, 
+    // but here we check if the html attribute might match the old system pref or just rely on 'if we want to be smart'. 
+    // Actually, getting the session from JS is hard. 
+    // We'll trust that if the user cares, they toggled it. 
+    // But for a pure "system default" experience, live updating is nice.
+    // We'll check if the backend supplied a specific theme? No.
+    // Let's just update strictly if we are in "auto" mode? 
+    // We don't have an "auto" mode flag. 
+    // We'll skip this for now to avoid overwriting manual choices, OR we check if document.documentElement.dataset.theme was set by us initially?
+    // Let's keep it simple and safe: ONLY log it or do nothing to avoid fighting the user's manual toggle.
+    // The user asked for "default value", not necessarily live sync.
+    // I will skip the live listener to be safe and strictly follow the "default value" request.
+    console.log("System theme changed to:", event.matches ? "dark" : "light");
+});
+
 scrollToTop();
 
 initFullviewer();
