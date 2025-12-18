@@ -6,7 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Login</title>
 
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon-96x96.png') }}" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="{{ asset('images/favicon.svg') }}" />
     <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/apple-touch-icon.png') }}" />
+    <meta name="apple-mobile-web-app-title" content="AppStream" />
+    <link rel="manifest" href="{{ asset('site.webmanifest') }}" />
     <link rel="stylesheet" href="{{ asset('css/frontend/libs.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/frontend/socialv.css?v=4.0.0') }}">
     {{-- <link rel="stylesheet" href="{{ asset('vendor/@fortawesome/fontawesome-free/css/all.min.css') }}"> --}}
