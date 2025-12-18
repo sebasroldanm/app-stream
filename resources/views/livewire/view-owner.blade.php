@@ -29,6 +29,14 @@
                                             </a>
                                         </li>
                                     @endif
+                                    @if ($is_related)
+                                        <li>
+                                            <a href="{{ route('owner.information', $owner->username) }}" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" data-bs-original-title="{{ $is_related->count() }} Relacionados">
+                                                <i class="las la-link"></i>
+                                            </a>
+                                        </li>
+                                    @endif
                                     <li>
                                         <a wire:click="toggleFavorite" href="javascript:void(0);"
                                             data-bs-toggle="tooltip" data-bs-placement="top"
@@ -38,18 +46,6 @@
                                                 @if ($is_fav) class="las la-heart" @else class="lar la-heart" @endif></i>
                                         </a>
                                     </li>
-                                    @if ($owner->isError)
-                                        <li><a href="javascript:void(0);" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" data-bs-original-title="Username no válido">
-                                                <i class="ri-alert-line"></i>
-                                            </a></li>
-                                    @else
-                                        <li><a wire:click="updateDataMod" href="javascript:void(0);"
-                                                data-bs-toggle="tooltip" data-bs-placement="top"
-                                                data-bs-original-title="Actualizar">
-                                                <i class="ri-refresh-line"></i>
-                                            </a></li>
-                                    @endif
                                     @if (isset($owner->data->user->modelTopPosition) && $owner->data->user->modelTopPosition->position !== 0)
                                         <li><a href="javascript:void(0);" data-bs-toggle="tooltip"
                                                 data-bs-placement="top"
@@ -64,6 +60,18 @@
                                                     <i class="las la-trophy"></i>
                                                 </a></li>
                                         @endif
+                                    @endif
+                                    @if ($owner->isError)
+                                        <li><a href="javascript:void(0);" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" data-bs-original-title="Username no válido">
+                                                <i class="ri-alert-line"></i>
+                                            </a></li>
+                                    @else
+                                        <li><a wire:click="updateDataMod" href="javascript:void(0);"
+                                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                                data-bs-original-title="Actualizar">
+                                                <i class="ri-refresh-line"></i>
+                                            </a></li>
                                     @endif
                                 </ul>
                             </div>

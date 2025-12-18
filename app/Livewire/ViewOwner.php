@@ -162,6 +162,8 @@ class ViewOwner extends Component
                 ->where('customer_id', Auth::guard('customer')->user()->id)
                 ->exists();
 
+            $is_related = $owner->getRelatedOwnersAttribute();
+
             return view('livewire.view-owner', [
                 'owner' => $owner,
                 'intro' => $intro,
@@ -169,6 +171,7 @@ class ViewOwner extends Component
                 'videos' => $videos,
                 'panels' => $panels,
                 'is_fav' => $is_fav,
+                'is_related' => $is_related,
             ]);
         } else {
             return view('livewire.view-owner', [
@@ -177,6 +180,8 @@ class ViewOwner extends Component
                 'albums' => $albums,
                 'panels' => $panels,
                 'videos' => $videos,
+                'is_fav' => false,
+                'is_related' => false,
             ]);
         }
     }

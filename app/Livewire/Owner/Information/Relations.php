@@ -59,7 +59,7 @@ class Relations extends Component
         }
 
         $this->searchResults = Owner::where('id', '!=', $this->owner->id)
-            ->where('username', 'like', '%' . $this->search . '%')
+            ->where('username', $this->search)
             ->limit(5)
             ->get();
     }
