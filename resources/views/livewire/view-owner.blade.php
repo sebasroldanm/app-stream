@@ -29,7 +29,7 @@
                                             </a>
                                         </li>
                                     @endif
-                                    @if ($is_related)
+                                    @if ($is_related && $is_related->count() > 0)
                                         <li>
                                             <a href="{{ route('owner.information', $owner->username) }}" data-bs-toggle="tooltip"
                                                 data-bs-placement="top" data-bs-original-title="{{ $is_related->count() }} Relacionados">

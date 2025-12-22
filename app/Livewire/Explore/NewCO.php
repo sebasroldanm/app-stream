@@ -51,8 +51,8 @@ class NewCO extends Component
                     'Connection' => 'keep-alive'
                 ],
                 'query' => [
-                    'limit' => 60,
-                    'offset' => 0,
+                    'limit' => $this->limit,
+                    'offset' => $this->offset,
                     'primaryTag' => 'girls',
                     'filterGroupTags' => '[["tagLanguageColombian"],["autoTagNew"]]',
                     'sortBy' => 'trending',
@@ -66,7 +66,7 @@ class NewCO extends Component
                 $response = $response->getBody()->getContents();
                 $this->data = json_decode($response, false);
                 array_push($this->owners, ...$this->data->models);
-                if (count($this->data->models) !== 60) {
+                if (count($this->data->models) !== $this->limit) {
                     $this->endResults = true;
                 }
             } else {
