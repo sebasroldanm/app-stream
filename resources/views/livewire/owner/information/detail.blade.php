@@ -5,7 +5,7 @@
         <h4 class="d-flex justify-content-between">
             Personal
             <a href="{{ route('metadata', ['model' => 'owner', 'id' => $owner->id]) }}" target="_blank">
-                <i class="fas fa-user"></i>
+                <i class="fas fa-link"></i>
             </a>
         </h4>
         <hr>

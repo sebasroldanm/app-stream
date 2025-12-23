@@ -1,6 +1,13 @@
 <div class="row">
     <div class="col-md-12">
-        <h4 class="mb-3">Similitudes con IA</h4>
+        <h4 class="mb-3 d-flex justify-content-between">
+            Similitudes con IA
+            @if ($similarity !== false)
+                <a href="{{ route('metadata', ['model' => 'similarity', 'id' => $owner->id]) }}" target="_blank">
+                    <i class="fas fa-link"></i>
+                </a>
+            @endif
+        </h4>
     </div>
     <div class="row">
         @if ($similarity === false)

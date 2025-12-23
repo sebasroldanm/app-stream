@@ -164,7 +164,8 @@ class ViewOwner extends Component
 
             $is_related = $owner->getRelatedOwnersAttribute();
 
-            return view('livewire.view-owner', [
+            /** @var \Livewire\Features\SupportPageComponents\ContentRenderer $view */
+            $view = view('livewire.view-owner', [
                 'owner' => $owner,
                 'intro' => $intro,
                 'albums' => $albums,
@@ -173,8 +174,11 @@ class ViewOwner extends Component
                 'is_fav' => $is_fav,
                 'is_related' => $is_related,
             ]);
+
+            return $view->layoutData(['title' => ' | ' . $this->username]);
         } else {
-            return view('livewire.view-owner', [
+            /** @var \Livewire\Features\SupportPageComponents\ContentRenderer $view */
+            $view = view('livewire.view-owner', [
                 'owner' => $owner,
                 'intro' => $intro,
                 'albums' => $albums,
@@ -183,6 +187,8 @@ class ViewOwner extends Component
                 'is_fav' => false,
                 'is_related' => false,
             ]);
+
+            return $view->layoutData(['title' => ' | ' . $this->username]);
         }
     }
 

@@ -54,7 +54,7 @@
                                                     href="{{ route('metadata', ['model' => 'feed', 'id' => $feed->id]) }}"
                                                     target="_blank">
                                                     <div class="d-flex align-items-top">
-                                                        <i class="ri-user-unfollow-line h4"></i>
+                                                        <i class="fas fa-link h4"></i>
                                                         <div class="data ms-2">
                                                             <h6>Ver Meta datos</h6>
                                                             <p class="mb-0">Ver metadatos en
