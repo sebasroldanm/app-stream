@@ -296,13 +296,19 @@
                 </div>
             @endforeach
             
-            <div x-intersect="$wire.loadMore()" class="col-sm-12 text-center p-4">
-                <div wire:loading wire:target="loadMore">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Loading...</span>
+            @if ($feeds->count() < $totalFeeds)
+                <div x-intersect="$wire.loadMore()" class="col-sm-12 text-center p-4">
+                    <div wire:loading wire:target="loadMore">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Cargando mas publicaciones...</span>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @else
+                <div class="col-sm-12 text-center p-4">
+                    <p>Eso es todo, no hay mas publicaciones</p>
+                </div>
+            @endif
         </div>
     </div>
 </div>

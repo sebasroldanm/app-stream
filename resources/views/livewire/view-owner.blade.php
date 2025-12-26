@@ -276,6 +276,7 @@
                 <img src="{{ asset('images/page-img/page-load-loader.gif ') }}" alt="loader"
                     style="height: 100px;">
             </div>
+            <livewire:owner.related :owner="$owner" lazy />
         </div>
     </div>
 </div>

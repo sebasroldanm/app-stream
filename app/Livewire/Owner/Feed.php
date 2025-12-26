@@ -64,6 +64,7 @@ class Feed extends Component
             'photos'    => $photos,
             'videos'    => $videos,
             'feeds'     => $feeds,
+            'totalFeeds' => ModelsFeed::where("owner_id", $owner->id)->count(),
         ]);
     }
 

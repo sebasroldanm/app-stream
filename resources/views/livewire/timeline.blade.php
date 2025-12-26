@@ -335,7 +335,7 @@
                                             class="rounded-circle img-fluid">
                                         <div class="stories-data ms-3">
                                             <h5><a
-                                                    href="{{ route('owner', $own_fav->username) }}">{{ $own_fav->username }}</a>
+                                                    href="/owner/{{ $own_fav->username }}">{{ $own_fav->username }}</a>
                                             </h5>
                                             <p class="mb-0">
                                                 {{ number_format($own_fav->favoritedCount, 0, ',', '.') }} seguidores
@@ -361,7 +361,7 @@
                                             class="rounded-circle img-fluid">
                                         <div class="stories-data ms-3">
                                             <h5>
-                                                <a href="{{ route('owner', $ownr_b->username) }}">{{ $ownr_b->username }}</a>
+                                                <a href="/owner/{{ $ownr_b->username }}">{{ $ownr_b->username }}</a>
                                             </h5>
 
                                             @php

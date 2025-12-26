@@ -420,3 +420,44 @@ function renderResults(models) {
 
     container.innerHTML = html;
 }
+
+initSwiper();
+
+window.Livewire.on("initSwiper", function () {
+    setTimeout(() => {
+        initSwiper();
+    }, 1);
+});
+
+function initSwiper() {
+    console.log('initSwiper');
+
+    var swiperContainer = document.querySelector('.related-swiper');
+    if (swiperContainer && swiperContainer.swiper) {
+        console.log('Swiper already initialized, skipping');
+        return;
+    }
+
+    new Swiper('.related-swiper', {
+        slidesPerView: 3,
+        spaceBetween: 10,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+            768: {
+                slidesPerView: 5,
+                spaceBetween: 20,
+            },
+            1024: {
+                slidesPerView: 6,
+                spaceBetween: 20,
+            },
+        },
+    });
+}

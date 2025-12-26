@@ -31,6 +31,12 @@ class UtilController extends Controller
                     $response = json_decode($response);
                 }
                 break;
+            case 'related':
+                $response = Cache::get('related_' . $id);
+                if ($response) {
+                    $response = ($response);
+                }
+                break;
         }
 
         return view('utils.json', ['data' => $response]);
