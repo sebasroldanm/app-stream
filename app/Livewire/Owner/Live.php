@@ -15,7 +15,7 @@ class Live extends Component
         $owner = $this->owner;
         $url = env("URL_HLS") . "/b-hls-32/" . $owner->id . "/" . $owner->id . ".m3u8";
 
-        $this->dispatch('playVideo', [
+        $this->dispatch('initLive', [
             'url' => trim($url),
             'cover' => $owner->preview,
             'format' => "live",

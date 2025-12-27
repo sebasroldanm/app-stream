@@ -99,6 +99,7 @@
 
     <script src="{{ asset('js/frontend/custom.js') }}"></script>
     <script src="{{ asset('js/frontend/video.js') }}"></script>
+    <script src="{{ asset('js/frontend/live.js') }}"></script>
 
 
 </body>
