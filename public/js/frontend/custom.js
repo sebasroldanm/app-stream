@@ -1,4 +1,19 @@
+window.Livewire.on("initMasonry", function (data) {
+    initializeMasonry();
+    initFullviewer();
+});
 
+window.Livewire.on("initExplorer", function (data) {
+    setTimeout(() => {
+        reloadExplorer();
+    }, 500);
+});
+
+window.addEventListener("initFullviewer", () => {
+    setTimeout(() => {
+        initFullviewer();
+    }, 500);
+});
 
 function initializeMasonry(item) {
     setTimeout(() => {
