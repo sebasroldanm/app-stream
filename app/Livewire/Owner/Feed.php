@@ -57,7 +57,7 @@ class Feed extends Component
 
         $this->dispatch('initFullviewer');
 
-        $this->dispatch('initVideosFeed');
+        $this->dispatch('initVideos');
 
         return view('livewire.owner.feed', [
             'owner'     => $owner,

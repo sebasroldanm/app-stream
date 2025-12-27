@@ -16,28 +16,10 @@ class ContentVideo extends Component
 
     public function render()
     {
+        $this->dispatch('initVideos');
         $duration = $this->stringDurationTime($this->video->duration);
         return view('livewire.owner.videos.content-video', [
             'duration' => $duration
-        ]);
-    }
-
-
-    public function playTrailer(Video $video)
-    {
-        $this->dispatch('playVideo', [
-            'url' => $video->trailerUrl,
-            'cover' => $video->coverUrl,
-            'format' => $this->returnFormatByUrl($video->trailerUrl),
-        ]);
-    }
-
-    public function playVideo(Video $video)
-    {
-        $this->dispatch('playVideo', [
-            'url' => $video->videoUrl,
-            'cover' => $video->coverUrl,
-            'format' => $this->returnFormatByUrl($video->videoUrl),
         ]);
     }
 }

@@ -1,11 +1,18 @@
-window.addEventListener("initVideosFeed", () => {
+window.addEventListener("initVideos", () => {
     setTimeout(() => {
-        console.log("initVideosFeed");
-        initVideosFeed();
+        // console.log("initVideos");
+        initVideos();
     }, 500);
 });
 
-function initVideosFeed() {
+window.Livewire.on("initVideos", () => {
+    setTimeout(() => {
+        // console.log("initVideos wire");
+        initVideos();
+    }, 500);
+});
+
+function initVideos() {
     // Selecciona todos los videos con la clase .video_feed
     const videos = document.querySelectorAll(".video_feed");
 

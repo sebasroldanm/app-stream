@@ -115,7 +115,7 @@ class Timeline extends Component
 
         $this->dispatch('initFullviewer');
 
-        $this->dispatch('initVideosFeed');
+        $this->dispatch('initVideos');
 
         return view('livewire.timeline', [
             'feeds' => $feeds
