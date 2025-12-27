@@ -52,7 +52,6 @@ class Related extends Component
 
     public function render()
     {
-        sleep(5);
         $favs = Customer::find(Auth::guard('customer')->user()->id)->getOwnerFavoriteIds()->toArray();
 
         $this->dispatch('initSwiper');
