@@ -1,13 +1,8 @@
 <div class="content-video-player" wire:ignore>
     <div class="row">
         <div class="col-9">
-            <div class="card">
-                <video id="live-player">
-                </video>
-            </div>
-            <div class="overlay-text" id="error-message" style="display: none;">
-                Intente más tarde
-            </div>
+            <livewire:owner.live.player :owner="$owner" />
+            <livewire:owner.live.data :owner="$owner" />
         </div>
         <div class="col-3">
             <livewire:owner.live.chat :owner="$owner" />
