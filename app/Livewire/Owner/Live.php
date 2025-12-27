@@ -27,6 +27,8 @@ class Live extends Component
         $owner = $this->owner;
         $url = env("URL_HLS") . "/b-hls-32/" . $owner->id . "/" . $owner->id . ".m3u8";
 
-        return view('livewire.owner.live', ['url' => $url]);
+        return view('livewire.owner.live', [
+            'url' => $url,
+        ]);
     }
 }

@@ -55,6 +55,10 @@ class UtilController extends Controller
                     });
                 }
                 break;
+            case 'chat':
+                $response = base64_decode($id);
+                $response = json_decode($response);
+                break;
         }
 
         return view('utils.json', ['data' => $response]);

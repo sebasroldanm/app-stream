@@ -406,3 +406,32 @@ i.online {
 .searchbox > .card > .card-body > .media-story > li > .stories-data > p {
     line-height: normal;
 }
+
+/* Chat prov */
+
+.iq-timeline {
+    height: 50vh;
+    overflow-y: auto;
+    padding: 0 0 0 10px;
+}
+.iq-timeline li {
+    padding: 8px 10px 8px 0px;
+}
+.iq-timeline li.newMessage {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.iq-timeline li p {
+    margin: 0;
+}
+/* Chat prov */
