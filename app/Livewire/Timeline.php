@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Customer;
 use App\Models\Feed;
 use App\Models\Owner;
+use App\Traits\OwnerProp;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -12,6 +13,7 @@ use Livewire\Component;
 
 class Timeline extends Component
 {
+    use OwnerProp;
     // public $feeds = []; // Removed to prevent large payload
     public $owner_birthday = [];
     public $owner_fav = [];

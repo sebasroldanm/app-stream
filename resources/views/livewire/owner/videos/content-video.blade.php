@@ -7,7 +7,10 @@
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
-                        <h5 class="card-title">{{ $video->title }}</h5>
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">{{ $video->title }}</h5>
+                            <a href="{{ route('metadata', ['model' => 'video', 'id' => $video->id]) }}" target="_blank"><i class="fas fa-link"></i></a>
+                        </div>
                         <p class="card-text">{{ $video->description }}</p>
                         <div class="row">
                             <div class="col-3">
@@ -28,22 +31,15 @@
                 </div>
                 <div class="col-md-12 mt-2 px-5">
                     {{-- Main Video --}}
-                    @if ($video->videoUrl)
-                        <div class="col-lg-12">
-                            <video class="video_feed" data-poster="{{ $video->coverUrl }}"
-                                data-video="{{ $video->videoUrl }}"
-                                data-format="{{ $this->returnFormatByUrl($video->videoUrl) }}">
-                            </video>
-                        </div>
-                    {{-- Trailer --}}
-                    @else ($video->trailerUrl)
-                        <div class="col-lg-12">
-                            <video class="video_feed" data-poster="{{ $video->coverUrl }}"
+                    <div class="col-lg-12">
+                        <video class="video_feed" data-poster="{{ $video->coverUrl }}"
+                            @if ($video->videoUrl) data-video="{{ $video->videoUrl }}"
+                            data-format="{{ $this->returnFormatByUrl($video->videoUrl) }}"
+                            @else
                                 data-video="{{ $video->trailerUrl }}"
-                                data-format="{{ $this->returnFormatByUrl($video->trailerUrl) }}">
-                            </video>
-                        </div>
-                    @endif
+                                data-format="{{ $this->returnFormatByUrl($video->trailerUrl) }}" @endif>
+                        </video>
+                    </div>
                 </div>
             </div>
         </div>

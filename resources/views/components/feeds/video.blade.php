@@ -7,10 +7,10 @@
             <div class="col-lg-12">
                 <video class="video_feed" data-poster="{{ $video->coverUrl }}"
                     @if ($video->videoUrl) data-video="{{ $video->videoUrl }}"
-                            data-format="{{ $video->format_video }}"
+                            data-format="{{ $this->returnFormatByUrl($video->videoUrl) }}"
                         @else
                             data-video="{{ $video->trailerUrl }}"
-                            data-format="{{ $video->format_trailer }}" @endif>
+                            data-format="{{ $this->returnFormatByUrl($video->trailerUrl) }}" @endif>
                 </video>
             </div>
         </div>

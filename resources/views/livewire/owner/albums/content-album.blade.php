@@ -1,5 +1,8 @@
 <div class="card-body p-0">
-    <h4 class="mb-2">{{ $album->name }}</h4>
+    <div class="d-flex justify-content-between">
+        <h4 class="mb-2">{{ $album->name }}</h4>
+        <a href="{{ route('metadata', ['model' => 'album', 'id' => $album->id]) }}" target="_blank"><i class="fas fa-link"></i></a>
+    </div>
     <div class="row">
         <div class="col-3">
             <h6>Acceso</h6>
