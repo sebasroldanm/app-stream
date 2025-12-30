@@ -1,10 +1,10 @@
 <div class="content-video-player" wire:ignore>
     <div class="row">
-        <div class="col-9">
+        <div class="{{ $mainCol }}">
             <livewire:owner.live.player :owner="$owner" />
-            <livewire:owner.live.data :owner="$owner" />
+            <livewire:owner.live.info :owner="$owner" />
         </div>
-        <div class="col-3">
+        <div class="{{ $sideCol }}">
             <livewire:owner.live.chat :owner="$owner" />
         </div>
     </div>

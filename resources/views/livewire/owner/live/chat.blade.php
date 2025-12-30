@@ -1,13 +1,13 @@
-<div class="card" wire:poll.5s>
+<div class="card" wire:poll.2s>
     <div class="card-header d-flex justify-content-between">
         <div class="header-title">
             <h4 class="card-title">Chat</h4>
         </div>
     </div>
-    <div class="card-body p-1">
-        <ul class="iq-timeline ms-1">
+    <div class="card-body p-2">
+        <ul class="iq-timeline p-2">
             @foreach ($messages as $message)
-                <li class="ml-1 {{ $message['isNew'] ? 'newMessage' : '' }}" wire:key="{{ $message['id'] }}">
+                <li class="{{ $message['isNew'] ? 'newMessage' : '' }}" wire:key="{{ $message['id'] }}">
                     @if ($message['userData']['isModel'] && $message['modelId'] === $message['userData']['id'])
                         @if(isset($message['details']['lovenseDetails']))
                             <div class="timeline-dots border-danger"></div>
@@ -61,6 +61,8 @@
                             @elseif(isset($message['type']) && $message['type'] == 'newKing')
                                 <p>Nuevo King</p>
                             {{-- Mensaje --}}
+                            @elseif ($message['type'] == 'userBoughtContent')
+                                <p>Comprador {{ $message['details']['content']['id'] }} - {{ $message['details']['content']['type'] }} - Cost: {{ $message['details']['content']['cost'] }}</p>
                             @else
                                 <p>{{ $message['details']['body'] ?? dd($message) }}</p>
                             @endif

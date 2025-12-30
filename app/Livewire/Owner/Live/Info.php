@@ -6,7 +6,7 @@ use App\Models\Owner;
 use App\Traits\SyncData;
 use Livewire\Component;
 
-class Data extends Component
+class Info extends Component
 {
     use SyncData;
 
@@ -17,9 +17,11 @@ class Data extends Component
         $this->syncOwnerByUsername($this->owner->username);
 
         $this->owner = Owner::where('id', $this->owner->id)->first();
+        
+        $this->dispatch('ownerUpdated');
 
         $this->owner->data = json_decode($this->owner->data);
 
-        return view('livewire.owner.live.data');
+        return view('livewire.owner.live.info');
     }
 }

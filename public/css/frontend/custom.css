@@ -410,9 +410,10 @@ i.online {
 /* Chat prov */
 
 .iq-timeline {
-    height: 50vh;
+    height: 62vh;
     overflow-y: auto;
-    padding: 0 0 0 10px;
+    overflow-x: hidden;
+    border-left: none;
 }
 .iq-timeline li {
     padding: 8px 10px 8px 0px;

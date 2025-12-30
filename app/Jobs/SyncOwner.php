@@ -3,17 +3,28 @@
 namespace App\Jobs;
 
 use App\Models\Owner;
-use App\Traits\SyncData;
+use App\Services\Owner\OwnerAlbumSyncService;
+use App\Services\Owner\OwnerFeedSyncService;
+use App\Services\Owner\OwnerIntroSyncService;
+use App\Services\Owner\OwnerPanelSyncService;
+use App\Services\Owner\OwnerSyncService;
+use App\Services\Owner\OwnerVideoSyncService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
 class SyncOwner implements ShouldQueue
 {
-    use Queueable, SyncData;
+    use Queueable;
 
     protected Owner $owner;
-
     protected $type;
+
+    protected OwnerSyncService $ownerSyncService;
+    protected OwnerPanelSyncService $ownerPanelSyncService;
+    protected OwnerAlbumSyncService $ownerAlbumSyncService;
+    protected OwnerIntroSyncService $ownerIntroSyncService;
+    protected OwnerVideoSyncService $ownerVideoSyncService;
+    protected OwnerFeedSyncService $ownerFeedSyncService;
 
     /**
      * Create a new job instance.
@@ -27,10 +38,23 @@ class SyncOwner implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(): void
+    public function handle(
+        OwnerSyncService $ownerSyncService,
+        OwnerPanelSyncService $ownerPanelSyncService,
+        OwnerAlbumSyncService $ownerAlbumSyncService,
+        OwnerIntroSyncService $ownerIntroSyncService,
+        OwnerVideoSyncService $ownerVideoSyncService,
+        OwnerFeedSyncService $ownerFeedSyncService
+    ): void
     {
-        $owner = $this->owner;
+        $this->ownerSyncService = $ownerSyncService;
+        $this->ownerPanelSyncService = $ownerPanelSyncService;
+        $this->ownerAlbumSyncService = $ownerAlbumSyncService;
+        $this->ownerIntroSyncService = $ownerIntroSyncService;
+        $this->ownerVideoSyncService = $ownerVideoSyncService;
+        $this->ownerFeedSyncService = $ownerFeedSyncService;
 
+        $owner = $this->owner;
         $type = $this->type;
 
         switch ($type) {
@@ -53,16 +77,16 @@ class SyncOwner implements ShouldQueue
 
     private function updateOwner($owner)
     {
-        $this->syncOwnerByUsername($owner->username);
+        $this->ownerSyncService->syncOwnerByUsername($owner->username);
     }
 
     private function updateAll($owner)
     {
-        $this->syncOwnerByUsername($owner->username);
-        $this->syncPanelByOwnerId($owner->id);
-        $this->syncAlbum($owner->id, $owner->username);
-        $this->syncIntroByOwnerId($owner->id);
-        $this->syncVideo($owner->id, $owner->username);
-        $this->syncFeedByOwnerId($owner->id);
+        $this->ownerSyncService->syncOwnerByUsername($owner->username);
+        $this->ownerPanelSyncService->syncPanelByOwnerId($owner->id);
+        $this->ownerAlbumSyncService->syncAlbum($owner->id, $owner->username);
+        $this->ownerIntroSyncService->syncIntroByOwnerId($owner->id);
+        $this->ownerVideoSyncService->syncVideo($owner->id, $owner->username);
+        $this->ownerFeedSyncService->syncFeedByOwnerId($owner->id);
     }
 }

@@ -20,6 +20,9 @@
 
         const videoSource = data.url;
         const poster = data.cover;
+        const height = data.height;
+        const width = data.width;
+        const ratio = data.ratio;
 
         // Limpieza robusta de instancias previas
         if (hls) {
