@@ -73,10 +73,15 @@
     @livewire('footer')
 
     @livewireScripts
+
+    {{-- STACK DE SCRIPTS --}}
+    @stack('scripts')
     <!-- Backend Bundle JavaScript -->
     <script src="{{ asset('js/frontend/libs.min.js') }}"></script>
     <!-- slider JavaScript -->
     <script src="{{ asset('js/frontend/slider.js') }}"></script>
+    <!-- info JavaScript -->
+    <script src="{{ asset('js/frontend/info.js') }}"></script>
     <!-- masonry JavaScript -->
     <script src="{{ asset('js/frontend/masonry.pkgd.min.js') }}"></script>
     <!-- SweetAlert JavaScript -->

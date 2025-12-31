@@ -2,13 +2,22 @@
 * Parental control
 */
 
+:root {
+    --parental-control: 15px;
+}
+
 img {
-    filter: blur(5px);
+    filter: blur(var(--parental-control));
 }
 .iq-navbar-logo img,
-.avatar-60,
-.me-2 {
+.me-2,
+.me-3,
+.img-fluid.rounded {
     filter: none;
+}
+
+video {
+    filter: blur(var(--parental-control));
 }
 
 /**

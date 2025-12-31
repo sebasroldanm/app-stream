@@ -7,9 +7,15 @@
                     @if (isset($owner->data->cam->goal))
                         @php
                             $goal = $owner->data->cam->goal;
-                            $current = $goal->left * 100 / $goal->goal;
                         @endphp
-                        <p class="card-text">{{ $goal->description }}. <br/>Meta {{ $goal->goal }} | {{ round($current) }}% <small>({{ $goal->left }})</small></p>
+                        <h5>{{ $goal->description }}</h5>
+                        <div class="progress-container" wire:ignore>
+                            <div class="progress-bar" id="progressBar">
+                                <div class="progress-shimmer"></div>
+                                <div class="progress-text" id="progressText">0%</div>
+                            </div>
+                        </div>
+                        <p class="card-text">Meta <small>{{ $goal->spent }}</small> / {{ $goal->goal }}</p>
                     @else
                         <p class="card-text">No goal set</p>
                     @endif
@@ -46,5 +52,88 @@
             </div>
         </div>
     </div>
-</div>
 
+    <style>
+        .progress-container {
+            width: 100%;
+            max-width: 420px;
+            height: 30px;
+            background-color: #e5e7eb;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            position: relative;
+            height: 100%;
+            width: 0%;
+            background-color: #86efac;
+            /* verde claro */
+            transition: width 0.6s ease;
+            overflow: hidden;
+        }
+
+        /* Brillo suave interno */
+        .progress-shimmer {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg,
+                    rgba(255, 255, 255, 0) 0%,
+                    rgba(255, 255, 255, 0.35) 50%,
+                    rgba(255, 255, 255, 0) 100%);
+            background-size: 200% 100%;
+            animation: shimmerMove 1.6s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        .progress-bar.complete .progress-shimmer {
+            animation: none;
+            background: none;
+        }
+
+        .progress-text {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            color: #064e3b;
+            /* verde oscuro */
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        @keyframes shimmerMove {
+            from {
+                background-position: 200% 0;
+            }
+
+            to {
+                background-position: -200% 0;
+            }
+        }
+
+        /* Demo buttons */
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            background: #064e3b;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</div>
