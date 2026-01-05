@@ -58,7 +58,9 @@ class OwnerSyncService
                     $owner->eyeColor = $dataUser['eyeColor'];
                     if (is_numeric($dataUser['age'])) {
                         $owner->age = $dataUser['age'];
-                        $owner->birthDate = $dataUser['birthDate'];
+                        if (!empty($dataUser['birthDate'])) {
+                            $owner->birthDate = Carbon::parse($dataUser['birthDate']);
+                        }
                     }
                     $owner->favoritedCount = $dataUser['favoritedCount'];
                     $offLineRaw = $dataUser['offlineStatusUpdatedAt'] ?? null;

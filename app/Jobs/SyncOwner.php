@@ -18,6 +18,8 @@ class SyncOwner implements ShouldQueue
 
     protected Owner $owner;
     protected $type;
+    
+    public $timeout = 1200;
 
     protected OwnerSyncService $ownerSyncService;
     protected OwnerPanelSyncService $ownerPanelSyncService;

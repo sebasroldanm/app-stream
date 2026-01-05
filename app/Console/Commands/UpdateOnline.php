@@ -3,13 +3,10 @@
 namespace App\Console\Commands;
 
 use App\Jobs\SyncOwner;
-use App\Models\Customer;
 use App\Models\Owner;
-use App\Traits\SyncData;
 use Illuminate\Console\Command;
 class UpdateOnline extends Command
 {
-    use SyncData;
     /**
      * The name and signature of the console command.
      *
@@ -26,9 +23,8 @@ class UpdateOnline extends Command
 
     public function handle()
     {
-        $favs = Customer::find(1)->getOwnerFavoriteIds()->toArray();
-        $owners = Owner::whereIn('id', $favs)
-            ->where('isDelete', false)    
+        $owners = Owner::where('isLive', true)
+            ->orWhere('isOnline', true)
             ->get();
 
         foreach ($owners as $owner) {
