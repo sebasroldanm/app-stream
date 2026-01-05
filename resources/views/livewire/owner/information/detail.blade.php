@@ -74,6 +74,14 @@
         </h4>
         <hr>
         <div class="row">
+            @if ($owner->notFound)
+                <div class="col-3">
+                    <h6>Estado de Perfil</h6>
+                </div>
+                <div class="col-9">
+                    <span>No encontrado en el Servidor principal, buscar en similitudes</span>
+                </div>
+            @endif
             @if (isset($owner->data->user->modelTopPosition) && $owner->data->user->modelTopPosition->position !== 0)
                 <div class="col-3">
                     <h6>Posición actual</h6>
@@ -122,7 +130,7 @@
 
             @if (!$owner->isDelete)
                 <div class="col-3">
-                    Last Snapshot
+                    <h6>Último snapshot</h6>
                 </div>
                 <div class="col-9">
                     {{ $snapshotCalendar }} - {{ $snapshotDiff }}

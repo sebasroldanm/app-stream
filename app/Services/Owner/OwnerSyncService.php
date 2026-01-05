@@ -102,6 +102,18 @@ class OwnerSyncService
                     return $newUsername;
                 }
             }
+            if (strpos($th->getMessage(), 'Not Found')) {
+                $owner = Owner::where('username', $username)->first();
+                if (!$owner) {
+                    $owner = new Owner();
+                    $owner->username = $username;
+                }
+                $owner->notFound = true;
+                $owner->isLive = false;
+                $owner->isOnline = false;
+                $owner->save();
+            }
+            
             $this->logger->logError(
                 'service/owner_sync',
                 $th->getMessage(),

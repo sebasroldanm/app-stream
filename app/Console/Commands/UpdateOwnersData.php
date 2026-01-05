@@ -30,7 +30,8 @@ class UpdateOwnersData extends Command
     {
         $favs = Customer::find(1)->getOwnerFavoriteIds()->toArray();
         $owners = Owner::whereIn('id', $favs)
-            ->where('isDelete', false)    
+            ->where('isDelete', false)
+            ->where('notFound', false)
             ->get();
 
         foreach ($owners as $owner) {

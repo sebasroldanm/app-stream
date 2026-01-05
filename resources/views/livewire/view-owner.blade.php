@@ -61,9 +61,9 @@
                                                 </a></li>
                                         @endif
                                     @endif
-                                    @if ($owner->isError)
+                                    @if ($owner->notFound)
                                         <li><a href="javascript:void(0);" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" data-bs-original-title="Username no válido">
+                                                data-bs-placement="top" data-bs-original-title="No encontrado en el Servidor principal, buscar en similitudes">
                                                 <i class="ri-alert-line"></i>
                                             </a></li>
                                     @else
@@ -92,6 +92,9 @@
                                             @if ($owner->isDelete)
                                                 <i class="ri-close-circle-fill disable" data-bs-toggle="tooltip"
                                                     data-bs-placement="top" data-bs-original-title="Desactivado"></i>
+                                            @elseif ($owner->notFound)
+                                                <i class="ri-close-circle-fill disable" data-bs-toggle="tooltip"
+                                                    data-bs-placement="top" data-bs-original-title="No encontrado Origin Server"></i>
                                             @else
                                                 <i class="ri-indeterminate-circle-fill offline" data-bs-toggle="tooltip"
                                                     data-bs-placement="top" data-bs-original-title="{{ \Carbon\Carbon::parse($owner->statusChangedAt)->diffForHumans() }}"></i>

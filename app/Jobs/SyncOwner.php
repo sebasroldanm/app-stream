@@ -82,7 +82,12 @@ class SyncOwner implements ShouldQueue
 
     private function updateAll($owner)
     {
-        $this->ownerSyncService->syncOwnerByUsername($owner->username);
+        $synchronized = $this->ownerSyncService->syncOwnerByUsername($owner->username);
+        
+        if (!$synchronized) {
+            return;
+        }
+
         $this->ownerPanelSyncService->syncPanelByOwnerId($owner->id);
         $this->ownerAlbumSyncService->syncAlbum($owner->id, $owner->username);
         $this->ownerIntroSyncService->syncIntroByOwnerId($owner->id);
