@@ -32,6 +32,7 @@ class UpdateOwnersData extends Command
         $owners = Owner::whereIn('id', $favs)
             ->where('isDelete', false)
             ->where('notFound', false)
+            ->where('statusChangedAt', '<', now()->subMonths(3))
             ->get();
 
         foreach ($owners as $owner) {

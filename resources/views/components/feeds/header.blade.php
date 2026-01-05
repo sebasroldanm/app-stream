@@ -29,7 +29,8 @@
                         @endswitch
                     </p>
                     <p class="mb-0" data-bs-toggle="tooltip" data-bs-placement="top"
-                        data-bs-original-title="{{ Carbon\Carbon::parse($feed->updatedAt)->format('d M, Y - H:i:s') }}">
+                        data-bs-original-title="{{ \Carbon\Carbon::parse($feed->updatedAt)->format('d/m/Y H:i') }}"
+                        title="{{ \Carbon\Carbon::parse($feed->updatedAt)->format('d/m/Y H:i') }}">
                         {{ \Carbon\Carbon::parse($feed->updatedAt)->diffForHumans() }}
                     </p>
                 </div>
