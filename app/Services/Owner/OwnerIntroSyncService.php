@@ -3,27 +3,32 @@
 namespace App\Services\Owner;
 
 use App\Models\Intro;
-use App\Models\Log;
+use App\Services\Logger\ServiceLogger;
 
 class OwnerIntroSyncService
 {
     protected OwnerApiClient $apiClient;
+    protected ServiceLogger $logger;
 
-    public function __construct(OwnerApiClient $apiClient)
+    public function __construct(OwnerApiClient $apiClient, ServiceLogger $logger)
     {
         $this->apiClient = $apiClient;
+        $this->logger = $logger;
     }
 
     public function syncIntroByOwnerId($id)
     {
+        $path = '/api/front/users/' . $id . '/intros';
+        
         try {
-            $path = '/api/front/users/' . $id . '/intros';
-            
             $response = $this->apiClient->get($path);
             $statusCode = $response->getStatusCode();
 
             if ($statusCode === 200) {
                 $content = $response->getBody()->getContents();
+                if (empty($content)) {
+                    return false;
+                }
                 $data = json_decode($content, true);
                 
                 $intro = Intro::find($data["id"]);
@@ -40,11 +45,13 @@ class OwnerIntroSyncService
                 // Image/Video saving commented out in original
             }
         } catch (\Throwable $th) {
-            $log = new Log();
-            $log->type = 'error';
-            $log->message = $th->getMessage();
-            $log->trace = $th->getTraceAsString();
-            $log->save();
+            $this->logger->logError(
+                'service/owner_intro_sync',
+                $th->getMessage(),
+                ['path' => $path],
+                [],
+                $th->getTraceAsString()
+            );
         }
     }
 }

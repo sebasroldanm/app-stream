@@ -39,6 +39,9 @@ class Info extends Component
             }
         }
 
+        // Implementar
+        // https://design.spiderbees.com/bootstrap5/html-dark/chat.html
+
         return view('livewire.owner.live.info');
     }
 }

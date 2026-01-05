@@ -3,16 +3,18 @@
 namespace App\Services\Owner;
 
 use App\Jobs\Processing\ProcessFeedPost;
-use App\Models\Log;
+use App\Services\Logger\ServiceLogger;
 use Illuminate\Support\Facades\Bus;
 
 class OwnerFeedSyncService
 {
     protected OwnerApiClient $apiClient;
+    protected ServiceLogger $logger;
 
-    public function __construct(OwnerApiClient $apiClient)
+    public function __construct(OwnerApiClient $apiClient, ServiceLogger $logger)
     {
         $this->apiClient = $apiClient;
+        $this->logger = $logger;
     }
 
     public function syncFeedByOwnerId($id)
@@ -23,9 +25,9 @@ class OwnerFeedSyncService
             public $excludeIds = "123456789";
         };
 
+        $path = '/api/front/feed/model/' . $id;
+
         try {
-            $path = '/api/front/feed/model/' . $id;
-            
             $response = $this->apiClient->get($path);
             $statusCode = $response->getStatusCode();
 
@@ -65,11 +67,13 @@ class OwnerFeedSyncService
                 }
             }
         } catch (\Throwable $th) {
-            $log = new Log();
-            $log->type = 'error';
-            $log->message = $th->getMessage();
-            $log->trace = $th->getTraceAsString();
-            $log->save();
+            $this->logger->logError(
+                'service/owner_feed_sync',
+                $th->getMessage(),
+                ['path' => $path], // Might need query params too for subsequent calls?
+                [],
+                $th->getTraceAsString()
+            );
         }
     }
 

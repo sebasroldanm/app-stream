@@ -3,23 +3,25 @@
 namespace App\Services\Owner;
 
 use App\Jobs\Processing\ProcessAlbum;
-use App\Models\Log;
+use App\Services\Logger\ServiceLogger;
 use Illuminate\Support\Facades\Bus;
 
 class OwnerAlbumSyncService
 {
     protected OwnerApiClient $apiClient;
+    protected ServiceLogger $logger;
 
-    public function __construct(OwnerApiClient $apiClient)
+    public function __construct(OwnerApiClient $apiClient, ServiceLogger $logger)
     {
         $this->apiClient = $apiClient;
+        $this->logger = $logger;
     }
 
     public function syncAlbum($id_owner, $username)
     {
+        $path = '/api/front/v2/users/username/' . $username . '/albums';
+
         try {
-            $path = '/api/front/v2/users/username/' . $username . '/albums';
-    
             $response = $this->apiClient->get($path);
             $statusCode = $response->getStatusCode();
 
@@ -37,11 +39,13 @@ class OwnerAlbumSyncService
                 return true;
             }
         } catch (\Throwable $th) {
-            $log = new Log();
-            $log->type = 'error';
-            $log->message = $th->getMessage();
-            $log->trace = $th->getTraceAsString();
-            $log->save();
+            $this->logger->logError(
+                'service/owner_album_sync',
+                $th->getMessage(),
+                ['path' => $path],
+                [],
+                $th->getTraceAsString()
+            );
             return false;
         }
     }

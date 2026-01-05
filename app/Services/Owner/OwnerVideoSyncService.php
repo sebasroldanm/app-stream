@@ -3,23 +3,25 @@
 namespace App\Services\Owner;
 
 use App\Jobs\Processing\ProcessVideo;
-use App\Models\Log;
+use App\Services\Logger\ServiceLogger;
 use Illuminate\Support\Facades\Bus;
 
 class OwnerVideoSyncService
 {
     protected OwnerApiClient $apiClient;
+    protected ServiceLogger $logger;
 
-    public function __construct(OwnerApiClient $apiClient)
+    public function __construct(OwnerApiClient $apiClient, ServiceLogger $logger)
     {
         $this->apiClient = $apiClient;
+        $this->logger = $logger;
     }
 
     public function syncVideo($id_owner, $username)
     {
+        $path = '/api/front/v2/users/username/' . $username . '/videos';
+        
         try {
-            $path = '/api/front/v2/users/username/' . $username . '/videos';
-            
             $response = $this->apiClient->get($path);
             $statusCode = $response->getStatusCode();
 
@@ -33,11 +35,13 @@ class OwnerVideoSyncService
                 }
             }
         } catch (\Throwable $th) {
-            $log = new Log();
-            $log->type = 'error';
-            $log->message = $th->getMessage();
-            $log->trace = $th->getTraceAsString();
-            $log->save();
+            $this->logger->logError(
+                'service/owner_video_sync',
+                $th->getMessage(),
+                ['path' => $path],
+                [], // Response might not be available here easily unless we capture it before throw? 
+                $th->getTraceAsString()
+            );
         }
     }
 }

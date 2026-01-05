@@ -1,28 +1,30 @@
 <?php
 
 namespace App\Services\Owner;
-
-use App\Models\Log;
+ 
+use App\Services\Logger\ServiceLogger;
 
 class OwnerSearchService
 {
     protected OwnerApiClient $apiClient;
+    protected ServiceLogger $logger;
 
-    public function __construct(OwnerApiClient $apiClient)
+    public function __construct(OwnerApiClient $apiClient, ServiceLogger $logger)
     {
         $this->apiClient = $apiClient;
+        $this->logger = $logger;
     }
 
     public function searchGlobal($keyword)
     {
+        $path = '/api/front/v4/models/search/suggestion';
+        $query = [
+            'query' => $keyword,
+            'primaryTag' => 'girls'
+        ];
+
         try {
             // Logic from SyncData::searchGlobal
-            $path = '/api/front/v4/models/search/suggestion';
-            $query = [
-                'query' => $keyword,
-                'primaryTag' => 'girls'
-            ];
-
             $response = $this->apiClient->get($path, ['query' => $query]);
             $statusCode = $response->getStatusCode();
 
@@ -32,11 +34,13 @@ class OwnerSearchService
                 return $data;
             }
         } catch (\Throwable $th) {
-             $log = new Log();
-             $log->type = 'error';
-             $log->message = $th->getMessage();
-             $log->trace = $th->getTraceAsString();
-             $log->save();
+             $this->logger->logError(
+                 'service/owner_search',
+                 $th->getMessage(),
+                 ['path' => $path, 'query' => $query],
+                 [],
+                 $th->getTraceAsString()
+             );
         }
         return null;
     }

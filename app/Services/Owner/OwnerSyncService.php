@@ -2,25 +2,27 @@
 
 namespace App\Services\Owner;
 
-use App\Models\Log;
 use App\Models\Owner;
+use App\Services\Logger\ServiceLogger;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log as LaravelLog;
 
 class OwnerSyncService
 {
     protected OwnerApiClient $apiClient;
+    protected ServiceLogger $logger;
 
-    public function __construct(OwnerApiClient $apiClient)
+    public function __construct(OwnerApiClient $apiClient, ServiceLogger $logger)
     {
         $this->apiClient = $apiClient;
+        $this->logger = $logger;
     }
 
     public function syncOwnerByUsername(string $username)
     {
+        $path = '/api/front/v2/models/username/' . $username . '/cam';
+
         try {            
-            $path = '/api/front/v2/models/username/' . $username . '/cam';
-            
             $response = $this->apiClient->get($path);
             $statusCode = $response->getStatusCode();
             
@@ -100,11 +102,13 @@ class OwnerSyncService
                     return $newUsername;
                 }
             }
-            $log = new Log();
-            $log->type = 'error';
-            $log->message = $th->getMessage();
-            $log->trace = $th->getTraceAsString();
-            $log->save();
+            $this->logger->logError(
+                'service/owner_sync',
+                $th->getMessage(),
+                ['path' => $path],
+                [],
+                $th->getTraceAsString()
+            );
         }
         return false;
     }

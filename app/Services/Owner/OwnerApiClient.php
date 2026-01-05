@@ -2,15 +2,18 @@
 
 namespace App\Services\Owner;
 
+use App\Services\Logger\ServiceLogger;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 
 class OwnerApiClient
 {
     protected Client $client;
+    protected ServiceLogger $logger;
 
-    public function __construct()
+    public function __construct(ServiceLogger $logger)
     {
+        $this->logger = $logger;
         $this->client = new Client([
             'base_uri' => env('API_SERVER'),
             'verify' => false,
@@ -33,6 +36,17 @@ class OwnerApiClient
      */
     public function get(string $uri, array $options = []): Response
     {
-        return $this->client->get($uri, $options);
+        try {
+            return $this->client->get($uri, $options);
+        } catch (\Throwable $th) {
+            $this->logger->logError(
+                'service/owner_api_client',
+                $th->getMessage(),
+                ['uri' => $uri, 'options' => $options],
+                [],
+                $th->getTraceAsString()
+            );
+            throw $th;
+        }
     }
 }

@@ -3,23 +3,25 @@
 namespace App\Services\Owner;
 
 use App\Jobs\Processing\ProcessPanel;
-use App\Models\Log;
+use App\Services\Logger\ServiceLogger;
 use Illuminate\Support\Facades\Bus;
 
 class OwnerPanelSyncService
 {
     protected OwnerApiClient $apiClient;
+    protected ServiceLogger $logger;
 
-    public function __construct(OwnerApiClient $apiClient)
+    public function __construct(OwnerApiClient $apiClient, ServiceLogger $logger)
     {
         $this->apiClient = $apiClient;
+        $this->logger = $logger;
     }
 
     public function syncPanelByOwnerId($id)
     {
+        $path = '/api/front/users/' . $id . '/panels';
+        
         try {
-            $path = '/api/front/users/' . $id . '/panels';
-            
             $response = $this->apiClient->get($path);
             $statusCode = $response->getStatusCode();
 
@@ -38,11 +40,13 @@ class OwnerPanelSyncService
                 return true;
             }
         } catch (\Throwable $th) {
-            $log = new Log();
-            $log->type = 'error';
-            $log->message = $th->getMessage();
-            $log->trace = $th->getTraceAsString();
-            $log->save();
+            $this->logger->logError(
+                'service/owner_panel_sync',
+                $th->getMessage(),
+                ['path' => $path],
+                [],
+                $th->getTraceAsString()
+            );
         }
         return false;
     }
