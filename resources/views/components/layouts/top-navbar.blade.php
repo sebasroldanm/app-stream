@@ -28,6 +28,9 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav  ms-auto navbar-list">
                     <li>
+                        <span class="badge bg-success">{{ $online_app }} online</span>
+                    </li>
+                    <li>    
                         <a href="{{ route('home') }}" class="  d-flex align-items-center">
                             <i class="ri-home-line"></i>
                         </a>

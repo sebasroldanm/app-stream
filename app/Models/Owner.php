@@ -20,9 +20,16 @@ class Owner extends Model
         return $this->hasMany(Panel::class);
     }
 
-    public function favoritedByCustomers()
+    public function customers()
     {
         return $this->belongsToMany(Customer::class, 'customer_owner_favorites');
+    }
+
+    public function scopeFavoritedByCustomers($query, $customerId)
+    {
+        return $query->whereHas('customers', function ($q) use ($customerId) {
+            $q->where('customer_id', $customerId);
+        });
     }
 
     public function snapshots()

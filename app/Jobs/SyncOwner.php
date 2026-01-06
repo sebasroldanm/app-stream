@@ -9,12 +9,13 @@ use App\Services\Owner\OwnerIntroSyncService;
 use App\Services\Owner\OwnerPanelSyncService;
 use App\Services\Owner\OwnerSyncService;
 use App\Services\Owner\OwnerVideoSyncService;
+use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
 class SyncOwner implements ShouldQueue
 {
-    use Queueable;
+    use Batchable, Queueable;
 
     protected Owner $owner;
     protected $type;

@@ -18,17 +18,22 @@
                         <i class="las la-globe"></i><span>Timeline</span>
                     </a>
                 </li>
+                <li class="@if (Route::is('favorites')) active @endif">
+                    <a href="{{ route('favorites') }}" wire:navigate class=" ">
+                        <i class="las la-heart"></i><span>Favorites</span>
+                    </a>
+                </li>
                 {{-- <li class=" ">
                     <a href="../app/todo.html" class=" ">
                         <i class="las la-check-circle"></i><span>Todo</span>
                     </a>
-                </li> --}}
-                {{-- <li class=" ">
+                </li>
+                <li class=" ">
                     <a href="../dashboard/calendar.html" class=" ">
                         <i class="las la-calendar"></i><span>Calendar</span>
                     </a>
-                </li> --}}
-                {{-- <li class=" ">
+                </li>
+                <li class=" ">
                     <a href="#mailbox" data-bs-toggle="collapse" class="  collapsed" aria-expanded="false">
                         <i class="ri-mail-line"></i><span>Email</span><i
                             class="ri-arrow-right-s-line iq-arrow-right"></i>

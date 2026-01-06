@@ -8,6 +8,7 @@ use App\Livewire\Explore;
 use App\Livewire\Explore\MobileCO;
 use App\Livewire\Explore\NewCO;
 use App\Livewire\Explore\NewMobileCO;
+use App\Livewire\Favorites;
 use App\Livewire\Home;
 use App\Livewire\Timeline;
 use App\Livewire\ViewOwner;
@@ -36,6 +37,9 @@ Route::middleware(['auth:customer'])->group(function () {
         Route::get('/videos', ViewOwner::class)->name('owner.videos');
         Route::get('/live', ViewOwner::class)->name('owner.live');
     });
+
+    Route::get('/favorites', Favorites::class)->name('favorites');
+
     Route::get('/explore', Explore::class)->name('explore');
     Route::get('/explore/new-co', NewCO::class)->name('explore.new-co');
     Route::get('/explore/mobile-co', MobileCO::class)->name('explore.mobile-co');

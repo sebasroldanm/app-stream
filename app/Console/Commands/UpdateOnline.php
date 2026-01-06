@@ -4,7 +4,12 @@ namespace App\Console\Commands;
 
 use App\Jobs\SyncOwner;
 use App\Models\Owner;
+use Illuminate\Bus\Batch;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Cache;
+use Throwable;
+
 class UpdateOnline extends Command
 {
     /**
@@ -27,9 +32,27 @@ class UpdateOnline extends Command
             ->orWhere('isOnline', true)
             ->get();
 
-        foreach ($owners as $owner) {
-            SyncOwner::dispatch($owner, 'owner');
-        }
+        Bus::batch(
+            $owners->map(fn($owner) => new SyncOwner($owner, 'owner'))->toArray()
+        )
+            ->then(function (Batch $batch) {
+                Cache::forget('online_app');
+                Cache::remember('online_app', 60, function () {
+                    return Owner::where('isOnline', true)->count();
+                });
+            })
+            ->catch(function (Batch $batch, Throwable $e) {
+                Cache::forget('online_app');
+                Cache::remember('online_app', 60, function () {
+                    return Owner::where('isOnline', true)->count();
+                });
+            })
+            ->finally(function (Batch $batch) {
+                Cache::forget('online_app');
+                Cache::remember('online_app', 60, function () {
+                    return Owner::where('isOnline', true)->count();
+                });
+            })
+            ->dispatch();
     }
-
 }

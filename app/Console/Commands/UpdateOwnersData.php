@@ -5,7 +5,11 @@ namespace App\Console\Commands;
 use App\Jobs\SyncOwner;
 use App\Models\Customer;
 use App\Models\Owner;
+use Illuminate\Bus\Batch;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Cache;
+use Throwable;
 
 class UpdateOwnersData extends Command
 {
@@ -35,8 +39,27 @@ class UpdateOwnersData extends Command
             ->where('statusChangedAt', '<', now()->subMonths(3))
             ->get();
 
-        foreach ($owners as $owner) {
-            SyncOwner::dispatch($owner, 'all');
-        }
+        Bus::batch(
+            $owners->map(fn($owner) => new SyncOwner($owner, 'all'))->toArray()
+        )
+            ->then(function (Batch $batch) {
+                Cache::forget('online_app');
+                Cache::remember('online_app', 60, function () {
+                    return Owner::where('isOnline', true)->count();
+                });
+            })
+            ->catch(function (Batch $batch, Throwable $e) {
+                Cache::forget('online_app');
+                Cache::remember('online_app', 60, function () {
+                    return Owner::where('isOnline', true)->count();
+                });
+            })
+            ->finally(function (Batch $batch) {
+                Cache::forget('online_app');
+                Cache::remember('online_app', 60, function () {
+                    return Owner::where('isOnline', true)->count();
+                });
+            })
+            ->dispatch();
     }
 }
