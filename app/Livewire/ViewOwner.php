@@ -9,6 +9,7 @@ use App\Models\Owner;
 use App\Models\Panel;
 use App\Models\Video;
 use App\Traits\SyncData;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -122,6 +123,11 @@ class ViewOwner extends Component
 
         if (is_null($owner)) {
             return view('livewire.404');
+        }
+
+        if (is_null($owner->lastSync) || Carbon::parse($owner->lastSync)->diffInHours(Carbon::now()) > 1) {
+            $own_id = $this->syncOwnerByUsername($this->username);
+            $owner = Owner::find($own_id);
         }
 
         $owner->data = json_decode($owner->data);

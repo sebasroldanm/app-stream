@@ -2,8 +2,8 @@
 
 namespace App\Livewire\Explore;
 
+use App\Services\Explore\ExploreService;
 use App\Models\Customer;
-use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -41,42 +41,19 @@ class NewMobileCO extends Component
 
     private function loadData()
     {
-        $client = new Client();
+        $this->data = app(ExploreService::class)->filterSearch(
+            $this->limit,
+            $this->offset,
+            [['tagLanguageColombian'], ['autoTagNew'], ['mobile']],
+            'autoTagNew'
+        );
 
-        try {
-            $url = env('API_SERVER') . '/api/front/models';
-
-            $response = $client->get($url, [
-                'verify' => false,
-                'headers' => [
-                    'User-Agent' => 'PostmanRuntime/7.39.0',
-                    'Accept' => '*/*',
-                    'Accept-Encoding' => 'gzip, deflate, br',
-                    'Connection' => 'keep-alive'
-                ],
-                'query' => [
-                    'limit' => $this->limit,
-                    'offset' => $this->offset,
-                    'primaryTag' => 'girls',
-                    'filterGroupTags' => '[["tagLanguageColombian"],["autoTagNew"],["mobile"]]',
-                    'sortBy' => 'trending',
-                    'parentTag' => 'autoTagNew',
-                ],
-            ]);
-
-            $statusCode = $response->getStatusCode();
-
-            if ($statusCode === 200) {
-                $response = $response->getBody()->getContents();
-                $this->data = json_decode($response, false);
-                array_push($this->owners, ...$this->data->models);
-                if (count($this->data->models) !== $this->limit) {
-                    $this->endResults = true;
-                }
-            } else {
-                $this->data = false;
+        if ($this->data && isset($this->data->models)) {
+            array_push($this->owners, ...$this->data->models);
+            if (count($this->data->models) !== $this->limit) {
+                $this->endResults = true;
             }
-        } catch (\Throwable $th) {
+        } else {
             $this->data = false;
         }
     }

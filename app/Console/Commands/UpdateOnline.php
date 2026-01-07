@@ -33,8 +33,9 @@ class UpdateOnline extends Command
             ->get();
 
         Bus::batch(
-            $owners->map(fn($owner) => new SyncOwner($owner, 'owner'))->toArray()
+            $owners->map(fn($owner) => (new SyncOwner($owner, 'owner')))->toArray()
         )
+            ->onQueue('default')
             ->then(function (Batch $batch) {
                 Cache::forget('online_app');
                 Cache::remember('online_app', 60, function () {

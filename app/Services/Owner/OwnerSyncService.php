@@ -123,6 +123,9 @@ class OwnerSyncService
                 [],
                 $th->getTraceAsString()
             );
+        } finally {
+            $owner->lastSync = Carbon::now();
+            $owner->save();
         }
         return false;
     }

@@ -40,8 +40,9 @@ class UpdateOwnersData extends Command
             ->get();
 
         Bus::batch(
-            $owners->map(fn($owner) => new SyncOwner($owner, 'all'))->toArray()
+            $owners->map(fn($owner) => (new SyncOwner($owner, 'all')))->toArray()
         )
+            ->onQueue('high')
             ->then(function (Batch $batch) {
                 Cache::forget('online_app');
                 Cache::remember('online_app', 60, function () {
