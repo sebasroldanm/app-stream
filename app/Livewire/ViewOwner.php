@@ -42,6 +42,11 @@ class ViewOwner extends Component
 
     public function mount($username)
     {
+        if (is_numeric($this->username)) {
+            $owner = Owner::find($this->username);
+            return redirect()->route('owner.feed', $owner->username);
+        }
+        
         $this->username = $username;
 
         $routeName = request()->route()->getName();

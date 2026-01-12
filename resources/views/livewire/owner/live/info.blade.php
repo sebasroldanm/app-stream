@@ -33,7 +33,16 @@
                     @if (isset($owner->data->cam->show))
                         <p class="card-text">{{ $owner->data->cam->show->mode }}</p>
                     @else
-                        <p class="card-text">Online</p>
+                        @php
+                            if ($owner->data->user->user->isLive) {
+                                $state = 'Live';
+                            } elseif ($owner->data->user->user->isOnline) {
+                                $state = 'Online';
+                            } else {
+                                $state = 'Offline';
+                            }
+                        @endphp
+                        <p class="card-text">{{ $state }}</p>     
                     @endif
 
                     <h5 class="card-title">King</h5>

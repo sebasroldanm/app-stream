@@ -45,8 +45,10 @@
                                 @endphp
                                 @if (isset($love['power']))
                                     <p>{{ $love['power'] }}({{ $love['time'] }} sec.) por <bold>{{ $love['name'] }}</bold> - propina {{ $love['amount'] }}</p>
+                                @elseif(isset($love['specialActualValue']) && $love['specialActualValue'] == 'giveControl')
+                                    <p>Control por {{ $love['name'] }}</p>
                                 @else
-                                    <p>Propina {{ $love['amount'] }} ({{ $love['time'] }} sec.) {{ $love['name'] }}</p>
+                                    <p>Propina {{ $love['amount'] ?? dd($love) }} ({{ $love['time'] }} sec.) {{ $love['name'] }}</p>
                                 @endif
                             {{-- Propina --}}
                             @else
@@ -63,6 +65,8 @@
                             {{-- Mensaje --}}
                             @elseif ($message['type'] == 'userBoughtContent')
                                 <p>Comprador {{ $message['details']['content']['id'] }} - {{ $message['details']['content']['type'] }} - Cost: {{ $message['details']['content']['cost'] }}</p>
+                            @elseif($message['type'] == 'knightAdded')
+                                <p>King updated: {{ $message['details']['knight']['username'] }} - Level: {{ $message['details']['knight']['userRanking']['level'] }}</p>
                             @else
                                 <p>{{ $message['details']['body'] ?? dd($message) }}</p>
                             @endif

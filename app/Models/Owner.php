@@ -32,6 +32,13 @@ class Owner extends Model
         });
     }
 
+    public function scopeNotFavoritedByCustomer($query, $customerId)
+    {
+        return $query->whereDoesntHave('customers', function ($q) use ($customerId) {
+            $q->where('customer_id', $customerId);
+        });
+    }
+
     public function snapshots()
     {
         return $this->hasMany(Snapshot::class);
@@ -57,7 +64,7 @@ class Owner extends Model
         // but assuming for "same person" typically one group.
         // We can use a custom accessor or a complex relationship.
         // For simplicity and compatibility with standard usage:
-        
+
         return $this->hasOneThrough(
             OwnerRelationGroup::class,
             OwnerRelation::class,
@@ -65,7 +72,7 @@ class Owner extends Model
             'id', // Foreign key on owner_relation_groups table...
             'id', // Local key on owners table...
             'owner_relation_group_id' // Local key on owner_relations table...
-        ); 
+        );
         // Wait, hasOneThrough gets ONE group.
         // If we want the OWNERS, it's harder.
         // Let's keep `relations` as the hasMany to the pivot-like model.
@@ -81,7 +88,7 @@ class Owner extends Model
     {
         $group = $this->relation_group;
         if (!$group) return collect();
-        
+
         return $group->owners()->where('owners.id', '!=', $this->id)->get();
     }
 
