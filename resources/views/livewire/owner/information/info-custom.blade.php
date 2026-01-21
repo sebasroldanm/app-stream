@@ -99,13 +99,19 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <button wire:click="delete({{ $info->id }})"
-                                                wire:loading.attr="disabled"
-                                                wire:target="delete({{ $info->id }})"
-                                                class="btn btn-sm btn-danger">
-                                                <i class="ri-delete-bin-line" wire:loading.remove wire:target="delete({{ $info->id }})"></i>
-                                                <i class="ri-loader-4-line ri-spin" wire:loading wire:target="delete({{ $info->id }})"></i>
-                                            </button>
+                                            @if($info->owner_id === $owner->id)
+                                                <button wire:click="delete({{ $info->id }})"
+                                                    wire:loading.attr="disabled"
+                                                    wire:target="delete({{ $info->id }})"
+                                                    class="btn btn-sm btn-danger">
+                                                    <i class="ri-delete-bin-line" wire:loading.remove wire:target="delete({{ $info->id }})"></i>
+                                                    <i class="ri-loader-4-line ri-spin" wire:loading wire:target="delete({{ $info->id }})"></i>
+                                                </button>
+                                            @else
+                                                <a href="{{ route('owner.information', $info->owner->username) }}" class="btn btn-sm btn-primary" target="_blank">
+                                                    <i class="ri-eye-line"></i>
+                                                </a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @empty

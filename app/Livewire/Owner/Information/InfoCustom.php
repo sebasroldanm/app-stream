@@ -69,7 +69,24 @@ class InfoCustom extends Component
     {
         $types = OwnerInfoType::where('is_active', true)->get();
         $sources = OwnerInfoSource::all();
-        $customInfos = $this->owner->customInfos()->with(['type', 'source'])->get();
+
+        // 1. Get IDs of groups the current owner belongs to
+        $groupIds = $this->owner->relations()->pluck('owner_relation_group_id');
+
+        // 2. If in groups, find all owner IDs in those groups
+        if ($groupIds->isNotEmpty()) {
+            $relatedOwnerIds = \App\Models\OwnerRelation::whereIn('owner_relation_group_id', $groupIds)
+                ->pluck('owner_id')
+                ->unique();
+        } else {
+            // Fallback: just the current owner
+            $relatedOwnerIds = collect([$this->owner->id]);
+        }
+
+        // 3. Fetch Custom Info for ALL related owners
+        $customInfos = OwnerCustomInfo::whereIn('owner_id', $relatedOwnerIds)
+            ->with(['type', 'source', 'owner']) // eager load owner for display/logic
+            ->get();
 
         return view('livewire.owner.information.info-custom', compact('types', 'sources', 'customInfos'));
     }
@@ -119,7 +136,7 @@ class InfoCustom extends Component
     {
         $info = OwnerCustomInfo::findOrFail($id);
         
-        // Ensure the info belongs to the current owner
+        // Ensure the info belongs to the current owner DO NOT ALLOW deleting other's info
         if ($info->owner_id === $this->owner->id) {
             // Optional: Delete file from storage if it exists
             if ($info->type && $info->type->data_type === 'file') {
