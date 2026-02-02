@@ -7287,6 +7287,11 @@ html[data-theme='dark'] .card-header {
     outline: 0
 }
 
+html[data-theme='dark'] .modal-content {
+    background-color: #212529;
+    border-color: #212529;
+}
+
 .modal-backdrop {
     position: fixed;
     top: 0;
@@ -7327,6 +7332,10 @@ html[data-theme='dark'] .card-header {
     border-top-left-radius: 9px;
     -webkit-border-top-right-radius: 9px;
     border-top-right-radius: 9px
+}
+
+html[data-theme='dark'] .modal-header {
+    border-bottom: 1px solid #212529;
 }
 
 .modal-header .btn-close {
@@ -7373,6 +7382,10 @@ html[data-theme='dark'] .card-header {
     border-bottom-right-radius: 9px;
     -webkit-border-bottom-left-radius: 9px;
     border-bottom-left-radius: 9px
+}
+
+html[data-theme='dark'] .modal-footer {
+    border-top: 1px solid #212529;
 }
 
 .modal-footer>* {
@@ -8868,6 +8881,10 @@ html[data-theme='dark'] .card-header {
     border-color: #fff !important
 }
 
+.border-red {
+    border-color: #ff0000 !important
+}
+
 .border-1 {
     border-width: 1px !important
 }
@@ -9815,6 +9832,10 @@ html[data-theme='dark'] .card-header {
 
 .text-white {
     color: #fff !important
+}
+
+.text-red {
+    color: #ff0000 !important
 }
 
 .text-body {

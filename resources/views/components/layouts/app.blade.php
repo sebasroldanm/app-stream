@@ -2,15 +2,6 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="{{ session('themeApp') }}">
 
 <head>
-    <script>
-        (function() {
-            const savedTheme = "{{ session('themeApp') }}";
-            if (!savedTheme) {
-                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
-            }
-        })();
-    </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{{ env('APP_NAME') }} {{ $title ?? '' }}</title>
@@ -25,8 +16,8 @@
     <link rel="stylesheet" href="{{ asset('/css/frontend/libs.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/css/frontend/socialv.css?v=4.0.0') }}">
     <link rel="stylesheet" href="{{ asset('/css/frontend/custom.css?v=1.0.0') }}">
-    @if (env('PARENTAL_CONTROL') == 'production')
-        <link rel="stylesheet" href="{{ asset('/css/frontend/parental.css?v=1.0.0') }}">
+    @if (session('notice_age') == false)
+        <link id="parental-css" rel="stylesheet" href="{{ asset('/css/frontend/parental.css?v=1.0.0') }}">
     @endif
     <link rel="stylesheet" href="{{ asset('/vendor/fortawesome/fontawesome-free/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/vendor/remixicon/fonts/remixicon.css') }}">
@@ -56,6 +47,7 @@
         <livewire:sidebar-default />
         <livewire:top-navbar />
         <livewire:right-sidebar />
+        <livewire:notice-age />
 
         <div id="viewer_photo" class="modal_vp">
             <span class="cerrar">&times;</span>

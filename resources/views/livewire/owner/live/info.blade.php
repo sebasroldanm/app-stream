@@ -37,13 +37,13 @@
                         @php
                             if ($owner->data->user->user->isLive) {
                                 $state = 'Live';
-                                $type = 'badge border border-danger text-danger';
+                                $type = 'badge border border-red text-red text-bold';
                             } elseif ($owner->data->user->user->isOnline) {
                                 $state = 'Online';
-                                // $type = 'success';
+                                $type = 'badge border border-success text-success text-bold';
                             } else {
                                 $state = 'Offline';
-                                // $type = 'danger';
+                                $type = 'badge border border-secondary text-secondary text-bold';
                             }
                         @endphp
                         <span class="badge {{$type}}">{{ $state }}</span>     

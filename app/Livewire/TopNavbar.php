@@ -8,12 +8,18 @@ use Livewire\Component;
 
 class TopNavbar extends Component
 {
-    public $themeApp = 'light';
+    public $themeApp;
     public $online_app = 0;
 
     public function mount()
     {
-        $this->themeApp = session('themeApp', 'light');
+        if (session()->has('themeApp')) {
+            $this->themeApp = session('themeApp');
+        } else {
+            session()->put('themeApp', env('THEME_APP', 'light'));
+            $this->themeApp = session('themeApp');
+        }
+
         $this->online_app = Cache::remember('online_app', 60, function () {
             return Owner::where('isOnline', true)->count();
         });
@@ -22,7 +28,7 @@ class TopNavbar extends Component
     public function togglethemeApp()
     {
         $this->themeApp = $this->themeApp === 'light' ? 'dark' : 'light';
-        session(['themeApp' => $this->themeApp]);
+        session()->put('themeApp', $this->themeApp);
 
         $this->dispatch('themeApp', theme: $this->themeApp);
     }

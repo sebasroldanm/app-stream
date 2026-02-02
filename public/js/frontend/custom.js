@@ -15,6 +15,15 @@ window.addEventListener("initFullviewer", () => {
     }, 500);
 });
 
+window.addEventListener("themeApp", (event) => {
+    document.documentElement.setAttribute('data-theme', event.detail.theme);
+});
+
+window.addEventListener("notice-age-confirmed", (event) => {
+    const link = document.getElementById("parental-css");
+    link.remove();
+});
+
 function initializeMasonry(item) {
     setTimeout(() => {
         $(".masonry").masonry({
