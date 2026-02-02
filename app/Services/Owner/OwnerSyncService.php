@@ -22,15 +22,15 @@ class OwnerSyncService
     {
         $path = '/api/front/v2/models/username/' . $username . '/cam';
 
-        try {            
+        try {
             $response = $this->apiClient->get($path);
             $statusCode = $response->getStatusCode();
-            
+
             if ($statusCode === 200) {
                 $content = $response->getBody()->getContents();
                 $data = json_decode($content, true);
-                
-                if (isset($data['user']) && isset($data['user']['user'])) {
+
+                if (isset($data['user']) && isset($data['user']['user']) && !empty($data['user']['user']['login'])) {
                     $dataUser = $data['user']['user'];
                     $owner = Owner::find($dataUser['id']);
                     if (!$owner) {
@@ -124,8 +124,10 @@ class OwnerSyncService
                 $th->getTraceAsString()
             );
         } finally {
-            $owner->lastSync = Carbon::now();
-            $owner->save();
+            if (isset($owner) && $owner) {
+                $owner->lastSync = Carbon::now();
+                $owner->save();
+            }
         }
         return false;
     }

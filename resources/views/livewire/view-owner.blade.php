@@ -1,4 +1,5 @@
-<div id="content-page" class="content-page" data-id_owner="{{ $owner->id }}" @if ($owner->isLive) wire:init="verifyAsync" @endif >
+<div id="content-page" class="content-page" data-id_owner="{{ $owner->id }}"
+    @if ($owner->isLive) wire:init="verifyAsync" @endif>
     {{-- @php
         $owner->data = json_decode($owner->data, true);
     @endphp --}}
@@ -10,8 +11,7 @@
                         <div class="profile-header">
                             <div class="position-relative intro-owner container-overlay">
                                 @if (in_array($intro->type, ['image', 'avatar']))
-                                    <img src="{{ $intro->url }}" alt="profile-bg"
-                                        onerror="this.style.display='none';"
+                                    <img src="{{ $intro->url }}" alt="profile-bg" onerror="this.style.display='none';"
                                         class="rounded img-fluid _overlay @if ($intro->type == 'avatar') blur_avatar @endif fullviewer">
                                 @else
                                     <video autoplay loop muted class="rounded _overlay">
@@ -31,8 +31,9 @@
                                     @endif
                                     @if ($is_related && $is_related->count() > 0)
                                         <li>
-                                            <a href="{{ route('owner.information', $owner->username) }}" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" data-bs-original-title="{{ $is_related->count() }} Relacionados">
+                                            <a href="{{ route('owner.information', $owner->username) }}"
+                                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                                data-bs-original-title="{{ $is_related->count() }} Relacionados">
                                                 <i class="las la-link"></i>
                                             </a>
                                         </li>
@@ -62,10 +63,17 @@
                                         @endif
                                     @endif
                                     @if ($owner->notFound)
-                                        <li><a href="javascript:void(0);" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" data-bs-original-title="No encontrado en el Servidor principal, buscar en similitudes">
-                                                <i class="ri-alert-line"></i>
-                                            </a></li>
+                                        @if (!$force_sync)
+                                            <li><a href="javascript:void(0);" data-bs-toggle="tooltip" wire:click="force_sync_enable"
+                                                    data-bs-placement="top" data-bs-original-title="No encontrado en el Servidor principal, desbloquear para buscar">
+                                                    <i class="ri-alert-line"></i>
+                                                </a></li>
+                                        @else
+                                            <li><a href="javascript:void(0);" data-bs-toggle="tooltip" wire:click="updateDataMod"
+                                                    data-bs-placement="top" data-bs-original-title="No encontrado en el Servidor principal, buscar en similitudes">
+                                                    <i class="ri-refresh-line"></i>
+                                                </a></li>
+                                        @endif
                                     @else
                                         <li><a wire:click="updateDataMod" href="javascript:void(0);"
                                                 data-bs-toggle="tooltip" data-bs-placement="top"
@@ -94,10 +102,12 @@
                                                     data-bs-placement="top" data-bs-original-title="Desactivado"></i>
                                             @elseif ($owner->notFound)
                                                 <i class="ri-close-circle-fill disable" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" data-bs-original-title="No encontrado Origin Server"></i>
+                                                    data-bs-placement="top"
+                                                    data-bs-original-title="No encontrado Origin Server"></i>
                                             @else
                                                 <i class="ri-indeterminate-circle-fill offline" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" data-bs-original-title="{{ \Carbon\Carbon::parse($owner->statusChangedAt)->diffForHumans() }}"></i>
+                                                    data-bs-placement="top"
+                                                    data-bs-original-title="{{ \Carbon\Carbon::parse($owner->statusChangedAt)->diffForHumans() }}"></i>
                                             @endif
                                         @endif
                                     </h3>
@@ -174,61 +184,54 @@
                 <div class="card">
                     <div class="card-body p-0">
                         <div class="user-tabing">
-                            <ul class="nav nav-pills d-flex align-items-center justify-content-center profile-feed-items p-0 m-0">
+                            <ul
+                                class="nav nav-pills d-flex align-items-center justify-content-center profile-feed-items p-0 m-0">
                                 @if ($owner->isLive)
                                     <li class="nav-item col-12 col-sm-2 p-0">
                                         <a wire:navigate
-                                        href="{{ route('owner.live', ['username' => $owner->username]) }}"
-                                        class="nav-link live @if ($showLive) active @endif"
-                                        data-bs-toggle="pill"
-                                        data-bs-target="#live"
-                                        role="button">
-                                        Live <div class="live-icon"></div>
+                                            href="{{ route('owner.live', ['username' => $owner->username]) }}"
+                                            class="nav-link live @if ($showLive) active @endif"
+                                            data-bs-toggle="pill" data-bs-target="#live" role="button">
+                                            Live <div class="live-icon"></div>
                                         </a>
                                     </li>
                                 @endif
 
-                                <li class="nav-item col-12 @if ($owner->isLive) col-sm-2 @else col-sm-3 @endif p-0">
+                                <li
+                                    class="nav-item col-12 @if ($owner->isLive) col-sm-2 @else col-sm-3 @endif p-0">
                                     <a wire:navigate
-                                    href="{{ route('owner.feed', ['username' => $owner->username]) }}"
-                                    class="nav-link @if ($showFeed) active @endif"
-                                    data-bs-toggle="pill"
-                                    data-bs-target="#feed"
-                                    role="button">
-                                    Feed
+                                        href="{{ route('owner.feed', ['username' => $owner->username]) }}"
+                                        class="nav-link @if ($showFeed) active @endif"
+                                        data-bs-toggle="pill" data-bs-target="#feed" role="button">
+                                        Feed
                                     </a>
                                 </li>
 
                                 <li class="nav-item col-12 col-sm-3 p-0">
                                     <a wire:navigate
-                                    href="{{ route('owner.information', ['username' => $owner->username]) }}"
-                                    class="nav-link @if ($showInformation) active @endif"
-                                    data-bs-toggle="pill"
-                                    data-bs-target="#infomation"
-                                    role="button">
-                                    Información
+                                        href="{{ route('owner.information', ['username' => $owner->username]) }}"
+                                        class="nav-link @if ($showInformation) active @endif"
+                                        data-bs-toggle="pill" data-bs-target="#infomation" role="button">
+                                        Información
                                     </a>
                                 </li>
 
-                                <li class="nav-item col-12 @if ($owner->isLive) col-sm-2 @else col-sm-3 @endif p-0">
+                                <li
+                                    class="nav-item col-12 @if ($owner->isLive) col-sm-2 @else col-sm-3 @endif p-0">
                                     <a wire:navigate
-                                    href="{{ route('owner.albums', ['username' => $owner->username]) }}"
-                                    class="nav-link @if ($showAlbums) active @endif"
-                                    data-bs-toggle="pill"
-                                    data-bs-target="#albums"
-                                    role="button">
-                                    Albums
+                                        href="{{ route('owner.albums', ['username' => $owner->username]) }}"
+                                        class="nav-link @if ($showAlbums) active @endif"
+                                        data-bs-toggle="pill" data-bs-target="#albums" role="button">
+                                        Albums
                                     </a>
                                 </li>
 
                                 <li class="nav-item col-12 col-sm-3 p-0">
                                     <a wire:navigate
-                                    href="{{ route('owner.videos', ['username' => $owner->username]) }}"
-                                    class="nav-link @if ($showVideos) active @endif"
-                                    data-bs-toggle="pill"
-                                    data-bs-target="#videos"
-                                    role="button">
-                                    Videos
+                                        href="{{ route('owner.videos', ['username' => $owner->username]) }}"
+                                        class="nav-link @if ($showVideos) active @endif"
+                                        data-bs-toggle="pill" data-bs-target="#videos" role="button">
+                                        Videos
                                     </a>
                                 </li>
                             </ul>

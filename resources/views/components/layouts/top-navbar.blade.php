@@ -27,10 +27,12 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav  ms-auto navbar-list">
-                    <li>
-                        <span class="badge bg-success">{{ $online_app }} online</span>
+                    <li class="nav-item d-flex align-items-center">
+                        <h4>
+                            <span class="badge bg-success">{{ $online_app }} online</span>
+                        </h4>
                     </li>
-                    <li>    
+                    <li class="nav-item">    
                         <a href="{{ route('home') }}" class="  d-flex align-items-center">
                             <i class="ri-home-line"></i>
                         </a>

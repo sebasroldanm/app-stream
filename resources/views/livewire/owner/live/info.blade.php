@@ -9,12 +9,13 @@
                             $goal = $owner->data->cam->goal;
                         @endphp
                         <h5>{{ $goal->description }}</h5>
-                        <div class="progress-container" wire:ignore>
-                            <div class="progress-bar" id="progressBar">
-                                <div class="progress-shimmer"></div>
-                                <div class="progress-text" id="progressText">0%</div>
+
+                        <div class="progress" style="height: 20px;" wire:ignore>
+                            <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                <span id="progressText"></span>
                             </div>
                         </div>
+
                         <p class="card-text">Meta <small>{{ $goal->spent }}</small> / {{ $goal->goal }}</p>
                     @else
                         <p class="card-text">No goal set</p>
@@ -36,13 +37,16 @@
                         @php
                             if ($owner->data->user->user->isLive) {
                                 $state = 'Live';
+                                $type = 'badge border border-danger text-danger';
                             } elseif ($owner->data->user->user->isOnline) {
                                 $state = 'Online';
+                                // $type = 'success';
                             } else {
                                 $state = 'Offline';
+                                // $type = 'danger';
                             }
                         @endphp
-                        <p class="card-text">{{ $state }}</p>     
+                        <span class="badge {{$type}}">{{ $state }}</span>     
                     @endif
 
                     <h5 class="card-title">King</h5>
@@ -62,7 +66,7 @@
         </div>
     </div>
 
-    <style>
+    {{-- <style>
         .progress-container {
             width: 100%;
             max-width: 420px;
@@ -144,5 +148,5 @@
         button:hover {
             opacity: 0.9;
         }
-    </style>
+    </style> --}}
 </div>

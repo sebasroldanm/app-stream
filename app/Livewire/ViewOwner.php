@@ -40,6 +40,8 @@ class ViewOwner extends Component
     public $showVideos = false;
     public $showLive = false;
 
+    public $force_sync = false;
+
     public function mount($username)
     {
         if (is_numeric($this->username)) {
@@ -232,5 +234,11 @@ class ViewOwner extends Component
     public function verifyAsync()
     {
         $this->status_owner = $this->syncOwnerByUsername($this->username);
+    }
+
+    public function force_sync_enable()
+    {
+        $this->force_sync = true;
+        Owner::where('id', $this->id_owner)->update(['notFound' => false]);
     }
 }

@@ -22,25 +22,31 @@
                                     </div>
                                     <div class="s_icon top right">
                                         @if ($related->isNew)
-                                            <span class="badge badge-pill bg-warning">New</span>
+                                            <h5 class="m-0">
+                                                <span class="badge badge-pill bg-warning">New</span>
+                                            </h5>
                                         @endif
                                         @if (in_array($related->id, $favs))
                                             <i class="las la-heart favorite_icon"></i>
                                         @endif
                                     </div>
                                     <div class="s_icon top left">
-                                        <span class="badge badge-pill bg-dark">
-                                            @if ($related->isMobile)
-                                                <i class="las la-mobile-alt"></i>
-                                            @else
-                                                <i class="las la-laptop"></i>
-                                            @endif
-                                        </span>
+                                        <h5>
+                                            <span class="badge badge-pill bg-dark">
+                                                @if ($related->isMobile)
+                                                    <i class="las la-mobile-alt"></i>
+                                                @else
+                                                    <i class="las la-laptop"></i>
+                                                @endif
+                                            </span>
+                                        </h5>
                                     </div>
                                     <div class="s_icon bottom right">
-                                        <span class="badge badge-pill bg-dark">
-                                            {{ $related->viewersCount }} <i class="las la-eye"></i>
-                                        </span>
+                                        <h5>
+                                            <span class="badge badge-pill bg-dark">
+                                                {{ $related->viewersCount }} <i class="las la-eye"></i>
+                                            </span>
+                                        </h5>
                                     </div>
                                 </a>
                             </div>
