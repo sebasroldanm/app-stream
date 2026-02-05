@@ -41,10 +41,14 @@ trait OwnerProp
 
     public function flagCountry($country)
     {
-        if ($country == '') {
+        if (empty($country)) {
             return false;
         }
-        return strtoupper($country);
+        $country = strtolower($country);
+
+        $html = '<span class="fi fi-' . $country . ' ms-1 rounded-1"></span>';
+
+        return $html;
     }
 
     public function stringLaguages($languages)
@@ -57,6 +61,31 @@ trait OwnerProp
             $string .= $lang . ', ';
         }
         return substr($string, 0, -2) . ".";
+    }
+
+    public function flagsLanguages($languages)
+    {
+        if (count($languages) == 0) {
+            return false;
+        }
+        $html = '';
+        foreach ($languages as $lang) {
+            switch ($lang) {
+                case 'es':
+                    $html .= '<span class="fi fi-es ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Español"></span>';
+                    break;
+                case 'en':
+                    $html .= '<span class="fi fi-gb ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Ingles"></span>';
+                    break;
+                case 'pt':
+                    $html .= '<span class="fi fi-pt ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Portugues"></span>';
+                    break;
+                default:
+                    $html .= '<span class="fi fi-xx ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="' . $lang . '"></span>';
+                    break;
+            }
+        }
+        return $html;
     }
 
     public function stringDurationTime($seconds)

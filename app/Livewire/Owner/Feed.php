@@ -38,7 +38,7 @@ class Feed extends Component
         $this->country = $this->flagCountry($owner->country);
         $this->city = 'Medellin';
         if (isset($owner->data)) {
-            $this->languages = $this->stringLaguages($owner->data->user->user->languages);
+            $this->languages = $this->flagsLanguages($owner->data->user->user->languages);
             $this->description = $owner->data->user->user->description;
             $this->gender = $owner->data ? $this->iconGender($owner->gender) : false;
             $this->birthDate = $owner->data->user->user->birthDate;
