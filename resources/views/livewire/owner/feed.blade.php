@@ -19,11 +19,11 @@
                                             <hr>
                                         @endif
                                         @if ($country !== false)
-                                            <p><i class="las la-home"></i> Vive en <strong>{{ $country }}</strong>
+                                            <p><i class="las la-home"></i> Vive en {!! $country !!}
                                             </p>
                                         @endif
                                         @if ($languages !== false)
-                                            <p><i class="las la-globe"></i> Mis idiomas {{ $languages }}</p>
+                                            <p><i class="las la-globe"></i> Mis idiomas {!! $languages !!}</p>
                                         @endif
                                         @if ($gender !== false)
                                             <p><i class="las la-users"></i> Mi genero {!! $gender !!}</p>

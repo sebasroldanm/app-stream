@@ -29,11 +29,18 @@
                 <div class="col-9">{{ $owner->data->user->user->gender }}</div>
             @endif
 
-            @if ($owner->data->user->user->country)
+            @if ($country)
                 <div class="col-3">
                     <h6>País</h6>
                 </div>
-                <div class="col-9">{{ $owner->data->user->user->country }}</div>
+                <div class="col-9">{!! $country !!}</div>
+            @endif
+
+            @if ($languages)
+                <div class="col-3">
+                    <h6>Idiomas</h6>
+                </div>
+                <div class="col-9">{!! $languages !!}</div>
             @endif
 
             <div class="col-3">

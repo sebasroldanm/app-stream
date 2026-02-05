@@ -19,6 +19,7 @@
     @if (session('notice_age') == false)
         <link id="parental-css" rel="stylesheet" href="{{ asset('/css/frontend/parental.css?v=1.0.0') }}">
     @endif
+    <link rel="stylesheet" href="{{ asset('/css/frontend/flag-icons.css?v=1.0.0') }}">
     <link rel="stylesheet" href="{{ asset('/vendor/fortawesome/fontawesome-free/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/vendor/remixicon/fonts/remixicon.css') }}">
     <link rel="stylesheet" href="{{ asset('/vendor/vanillajs-datepicker/dist/css/datepicker.min.css') }}">
