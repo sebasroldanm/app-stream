@@ -34,7 +34,14 @@
     --bs-dark: #212529;
     --bs-font-sans-serif: "Montserrat", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0))
+    --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
+    --bs-legend: #ed1819;
+    --bs-royal: #e22f2f;
+    --bs-diamond: #d421ed;
+    --bs-gold: #ffad22;
+    --bs-silver: #b3e7fe;
+    --bs-bronze: #dd884a;
+    --bs-grey: #b3b3b3;
 }
 
 *,
@@ -9852,6 +9859,34 @@ html[data-theme='dark'] .modal-footer {
 
 .text-white-50 {
     color: rgba(255, 255, 255, .5) !important
+}
+
+.text-legend {
+    color: var(--bs-legend) !important;
+}
+
+.text-royal {
+    color: var(--bs-royal) !important;
+}
+
+.text-diamond {
+    color: var(--bs-diamond) !important;
+}
+
+.text-gold {
+    color: var(--bs-gold) !important;
+}
+
+.text-silver {
+    color: var(--bs-silver) !important;
+}
+
+.text-bronze {
+    color: var(--bs-bronze) !important;
+}
+
+.text-grey {
+    color: var(--bs-grey) !important;
 }
 
 .text-reset {

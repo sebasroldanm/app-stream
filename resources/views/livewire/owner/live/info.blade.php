@@ -11,12 +11,15 @@
                         <h5>{{ $goal->description }}</h5>
 
                         <div class="progress" style="height: 20px;" wire:ignore>
-                            <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                            <div id="progressBar"
+                                class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                                role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0"
+                                aria-valuemax="100">
                                 <span id="progressText"></span>
                             </div>
                         </div>
 
-                        <p class="card-text">Meta <small>{{ $goal->spent }}</small> / {{ $goal->goal }}</p>
+                        <p class="card-text">Meta {{ $goal->spent }} / {{ $goal->goal }}</p>
                     @else
                         <p class="card-text">No goal set</p>
                     @endif
@@ -46,21 +49,61 @@
                                 $type = 'badge border border-secondary text-secondary text-bold';
                             }
                         @endphp
-                        <span class="badge {{$type}}">{{ $state }}</span>     
+                        <span class="badge {{ $type }}">{{ $state }}</span>
                     @endif
+
+                    @php
+                        $views_count = $viewers->guests + $viewers->spies + $viewers->invisibles + $viewers->greens + $viewers->golds + $viewers->regulars;
+                    @endphp
+                    <h5 class="card-title">Viewers: <span>{{ $views_count }}</span></h5>
 
                     <h5 class="card-title">King</h5>
                     @if (isset($owner->data->cam->king))
                         @php
                             $king = $owner->data->cam->king;
+                            $isEx = $king->userRanking->isEx;
+                            $league = $king->userRanking->league;
                         @endphp
-                        <p class="card-text">{{ $king->username }} | Level {{ $king->userRanking->level }}</p>
-                        @if ($king->userRanking->isEx)
-                            <small>EX {{ $king->userRanking->league }}</small>
+                        @if ($isEx)
+                            <p class="card-text">{{ $king->username }} <sup class="text-{{ $league }}">EX</sup> |
+                                Level {{ $king->userRanking->level }}</p>
+                        @else
+                            <p class="card-text text-{{ $league }}">{{ $king->username }} | Level
+                                {{ $king->userRanking->level }}</p>
                         @endif
                     @else
                         <p class="card-text">No king set</p>
                     @endif
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Viendo ahora</h5>
+                    <div class="viewers-list">
+
+                        @if (isset($viewers->members))
+                            @foreach ($viewers->members as $member)
+                                @php
+                                    $user = $member->user;
+                                    $isEx = $user->userRanking->isEx;
+                                    $level = $user->userRanking->level;
+                                    $league = $user->userRanking->league;
+                                @endphp
+                                @if ($isEx)
+                                    <p class="fw-bold card-text">{{ $user->username }} <sup
+                                            class="fw-bold text-{{ $league }}">EX</sup> | Level {{ $level }}</p>
+                                @else
+                                    <p class="fw-bold card-text text-{{ $league }}">{{ $user->username }} | Level
+                                        {{ $level }}</p>
+                                @endif
+                            @endforeach
+                        @endif
+                        @if ($viewers->guests > 0)
+                            <p class="card-text">Visitantes: {{ $viewers->guests }}</p>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>

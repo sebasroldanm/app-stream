@@ -436,3 +436,10 @@ i.online {
     margin: 0;
 }
 /* Chat prov */
+
+/* Info Viewers */
+.viewers-list {
+    max-height: 60vh;
+    overflow-y: auto;
+}
+/* Info Viewers */
