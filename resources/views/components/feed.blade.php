@@ -7,7 +7,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="post-item">
-                    @include('components.feeds.header', ['feed' => $feed])
+                    @include('components.feeds.header', ['feed' => $feed, 'tagLive' => $tagLive])
 
                     @if ($feed->type == 'offlineStatusChanged')
                         @include('components.feeds.offline', ['feed' => $feed])

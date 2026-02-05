@@ -292,7 +292,7 @@
 
             @foreach ($feeds as $feed)
                 <div wire:key="feed-{{ $feed->id }}">
-                    @include('components.feed', ['feed' => $feed])
+                    @include('components.feed', ['feed' => $feed, 'tagLive' => false])
                 </div>
             @endforeach
             

@@ -1,9 +1,17 @@
 <div class="user-post-data pb-3">
     <div class="d-flex justify-content-between">
-        <div class="me-3">
-            <img class="rounded-circle avatar-60" src="{{ $feed->owner->avatar }}"
-                onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ $feed->owner->username }}';"
-                alt="">
+        @php
+            $classIcon = '';
+            if ($feed->owner->isOnline) {
+                $classIcon = 'iq-profile-avatar status-live';
+            }
+        @endphp
+        <div class="me-3 {{ $classIcon }}">
+            <a href="{{ route('owner', $feed->owner->username) }}">
+                <img class="rounded-circle avatar-60" src="{{ $feed->owner->avatar }}"
+                    onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ $feed->owner->username }}';"
+                    alt="">
+            </a>
         </div>
         <div class="w-100">
             <div class="d-flex justify-content-between flex-wrap">
