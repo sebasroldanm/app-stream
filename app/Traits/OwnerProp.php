@@ -72,16 +72,52 @@ trait OwnerProp
         foreach ($languages as $lang) {
             switch ($lang) {
                 case 'es':
-                    $html .= '<span class="fi fi-es ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Español"></span>';
+                    $html .= '<span class="fi fi-es fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Español"></span>';
                     break;
                 case 'en':
-                    $html .= '<span class="fi fi-gb ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Ingles"></span>';
+                    $html .= '<span class="fi fi-gb fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Ingles"></span>';
                     break;
                 case 'pt':
-                    $html .= '<span class="fi fi-pt ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Portugues"></span>';
+                    $html .= '<span class="fi fi-pt fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Portugues"></span>';
+                    break;
+                case 'fr':
+                    $html .= '<span class="fi fi-fr fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Frances"></span>';
+                    break;
+                case 'de':
+                    $html .= '<span class="fi fi-de fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Aleman"></span>';
+                    break;
+                case 'it':
+                    $html .= '<span class="fi fi-it fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Italiano"></span>';
+                    break;
+                case 'nl':
+                    $html .= '<span class="fi fi-nl fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Holandes"></span>';
+                    break;
+                case 'ru':
+                    $html .= '<span class="fi fi-ru fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Ruso"></span>';
+                    break;
+                case 'ja':
+                    $html .= '<span class="fi fi-jp fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Japones"></span>';
+                    break;
+                case 'zh':
+                    $html .= '<span class="fi fi-cn fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Chino"></span>';
+                    break;
+                case 'ko':
+                    $html .= '<span class="fi fi-kr fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Coreano"></span>';
+                    break;
+                case 'ar':
+                    $html .= '<span class="fi fi-ar fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Arabe"></span>';
+                    break;
+                case 'hi':
+                    $html .= '<span class="fi fi-in fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Hindi"></span>';
+                    break;
+                case 'vi':
+                    $html .= '<span class="fi fi-vn fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Vietnamita"></span>';
+                    break;
+                case 'tr':
+                    $html .= '<span class="fi fi-tr fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Turco"></span>';
                     break;
                 default:
-                    $html .= '<span class="fi fi-xx ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="' . $lang . '"></span>';
+                    $html .= '<span class="fi fi-xx fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="' . $lang . '"></span>';
                     break;
             }
         }
