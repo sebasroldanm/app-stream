@@ -21,12 +21,6 @@
                                 <button class="btn btn-primary" wire:click="updateOnline" wire:loading.attr="disabled">Actualizar Online</button>
                                 <button class="btn btn-primary" wire:click="updateAll" wire:loading.attr="disabled">Actualización completa</button>
                             </div>
-
-                            <hr>
-
-                            <div class="d-flex justify-content-center" wire:loading>
-                                <div class="spinner-border text-primary"></div>
-                            </div>
                         </div>
                     </div>
                 </div>
