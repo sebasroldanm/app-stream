@@ -49,7 +49,7 @@ class Snapshots extends Component
             return false;
         }
 
-        $snapshotUrl = "https://img.strpst.com/thumbs/{$snap_time}/{$owner_id}_webp";
+        $snapshotUrl = "https://img.doppiocdn.net/thumbs/{$snap_time}/{$owner_id}";
 
         $response = Http::get($snapshotUrl);
         if (! $response->successful()) {

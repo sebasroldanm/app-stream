@@ -24,7 +24,7 @@ class UpdateOnline extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Update online status of owners';
 
     public function handle()
     {

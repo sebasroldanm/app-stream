@@ -25,7 +25,7 @@ class UpdateOwnersData extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Update owners data';
 
     /**
      * Execute the console command.

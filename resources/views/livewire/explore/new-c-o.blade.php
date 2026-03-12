@@ -23,9 +23,9 @@
                                             <img src="{{ $owner->avatarUrl }}" class="card-img-top secondary-image"
                                                 alt="#">
                                         @endif
-                                        <img src="https://img.strpst.com/thumbs/{{ $owner->popularSnapshotTimestamp }}/{{ $owner->id }}_webp"
+                                        <img src="https://img.doppiocdn.net/thumbs/{{ $owner->popularSnapshotTimestamp }}/{{ $owner->id }}"
                                             class="card-img-top primary-image _overlay" alt="#"
-                                            onerror="this.onerror=null; this.src='https://img.strpst.com/thumbs/{{ $owner->snapshotTimestamp }}/{{ $owner->id }}_webp';">
+                                            onerror="this.onerror=null; this.src='https://img.doppiocdn.net/thumbs/{{ $owner->snapshotTimestamp }}/{{ $owner->id }}';">
                                         <img src="{{ $owner->previewUrlThumbSmall }}"
                                             class="card-img-top tertiary-image _overlay" alt="#">
                                     </div>

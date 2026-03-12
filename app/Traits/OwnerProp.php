@@ -116,6 +116,12 @@ trait OwnerProp
                 case 'tr':
                     $html .= '<span class="fi fi-tr fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Turco"></span>';
                     break;
+                case 'pl':
+                    $html .= '<span class="fi fi-pl fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Polaco"></span>';
+                    break;
+                case 'cs':
+                    $html .= '<span class="fi fi-cz fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Checo"></span>';
+                    break;
                 default:
                     $html .= '<span class="fi fi-xx fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="' . $lang . '"></span>';
                     break;

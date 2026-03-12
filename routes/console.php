@@ -8,5 +8,6 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote')->hourly();
 
-Schedule::command('app:update-snapshots')->everyTwoMinutes();
-// Schedule::command('app:update-online')->everyMinute();
+// Schedule::command('app:update-online')->everyFiveMinutes();
+// Schedule::command('app:update-owners-data')->everyThirtyMinutes();
+// Schedule::command('app:reload-timeline')->daily();

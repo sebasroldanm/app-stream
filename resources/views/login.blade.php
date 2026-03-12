@@ -49,17 +49,20 @@
                             <div class="sign-slider overflow-hidden ">
                                 <ul class="swiper-wrapper list-inline m-0 p-0 ">
                                     <li class="swiper-slide">
-                                        <img src="{{ asset('/images/login/1.png') }}" class="img-fluid mb-4" alt="logo">
+                                        <img src="{{ asset('/images/login/1.png') }}" class="img-fluid mb-4"
+                                            alt="logo">
                                         <h4 class="mb-1 text-white">Encuentra a celebridades</h4>
                                         <p>Te gusta algo, síguelo, y comparte.</p>
                                     </li>
                                     <li class="swiper-slide">
-                                        <img src="{{ asset('/images/login/2.png') }}" class="img-fluid mb-4" alt="logo">
+                                        <img src="{{ asset('/images/login/2.png') }}" class="img-fluid mb-4"
+                                            alt="logo">
                                         <h4 class="mb-1 text-white">Descubre nuevas experiencias</h4>
                                         <p>Los mejores secretos estan guardados donde no vemos.</p>
                                     </li>
                                     <li class="swiper-slide">
-                                        <img src="{{ asset('/images/login/3.png') }}" class="img-fluid mb-4" alt="logo">
+                                        <img src="{{ asset('/images/login/3.png') }}" class="img-fluid mb-4"
+                                            alt="logo">
                                         <h4 class="mb-1 text-white">Manten al día</h4>
                                         <p>Toma el control de lo que quieres ver.</p>
                                     </li>
@@ -71,6 +74,16 @@
                         <div class="sign-in-from">
                             <h1 class="mb-0">Sign in</h1>
                             <p>Ingrese su dirección de correo electrónico y contraseña para acceder.</p>
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
                             <form class="mt-4" method="POST" action="{{ route('customer.login.submit') }}">
                                 @csrf
                                 <div class="form-group">

@@ -55,7 +55,7 @@ class UpdateSnapshots extends Command
                     $newSnap->owner_id = $fav->id;
                     $newSnap->snapshotTimestamp = $snap_time;
                     $newSnap->date_created = Carbon::createFromTimestamp($snap_time);
-                    $newSnap->snapshotUrl = "https://img.strpst.com/thumbs/" . $snap_time . "/" . $fav->id . "_webp";
+                    $newSnap->snapshotUrl = "https://img.doppiocdn.net/thumbs/" . $snap_time . "/" . $fav->id;
                     $test_url = $response = Http::get($newSnap->snapshotUrl);
                     if ($test_url->successful()) {
 

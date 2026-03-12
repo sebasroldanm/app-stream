@@ -37,7 +37,7 @@ class Related extends Component
                         'Connection' => 'keep-alive'
                     ],
                     'query' => [
-                        'limit' => 10,
+                        'limit' => 30,
                         'offset' => 0,
                         'primaryTag' => 'girls'
                     ]

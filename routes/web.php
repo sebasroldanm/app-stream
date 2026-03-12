@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthCustomerController;
 use App\Http\Controllers\UtilController;
 use App\Livewire\About;
+use App\Livewire\Actions;
 use App\Livewire\Contact;
 use App\Livewire\Explore;
 use App\Livewire\Explore\MobileCO;
@@ -44,6 +45,8 @@ Route::middleware(['auth:customer'])->group(function () {
     Route::get('/explore/new-co', NewCO::class)->name('explore.new-co');
     Route::get('/explore/mobile-co', MobileCO::class)->name('explore.mobile-co');
     Route::get('/explore/new-mobile-co', NewMobileCO::class)->name('explore.new-mobile-co');
+
+    Route::get('/actions', Actions::class)->name('actions');
 
     Route::get('/metadata/{model}/{id}', [UtilController::class, 'viewMetadata'])->name('metadata');
 });

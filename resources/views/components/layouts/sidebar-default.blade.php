@@ -23,6 +23,11 @@
                         <i class="las la-heart"></i><span>Favorites</span>
                     </a>
                 </li>
+                <li class="@if (Route::is('actions')) active @endif">
+                    <a href="{{ route('actions') }}" wire:navigate class=" ">
+                        <i class="las la-cog"></i><span>Actions</span>
+                    </a>
+                </li>
                 {{-- <li class=" ">
                     <a href="../app/todo.html" class=" ">
                         <i class="las la-check-circle"></i><span>Todo</span>

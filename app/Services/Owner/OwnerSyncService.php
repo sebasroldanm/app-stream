@@ -30,7 +30,7 @@ class OwnerSyncService
                 $content = $response->getBody()->getContents();
                 $data = json_decode($content, true);
 
-                if (isset($data['user']) && isset($data['user']['user']) && !empty($data['user']['user']['login'])) {
+                if (isset($data['user']) && isset($data['user']['user'])) {
                     $dataUser = $data['user']['user'];
                     $owner = Owner::find($dataUser['id']);
                     if (!$owner) {
@@ -101,6 +101,12 @@ class OwnerSyncService
                 if (isset($body[1])) {
                     $json = json_decode($body[1], true);
                     $newUsername = $json['data']['newUsername'] ?? null;
+                    $owner = Owner::where('username', $username)->first();
+                    if ($owner) {
+                        $owner->username = $newUsername;
+                        $owner->lastUsername = $this->addUsernameToHistory($owner->lastUsername, $newUsername);
+                        $owner->save();
+                    }
                     return $newUsername;
                 }
             }
@@ -123,13 +129,14 @@ class OwnerSyncService
                 [],
                 $th->getTraceAsString()
             );
+            return false;
         } finally {
             if (isset($owner) && $owner) {
                 $owner->lastSync = Carbon::now();
                 $owner->save();
             }
+            return true;
         }
-        return false;
     }
 
     /**

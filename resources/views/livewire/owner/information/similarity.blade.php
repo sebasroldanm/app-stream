@@ -35,9 +35,34 @@
                                     <div class="col-7">
                                         <div class="info">
                                             <h5>{{ $result->model }}</h5>
-                                            <p class="mb-0">Probabilidad: {{ $result->probability }}</p>
+                                            @php
+                                                switch ($result->probability) {
+                                                    case 'high':
+                                                        $class = 'success';
+                                                        $text = 'Alta';
+                                                        break;
+                                                    case 'medium':
+                                                        $class = 'warning';
+                                                        $text = 'Media';
+                                                        break;
+                                                    case 'low':
+                                                        $class = 'danger';
+                                                        $text = 'Baja';
+                                                        break;
+                                                    default:
+                                                        $class = 'secondary';
+                                                        $text = 'Desconocida';
+                                                        break;
+                                                }
+                                                $similarity = (1 - floatval($result->distance)) * 100;
+                                            @endphp
+                                            <p class="mb-0">Probabilidad: <span class="badge bg-{{ $class }}"> {{ $text }}</span></p>
+                                            <p class="mb-0">Similitud: {{ round($similarity, 2) }}%</p>
                                             <p class="mb-0">Plataforma: {{ $result->platform }}</p>
                                             <p class="mb-0">Conexión:
+                                                {{ \Carbon\Carbon::parse($result->seen)->diffForHumans() }}
+                                            </p>
+                                            <p class="mb-0">Perfil:
                                                 {{ \Carbon\Carbon::parse($result->accountSeen)->diffForHumans() }}
                                             </p>
                                         </div>

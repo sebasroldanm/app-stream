@@ -172,7 +172,7 @@
                                             </li>
                                             <li class="text-center ps-3">
                                                 <h6>Favoritos</h6>
-                                                <p class="mb-0">{{ $owner->data->user->user->favoritedCount }}</p>
+                                                <p class="mb-0">{{ number_format($owner->data->user->user->favoritedCount, 0, ',', '.') }}</p>
                                             </li>
                                         </ul>
                                     @endif

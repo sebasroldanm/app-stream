@@ -124,8 +124,11 @@ class ViewOwner extends Component
         if (is_null($owner) || strcasecmp($owner->username, $this->username) !== 0) {
             $this->error_search = true;
             $own_id = $this->syncOwnerByUsername($this->username);
-            $owner = Owner::find($own_id);
-            // $owner = Owner::where('username', $this->username)->first();
+            if (is_numeric($own_id)) {
+                $owner = Owner::find($own_id);
+            } else {
+                $owner = Owner::where('username', $this->username)->first();
+            }
         }
 
         if (is_null($owner)) {
@@ -134,14 +137,24 @@ class ViewOwner extends Component
 
         if (is_null($owner->lastSync) || Carbon::parse($owner->lastSync)->diffInHours(Carbon::now()) > 1) {
             $own_id = $this->syncOwnerByUsername($this->username);
-            $owner = Owner::find($own_id);
+            if (is_numeric($own_id)) {
+                $owner = Owner::find($own_id);
+            } else {
+                $owner = Owner::where('username', $this->username)->first();
+            }
         }
 
-        $owner->data = json_decode($owner->data);
+        if ($this->username !== $owner->username) {
+            return redirect()->route('owner.feed', $owner->username);
+        }
+
+        $owner->data = isset($owner->data) && !empty($owner->data) ? json_decode($owner->data) : null;
         if (!isset($owner->data->user)) {
             $own_id = $this->syncOwnerByUsername($this->username);
-            if ($own_id) {
+            if (is_numeric($own_id)) {
                 $owner = Owner::find($own_id);
+            } else {
+                $owner = Owner::where('username', $this->username)->first();
             }
         }
         $this->id_owner = $owner->id;
