@@ -122,12 +122,180 @@ trait OwnerProp
                 case 'cs':
                     $html .= '<span class="fi fi-cz fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Checo"></span>';
                     break;
+                case 'br':
+                    $html .= '<span class="fi fi-br fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Brasil"></span>';
+                    break;
                 default:
                     $html .= '<span class="fi fi-xx fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="' . $lang . '"></span>';
                     break;
             }
         }
         return $html;
+    }
+
+    public function eyeColor($color)
+    {
+        switch ($color) {
+            case 'eyeColorBrown':
+                return 'Café';
+                break;
+            case 'eyeColorBlue':
+                return 'Azul';
+                break;
+            case 'eyeColorGreen':
+                return 'Verde';
+                break;
+            case 'eyeColorHazel':
+                return 'Avellana';
+                break;
+            case 'eyeColorGray':
+                return 'Gris';
+                break;
+            case 'eyeColorBlack':
+                return 'Negro';
+                break;
+            default:
+                return $color;
+                break;
+        }
+    }
+
+    public function hairColor($color)
+    {
+        switch ($color) {
+            case 'hairColorBlonde':
+                return 'Amarillo';
+                break;
+            case 'hairColorBrown':
+                return 'Castaño';
+                break;
+            case 'hairColorBlack':
+                return 'Negro';
+                break;
+            case 'hairColorRed':
+                return 'Rojo';
+                break;
+            case 'hairColorColorful':
+                return 'Colorido';
+                break;
+            default:
+                return $color;
+                break;
+        }
+    }
+
+    public function bodyType($type)
+    {
+        switch ($type) {
+            case 'bodyTypePetite':
+                return 'Pequeño';
+                break;
+            case 'bodyTypeAthletic':
+                return 'Atlética';
+                break;
+            case 'bodyTypeMedium':
+                return 'Media';
+                break;
+            case 'bodyTypeCurvy':
+                return 'Curva';
+                break;
+            case 'bodyTypeBBW':
+                return 'BBW';
+                break;
+            case 'bodyTypeBig':
+                return 'Grande';
+                break;
+            default:
+                return $type;
+                break;
+        }
+    }
+
+    public function ethnicity($ethnicity)
+    {
+        switch ($ethnicity) {
+            case 'ethnicityMiddleEastern':
+                return 'Medio Oriente';
+                break;
+            case 'ethnicityAsian':
+                return ' Asiatico';
+                break;
+            case 'ethnicityEbony':
+                return 'Ebano';
+                break;
+            case 'ethnicityIndian':
+                return 'Indio';
+                break;
+            case 'ethnicityLatino':
+                return 'Latino';
+                break;
+            case 'ethnicityMultiracial':
+                return 'Multiracial';
+                break;
+            case 'ethnicityWhite':
+                return 'Blanco';
+                break;
+            default:
+                return $ethnicity;
+                break;
+        }
+    }
+
+    public function age($age)
+    {
+        switch ($age) {
+            case 'ageTeen':
+                return 'Adolescente';
+                break;
+            case 'ageYoung':
+                return 'Joven';
+                break;
+            case 'ageMilf':
+                return 'Milf';
+                break;
+            case 'ageMature':
+                return 'Madrura';
+                break;
+            case 'ageOld':
+                return 'Viejo';
+                break;
+            default:
+                return $age;
+                break;
+        }
+    }
+
+    public function privatePrice($price)
+    {
+        switch ($price) {
+            case 'privatePriceEight':
+                return '8';
+                break;
+            case 'privatePriceSixteenToTwentyFour':
+                return '16-24';
+                break;
+            case 'privatePriceThirtyTwoSixty':
+                return '32-60';
+                break;
+            case 'privatePriceNinetyPlus':
+                return '90+';
+                break;
+            case 'autoTagBestPrivates':
+                return 'Mejores privados';
+                break;
+            case 'autoTagRecordablePrivate':
+                return 'Privado grabable';
+                break;
+            case 'autoTagSpy':
+                return 'Espía';
+                break;
+            case 'autoTagP2P':
+                return 'P2P';
+                break;
+            default:
+                return $price;
+                break;
+        }
     }
 
     public function stringDurationTime($seconds)

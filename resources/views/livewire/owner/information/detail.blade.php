@@ -54,24 +54,24 @@
             <div class="col-9">{{ $age }}</div>
 
             <div class="col-3">
-                <h6>Conplexión</h6>
+                <h6>Complexión</h6>
             </div>
-            <div class="col-9">{{ $owner->data->user->user->bodyType }}</div>
+            <div class="col-9">{{ $this->bodyType($owner->data->user->user->bodyType) }}</div>
 
             <div class="col-3">
                 <h6>Color de ojos</h6>
             </div>
-            <div class="col-9">{{ $owner->data->user->user->eyeColor }}</div>
+            <div class="col-9">{{ $this->eyeColor($owner->data->user->user->eyeColor) }}</div>
 
             <div class="col-3">
                 <h6>Color de cabello</h6>
             </div>
-            <div class="col-9">{{ $owner->data->user->user->hairColor }}</div>
+            <div class="col-9">{{ $this->hairColor($owner->data->user->user->hairColor) }}</div>
 
             <div class="col-3">
                 <h6>Etnia</h6>
             </div>
-            <div class="col-9">{{ $owner->data->user->user->ethnicity }}</div>
+            <div class="col-9">{{ $this->ethnicity($owner->data->user->user->ethnicity) }}</div>
         </div>
         {{-- Personal --}}
 
