@@ -14,7 +14,7 @@
                     @break
 
                     @case(2)
-                        <div class="col-lg-6 container-overlay">
+                        <div class="col-6 col-lg-6 container-overlay">
                             <img src="{{ $media->url }}" data-images-full='@json($pst->mediaPostFeeds->pluck('url'))'
                                 data-images-thumb='@json($pst->mediaPostFeeds->pluck('urlThumb'))'
                                 class="img-fluid rounded fullviewer max-vh-60 _overlay pics_feed"
@@ -23,7 +23,7 @@
                     @break
 
                     @case(3)
-                        <div class="col-lg-4 mb-2 container-overlay">
+                        <div class="col-4 col-lg-4 mb-2 container-overlay">
                             <img src="{{ $media->url }}" data-images-full='@json($pst->mediaPostFeeds->pluck('url'))'
                                 data-images-thumb='@json($pst->mediaPostFeeds->pluck('urlThumb'))'
                                 class="img-fluid rounded fullviewer max-vh-60 _overlay pics_feed"
@@ -32,7 +32,7 @@
                     @break
 
                     @default
-                        <div class="col-lg-4 mb-2">
+                        <div class="col-4 col-lg-4 mb-2">
                             <img src="{{ $media->url }}" class="img-fluid rounded fullviewer max-vh-60"
                                 alt="{{ $pst->body }}">
                         </div>

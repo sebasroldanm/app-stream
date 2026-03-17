@@ -13,8 +13,9 @@ class Favorites extends Component
         $favs = Owner::favoritedByCustomers(Auth::guard('customer')->user()->id)
             ->whereNotNull('username')
             ->where('username', '!=', '')
-            ->orderBy('statusChangedAt', 'desc')
-            ->get();        
+            ->orderByDesc('isLive')
+            ->orderByDesc('statusChangedAt')
+            ->get();
 
         return view('livewire.favorites', [
             'favorites' => $favs,

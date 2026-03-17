@@ -26,12 +26,25 @@
 
                         @default
                             <div class="col-lg-4 mb-2 container-overlay">
-                                <img src="{{ $photo->urlThumb }}"
-                                    data-images-full='@json($album->photos->pluck('urlPreview'))'
-                                    data-images-thumb='@json($album->photos->pluck('urlThumb'))'
-                                    data-image_vh="{{ $photo->urlPreview ? $photo->urlPreview : $photo->urlPreview }}"
-                                    class="img-fluid rounded fullviewer max-vh-60 _overlay pics_feed"
-                                    alt="{{ $album->body }}">
+                                @if ($photo->urlPreview)
+                                    <img src="{{ $photo->urlThumb }}"
+                                        data-images-full='@json($album->photos->whereNotNull('urlPreview')->pluck('urlPreview'))'
+                                        data-images-thumb='@json($album->photos->whereNotNull('urlThumb')->pluck('urlThumb'))'
+                                        data-image_vh="{{ $photo->urlPreview ? $photo->urlPreview : $photo->urlPreview }}"
+                                        class="img-fluid rounded fullviewer max-vh-60 _overlay pics_feed"
+                                        alt="{{ $album->body }}">
+                                @else
+                                    @foreach ($album->photos as $key => $ph_thumb)
+                                        @if ($key != 0)
+                                            <img src="{{ $ph_thumb->urlThumbMicro }}"
+                                                class="img-fluid rounded urlThumbMicro"
+                                                alt="{{ $album->body }}">
+                                        @endif
+                                    @endforeach
+                                    @php
+                                        $force_loop = true;   
+                                    @endphp
+                                @endif
                             </div>
                         @break
                     @endswitch
@@ -47,6 +60,9 @@
                                 alt="{{ $album->body }}">
                         </div>
                     @endif
+                @endif
+                @if (isset($force_loop) && $force_loop)
+                    @break
                 @endif
             @endforeach
         </div>
