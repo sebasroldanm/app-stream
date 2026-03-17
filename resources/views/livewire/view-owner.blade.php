@@ -198,7 +198,7 @@
                                 @endif
 
                                 <li
-                                    class="nav-item col-12 @if ($owner->isLive) col-sm-2 @else col-sm-3 @endif p-0">
+                                    class="nav-item col-6 @if ($owner->isLive) col-sm-2 @else col-sm-3 @endif p-0">
                                     <a wire:navigate
                                         href="{{ route('owner.feed', ['username' => $owner->username]) }}"
                                         class="nav-link @if ($showFeed) active @endif"
@@ -207,7 +207,7 @@
                                     </a>
                                 </li>
 
-                                <li class="nav-item col-12 col-sm-3 p-0">
+                                <li class="nav-item col-6 col-sm-3 p-0">
                                     <a wire:navigate
                                         href="{{ route('owner.information', ['username' => $owner->username]) }}"
                                         class="nav-link @if ($showInformation) active @endif"
@@ -217,7 +217,7 @@
                                 </li>
 
                                 <li
-                                    class="nav-item col-12 @if ($owner->isLive) col-sm-2 @else col-sm-3 @endif p-0">
+                                    class="nav-item col-6 @if ($owner->isLive) col-sm-2 @else col-sm-3 @endif p-0">
                                     <a wire:navigate
                                         href="{{ route('owner.albums', ['username' => $owner->username]) }}"
                                         class="nav-link @if ($showAlbums) active @endif"
@@ -226,7 +226,7 @@
                                     </a>
                                 </li>
 
-                                <li class="nav-item col-12 col-sm-3 p-0">
+                                <li class="nav-item col-6 col-sm-3 p-0">
                                     <a wire:navigate
                                         href="{{ route('owner.videos', ['username' => $owner->username]) }}"
                                         class="nav-link @if ($showVideos) active @endif"

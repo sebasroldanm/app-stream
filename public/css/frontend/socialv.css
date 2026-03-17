@@ -20425,6 +20425,10 @@ ul.request-list>li:last-child {
         height: 18.75rem;
         width: 18.75rem
     }
+
+    .intro-owner {
+        height: 210px;
+    }
 }
 
 .profile-pic {

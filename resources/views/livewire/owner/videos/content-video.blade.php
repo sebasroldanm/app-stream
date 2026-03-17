@@ -29,7 +29,7 @@
                         {{-- <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> --}}
                     </div>
                 </div>
-                <div class="col-md-12 mt-2 px-5">
+                <div class="col-md-12 mt-2">
                     {{-- Main Video --}}
                     <div class="col-lg-12">
                         <video class="video_feed" data-poster="{{ $video->coverUrl }}"
