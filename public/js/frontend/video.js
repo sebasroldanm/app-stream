@@ -30,17 +30,14 @@ function initVideos() {
             controls: [
                 "play-large",
                 "play",
-                "rewind",
-                "fast-forward",
                 "progress",
-                "current-time",
                 "duration",
                 "mute",
                 "volume",
                 "fullscreen",
             ],
             debug: false,
-            autoplay: false, // Desactiva la reproducción automática
+            autoplay: false,
             muted: true,
             volume: 1,
             seekTime: 10,
