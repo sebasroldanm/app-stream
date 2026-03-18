@@ -32,8 +32,8 @@ class Live extends Component
         $this->broadcastSettings = $this->owner->data->cam->broadcastSettings;
 
         if ($this->owner->isMobile) {
-            $this->mainCol = 'col-8';
-            $this->sideCol = 'col-4';
+            $this->mainCol = 'col-12 col-sm-8';
+            $this->sideCol = 'col-12 col-sm-4';
         }
 
         $this->dispatch('initFullviewer');
