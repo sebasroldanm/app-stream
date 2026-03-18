@@ -95,9 +95,10 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
 
 
-    <script src="{{ asset('js/frontend/custom.js') }}"></script>
-    <script src="{{ asset('js/frontend/video.js') }}"></script>
-    <script src="{{ asset('js/frontend/live.js') }}"></script>
+    @php $version = date('YmdHi'); @endphp
+    <script src="{{ asset('js/frontend/custom.js') }}?v={{ $version }}"></script>
+    <script src="{{ asset('js/frontend/video.js') }}?v={{ $version }}"></script>
+    <script src="{{ asset('js/frontend/live.js') }}?v={{ $version }}"></script>
 
 
 </body>

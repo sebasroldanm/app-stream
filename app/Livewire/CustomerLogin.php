@@ -30,7 +30,7 @@ class CustomerLogin extends Component
                 'last_login_ip' => request()->ip(),
             ]);
 
-            return redirect()->route('home');
+            return redirect()->intended(route('home'));
         } else {
             session()->flash('error', 'Invalid credentials');
         }

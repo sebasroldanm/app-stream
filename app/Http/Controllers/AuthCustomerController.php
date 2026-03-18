@@ -33,7 +33,7 @@ class AuthCustomerController extends Controller
                 'last_login_ip' => request()->ip(),
             ]);
 
-            return redirect()->route('home');
+            return redirect()->intended(route('home'));
         }
 
         // Si la autenticación falla, redirigir de vuelta con un error
