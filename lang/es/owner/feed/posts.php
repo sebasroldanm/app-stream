@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'create_post' => 'Crear Publicación',
+    'write_something' => 'Escribe algo aquí...',
+    'photo_video' => 'Foto/Video',
+    'mention_friend' => 'Menciona un amigo',
+    'status_activity' => 'Estado/Actividad',
+    'mention_friend' => 'Menciona un amigo',
+    'feeling_activity' => 'Sentimiento/Actividad',
+    'location' => 'Ubicación',
+    'live_video' => 'Video en Vivo',
+    'gif' => 'Gif',
+    'watch_party' => 'Ver fiesta',
+    'play_with_friends' => 'Jugar con amigos',
+    'your_story' => 'Tu historia',
+    'friends' => 'Amigos',
+    'public' => 'Público',
+    'anyone_on_or_off_facebook' => 'Cualquier persona dentro o fuera de Facebook',
+    'your_friend_on_facebook' => 'Tus amigos en Facebook',
+    'friends_except' => 'Amigos excepto',
+    'dont_show_to_some_friends' => 'No mostrar a algunos amigos',
+    'only_me' => 'Solo yo',
+    'post' => 'Publicar',
+    'loading_more_posts' => 'Cargando mas publicaciones...',
+    'no_more_posts' => 'Eso es todo, no hay mas publicaciones',
+];

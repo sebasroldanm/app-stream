@@ -23,7 +23,7 @@
                                     @if ($error_search)
                                         <li>
                                             <a href="javascript:void(0);" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" data-bs-original-title="Reportado por lentitud"
+                                                data-bs-placement="top" data-bs-original-title="{{ __('owner/information/details.reported_slowness') }}"
                                                 class="username_reported">
                                                 <i class="las la-exclamation-triangle"></i>
                                             </a>
@@ -33,7 +33,7 @@
                                         <li>
                                             <a href="{{ route('owner.information', $owner->username) }}"
                                                 data-bs-toggle="tooltip" data-bs-placement="top"
-                                                data-bs-original-title="{{ $is_related->count() }} Relacionados">
+                                                data-bs-original-title="{{ __('owner/information/details.related_count', ['count' => $is_related->count()]) }}">
                                                 <i class="las la-link"></i>
                                             </a>
                                         </li>
@@ -41,7 +41,7 @@
                                     <li>
                                         <a wire:click="toggleFavorite" href="javascript:void(0);"
                                             data-bs-toggle="tooltip" data-bs-placement="top"
-                                            data-bs-original-title="@if ($is_fav) Eliminar de favoritos @else Agregar a favoritos @endif"
+                                            data-bs-original-title="{{ $is_fav ? __('owner/profile.remove_favorite') : __('owner/profile.add_favorite') }}"
                                             @if ($is_fav) class="delete_favorite" @endif>
                                             <i
                                                 @if ($is_fav) class="las la-heart" @else class="lar la-heart" @endif></i>
@@ -50,14 +50,14 @@
                                     @if (isset($owner->data->user->modelTopPosition) && $owner->data->user->modelTopPosition->position !== 0)
                                         <li><a href="javascript:void(0);" data-bs-toggle="tooltip"
                                                 data-bs-placement="top"
-                                                data-bs-original-title="Posición: {{ $owner->data->user->modelTopPosition->position }}">
+                                                data-bs-original-title="{{ __('owner/information/details.position', ['pos' => $owner->data->user->modelTopPosition->position]) }}">
                                                 <i class="las la-trophy"></i>
                                             </a></li>
                                     @else
                                         @if (isset($owner->data->usercurrPosition) && $owner->data->usercurrPosition !== 0)
                                             <li><a href="javascript:void(0);" data-bs-toggle="tooltip"
                                                     data-bs-placement="top"
-                                                    data-bs-original-title="Posición: {{ $owner->data->user->modelTopPosition->position }}">
+                                                    data-bs-original-title="{{ __('owner/information/details.position', ['pos' => $owner->data->user->modelTopPosition->position]) }}">
                                                     <i class="las la-trophy"></i>
                                                 </a></li>
                                         @endif
@@ -65,19 +65,19 @@
                                     @if ($owner->notFound)
                                         @if (!$force_sync)
                                             <li><a href="javascript:void(0);" data-bs-toggle="tooltip" wire:click="force_sync_enable"
-                                                    data-bs-placement="top" data-bs-original-title="No encontrado en el Servidor principal, desbloquear para buscar">
+                                                    data-bs-placement="top" data-bs-original-title="{{ __('owner/information/details.not_found_origin_unlock') }}">
                                                     <i class="ri-alert-line"></i>
                                                 </a></li>
                                         @else
                                             <li><a href="javascript:void(0);" data-bs-toggle="tooltip" wire:click="updateDataMod"
-                                                    data-bs-placement="top" data-bs-original-title="No encontrado en el Servidor principal, buscar en similitudes">
+                                                    data-bs-placement="top" data-bs-original-title="{{ __('owner/information/details.not_found_origin_search') }}">
                                                     <i class="ri-refresh-line"></i>
                                                 </a></li>
                                         @endif
                                     @else
                                         <li><a wire:click="updateDataMod" href="javascript:void(0);"
                                                 data-bs-toggle="tooltip" data-bs-placement="top"
-                                                data-bs-original-title="Actualizar">
+                                                data-bs-original-title="{{ __('owner/profile.update') }}">
                                                 <i class="ri-refresh-line"></i>
                                             </a></li>
                                     @endif
@@ -95,19 +95,17 @@
                                     <h3 class="">{{ $owner->username }}
                                         @if ($owner->isOnline)
                                             <i class="ri-checkbox-blank-circle-fill online m-2" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" data-bs-original-title="Online"></i>
+                                                data-bs-placement="top" data-bs-original-title="{{ __('owner/profile.online') }}"></i>
                                         @else
                                             @if ($owner->isDelete)
                                                 <i class="ri-close-circle-fill disable" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" data-bs-original-title="Desactivado"></i>
+                                                    data-bs-placement="top" data-bs-original-title="{{ __('owner/profile.disabled') }}"></i>
                                             @elseif ($owner->notFound)
                                                 <i class="ri-close-circle-fill disable" data-bs-toggle="tooltip"
                                                     data-bs-placement="top"
-                                                    data-bs-original-title="No encontrado Origin Server"></i>
+                                                    data-bs-original-title="{{ __('owner/profile.not_found_origin') }}"></i>
                                             @else
-                                                <i class="ri-indeterminate-circle-fill offline" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top"
-                                                    data-bs-original-title="{{ \Carbon\Carbon::parse($owner->statusChangedAt)->diffForHumans() }}"></i>
+                                                    <i data-bs-original-title="{{ \Carbon\Carbon::parse($owner->statusChangedAt)->diffForHumans() }}"></i>
                                             @endif
                                         @endif
                                     </h3>
@@ -163,15 +161,15 @@
                                         <ul
                                             class="social-data-block d-flex align-items-center justify-content-between list-inline p-0 m-0">
                                             <li class="text-center ps-3">
-                                                <h6>Fotos</h6>
+                                                <h6>{{ __('owner/profile.photos') }}</h6>
                                                 <p class="mb-0">{{ $owner->data->user->photosCount }}</p>
                                             </li>
                                             <li class="text-center ps-3">
-                                                <h6>Videos</h6>
+                                                <h6>{{ __('owner/profile.videos') }}</h6>
                                                 <p class="mb-0">{{ $owner->data->user->videosCount }}</p>
                                             </li>
                                             <li class="text-center ps-3">
-                                                <h6>Favoritos</h6>
+                                                <h6>{{ __('owner/profile.favorites') }}</h6>
                                                 <p class="mb-0">{{ number_format($owner->data->user->user->favoritedCount, 0, ',', '.') }}</p>
                                             </li>
                                         </ul>
@@ -192,7 +190,7 @@
                                             href="{{ route('owner.live', ['username' => $owner->username]) }}"
                                             class="nav-link live @if ($showLive) active @endif"
                                             data-bs-toggle="pill" data-bs-target="#live" role="button">
-                                            Live <div class="live-icon"></div>
+                                            {{ __('owner/tabs.live') }} <div class="live-icon"></div>
                                         </a>
                                     </li>
                                 @endif
@@ -203,7 +201,7 @@
                                         href="{{ route('owner.feed', ['username' => $owner->username]) }}"
                                         class="nav-link @if ($showFeed) active @endif"
                                         data-bs-toggle="pill" data-bs-target="#feed" role="button">
-                                        Feed
+                                        {{ __('owner/tabs.feed') }}
                                     </a>
                                 </li>
 
@@ -212,7 +210,7 @@
                                         href="{{ route('owner.information', ['username' => $owner->username]) }}"
                                         class="nav-link @if ($showInformation) active @endif"
                                         data-bs-toggle="pill" data-bs-target="#infomation" role="button">
-                                        Información
+                                        {{ __('owner/tabs.info') }}
                                     </a>
                                 </li>
 
@@ -222,7 +220,7 @@
                                         href="{{ route('owner.albums', ['username' => $owner->username]) }}"
                                         class="nav-link @if ($showAlbums) active @endif"
                                         data-bs-toggle="pill" data-bs-target="#albums" role="button">
-                                        Albums
+                                        {{ __('owner/tabs.albums') }}
                                     </a>
                                 </li>
 
@@ -231,7 +229,7 @@
                                         href="{{ route('owner.videos', ['username' => $owner->username]) }}"
                                         class="nav-link @if ($showVideos) active @endif"
                                         data-bs-toggle="pill" data-bs-target="#videos" role="button">
-                                        Videos
+                                        {{ __('owner/tabs.videos') }}
                                     </a>
                                 </li>
                             </ul>

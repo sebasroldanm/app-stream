@@ -3,7 +3,7 @@
 
         {{-- Personal --}}
         <h4 class="d-flex justify-content-between">
-            Personal
+            {{ __('owner/information/details.personal') }}
             <a href="{{ route('metadata', ['model' => 'owner', 'id' => $owner->id]) }}" target="_blank">
                 <i class="fas fa-link"></i>
             </a>
@@ -11,109 +11,114 @@
         <hr>
         <div class="row">
             <div class="col-3">
-                <h6>ID</h6>
+                <h6>{{ __('owner/information/details.id') }}</h6>
             </div>
             <div class="col-9"><code>{{ $owner->id }}</code></div>
 
             @if ($owner->data->user->user->name)
                 <div class="col-3">
-                    <h6>Nombre</h6>
+                    <h6>{{ __('owner/information/details.name') }}</h6>
                 </div>
                 <div class="col-9">{{ $owner->data->user->user->name }}</div>
             @endif
 
             @if ($owner->data->user->user->gender)
                 <div class="col-3">
-                    <h6>Género</h6>
+                    <h6>{{ __('owner/information/details.gender') }}</h6>
                 </div>
-                <div class="col-9">{{ $owner->data->user->user->gender }}</div>
+                <div class="col-9">{{ __('owner/information/details.genders.' . $owner->data->user->user->gender) }}</div>
             @endif
 
             @if ($country)
                 <div class="col-3">
-                    <h6>País</h6>
+                    <h6>{{ __('owner/information/details.country') }}</h6>
                 </div>
                 <div class="col-9">{!! $country !!}</div>
             @endif
 
             @if ($languages)
                 <div class="col-3">
-                    <h6>Idiomas</h6>
+                    <h6>{{ __('owner/information/details.language') }}</h6>
                 </div>
                 <div class="col-9">{!! $languages !!}</div>
             @endif
 
             <div class="col-3">
-                <h6>Fecha de nacimiento</h6>
+                <h6>{{ __('owner/information/details.birth_date') }}</h6>
             </div>
             <div class="col-9">{{ $owner->data->user->user->birthDate }}</div>
 
             <div class="col-3">
-                <h6>Edad</h6>
+                <h6>{{ __('owner/information/details.age') }}</h6>
             </div>
             <div class="col-9">{{ $age }}</div>
 
             <div class="col-3">
-                <h6>Complexión</h6>
+                <h6>{{ __('owner/information/details.body_type') }}</h6>
             </div>
-            <div class="col-9">{{ $this->bodyType($owner->data->user->user->bodyType) }}</div>
+            <div class="col-9">{{ __('owner/information/details.body_types.' . $owner->data->user->user->bodyType) }}</div>
 
             <div class="col-3">
-                <h6>Color de ojos</h6>
+                <h6>{{ __('owner/information/details.eye_color') }}</h6>
             </div>
-            <div class="col-9">{{ $this->eyeColor($owner->data->user->user->eyeColor) }}</div>
+            <div class="col-9">{{ __('owner/information/details.eye_colors.' . $owner->data->user->user->eyeColor) }}</div>
 
             <div class="col-3">
-                <h6>Color de cabello</h6>
+                <h6>{{ __('owner/information/details.hair_color') }}</h6>
             </div>
-            <div class="col-9">{{ $this->hairColor($owner->data->user->user->hairColor) }}</div>
+            <div class="col-9">{{ __('owner/information/details.hair_colors.' . $owner->data->user->user->hairColor) }}</div>
 
             <div class="col-3">
-                <h6>Etnia</h6>
+                <h6>{{ __('owner/information/details.ethnicity') }}</h6>
             </div>
-            <div class="col-9">{{ $this->ethnicity($owner->data->user->user->ethnicity) }}</div>
+            <div class="col-9">{{ __('owner/information/details.ethnicities.' . $owner->data->user->user->ethnicity) }}</div>
         </div>
         {{-- Personal --}}
 
         {{-- Perfil --}}
         <h4 class="mt-4">
-            Perfil
+            {{ __('owner/information/details.profile') }}
         </h4>
         <hr>
         <div class="row">
             @if ($owner->notFound)
                 <div class="col-3">
-                    <h6>Estado de Perfil</h6>
+                    <h6>{{ __('owner/information/details.profile_status') }}</h6>
                 </div>
                 <div class="col-9">
-                    <span>No encontrado en el Servidor principal, buscar en similitudes</span>
+                    <span>{{ __('owner/information/details.profile_not_found') }}</span>
                 </div>
             @endif
             @if (isset($owner->data->user->modelTopPosition) && $owner->data->user->modelTopPosition->position !== 0)
                 <div class="col-3">
-                    <h6>Posición actual</h6>
+                    <h6>{{ __('owner/information/details.profile_top_position') }}</h6>
                 </div>
                 <div class="col-9">
-                    <span>{{ number_format($owner->data->user->modelTopPosition->position, 0, ',', '.') }} en el genero {!! $owner->getGenderIcon() !!}
-                        con {{ number_format($owner->data->user->modelTopPosition->points, 0, ',', '.') }} puntos en {{ $owner->getContinent() }}
+                    <span>
+                        {!! __('owner/information/details.ranking_info', [
+                            'position'  => number_format($owner->data->user->modelTopPosition->position, 0, ',', '.'),
+                            'icon'      => $owner->getGenderIcon(),
+                            'points'    => number_format($owner->data->user->modelTopPosition->points, 0, ',', '.'),
+                            'continent' => __('owner/information/details.regions' . $owner->getContinent()),
+                        ]) !!}
                     </span>
                 </div>
             @endif
 
             @if ($offlineHuman != '01/01/1970')
                 <div class="col-3">
-                    <h6>Último estado</h6>
+                    <h6>{{ __('owner/information/details.last_offline') }}</h6>
                 </div>
                 <div class="col-9">{{ $offlineHuman }} - {{ $lastOffline }}</div>
             @endif
 
             <div class="col-3">
-                <h6>Última conexión</h6>
+                <h6>{{ __('owner/information/details.last_active') }}</h6>
             </div>
             <div class="col-9">{{ $activeHuman }} - {{ $lastActive }}</div>
 
             <div class="col-3">
-                <h6>Inactivo</h6>
+                <h6>{{ __('owner/information/details.idle') }}</h6>
             </div>
             <div class="col-9">
                 {{ $idleCalendar }} - {{ $idleDiff }}
@@ -121,7 +126,7 @@
 
             @if ($ratingPrivate)
                 <div class="col-3">
-                    <h6>Evaluation Private</h6>
+                    <h6>{{ __('owner/information/details.rating_private') }}</h6>
                 </div>
                 <div class="col-9">
                     <div class="rating">
@@ -137,7 +142,7 @@
 
             @if (!$owner->isDelete)
                 <div class="col-3">
-                    <h6>Último snapshot</h6>
+                    <h6>{{ __('owner/information/details.last_snapshot') }}</h6>
                 </div>
                 <div class="col-9">
                     {{ $snapshotCalendar }} - {{ $snapshotDiff }}
@@ -149,7 +154,7 @@
         {{-- Intereses --}}
         @if ($owner->data->user->user->interests)
             <h4 class="mt-4">
-                Intereses
+                {{ __('owner/information/details.interests') }}
             </h4>
             <hr>
             <div class="row">
@@ -166,12 +171,12 @@
         {{-- Actividades --}}
         @if ($owner->data->user->user->publicActivities && $owner->data->user->user->privateActivities)
             <h4 class="mt-4">
-                Actividades
+                {{ __('owner/information/details.activities') }}
             </h4>
             <hr>
             <div class="row">
                 <div class="col-3">
-                    <h6>Público</h6>
+                    <h6>{{ __('owner/information/details.public_activities') }}</h6>
                 </div>
                 <div class="col-9">
                     @foreach ($owner->data->user->user->publicActivities as $activity)
@@ -179,7 +184,7 @@
                     @endforeach
                 </div>
                 <div class="col-3">
-                    <h6>Privado</h6>
+                    <h6>{{ __('owner/information/details.private_activities') }}</h6>
                 </div>
                 <div class="col-9">
                     @foreach ($owner->data->user->user->privateActivities as $activity)
@@ -192,13 +197,13 @@
 
         {{-- Media --}}
         <h4 class="mt-4">
-            Media
+            {{ __('owner/information/details.media') }}
         </h4>
         <hr>
         <div class="row">
             @if ($owner->data->user->user->previewUrlThumbSmall)
                 <div class="col-3">
-                    <h6>Preview</h6>
+                    <h6>{{ __('owner/information/details.preview') }}</h6>
                 </div>
                 <div class="col-9">
                     <img src="{{ $owner->data->user->user->previewUrlThumbSmall }}" data-image_vh="{{ $owner->data->user->user->previewUrlThumbBig }}"
@@ -211,7 +216,7 @@
             @endif
             @if ($owner->data->user->user->avatarUrl)
                 <div class="col-3">
-                    <h6>Avatar</h6>
+                    <h6>{{ __('owner/information/details.avatar') }}</h6>
                 </div>
                 <div class="col-9">
                     <img src="{{ $owner->data->user->user->avatarUrlThumb }}" data-image_vh="{{ $owner->data->user->user->avatarUrl }}"
@@ -223,8 +228,8 @@
     @else
         <div class="row">
             <div class="col-sm-12">
-                <h4 class="mb-3">Detalles</h4>
-                <h5 class="text-center">Sin información :(</h5>
+                <h4 class="mb-3">{{ __('owner/information/details.details') }}</h4>
+                <h5 class="text-center">{{ __('owner/information/details.no_information') }}</h5>
             </div>
         </div>
     @endif

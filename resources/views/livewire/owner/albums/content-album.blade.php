@@ -5,19 +5,19 @@
     </div>
     <div class="row">
         <div class="col-3">
-            <h6>Acceso</h6>
+            <h6>{{ __('owner/media/albums.content.access') }}</h6>
         </div>
         <div class="col-9">
-            <p class="mb-0">{{ $album->data['accessMode'] }}</p>
+            <p class="mb-0">{{ __('owner/media/albums.content.price.' . $album->data['accessMode']) }}</p>
         </div>
         <div class="col-3">
-            <h6>Likes</h6>
+            <h6>{{ __('owner/media/albums.content.likes') }}</h6>
         </div>
         <div class="col-9">
             <p class="mb-0">{{ $album->data['likes'] }}</p>
         </div>
         <div class="col-3">
-            <h6>Creado</h6>
+            <h6>{{ __('owner/media/albums.content.created_at') }}</h6>
         </div>
         <div class="col-9">
             <p class="mb-0">

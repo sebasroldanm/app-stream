@@ -92,9 +92,14 @@ class Owner extends Model
         return $group->owners()->where('owners.id', '!=', $this->id)->get();
     }
 
+    public function getGender()
+    {
+        return $this->data->user->user->gender;
+    }
+
     public function getGenderIcon()
     {
-        return $this->iconGender($this->data->user->user->gender);
+        return $this->iconGender($this->getGender());
     }
 
     public function getContinent()
@@ -102,6 +107,6 @@ class Owner extends Model
         if (!isset($this->data->user->modelTopPosition)) {
             return '';
         }
-        return $this->continent($this->data->user->modelTopPosition->continent);
+        return $this->data->user->modelTopPosition->continent;
     }
 }

@@ -12,10 +12,15 @@
                     </div>
                 </div>
             </div>
+            <div class="badge_online">
+                <div class="d-flex justify-content-between">
+                    <span class="badge bg-success">{{ __('navbar.online_mobile', ['count' => $online_app]) }}</span>
+                </div>
+            </div>
             <div class="iq-search-bar device-search">
                 <form action="#" class="searchbox">
                     <a class="search-link" href="#"><i class="ri-search-line"></i></a>
-                    <input id="searchGlobe" type="text" class="text search-input" placeholder="Search here...">
+                    <input id="searchGlobe" type="text" class="text search-input" placeholder="{{ __('navbar.search_placeholder') }}">
                     <div id="resultSearch" class="card">
                     </div>
                 </form>
@@ -29,7 +34,7 @@
                 <ul class="navbar-nav  ms-auto navbar-list">
                     <li class="nav-item d-flex align-items-center">
                         <h4>
-                            <span class="badge bg-success">{{ $online_app }} online</span>
+                            <span class="badge bg-success">{{ __('navbar.online', ['count' => $online_app]) }}</span>
                         </h4>
                     </li>
                     <li class="nav-item">    
@@ -44,7 +49,7 @@
                             <div class="card shadow-none m-0">
                                 <div class="card-header d-flex justify-content-between bg-primary">
                                     <div class="header-title">
-                                        <h5 class="mb-0 text-white">Friend Request</h5>
+                                        <h5 class="mb-0 text-white">{{ __('navbar.friend_requests') }}</h5>
                                     </div>
                                     <small class="badge  bg-light text-dark ">4</small>
                                 </div>
@@ -62,9 +67,9 @@
                                             </div>
                                             <div class="d-flex align-items-center">
                                                 <a href="javascript:void();"
-                                                    class="me-3 btn btn-primary rounded">Confirm</a>
+                                                    class="me-3 btn btn-primary rounded">{{ __('navbar.confirm') }}</a>
                                                 <a href="javascript:void();"
-                                                    class="me-3 btn btn-secondary rounded">Delete Request</a>
+                                                    class="me-3 btn btn-secondary rounded">{{ __('navbar.delete_request') }}</a>
                                             </div>
                                         </div>
                                     </div>
@@ -100,9 +105,9 @@
                                             </div>
                                             <div class="d-flex align-items-center">
                                                 <a href="javascript:void();"
-                                                    class="me-3 btn btn-primary rounded">Confirm</a>
+                                                    class="me-3 btn btn-primary rounded">{{ __('navbar.confirm') }}</a>
                                                 <a href="javascript:void();"
-                                                    class="me-3 btn btn-secondary rounded">Delete Request</a>
+                                                    class="me-3 btn btn-secondary rounded">{{ __('navbar.delete_request') }}</a>
                                             </div>
                                         </div>
                                     </div>
@@ -126,7 +131,7 @@
                                         </div>
                                     </div>
                                     <div class="text-center">
-                                        <a href="#" class=" btn text-primary">View More Request</a>
+                                        <a href="#" class=" btn text-primary">{{ __('navbar.view_more_requests') }}</a>
                                     </div>
                                 </div>
                             </div>
@@ -159,7 +164,7 @@
                             <div class="card shadow-none m-0">
                                 <div class="card-header d-flex justify-content-between bg-primary">
                                     <div class="header-title bg-primary">
-                                        <h5 class="mb-0 text-white">All Message</h5>
+                                        <h5 class="mb-0 text-white">{{ __('navbar.all_messages') }}</h5>
                                     </div>
                                     <small class="badge bg-light text-dark">4</small>
                                 </div>
@@ -241,8 +246,8 @@
                             <div class="card shadow-none m-0">
                                 <div class="card-header  bg-primary">
                                     <div class="header-title">
-                                        <h5 class="mb-0 text-white">Hola {{ auth()->guard('customer')->user()->name . ' ' . auth()->guard('customer')->user()->last_name }}</h5>
-                                        <span class="text-white font-size-12">Activo</span>
+                                        <h5 class="mb-0 text-white">{{ __('navbar.hello') }} {{ auth()->guard('customer')->user()->name . ' ' . auth()->guard('customer')->user()->last_name }}</h5>
+                                        <span class="text-white font-size-12">{{ __('navbar.active') }}</span>
                                     </div>
                                 </div>
                                 <div class="card-body p-0 ">
@@ -252,8 +257,8 @@
                                                 <i class="ri-file-user-line"></i>
                                             </div>
                                             <div class="ms-3">
-                                                <h6 class="mb-0 ">My Profile</h6>
-                                                <p class="mb-0 font-size-12">View personal profile details.</p>
+                                                <h6 class="mb-0 ">{{ __('navbar.my_profile') }}</h6>
+                                                <p class="mb-0 font-size-12">{{ __('navbar.view_profile_details') }}</p>
                                             </div>
                                         </div>
                                     </a>
@@ -263,8 +268,8 @@
                                                 <i class="ri-profile-line"></i>
                                             </div>
                                             <div class="ms-3">
-                                                <h6 class="mb-0 ">Edit Profile</h6>
-                                                <p class="mb-0 font-size-12">Modify your personal details.</p>
+                                                <h6 class="mb-0 ">{{ __('navbar.edit_profile') }}</h6>
+                                                <p class="mb-0 font-size-12">{{ __('navbar.modify_profile_details') }}</p>
                                             </div>
                                         </div>
                                     </a>
@@ -274,8 +279,8 @@
                                                 <i class="ri-account-box-line"></i>
                                             </div>
                                             <div class="ms-3">
-                                                <h6 class="mb-0 ">Account settings</h6>
-                                                <p class="mb-0 font-size-12">Manage your account parameters.</p>
+                                                <h6 class="mb-0 ">{{ __('navbar.account_settings') }}</h6>
+                                                <p class="mb-0 font-size-12">{{ __('navbar.manage_account_parameters') }}</p>
                                             </div>
                                         </div>
                                     </a>
@@ -286,15 +291,14 @@
                                                 <i class="ri-lock-line"></i>
                                             </div>
                                             <div class="ms-3">
-                                                <h6 class="mb-0 ">Privacy Settings</h6>
-                                                <p class="mb-0 font-size-12">Control your privacy parameters.
-                                                </p>
+                                                <h6 class="mb-0 ">{{ __('navbar.privacy_settings') }}</h6>
+                                                <p class="mb-0 font-size-12">{{ __('navbar.control_privacy_parameters') }}</p>
                                             </div>
                                         </div>
                                     </a>
                                     <div class="d-inline-block w-100 text-center p-3">
                                         <a class="btn btn-primary iq-sign-btn" href="{{ route('customer.logout') }}"
-                                            role="button">Cerrar sesión<i class="ri-login-box-line ms-2"></i></a>
+                                            role="button">{{ __('navbar.logout') }}<i class="ri-login-box-line ms-2"></i></a>
                                     </div>
                                 </div>
                             </div>

@@ -4,16 +4,16 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <div class="header-title">
-                        <h4 class="card-title">Información Personalizada</h4>
+                        <h4 class="card-title">{{ __('owner/information/custom.title') }}</h4>
                     </div>
                 </div>
                 <div class="card-body">
                     <form wire:submit.prevent="save">
                         <div class="row align-items-center">
                             <div class="form-group col-sm-4">
-                                <label>Tipo:</label>
+                                <label>{{ __('owner/information/custom.type') }}:</label>
                                 <select class="form-control" wire:model.live="info_type_id">
-                                    <option value="">Seleccione...</option>
+                                    <option value="">{{ __('owner/information/custom.select') }}</option>
                                     @foreach ($types as $type)
                                         <option value="{{ $type->id }}">{{ $type->label }}</option>
                                     @endforeach
@@ -23,10 +23,10 @@
                                 @enderror
                             </div>
                             <div class="form-group col-sm-4">
-                                <label>Fuente:</label>
+                                <label>{{ __('owner/information/custom.source') }}:</label>
                                 @if ($this->selectedTypeModel && in_array($this->selectedTypeModel->data_type, ['file', 'json']))
                                     <select class="form-control" wire:model="source_id">
-                                        <option value="">(Opcional)</option>
+                                        <option value="">{{ __('owner/information/custom.optional') }}</option>
                                         @foreach ($sources as $source)
                                             <option value="{{ $source->id }}">{{ $source->name }}</option>
                                         @endforeach
@@ -35,18 +35,18 @@
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 @else
-                                    <input placeholder="No disponible" disabled>
+                                    <input placeholder="{{ __('owner/information/custom.unavailable') }}" disabled>
                                 @endif
                             </div>
                             <div class="form-group col-sm-4">
-                                <label>Valor:</label>
+                                <label>{{ __('owner/information/custom.value') }}:</label>
                                 @if ($this->selectedTypeModel && $this->selectedTypeModel->data_type === 'file')
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" wire:model="data_value" id="customFile">
-                                        <label class="custom-file-label" for="customFile">Elegir archivo</label>
+                                        <label class="custom-file-label" for="customFile">{{ __('owner/information/custom.choose_file') }}</label>
                                     </div>
                                     @if ($data_value)
-                                        <small class="text-success">Archivo seleccionado: {{ $data_value->getClientOriginalName() }}</small>
+                                        <small class="text-success">{{ __('owner/information/custom.selected_file') }}: {{ $data_value->getClientOriginalName() }}</small>
                                     @endif
                                 @elseif($this->selectedTypeModel && $this->selectedTypeModel->data_type === 'number')
                                      <input type="number" class="form-control" wire:model="data_value" placeholder="12345...">
@@ -61,7 +61,7 @@
                                 @enderror
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Agregar</button>
+                        <button type="submit" class="btn btn-primary">{{ __('owner/information/custom.add') }}</button>
                     </form>
 
                     <hr>
@@ -70,10 +70,10 @@
                         <table class="table table-striped mb-0">
                             <thead class="thead-light">
                                 <tr>
-                                    <th>Tipo</th>
-                                    <th>Fuente</th>
-                                    <th>Valor</th>
-                                    <th>Acciones</th>
+                                    <th>{{ __('owner/information/custom.type') }}</th>
+                                    <th>{{ __('owner/information/custom.source') }}</th>
+                                    <th>{{ __('owner/information/custom.value') }}</th>
+                                    <th>{{ __('owner/information/custom.actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -87,7 +87,7 @@
                                                     <a href="{{ $info->data_info['value'] }}" target="_blank">{{ Str::limit($info->data_info['value'], 30) }}</a>
                                                 @elseif($info->type->data_type === 'file')
                                                     <a href="{{ Storage::url($info->data_info['value']) }}" target="_blank" class="badge badge-info">
-                                                        Ver Archivo
+                                                        {{ __('owner/information/custom.view_file') }}
                                                     </a>
                                                     {{-- Optional: Preview if image --}}
                                                     <img src="{{ Storage::url($info->data_info['value']) }}" width="50" />
@@ -116,8 +116,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="text-center">No hay información personalizada
-                                            registrada.</td>
+                                        <td colspan="4" class="text-center">{{ __('owner/information/custom.no_results') }}</td>
                                     </tr>
                                 @endforelse
                             </tbody>

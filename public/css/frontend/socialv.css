@@ -2603,6 +2603,12 @@ progress {
     -webkit-overflow-scrolling: touch
 }
 
+@media (max-width:376px) {
+    .badge_online {
+        display: none;
+    }
+}
+
 @media (max-width:575.98px) {
     .table-responsive-sm {
         overflow-x: auto;
@@ -4785,6 +4791,10 @@ html[data-theme='dark'] .dropdown-menu {
     .dropdown-menu-lg-end[data-bs-popper] {
         right: 0;
         left: auto
+    }
+
+    .badge_online {
+        display: none;
     }
 }
 

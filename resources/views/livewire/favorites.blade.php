@@ -4,7 +4,7 @@
             <img src="{{ asset('/images/page-img/profile-bg3.jpg') }}" class="img-fluid w-100" alt="header-bg">
             <div class="title-on-header">
                 <div class="data-block">
-                    <h2>Favorites</h2>
+                    <h2>{{ __('sidebar.favorites') }}</h2>
                 </div>
             </div>
         </div>

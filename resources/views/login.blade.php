@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Login</title>
+    <title>{{ config('app.name') }} | {{ __('login.title') }}</title>
 
     <link rel="icon" type="image/png" href="{{ asset('images/favicon-96x96.png') }}" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="{{ asset('images/favicon.svg') }}" />
@@ -51,20 +51,20 @@
                                     <li class="swiper-slide">
                                         <img src="{{ asset('/images/login/1.png') }}" class="img-fluid mb-4"
                                             alt="logo">
-                                        <h4 class="mb-1 text-white">Encuentra a celebridades</h4>
-                                        <p>Te gusta algo, síguelo, y comparte.</p>
+                                        <h4 class="mb-1 text-white">{{ __('login.slide_1_title') }}</h4>
+                                        <p>{{ __('login.slide_1_content') }}</p>
                                     </li>
                                     <li class="swiper-slide">
                                         <img src="{{ asset('/images/login/2.png') }}" class="img-fluid mb-4"
                                             alt="logo">
-                                        <h4 class="mb-1 text-white">Descubre nuevas experiencias</h4>
-                                        <p>Los mejores secretos estan guardados donde no vemos.</p>
+                                        <h4 class="mb-1 text-white">{{ __('login.slide_2_title') }}</h4>
+                                        <p>{{ __('login.slide_2_content') }}</p>
                                     </li>
                                     <li class="swiper-slide">
                                         <img src="{{ asset('/images/login/3.png') }}" class="img-fluid mb-4"
                                             alt="logo">
-                                        <h4 class="mb-1 text-white">Manten al día</h4>
-                                        <p>Toma el control de lo que quieres ver.</p>
+                                        <h4 class="mb-1 text-white">{{ __('login.slide_3_title') }}</h4>
+                                        <p>{{ __('login.slide_3_content') }}</p>
                                     </li>
                                 </ul>
                             </div>
@@ -72,8 +72,8 @@
                     </div>
                     <div class="col-md-6 bg-white pt-5 pt-5 pb-lg-0 pb-5">
                         <div class="sign-in-from">
-                            <h1 class="mb-0">Sign in</h1>
-                            <p>Ingrese su dirección de correo electrónico y contraseña para acceder.</p>
+                            <h1 class="mb-0">{{ __('login.sign_in') }}</h1>
+                            <p>{{ __('login.subtitle') }}</p>
                             @if ($errors->any())
                                 <div class="alert alert-danger">
                                     <ul>
@@ -87,26 +87,26 @@
                             <form class="mt-4" method="POST" action="{{ route('customer.login.submit') }}">
                                 @csrf
                                 <div class="form-group">
-                                    <label class="form-label" for="email">Correo electrónico</label>
+                                    <label class="form-label" for="email">{{ __('login.email') }}</label>
                                     <input name="email" type="email" class="form-control mb-0" id="email"
-                                        placeholder="Ingresar correo">
+                                        placeholder="{{ __('login.email') }}">
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="password">Contraseña</label>
-                                    <a href="#" class="float-end">¿Olvidaste tu contraseña?</a>
+                                    <label class="form-label" for="password">{{ __('login.password') }}</label>
+                                    <a href="#" class="float-end">{{ __('login.forgot') }}</a>
                                     <input name="password" type="password" class="form-control mb-0" id="password"
-                                        placeholder="Contraseña">
+                                        placeholder="{{ __('login.password') }}">
                                 </div>
                                 <div class="d-inline-block w-100">
                                     <div class="form-check d-inline-block mt-2 pt-1">
                                         <input type="checkbox" class="form-check-input" id="customCheck11">
-                                        <label class="form-check-label" for="customCheck11">Recordarme</label>
+                                        <label class="form-check-label" for="customCheck11">{{ __('login.remember') }}</label>
                                     </div>
-                                    <button type="submit" class="btn btn-primary float-end">Ingresar</button>
+                                    <button type="submit" class="btn btn-primary float-end">{{ __('login.sign_in') }}</button>
                                 </div>
                                 <div class="sign-info">
-                                    <span class="dark-color d-inline-block line-height-2">¿No tienes una cuenta? <a
-                                            href="sign-up.html">Registrate</a></span>
+                                    <span class="dark-color d-inline-block line-height-2">{{ __('login.dont_have_account') }} <a
+                                            href="sign-up.html">{{ __('login.sign_up') }}</a></span>
                                     {{-- <ul class="iq-social-media">
                                         <li><a href="#"><i class="ri-facebook-box-line"></i></a></li>
                                         <li><a href="#"><i class="ri-twitter-line"></i></a></li>

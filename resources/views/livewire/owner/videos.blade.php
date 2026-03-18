@@ -2,7 +2,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-12">
-                <h4 class="mb-3">Videos</h4>
+                <h4 class="mb-3">{{ __('owner/media/videos.title') }}</h4>
             </div>
             @if (count($videos) > 0)
                 <div class="col-md-3 list_medias">
@@ -54,7 +54,7 @@
                 </div>
             @else
                 <div class="col-md-12">
-                    <h5 class="mb-3 text-center">No hay Videos :(</h5>
+                    <h5 class="mb-3 text-center">{{ __('owner/feed/panels.no_results') }}</h5>
                 </div>
             @endif
         </div>

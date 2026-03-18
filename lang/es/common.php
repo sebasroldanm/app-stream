@@ -1,0 +1,19 @@
+<?php
+
+return [
+    'loading' => 'Cargando...',
+    'error' => 'Error',
+    'success' => 'Éxito',
+    'cancel' => 'Cancelar',
+    'save' => 'Guardar',
+    'delete' => 'Eliminar',
+    'edit' => 'Editar',
+    'view' => 'Ver',
+    'close' => 'Cerrar',
+];
+
+
+
+
+
+

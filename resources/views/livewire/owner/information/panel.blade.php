@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-sm-12">
-        <h4 class="mb-3">Pannels</h4>
+        <h4 class="mb-3">{{ __('owner/tabs.panel') }}</h4>
         <div class="row masonry">
             @foreach ($panels as $panel)
             {{-- {{ dd($panels) }} --}}
@@ -21,7 +21,7 @@
                                     <p class="card-text">{{ $panel->body }}</p>
                                 @endif
                                 @if (!empty($panel->data->imageLink))
-                                    <a href="{{  $panel->data->imageLink }}" class="btn btn-primary w-100" target="_blank">Ir al sitio</a>
+                                    <a href="{{  $panel->data->imageLink }}" class="btn btn-primary w-100" target="_blank">{{ __('owner/information/details.go_to_site') }}</a>
                                 @endif
                             </div>
                         @endif
@@ -29,7 +29,7 @@
                 </div>
             @endforeach
             @if (count($panels) == 0)
-                <h5 class="text-center">Sin perfil :(</h5>
+                <h5 class="text-center">{{ __('owner/information/details.no_information') }}</h5>
             @endif
         </div>
     </div>

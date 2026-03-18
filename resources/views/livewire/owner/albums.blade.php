@@ -2,7 +2,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-12">
-                <h4>Albumes</h4>
+                <h4>{{ __('owner/media/albums.title') }}</h4>
             </div>
             @if (count($albums) > 0)
                 <div class="col-md-3 list_medias">
@@ -43,7 +43,7 @@
                 </div>
             @else
                 <div class="col-md-12">
-                    <h5 class="mb-3 text-center">No hay Fotos :(</h5>
+                    <h5 class="mb-3 text-center">{{ __('owner/feed/panels.no_results') }}</h5>
                 </div>
             @endif
         </div>

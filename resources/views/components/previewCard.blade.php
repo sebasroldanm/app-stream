@@ -59,7 +59,7 @@
         <div class="group-details d-inline-block pb-3">
             <ul class="d-flex align-items-center justify-content-between list-inline m-0 p-0">
                 <li class="pe-3 ps-3">
-                    <p class="mb-0">Fotos</p>
+                    <p class="mb-0">{{ __('components/preview_card.photos') }}</p>
                     @if ($owner->data)
                         <h6>{{ $owner->data->user->photosCount }}</h6>
                     @else
@@ -67,7 +67,7 @@
                     @endif
                 </li>
                 <li class="pe-3 ps-3">
-                    <p class="mb-0">Videos</p>
+                    <p class="mb-0">{{ __('components/preview_card.videos') }}</p>
                     @if ($owner->data)
                         <h6>{{ $owner->data->user->videosCount }}</h6>
                     @else
@@ -75,10 +75,10 @@
                     @endif
                 </li>
                 <li class="pe-3 ps-3">
-                    <p class="mb-0">Ranking</p>
+                    <p class="mb-0">{{ __('components/preview_card.ranking') }}</p>
                     @if ($owner->data)
                         @if (isset($owner->data->user->modelTopPosition->position) && $owner->data->user->modelTopPosition->position !== 0)
-                            <h6>{{ $owner->data->user->modelTopPosition->position }}</h6>
+                            <h6>{{ number_format($owner->data->user->modelTopPosition->position, 0, ',', '.') }}</h6>
                         @else
                             <h6>-</h6>
                         @endif
@@ -104,10 +104,10 @@
         @endif
         @if ($owner->isError)
             <button class="btn btn-danger d-block w-100"><i class="las la-exclamation-triangle"></i>
-                No encontrado</button>
+                {{ __('components/preview_card.not_found') }}</button>
         @else
             <a href="{{ route('owner.feed', $owner->username) }}" type="submit"
-                class="btn btn-primary d-block w-100">Ver perfil</a>
+                class="btn btn-primary d-block w-100">{{ __('components/preview_card.view_profile') }}</a>
         @endif
     </div>
 </div>
