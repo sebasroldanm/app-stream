@@ -3,7 +3,7 @@
         <div class="col-6">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Goal</h5>
+                    <h5 class="card-title">{{ __('owner/live/info.goal') }}</h5>
                     @if (isset($owner->data->cam->goal))
                         @php
                             $goal = $owner->data->cam->goal;
@@ -19,12 +19,12 @@
                             </div>
                         </div>
 
-                        <p class="card-text">Meta {{ $goal->spent }} / {{ $goal->goal }}</p>
+                        <p class="card-text">{{ __('owner/live/info.goal') }} {{ $goal->spent }} / {{ $goal->goal }}</p>
                     @else
-                        <p class="card-text">No goal set</p>
+                        <p class="card-text">{{ __('owner/live/info.no_goal') }}</p>
                     @endif
                     @if (isset($owner->data->cam->topic))
-                        <h5>Topic:</h5>
+                        <h5>{{ __('owner/live/info.topic') }}:</h5>
                         <p class="card-text">{{ $owner->data->cam->topic }}</p>
                     @endif
                 </div>
@@ -33,7 +33,7 @@
         <div class="col-6">
             <div class="card">
                 <div class="card-body">
-                    <h5>Estado</h5>
+                    <h5>{{ __('owner/live/info.status') }}</h5>
                     @if (isset($owner->data->cam->show))
                         <p class="card-text">{{ $owner->data->cam->show->mode }}</p>
                     @else
@@ -55,9 +55,9 @@
                     @php
                         $views_count = $viewers->guests + $viewers->spies + $viewers->invisibles + $viewers->greens + $viewers->golds + $viewers->regulars;
                     @endphp
-                    <h5 class="card-title">Viewers: <span>{{ $views_count }}</span></h5>
+                    <h5 class="card-title">{{ __('owner/live/info.viewers') }}: <span>{{ $views_count }}</span></h5>
 
-                    <h5 class="card-title">King</h5>
+                    <h5 class="card-title">{{ __('owner/live/info.king') }}</h5>
                     @if (isset($owner->data->cam->king))
                         @php
                             $king = $owner->data->cam->king;
@@ -72,7 +72,7 @@
                                 {{ $king->userRanking->level }}</p>
                         @endif
                     @else
-                        <p class="card-text">No king set</p>
+                        <p class="card-text">{{ __('owner/live/info.no_king') }}</p>
                     @endif
                 </div>
             </div>
@@ -80,7 +80,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Viendo ahora</h5>
+                    <h5 class="card-title">{{ __('owner/live/info.viewing_now') }}</h5>
                     <div class="viewers-list">
 
                         @if (isset($viewers->members))
@@ -101,7 +101,7 @@
                             @endforeach
                         @endif
                         @if ($viewers->guests > 0)
-                            <p class="card-text">Visitantes: {{ $viewers->guests }}</p>
+                            <p class="card-text">{{ __('owner/live/info.visitors') }}: {{ $viewers->guests }}</p>
                         @endif
                     </div>
                 </div>

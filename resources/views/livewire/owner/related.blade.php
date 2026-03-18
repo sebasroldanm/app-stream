@@ -2,7 +2,7 @@
     <div class="card-body">
         <div class="row">
             <div class="d-flex justify-content-between">
-                <h4 class="mb-3">Modelos Relacionados</h4>
+                <h4 class="mb-3">{{ __('owner/tabs.relations') }}</h4>
                 <a href="{{ route('metadata', ['model' => 'related', 'id' => $owner->username]) }}" target="_blank">
                     <i class="fas fa-link"></i>
                 </a>
@@ -23,7 +23,7 @@
                                     <div class="s_icon top right">
                                         @if ($related->isNew)
                                             <h5 class="m-0">
-                                                <span class="badge badge-pill bg-warning">New</span>
+                                                <span class="badge badge-pill bg-warning">{{ __('owner/related.new') }}</span>
                                             </h5>
                                         @endif
                                         @if (in_array($related->id, $favs))
@@ -58,7 +58,7 @@
                 </div>
             @else
                 <div class="col-md-12">
-                    <p class="text-center">No hay modelos relacionados.</p>
+                    <p class="text-center">{{ __('owner/related.no_related_models') }}</p>
                 </div>
             @endif
         </div>

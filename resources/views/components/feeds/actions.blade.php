@@ -14,7 +14,7 @@
                     <div class="dropdown">
                         <span class="dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false" role="button">
-                            {{ $item->likes }} Likes
+                            {{ $item->likes }} {{ __('components/feed.likes') }}
                         </span>
                     </div>
                 </div>

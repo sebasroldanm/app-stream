@@ -14,13 +14,13 @@
                         <p class="card-text">{{ $video->description }}</p>
                         <div class="row">
                             <div class="col-3">
-                                <h6>Acceso</h6>
+                                <h6>{{ __('owner/media/videos.content.access') }}</h6>
                             </div>
                             <div class="col-9">
-                                {{ $video->accessMode }}
+                                {{ __('owner/media/videos.content.price.' . $video->accessMode) }}
                             </div>
                             <div class="col-3">
-                                <h6>Duración</h6>
+                                <h6>{{ __('owner/media/videos.content.duration') }}</h6>
                             </div>
                             <div class="col-9">
                                 {{ $duration }}

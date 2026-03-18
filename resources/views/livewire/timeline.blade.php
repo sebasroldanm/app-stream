@@ -8,7 +8,7 @@
                         <div id="post-modal-data" class="card card-block card-stretch card-height">
                             <div class="card-header d-flex justify-content-between">
                                 <div class="header-title">
-                                    <h4 class="card-title">Crear Post</h4>
+                                    <h4 class="card-title">{{ __('owner/feed/posts.create_post') }}</h4>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -20,7 +20,7 @@
                                     <form class="post-text ms-3 w-100 " data-bs-toggle="modal"
                                         data-bs-target="#post-modal" action="javascript:void();">
                                         <input type="text" class="form-control rounded"
-                                            placeholder="Write something here..." style="border:none;">
+                                            placeholder="{{ __('owner/feed/posts.write_something') }}" style="border:none;">
                                     </form>
                                 </div>
                                 <hr>
@@ -28,19 +28,19 @@
                                     <li class="me-3 mb-md-0 mb-2">
                                         <a href="#" class="btn btn-soft-primary">
                                             <img src="{{ asset('/images/small/07.png') }}" alt="icon"
-                                                class="img-fluid me-2"> Photo/Video
+                                                class="img-fluid me-2"> {{ __('owner/feed/posts.photo_video') }}
                                         </a>
                                     </li>
                                     <li class="me-3 mb-md-0 mb-2">
                                         <a href="#" class="btn btn-soft-primary">
                                             <img src="{{ asset('/images/small/08.png') }}" alt="icon"
-                                                class="img-fluid me-2"> Tag Friend
+                                                class="img-fluid me-2"> {{ __('owner/feed/posts.mention_friend') }}
                                         </a>
                                     </li>
                                     <li class="me-3">
                                         <a href="#" class="btn btn-soft-primary">
                                             <img src="{{ asset('/images/small/09.png') }}" alt="icon"
-                                                class="img-fluid me-2"> Feeling/Activity
+                                                class="img-fluid me-2"> {{ __('owner/feed/posts.feeling_activity') }}
                                         </a>
                                     </li>
                                     <li>
@@ -54,15 +54,15 @@
                                                     <div class="dropdown-menu dropdown-menu-right"
                                                         aria-labelledby="post-option" style="">
                                                         <a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                            data-bs-target="#post-modal">Check in</a>
+                                                            data-bs-target="#post-modal">{{ __('owner/feed/posts.location') }}</a></a>
                                                         <a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                            data-bs-target="#post-modal">Live Video</a>
+                                                            data-bs-target="#post-modal">{{ __('owner/feed/posts.live_video') }}</a></a>
                                                         <a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                            data-bs-target="#post-modal">Gif</a>
+                                                            data-bs-target="#post-modal">{{ __('owner/feed/posts.gif') }}</a></a>
                                                         <a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                            data-bs-target="#post-modal">Watch Party</a>
+                                                            data-bs-target="#post-modal">{{ __('owner/feed/posts.watch_party') }}</a></a>
                                                         <a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                            data-bs-target="#post-modal">Play with Friend</a>
+                                                            data-bs-target="#post-modal">{{ __('owner/feed/posts.play_with_friends') }}</a></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -75,7 +75,7 @@
                                 <div class="modal-dialog   modal-fullscreen-sm-down">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="post-modalLabel">Crear Post</h5>
+                                            <h5 class="modal-title" id="post-modalLabel">{{ __('owner/feed/posts.create_post') }}</h5>
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
                                                     class="ri-close-fill"></i></button>
                                         </div>
@@ -87,7 +87,7 @@
                                                 </div>
                                                 <form class="post-text ms-3 w-100" action="javascript:void();">
                                                     <input type="text" class="form-control rounded"
-                                                        placeholder="Write something here..." style="border:none;">
+                                                        placeholder="{{ __('owner/feed/posts.write_something') }}" style="border:none;">
                                                 </form>
                                             </div>
                                             <hr>
@@ -138,7 +138,7 @@
                                                     <div class="bg-soft-primary rounded p-2 pointer me-3"><a
                                                             href="#"></a><img
                                                             src="{{ asset('/images/small/14.png') }}" alt="icon"
-                                                            class="img-fluid"> Play with Friends</div>
+                                                            class="img-fluid"> {{ __('owner/feed/posts.play_with_friends') }}</div>
                                                 </li>
                                             </ul>
                                             <hr>
@@ -150,22 +150,22 @@
                                                                 alt="userimg"
                                                                 class="avatar-60 rounded-circle img-fluid">
                                                         </div>
-                                                        <h6>Tu Historia</h6>
+                                                        <h6>{{ __('owner/feed/posts.your_story') }}</h6>
                                                     </div>
                                                     <div class="card-post-toolbar">
                                                         <div class="dropdown">
                                                             <span class="dropdown-toggle" data-bs-toggle="dropdown"
                                                                 aria-haspopup="true" aria-expanded="false"
                                                                 role="button">
-                                                                <span class="btn btn-primary">Friend</span>
+                                                                <span class="btn btn-primary">{{ __('owner/feed/posts.friends') }}</span>
                                                             </span>
                                                             <div class="dropdown-menu m-0 p-0">
                                                                 <a class="dropdown-item p-3" href="#">
                                                                     <div class="d-flex align-items-top">
                                                                         <i class="ri-save-line h4"></i>
                                                                         <div class="data ms-2">
-                                                                            <h6>Public</h6>
-                                                                            <p class="mb-0">Anyone on or off Facebook
+                                                                            <h6>{{ __('owner/feed/posts.public') }}</h6>
+                                                                            <p class="mb-0">{{ __('owner/feed/posts.public_desc') }}
                                                                             </p>
                                                                         </div>
                                                                     </div>
@@ -174,8 +174,8 @@
                                                                     <div class="d-flex align-items-top">
                                                                         <i class="ri-close-circle-line h4"></i>
                                                                         <div class="data ms-2">
-                                                                            <h6>Friends</h6>
-                                                                            <p class="mb-0">Your Friend on facebook
+                                                                            <h6>{{ __('owner/feed/posts.friends') }}</h6>
+                                                                            <p class="mb-0">{{ __('owner/feed/posts.friends_desc') }}
                                                                             </p>
                                                                         </div>
                                                                     </div>
@@ -184,9 +184,8 @@
                                                                     <div class="d-flex align-items-top">
                                                                         <i class="ri-user-unfollow-line h4"></i>
                                                                         <div class="data ms-2">
-                                                                            <h6>Friends except</h6>
-                                                                            <p class="mb-0">Don't show to some
-                                                                                friends</p>
+                                                                            <h6>{{ __('owner/feed/posts.friends_except') }}</h6>
+                                                                            <p class="mb-0">{{ __('owner/feed/posts.friends_except_desc') }}</p>
                                                                         </div>
                                                                     </div>
                                                                 </a>
@@ -194,8 +193,8 @@
                                                                     <div class="d-flex align-items-top">
                                                                         <i class="ri-notification-line h4"></i>
                                                                         <div class="data ms-2">
-                                                                            <h6>Only Me</h6>
-                                                                            <p class="mb-0">Only me</p>
+                                                                            <h6>{{ __('owner/feed/posts.only_me') }}</h6>
+                                                                            <p class="mb-0">{{ __('owner/feed/posts.only_me_desc') }}</p>
                                                                         </div>
                                                                     </div>
                                                                 </a>
@@ -205,7 +204,7 @@
                                                 </div>
                                             </div>
                                             <button type="submit"
-                                                class="btn btn-primary d-block w-100 mt-3">Post</button>
+                                                class="btn btn-primary d-block w-100 mt-3">{{ __('owner/feed/posts.post') }}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -290,11 +289,11 @@
                                     <div class="dropdown-menu dropdown-menu-right"
                                         aria-labelledby="dropdownMenuButton" style="">
                                         <a class="dropdown-item" href="#"><i
-                                                class="ri-eye-fill me-2"></i>View</a>
+                                                class="ri-eye-fill me-2"></i>{{ __('pages/timeline.view') }}</a>
                                         <a class="dropdown-item" href="#"><i
-                                                class="ri-delete-bin-6-fill me-2"></i>Delete</a>
+                                                class="ri-delete-bin-6-fill me-2"></i>{{ __('pages/timeline.delete') }}</a>
                                         <a class="dropdown-item" href="#"><i
-                                                class="ri-pencil-fill me-2"></i>Edit</a>
+                                                class="ri-pencil-fill me-2"></i>{{ __('pages/timeline.edit') }}</a>
                                         <a class="dropdown-item" href="#"><i
                                                 class="ri-printer-fill me-2"></i>Print</a>
                                         <a class="dropdown-item" href="#"><i
@@ -327,7 +326,7 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
                             <div class="header-title">
-                                <h4 class="card-title">Favoritos famosos</h4>
+                                <h4 class="card-title">{{ __('timeline.fav_famous') }}</h4>
                             </div>
                         </div>
                         <div class="card-body">
@@ -341,7 +340,7 @@
                                                     href="/owner/{{ $own_fav->username }}">{{ $own_fav->username }}</a>
                                             </h5>
                                             <p class="mb-0">
-                                                {{ number_format($own_fav->favoritedCount, 0, ',', '.') }} seguidores
+                                                {{ __('timeline.followers', ['count' => number_format($own_fav->favoritedCount, 0, ',', '.')]) }}
                                             </p>
                                         </div>
                                     </li>
@@ -352,7 +351,7 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
                             <div class="header-title">
-                                <h4 class="card-title">Próximo cumpleaños</h4>
+                                <h4 class="card-title">{{ __('timeline.next_birthday') }}</h4>
                             </div>
                         </div>
                         <div class="card-body">
@@ -398,13 +397,15 @@
 
                                                 // Mensaje final
                                                 if ($days == 0) {
-                                                    $message = "Hoy cumple {$age} años";
+                                                    $message = __('timeline.birthday_today', ['age' => $age]);
                                                 } elseif ($days == 1) {
-                                                    $message = "Mañana cumple {$age} años";
+                                                    $message = __('timeline.birthday_tomorrow', ['age' => $age]);
                                                 } else {
-                                                    $message =
-                                                        "Faltan {$days} días para su cumpleaños ({$age} años) " .
-                                                        $ownr_b->birthDate;
+                                                    $message = __('timeline.birthday_days_left', [
+                                                        'days' => $days,
+                                                        'age' => $age,
+                                                        'date' => $ownr_b->birthDate
+                                                    ]);
                                                 }
                                             @endphp
 
@@ -419,7 +420,7 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
                             <div class="header-title">
-                                <h4 class="card-title">Suggested Pages</h4>
+                                <h4 class="card-title">{{ __('timeline.suggested_pages') }}</h4>
                             </div>
                             <div class="card-header-toolbar d-flex align-items-center">
                                 <div class="dropdown">
@@ -457,7 +458,7 @@
                                     <img src="{{ asset('/images/small/img-1.jpg') }}" class="img-fluid rounded"
                                         alt="Responsive image">
                                     <div class="mt-3"><a href="#" class="btn d-block"><i
-                                                class="ri-thumb-up-line me-2"></i> Like Page</a></div>
+                                                class="ri-thumb-up-line me-2"></i> {{ __('pages/timeline.like_page') }}</a></div>
                                 </li>
                                 <li class="">
                                     <div class="d-flex align-items-center mb-3">

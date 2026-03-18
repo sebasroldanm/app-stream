@@ -36,9 +36,8 @@ class AuthCustomerController extends Controller
             return redirect()->intended(route('home'));
         }
 
-        // Si la autenticación falla, redirigir de vuelta con un error
         return back()->withErrors([
-            'email' => 'Las credenciales no coinciden con nuestros registros.',
+            'email' => __('The credentials do not match our records.'),
         ])->withInput();
     }
 

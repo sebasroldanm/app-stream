@@ -11,14 +11,14 @@
         <div class="d-flex justify-content-center mt-2">
             @if ($data_mod->isError)
                 <div class="alert alert-danger" role="alert">
-                    Cambio de username
+                    {{ __('owner/profile.username_change') }}
                 </div>
             @else
-            <button wire:click="updateDataMod" class="btn btn-primary me-2">Actualizar data</button>
+            <button wire:click="updateDataMod" class="btn btn-primary me-2">{{ __('owner/profile.update_data') }}</button>
             @endif
             @if (auth()->guard('customer')->check())
                 <button wire:click="toggleFavorite"
-                    class="btn btn-secondary">{{ $is_fav ? 'ELiminar Favorito' : 'Agregar Favorito' }}</button>
+                    class="btn btn-secondary">{{ $is_fav ? __('owner/profile.remove_favorite') : __('owner/profile.add_favorite') }}</button>
             @endif
         </div>
     </div>
@@ -30,7 +30,7 @@
                 <!-- Profile Information -->
                 <div class="card mb-4">
                     <div class="card-body">
-                        <h5 class="card-title">Profile Information</h5>
+                        <h5 class="card-title">{{ __('owner/information/details.profile_info') }}</h5>
                         <div class="d-flex flex-column align-items-center">
                             <!-- Profile Picture -->
                             <img src="{{ $data_mod->preview ? $data_mod->preview : 'https://placehold.co/150x150?text=Profile+Pic' }}"
@@ -61,13 +61,13 @@
                             </p>
 
                             <div class="alert {{ $status_owner ? 'alert-success' : 'alert-danger' }}" role="alert">
-                                Estado Owner
+                                {{ __('owner/profile.owner_status') }}
                             </div>
                             <div class="alert {{ $status_panel ? 'alert-success' : 'alert-danger' }}" role="alert">
-                                Estado Panel
+                                {{ __('owner/profile.panel_status') }}
                             </div>
                             <div class="alert {{ $status_photos ? 'alert-success' : 'alert-danger' }}" role="alert">
-                                Estado Albums
+                                {{ __('owner/profile.albums_status') }}
                             </div>
                         </div>
                     </div>
@@ -113,7 +113,7 @@
                                         class="img-fluid rounded me-2 mb-2" style="width: 75px;">
                                 @endforeach
                             @else
-                                <h5>No videos</h5>
+                                <h5>{{ __('owner/profile.no_videos') }}</h5>
                             @endif
                         </div>
                     </div>
@@ -163,7 +163,7 @@
                                 </div>
                             @endforeach
                         @else
-                            <h5>No albums</h5>
+                            <h5>{{ __('owner/profile.no_albums') }}</h5>
                         @endif
                         {{-- </div> --}}
                     </div>

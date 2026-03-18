@@ -7,37 +7,37 @@
                     <li class="nav-item">
                         <a class="nav-link {{ $activeTab === 'detail' ? 'active' : '' }}"
                            wire:click="loadComponent('detail')" role="button">
-                            Detalles
+                            {{ __('owner/tabs.detail') }}
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ $activeTab === 'panel' ? 'active' : '' }}"
                            wire:click="loadComponent('panel')" role="button">
-                            Panel (Perfil)
+                            {{ __('owner/tabs.panel') }}
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ $activeTab === 'snapshots' ? 'active' : '' }}"
                            wire:click="loadComponent('snapshots')" role="button">
-                            Instantáneas
+                            {{ __('owner/tabs.snapshots') }}
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ $activeTab === 'similarity' ? 'active' : '' }}"
                            wire:click="loadComponent('similarity')" role="button">
-                            Similitud IA
+                            {{ __('owner/tabs.similarity') }}
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ $activeTab === 'info-custom' ? 'active' : '' }}"
                            wire:click="loadComponent('info-custom')" role="button">
-                            Información personalizada
+                            {{ __('owner/tabs.info-custom') }}
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ $activeTab === 'relations' ? 'active' : '' }}"
                            wire:click="loadComponent('relations')" role="button">
-                            Relacionadas
+                            {{ __('owner/tabs.relations') }}
                         </a>
                     </li>
                 </ul>

@@ -4,7 +4,7 @@
             <img src="{{ asset('/images/page-img/profile-bg3.jpg') }}" class="img-fluid w-100" alt="header-bg">
             <div class="title-on-header">
                 <div class="data-block">
-                    <h2>Explorar</h2>
+                    <h2>{{ __('sidebar.explore') }}</h2>
                 </div>
             </div>
         </div>
@@ -18,7 +18,7 @@
                     <div class="card mb-3">
                         <div class="card-body">
                             <h4 class="card-title">New CO</h4>
-                            <a href="{{ route('explore.new-co') }}" wire:navigate class="btn btn-primary btn-block">Explorar</a>
+                            <a href="{{ route('explore.new-co') }}" wire:navigate class="btn btn-primary btn-block">{{ __('pages/explore.explore') }}</a>
                         </div>
                     </div>
                 </div>
@@ -27,7 +27,7 @@
                     <div class="card mb-3">
                         <div class="card-body">
                             <h4 class="card-title">New Mobile CO</h4>
-                            <a href="{{ route('explore.new-mobile-co') }}" wire:navigate class="btn btn-primary btn-block">Explorar</a>
+                            <a href="{{ route('explore.new-mobile-co') }}" wire:navigate class="btn btn-primary btn-block">{{ __('pages/explore.explore') }}</a>
                         </div>
                     </div>
                 </div>
@@ -36,7 +36,7 @@
                     <div class="card mb-3">
                         <div class="card-body">
                             <h4 class="card-title">Mobile CO</h4>
-                            <a href="{{ route('explore.mobile-co') }}" wire:navigate class="btn btn-primary btn-block">Explorar</a>
+                            <a href="{{ route('explore.mobile-co') }}" wire:navigate class="btn btn-primary btn-block">{{ __('pages/explore.explore') }}</a>
                         </div>
                     </div>
                 </div>

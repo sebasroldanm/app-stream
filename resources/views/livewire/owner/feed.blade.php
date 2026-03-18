@@ -4,7 +4,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <div class="header-title">
-                        <h4 class="card-title">Detalles</h4>
+                        <h4 class="card-title">{{ __('owner/feed/panels.title') }}</h4>
                     </div>
                 </div>
                 <div class="card-body">
@@ -19,20 +19,20 @@
                                             <hr>
                                         @endif
                                         @if ($country !== false)
-                                            <p><i class="las la-home"></i> Vive en {!! $country !!}
+                                            <p><i class="las la-home"></i> {{ __('owner/feed/panels.country') }} {!! $country !!}
                                             </p>
                                         @endif
                                         @if ($languages !== false)
-                                            <p><i class="las la-globe"></i> Mis idiomas {!! $languages !!}</p>
+                                            <p><i class="las la-globe"></i> {{ __('owner/feed/panels.languages') }} {!! $languages !!}</p>
                                         @endif
                                         @if ($gender !== false)
-                                            <p><i class="las la-users"></i> Mi genero {!! $gender !!}</p>
+                                            <p><i class="las la-users"></i> {{ __('owner/feed/panels.gender') }} {!! $gender !!}</p>
                                         @endif
                                         @if ($age !== false)
-                                            <p><i class="las la-gifts"></i> Tengo {{ $age }} años</p>
+                                            <p><i class="las la-gifts"></i> {{ __('owner/feed/panels.age', ['age' => $age]) }}</p>
                                         @endif
                                     @else
-                                        <h5 class="text-center">No disponible :(</h5>
+                                        <h5 class="text-center">{{ __('owner/feed/panels.no_results') }}</h5>
                                     @endif
                                 </div>
                             </div>
@@ -44,13 +44,13 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between">
                         <div class="header-title">
-                            <h4 class="card-title">Fotos @if ($owner->data)
+                            <h4 class="card-title">{{ __('owner/feed/panels.photos') }} @if ($owner->data)
                                     ({{ $owner->data->user->photosCount }})
                                 @endif
                             </h4>
                         </div>
                         <div class="card-header-toolbar d-flex align-items-center">
-                            <p class="m-0"><a href="{{ route('owner.albums', $owner->username) }}">Ver Albums</a></p>
+                            <p class="m-0"><a href="{{ route('owner.albums', $owner->username) }}">{{ __('owner/feed/panels.view_albums') }}</a></p>
                         </div>
                     </div>
                     <div class="card-body">
@@ -69,13 +69,13 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between">
                         <div class="header-title">
-                            <h4 class="card-title">Videos @if ($owner->data)
+                            <h4 class="card-title">{{ __('owner/feed/panels.videos') }} @if ($owner->data)
                                     ({{ $owner->data->user->videosCount }})
                                 @endif
                             </h4>
                         </div>
                         <div class="card-header-toolbar d-flex align-items-center">
-                            <p class="m-0"><a href="{{ route('owner.videos', $owner->username) }}">Ver Videos</a></p>
+                            <p class="m-0"><a href="{{ route('owner.videos', $owner->username) }}">{{ __('owner/feed/panels.view_videos') }}</a></p>
                         </div>
                     </div>
                     <div class="card-body">
@@ -96,7 +96,7 @@
             <div id="post-modal-data" class="card">
                 <div class="card-header d-flex justify-content-between">
                     <div class="header-title">
-                        <h4 class="card-title">Crear Post</h4>
+                        <h4 class="card-title">{{ __('owner/feed/posts.create_post') }}</h4>
                     </div>
                 </div>
                 <div class="card-body">
@@ -107,7 +107,7 @@
                         </div>
                         <form class="post-text ms-3 w-100 " data-bs-toggle="modal" data-bs-target="#post-modal"
                             action="#">
-                            <input type="text" class="form-control rounded" placeholder="Escribe algo aquí..."
+                            <input type="text" class="form-control rounded" placeholder="{{ __('owner/feed/posts.write_something') }}"
                                 style="border:none;">
                         </form>
                     </div>
@@ -115,15 +115,15 @@
                     <ul class=" post-opt-block d-flex list-inline m-0 p-0 flex-wrap">
                         <li class="bg-soft-primary rounded p-2 pointer d-flex align-items-center me-3 mb-md-0 mb-2">
                             <img src="{{ asset('/images/small/07.png') }}" alt="icon" class="img-fluid me-2">
-                            Foto/Video
+                            {{ __('owner/feed/posts.photo_video') }}
                         </li>
                         <li class="bg-soft-primary rounded p-2 pointer d-flex align-items-center me-3 mb-md-0 mb-2">
                             <img src="{{ asset('/images/small/08.png') }}" alt="icon" class="img-fluid me-2">
-                            Mencioa un amigo
+                            {{ __('owner/feed/posts.mention_friend') }}
                         </li>
                         <li class="bg-soft-primary rounded p-2 pointer d-flex align-items-center me-3">
                             <img src="{{ asset('/images/small/09.png') }}" alt="icon" class="img-fluid me-2">
-                            Estado/Actividad
+                            {{ __('owner/feed/posts.status_activity') }}
                         </li>
                         {{-- <li class="bg-soft-primary rounded p-2 pointer text-center">
                             <div class="card-header-toolbar d-flex align-items-center">
@@ -154,7 +154,7 @@
                     <div class="modal-dialog  modal-lg modal-fullscreen-sm-down">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="post-modalLabel">Create Post</h5>
+                                <h5 class="modal-title" id="post-modalLabel">{{ __('owner/feed/posts.create_post') }}</h5>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
                                         class="ri-close-fill"></i></button>
                             </div>
@@ -166,7 +166,7 @@
                                     </div>
                                     <form class="post-text ms-3 w-100" action="#">
                                         <input type="text" class="form-control rounded"
-                                            placeholder="Write something here..." style="border:none;">
+                                            placeholder="{{ __('owner/feed/posts.write_something') }}" style="border:none;">
                                     </form>
                                 </div>
                                 <hr>
@@ -174,51 +174,50 @@
                                     <li class="col-md-6 mb-3">
                                         <div class="bg-soft-primary rounded p-2 pointer me-3">
                                             <a href="#"></a><img src="{{ asset('/images/small/07.png') }}"
-                                                alt="icon" class="img-fluid"> Photo/Video
+                                                alt="icon" class="img-fluid"> {{ __('owner/feed/posts.photo_video') }}
                                         </div>
                                     </li>
                                     <li class="col-md-6 mb-3">
                                         <div class="bg-soft-primary rounded p-2 pointer me-3">
                                             <a href="#"></a><img src="{{ asset('/images/small/08.png') }}"
-                                                alt="icon" class="img-fluid"> Tag Friend
+                                                alt="icon" class="img-fluid"> {{ __('owner/feed/posts.mention_friend') }}
                                         </div>
                                     </li>
                                     <li class="col-md-6 mb-3">
                                         <div class="bg-soft-primary rounded p-2 pointer me-3">
                                             <a href="#"></a><img src="{{ asset('/images/small/09.png') }}"
                                                 alt="icon" class="img-fluid">
-                                            Feeling/Activity
+                                            {{ __('owner/feed/posts.feeling_activity') }}
                                         </div>
                                     </li>
                                     <li class="col-md-6 mb-3">
                                         <div class="bg-soft-primary rounded p-2 pointer me-3">
                                             <a href="#"></a><img src="{{ asset('/images/small/10.png') }}"
-                                                alt="icon" class="img-fluid"> Check in
+                                                alt="icon" class="img-fluid"> {{ __('owner/feed/posts.location') }}
                                         </div>
                                     </li>
                                     <li class="col-md-6 mb-3">
                                         <div class="bg-soft-primary rounded p-2 pointer me-3">
                                             <a href="#"></a><img src="{{ asset('/images/small/11.png') }}"
-                                                alt="icon" class="img-fluid"> Live Video
+                                                alt="icon" class="img-fluid"> {{ __('owner/feed/posts.live_video') }}
                                         </div>
                                     </li>
                                     <li class="col-md-6 mb-3">
                                         <div class="bg-soft-primary rounded p-2 pointer me-3">
                                             <a href="#"></a><img src="{{ asset('/images/small/12.png') }}"
-                                                alt="icon" class="img-fluid"> Gif
+                                                alt="icon" class="img-fluid"> {{ __('owner/feed/posts.gif') }}
                                         </div>
                                     </li>
                                     <li class="col-md-6 mb-3">
                                         <div class="bg-soft-primary rounded p-2 pointer me-3">
                                             <a href="#"></a><img src="{{ asset('/images/small/13.png') }}"
-                                                alt="icon" class="img-fluid"> Watch Party
+                                                alt="icon" class="img-fluid"> {{ __('owner/feed/posts.watch_party') }}
                                         </div>
                                     </li>
                                     <li class="col-md-6 mb-3">
                                         <div class="bg-soft-primary rounded p-2 pointer me-3">
                                             <a href="#"></a><img src="{{ asset('/images/small/14.png') }}"
-                                                alt="icon" class="img-fluid"> Play with
-                                            Friends
+                                                alt="icon" class="img-fluid"> {{ __('owner/feed/posts.play_with_friends') }}
                                         </div>
                                     </li>
                                 </ul>
@@ -230,22 +229,21 @@
                                                 <img src="{{ asset('/images/user/1.jpg') }}" alt="userimg"
                                                     class="avatar-60 rounded-circle img-fluid">
                                             </div>
-                                            <h6>Your Story</h6>
+                                            <h6>{{ __('owner/feed/posts.your_story') }}</h6>
                                         </div>
                                         <div class="card-post-toolbar">
                                             <div class="dropdown">
                                                 <span class="dropdown-toggle" data-bs-toggle="dropdown"
                                                     aria-haspopup="true" aria-expanded="false" role="button">
-                                                    <span class="btn btn-primary">Friend</span>
+                                                    <span class="btn btn-primary">{{ __('owner/feed/posts.friends') }}</span>
                                                 </span>
                                                 <div class="dropdown-menu m-0 p-0">
                                                     <a class="dropdown-item p-3" href="#">
                                                         <div class="d-flex align-items-top">
                                                             <i class="ri-save-line h4"></i>
                                                             <div class="data ms-2">
-                                                                <h6>Public</h6>
-                                                                <p class="mb-0">Anyone on or
-                                                                    off Facebook</p>
+                                                                <h6>{{ __('owner/feed/posts.public') }}</h6>
+                                                                <p class="mb-0">{{ __('owner/feed/posts.anyone_on_or_off_facebook') }}</p>
                                                             </div>
                                                         </div>
                                                     </a>
@@ -253,9 +251,8 @@
                                                         <div class="d-flex align-items-top">
                                                             <i class="ri-close-circle-line h4"></i>
                                                             <div class="data ms-2">
-                                                                <h6>Friends</h6>
-                                                                <p class="mb-0">Your Friend
-                                                                    on facebook</p>
+                                                                <h6>{{ __('owner/feed/posts.friends') }}</h6>
+                                                                <p class="mb-0">{{ __('owner/feed/posts.your_friend_on_facebook') }}</p>
                                                             </div>
                                                         </div>
                                                     </a>
@@ -263,9 +260,8 @@
                                                         <div class="d-flex align-items-top">
                                                             <i class="ri-user-unfollow-line h4"></i>
                                                             <div class="data ms-2">
-                                                                <h6>Friends except</h6>
-                                                                <p class="mb-0">Don't show to
-                                                                    some friends</p>
+                                                                <h6>{{ __('owner/feed/posts.friends_except') }}</h6>
+                                                                <p class="mb-0">{{ __('owner/feed/posts.dont_show_to_some_friends') }}</p>
                                                             </div>
                                                         </div>
                                                     </a>
@@ -273,8 +269,8 @@
                                                         <div class="d-flex align-items-top">
                                                             <i class="ri-notification-line h4"></i>
                                                             <div class="data ms-2">
-                                                                <h6>Only Me</h6>
-                                                                <p class="mb-0">Only me</p>
+                                                                <h6>{{ __('owner/feed/posts.only_me') }}</h6>
+                                                                <p class="mb-0">{{ __('owner/feed/posts.only_me') }}</p>
                                                             </div>
                                                         </div>
                                                     </a>
@@ -283,7 +279,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary d-block w-100 mt-3">Post</button>
+                                <button type="submit" class="btn btn-primary d-block w-100 mt-3">{{ __('owner/feed/posts.post') }}</button>
                             </div>
                         </div>
                     </div>
@@ -300,13 +296,13 @@
                 <div x-intersect="$wire.loadMore()" class="col-sm-12 text-center p-4">
                     <div wire:loading wire:target="loadMore">
                         <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Cargando mas publicaciones...</span>
+                            <span class="visually-hidden">{{ __('owner/feed/posts.loading_more_posts') }}</span>
                         </div>
                     </div>
                 </div>
             @else
                 <div class="col-sm-12 text-center p-4">
-                    <p>Eso es todo, no hay mas publicaciones</p>
+                    <p>{{ __('owner/feed/posts.no_more_posts') }}</p>
                 </div>
             @endif
         </div>

@@ -16,10 +16,10 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Acciones</h5>
+                            <h5 class="card-title">{{ __('owner/actions.actions') }}</h5>
                             <div class="d-grid gap-3 d-grid-template-1fr-19">
-                                <button class="btn btn-primary" wire:click="updateOnline" wire:loading.attr="disabled">Actualizar Online</button>
-                                <button class="btn btn-primary" wire:click="updateAll" wire:loading.attr="disabled">Actualización completa</button>
+                                <button class="btn btn-primary" wire:click="updateOnline" wire:loading.attr="disabled">{{ __('owner/actions.update_online') }}</button>
+                                <button class="btn btn-primary" wire:click="updateAll" wire:loading.attr="disabled">{{ __('owner/actions.full_update') }}</button>
                             </div>
                         </div>
                     </div>

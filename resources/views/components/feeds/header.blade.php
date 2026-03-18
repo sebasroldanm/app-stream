@@ -21,19 +21,19 @@
                     <p class="ms-1 mb-0 d-inline-block">
                         @switch($feed->type)
                             @case('postAdded')
-                                Nueva publicación
+                                {{ __('components/feed.header.post_added') }}
                             @break
 
                             @case('albumUpdated')
-                                Album actualizado
+                                {{ __('components/feed.header.album_updated') }}
                             @break
 
                             @case('videoAdded')
-                                Nuevo video
+                                {{ __('components/feed.header.video_added') }}
                             @break
 
                             @default
-                                Nuevo estado
+                                {{ __('components/feed.header.new_status') }}
                         @endswitch
                     </p>
                     <p class="mb-0" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -54,9 +54,8 @@
                                 <div class="d-flex align-items-top">
                                     <i class="fas fa-link h4"></i>
                                     <div class="data ms-2">
-                                        <h6>Ver Meta datos</h6>
-                                        <p class="mb-0">Ver metadatos en
-                                            formato Json.</p>
+                                        <h6>{{ __('components/feed.header.view_metadata') }}</h6>
+                                        <p class="mb-0">{{ __('components/feed.header.view_metadata_description') }}</p>
                                     </div>
                                 </div>
                             </a>

@@ -4,28 +4,28 @@
             <ul id="iq-sidebar-toggle" class="iq-menu">
                 <li class="@if (Route::is('home')) active @endif">
                     <a href="{{ route('home') }}"  wire:navigate class=" ">
-                        <i class="las la-users"></i><span>Home</span>
+                        <i class="las la-users"></i><span>{{ __('sidebar.home') }}</span>
                     </a>
                 </li>
                 <li class="@if (Route::is('explore')) active @endif">
                     <a href="{{ route('explore') }}" wire:navigate class=" ">
-                        <i class="las la-search-location"></i><span>Explorar</span>
+                        <i class="las la-search-location"></i><span>{{ __('sidebar.explore') }}</span>
                     </a>
                 </li>
 
                 <li class="@if (Route::is('timeline')) active @endif">
                     <a href="{{ route('timeline') }}"  wire:navigate class=" ">
-                        <i class="las la-globe"></i><span>Timeline</span>
+                        <i class="las la-globe"></i><span>{{ __('sidebar.timeline') }}</span>
                     </a>
                 </li>
                 <li class="@if (Route::is('favorites')) active @endif">
                     <a href="{{ route('favorites') }}" wire:navigate class=" ">
-                        <i class="las la-heart"></i><span>Favorites</span>
+                        <i class="las la-heart"></i><span>{{ __('sidebar.favorites') }}</span>
                     </a>
                 </li>
                 <li class="@if (Route::is('actions')) active @endif">
                     <a href="{{ route('actions') }}" wire:navigate class=" ">
-                        <i class="las la-cog"></i><span>Actions</span>
+                        <i class="las la-cog"></i><span>{{ __('sidebar.actions') }}</span>
                     </a>
                 </li>
                 {{-- <li class=" ">
