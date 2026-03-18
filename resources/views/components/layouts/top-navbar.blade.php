@@ -12,6 +12,11 @@
                     </div>
                 </div>
             </div>
+            <div class="badge_online">
+                <div class="d-flex justify-content-between">
+                    <span class="badge bg-success">{{ __('navbar.online_mobile', ['count' => $online_app]) }}</span>
+                </div>
+            </div>
             <div class="iq-search-bar device-search">
                 <form action="#" class="searchbox">
                     <a class="search-link" href="#"><i class="ri-search-line"></i></a>
@@ -29,7 +34,7 @@
                 <ul class="navbar-nav  ms-auto navbar-list">
                     <li class="nav-item d-flex align-items-center">
                         <h4>
-                            <span class="badge bg-success">{{ $online_app }} {{ __('navbar.online') }}</span>
+                            <span class="badge bg-success">{{ __('navbar.online', ['count' => $online_app]) }}</span>
                         </h4>
                     </li>
                     <li class="nav-item">    

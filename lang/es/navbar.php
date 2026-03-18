@@ -2,7 +2,8 @@
 
 return [
     'search_placeholder' => 'Buscar aquí...',
-    'online' => 'en línea',
+    'online' => ':count en línea',
+    'online_mobile' => ':count',
     'friend_requests' => 'Solicitudes de amistad',
     'confirm' => 'Confirmar',
     'delete_request' => 'Eliminar solicitud',

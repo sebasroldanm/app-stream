@@ -26,7 +26,7 @@
                 <div class="col-3">
                     <h6>{{ __('owner/information/details.gender') }}</h6>
                 </div>
-                <div class="col-9">{{ __('owner/information/details.gender_' . $owner->data->user->user->gender) }}</div>
+                <div class="col-9">{{ __('owner/information/details.genders.' . $owner->data->user->user->gender) }}</div>
             @endif
 
             @if ($country)
@@ -56,22 +56,22 @@
             <div class="col-3">
                 <h6>{{ __('owner/information/details.body_type') }}</h6>
             </div>
-            <div class="col-9">{{ __('owner/information/details.body_type_' . $owner->data->user->user->bodyType) }}</div>
+            <div class="col-9">{{ __('owner/information/details.body_types.' . $owner->data->user->user->bodyType) }}</div>
 
             <div class="col-3">
                 <h6>{{ __('owner/information/details.eye_color') }}</h6>
             </div>
-            <div class="col-9">{{ __('owner/information/details.eye_color_' . $owner->data->user->user->eyeColor) }}</div>
+            <div class="col-9">{{ __('owner/information/details.eye_colors.' . $owner->data->user->user->eyeColor) }}</div>
 
             <div class="col-3">
                 <h6>{{ __('owner/information/details.hair_color') }}</h6>
             </div>
-            <div class="col-9">{{ __('owner/information/details.hair_color_' . $owner->data->user->user->hairColor) }}</div>
+            <div class="col-9">{{ __('owner/information/details.hair_colors.' . $owner->data->user->user->hairColor) }}</div>
 
             <div class="col-3">
                 <h6>{{ __('owner/information/details.ethnicity') }}</h6>
             </div>
-            <div class="col-9">{{ __('owner/information/details.ethnicity_' . $owner->data->user->user->ethnicity) }}</div>
+            <div class="col-9">{{ __('owner/information/details.ethnicities.' . $owner->data->user->user->ethnicity) }}</div>
         </div>
         {{-- Personal --}}
 
@@ -99,7 +99,7 @@
                             'position'  => number_format($owner->data->user->modelTopPosition->position, 0, ',', '.'),
                             'icon'      => $owner->getGenderIcon(),
                             'points'    => number_format($owner->data->user->modelTopPosition->points, 0, ',', '.'),
-                            'continent' => __('owner/information/details.region_' . $owner->getContinent()),
+                            'continent' => __('owner/information/details.regions' . $owner->getContinent()),
                         ]) !!}
                     </span>
                 </div>
