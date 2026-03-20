@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthCustomerController;
+use App\Http\Controllers\TelegramController;
 use App\Http\Controllers\UtilController;
 use App\Livewire\About;
 use App\Livewire\Actions;
@@ -50,6 +51,8 @@ Route::middleware(['auth:customer'])->group(function () {
 
     Route::get('/metadata/{model}/{id}', [UtilController::class, 'viewMetadata'])->name('metadata');
 });
+
+Route::get('/media-proxy/{fileId}', [TelegramController::class, 'proxy'])->name('telegram.proxy');
 
 Route::get('/search', [AuthCustomerController::class, 'search'])->name('searchGlobal');
 Route::get('/dashboard', function () {
