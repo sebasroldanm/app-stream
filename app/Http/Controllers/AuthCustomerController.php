@@ -12,7 +12,8 @@ class AuthCustomerController extends Controller
 {
     use SyncData;
 
-    public function index() {
+    public function index()
+    {
         return view('login');
     }
 
@@ -47,9 +48,9 @@ class AuthCustomerController extends Controller
         return redirect()->route('login');
     }
 
-    public function test()
+    public function test(Request $request)
     {
-        dd($this->syncFeedByOwnerId(191226603));
+        
     }
 
     public function search(Request $request)
@@ -63,7 +64,7 @@ class AuthCustomerController extends Controller
         $keyword = $request->q;
 
         $response = $this->searchGlobal($keyword);
-        
+
         return response()->json($response);
     }
 }
