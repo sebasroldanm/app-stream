@@ -250,7 +250,7 @@
                         class="tab-pane fade @if ($showFeed) show active @endif" id="feed"
                         role="tabpanel">
                         @if ($showFeed)
-                            <livewire:owner.feed :owner="$owner" lazy />
+                            <livewire:owner.feed :owner="$owner" />
                         @endif
                     </div>
                     <div wire:loading.remove

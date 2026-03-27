@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-lg-8 row m-0 p-0">
                     <div class="col-sm-12">
-                        <div id="post-modal-data" class="card card-block card-stretch card-height">
+                        {{-- <div id="post-modal-data" class="card card-block card-stretch card-height">
                             <div class="card-header d-flex justify-content-between">
                                 <div class="header-title">
                                     <h4 class="card-title">{{ __('owner/feed/posts.create_post') }}</h4>
@@ -209,7 +209,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
 
                     @foreach ($feeds as $feed)

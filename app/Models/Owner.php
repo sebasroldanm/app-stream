@@ -58,6 +58,11 @@ class Owner extends Model
         return $this->hasMany(OwnerRelation::class, 'owner_id');
     }
 
+    public function posts()
+    {
+        return $this->hasMany(Post::class, 'fk_owners_id');
+    }
+
     public function relatedOwners()
     {
         // This is a bit complex in pure Eloquent for "Many Groups -> Many Owners", 
