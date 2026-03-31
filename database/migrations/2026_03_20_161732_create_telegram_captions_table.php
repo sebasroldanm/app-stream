@@ -15,7 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('fk_telegram_messages_id')->constrained('telegram_messages')->onDelete('cascade');
             $table->text('caption');
-            $table->enum('type', ['text', 'hashtag', 'url', 'mention', 'bot_command'])->default('text');
+            $table->string('type');
+            $table->integer('position');
+            $table->integer('offset');
+            $table->integer('length');
             $table->timestamps();
             $table->softDeletes();
         });

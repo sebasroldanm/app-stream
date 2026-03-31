@@ -22,6 +22,8 @@ use App\Traits\SyncData;
 Route::get('/login', [AuthCustomerController::class, 'index'])->name('login');
 Route::post('/login', [AuthCustomerController::class, 'login'])->name('customer.login.submit');
 Route::get('/logout', [AuthCustomerController::class, 'logout'])->name('customer.logout');
+Route::get('/signup', [AuthCustomerController::class, 'signup'])->name('customer.signup');
+Route::post('/signup', [AuthCustomerController::class, 'register'])->name('customer.signup.submit');
 
 Route::get('/test', [AuthCustomerController::class, 'test']);
 
