@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->string('username')->nullable();
             $table->string('type');
+            $table->timestamp('send_at');
             $table->timestamps();
             $table->softDeletes();
         });

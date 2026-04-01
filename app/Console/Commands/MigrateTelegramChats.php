@@ -8,20 +8,10 @@ use Telegram\Bot\Laravel\Facades\Telegram;
 
 class MigrateTelegramChats extends Command
 {
-    /**
-     * El nombre y la firma del comando. 
-     * Eliminamos los parámetros obligatorios de la firma.
-     */
     protected $signature = 'app:migrate-telegram-chats';
 
-    /**
-     * Descripción del comando.
-     */
     protected $description = 'Migrate a Telegram chat to the database via interactive text input';
 
-    /**
-     * Execute the console command.
-     */
     public function handle()
     {
         try {

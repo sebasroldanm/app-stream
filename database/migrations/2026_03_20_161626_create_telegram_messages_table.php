@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('fk_telegram_chats_id')->constrained('telegram_chats')->onDelete('cascade');
             $table->bigInteger('message_id');
+            $table->bigInteger('id_message_parent')->nullable();
             $table->text('text')->nullable();
+            $table->timestamp('send_at');
             $table->timestamps();
             $table->softDeletes();
         });

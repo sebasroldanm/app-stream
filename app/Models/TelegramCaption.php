@@ -10,12 +10,13 @@ class TelegramCaption extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'telegram_captions';
-
     protected $fillable = [
         'fk_telegram_messages_id',
         'caption',
-        'type'
+        'type',
+        'position',
+        'offset',
+        'length'
     ];
 
     public function message(): BelongsTo
