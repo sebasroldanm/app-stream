@@ -44,7 +44,13 @@ class MigrateTelegramMessages extends Command
             return;
         }
 
-        $errors = [];
+        $rows = [];
+
+        $bar = $this->output->createProgressBar($end - $init + 1);
+        $bar->setFormat('debug'); 
+        $bar->setFormatDefinition('custom', ' %current%/%max% [%bar%] %percent:3s%% -- ETA: %estimated:-6s% -- Mem: %memory:6s%');
+        $bar->setFormat('custom');
+        $bar->start();
 
         for ($i = $init; $i <= $end; $i++) {
             try {
@@ -67,6 +73,8 @@ class MigrateTelegramMessages extends Command
 
                 if ($content) {
                     $parsed = $this->parseEntities($content, $entities);
+                } elseif ($message->has('text')) {
+                    $parsed = $this->parseEntities($message->getText(), $message->getEntities());
                 } else {
                     $parsed = [];
                 }
@@ -94,7 +102,7 @@ class MigrateTelegramMessages extends Command
                     }
 
                     // Delete those that no longer exist
-                    \App\Models\TelegramCaption::where('fk_telegram_messages_id', $telegramMessage->id)
+                    TelegramCaption::where('fk_telegram_messages_id', $telegramMessage->id)
                         ->whereNotIn('position', $positions)
                         ->delete();
                 });
@@ -157,8 +165,20 @@ class MigrateTelegramMessages extends Command
                     }
                 }
             } catch (\Exception $e) {
-                $errors[$i] = $e->getMessage();
+                $rows[] = [$i, $e->getMessage()];
+            } finally {
+                $bar->advance();
             }
+        }
+
+        $bar->finish();
+        $this->newLine(2);
+
+        if (count($rows) > 0) {
+            $this->error('Se encontraron los siguientes problemas:');
+            $this->table(['ID Mensaje', 'Error / Estado'], $rows);
+        } else {
+            $this->info('¡Migración completada con éxito absoluto! 0 errores.');
         }
     }
 
