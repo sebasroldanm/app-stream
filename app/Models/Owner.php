@@ -9,6 +9,52 @@ use Illuminate\Database\Eloquent\Model;
 class Owner extends Model
 {
     use HasFactory, OwnerProp;
+    
+    protected $fillable = [
+        'name',
+        'username',
+        'previousUsername',
+        'lastUsername',
+        'avatar',
+        'preview',
+        'gender',
+        'country',
+        'isMobile',
+        'statusChangedAt',
+        'isLive',
+        'isOnline',
+        'isError',
+        'isDelete',
+        'isInfoCustom',
+        'isMediaCustom',
+        'data',
+        'bodyType',
+        'eyeColor',
+        'age',
+        'birthDate',
+        'favoritedCount',
+        'offlineStatusUpdatedAt',
+        'notFound',
+        'lastSync',
+    ];
+
+    protected $casts = [
+        'isMobile' => 'boolean',
+        'isLive' => 'boolean',
+        'isOnline' => 'boolean',
+        'isError' => 'boolean',
+        'isDelete' => 'boolean',
+        'isInfoCustom' => 'boolean',
+        'isMediaCustom' => 'boolean',
+        'notFound' => 'boolean',
+        'data' => 'object',
+        'statusChangedAt' => 'datetime',
+        'offlineStatusUpdatedAt' => 'datetime',
+        'lastSync' => 'datetime',
+        'birthDate' => 'date',
+        'favoritedCount' => 'integer',
+        'age' => 'integer',
+    ];
 
     public function intro()
     {
