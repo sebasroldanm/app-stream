@@ -236,7 +236,7 @@
                     <li class="nav-item dropdown">
                         <a href="#" class="   d-flex align-items-center dropdown-toggle" id="drop-down-arrow"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img src="{{ URL::to("/") . auth()->guard('customer')->user()->avatar }}" class="img-fluid rounded-circle me-3"
+                            <img src="https://ui-avatars.com/api/?name={{ auth()->guard('customer')->user()->username }}&background=fa377b&color=fff" class="img-fluid rounded-circle me-3"
                                 alt="user">
                             <div class="caption">
                                 <h6 class="mb-0 line-height">{{ auth()->guard('customer')->user()->name }}</h6>

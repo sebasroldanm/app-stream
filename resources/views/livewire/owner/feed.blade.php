@@ -102,8 +102,8 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="user-img">
-                            <img src="{{ URL::to('/') . auth()->guard('customer')->user()->avatar }}" alt="userimg"
-                                class="avatar-60 rounded-circle">
+                            <img src="https://ui-avatars.com/api/?name={{ auth()->guard('customer')->user()->username }}&background=fa377b&color=fff"
+                                alt="userimg" class="avatar-60 rounded-circle">
                         </div>
                         <form class="post-text ms-3 w-100 " data-bs-toggle="modal" data-bs-target="#post-modal"
                             action="#">
