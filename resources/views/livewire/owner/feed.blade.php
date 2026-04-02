@@ -286,13 +286,17 @@
                 </div>
             </div>
 
-            @foreach ($feeds as $feed)
-                <div wire:key="feed-{{ $feed->id }}">
-                    @include('components.feed', ['feed' => $feed, 'tagLive' => false])
+            @foreach ($items as $item)
+                <div wire:key="{{ $item->type }}-{{ $item->data->id }}">
+                    @if ($item->type === 'feed')
+                        @include('components.feed', ['feed' => $item->data, 'tagLive' => false])
+                    @else
+                        @include('components.post-feed', ['post' => $item->data])
+                    @endif
                 </div>
             @endforeach
             
-            @if ($feeds->count() < $totalFeeds)
+            @if ($items->count() < $totalItems)
                 <div x-intersect="$wire.loadMore()" class="col-sm-12 text-center p-4">
                     <div wire:loading wire:target="loadMore">
                         <div class="spinner-border text-primary" role="status">
