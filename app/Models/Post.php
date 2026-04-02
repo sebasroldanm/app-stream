@@ -10,7 +10,17 @@ class Post extends Model
 {
     use SoftDeletes;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'fk_telegram_messages_id',
+        'fk_owners_id',
+        'body',
+        'status',
+        'published_at',
+    ];
+
+    protected $casts = [
+        'published_at' => 'datetime',
+    ];
 
     /**
      * Relación con el dueño del post.
