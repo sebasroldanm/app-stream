@@ -18,7 +18,8 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('accessMode')->nullable();
             $table->integer('photosCount')->nullable();
-            $table->integer('likesCount');
+            $table->integer('likes');
+            $table->timestamp('createdAt');
             $table->json('data')->nullable();
             $table->timestamps();
 

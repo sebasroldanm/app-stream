@@ -36,6 +36,7 @@ class Owner extends Model
         'offlineStatusUpdatedAt',
         'notFound',
         'lastSync',
+        'isGeoBanned',
     ];
 
     protected $casts = [
@@ -47,6 +48,7 @@ class Owner extends Model
         'isInfoCustom' => 'boolean',
         'isMediaCustom' => 'boolean',
         'notFound' => 'boolean',
+        'isGeoBanned' => 'boolean',
         'data' => 'object',
         'statusChangedAt' => 'datetime',
         'offlineStatusUpdatedAt' => 'datetime',

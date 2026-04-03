@@ -77,6 +77,7 @@ class OwnerSyncService
                         $owner->statusChangedAt = Carbon::parse($statusRaw)->subHours(5);
                     }
                     $owner->data = $content;
+                    $owner->isGeoBanned = $dataUser['isGeoBanned'];
                     $owner->save();
 
                     return $owner->id;
