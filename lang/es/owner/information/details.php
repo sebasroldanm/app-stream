@@ -90,4 +90,6 @@ return [
     'avatar' => 'Avatar',
     'last_seen' => 'Última vez visto',
     'go_to_site' => 'Ir al sitio',
+    'reported_slowness' => 'Reportado por lentitud',
+    'banned_or_blocked' => 'Baneado o Bloqueado',
 ];

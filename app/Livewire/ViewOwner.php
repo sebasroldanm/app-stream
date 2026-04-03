@@ -20,6 +20,7 @@ class ViewOwner extends Component
 
     public $username;
     public $id_owner;
+    public $isBanned = false;
     public $error_search = false;
 
     public $limitAlbums = 6;
@@ -138,6 +139,8 @@ class ViewOwner extends Component
             $ownerData = isset($owner->data) ? json_decode($owner->data) : null;
         }
 
+        $this->isBanned = $owner->isBanned || $owner->isBlocked || $owner->isGeoBanned || !$owner->isActive || !$owner->isProfileAvailable;
+
         if (is_null($owner)) {
             return view('livewire.404');
         }
@@ -213,6 +216,10 @@ class ViewOwner extends Component
     public function updateDataMod()
     {
         $this->status_owner = $this->syncOwnerByUsername($this->username);
+
+        if ($this->isBanned) {
+            return redirect()->route('owner.feed', ['username' => $this->username]);
+        }
 
         $this->status_panel = $this->syncPanelByOwnerId($this->id_owner);
 

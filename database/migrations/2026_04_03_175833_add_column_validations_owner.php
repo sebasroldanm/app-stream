@@ -12,7 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('owners', function (Blueprint $table) {
+            $table->boolean('isProfileAvailable')->default(true);
+            $table->boolean('isBlocked')->default(false);
+            $table->boolean('isBanned')->default(false);
             $table->boolean('isGeoBanned')->default(false);
+            $table->boolean('isActive')->default(true);
         });
     }
 
@@ -22,7 +26,11 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('owners', function (Blueprint $table) {
+            $table->dropColumn('isProfileAvailable');
+            $table->dropColumn('isBlocked');
+            $table->dropColumn('isBanned');
             $table->dropColumn('isGeoBanned');
+            $table->dropColumn('isActive');
         });
     }
 };

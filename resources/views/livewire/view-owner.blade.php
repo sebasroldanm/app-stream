@@ -20,6 +20,15 @@
                                 @endif
 
                                 <ul class="header-nav list-inline d-flex flex-wrap justify-end p-0 m-0">
+                                    @if ($isBanned)
+                                        <li>
+                                            <a href="javascript:void(0);" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" data-bs-original-title="{{ __('owner/information/details.banned_or_blocked') }}"
+                                                class="username_reported">
+                                                <i class="las la-ban"></i>
+                                            </a>
+                                        </li>
+                                    @endif
                                     @if ($error_search)
                                         <li>
                                             <a href="javascript:void(0);" data-bs-toggle="tooltip"

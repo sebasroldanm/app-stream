@@ -37,6 +37,10 @@ class Owner extends Model
         'notFound',
         'lastSync',
         'isGeoBanned',
+        'isProfileAvailable',
+        'isBanned',
+        'isActive',
+        'isBlocked',
     ];
 
     protected $casts = [
@@ -49,6 +53,10 @@ class Owner extends Model
         'isMediaCustom' => 'boolean',
         'notFound' => 'boolean',
         'isGeoBanned' => 'boolean',
+        'isProfileAvailable' => 'boolean',
+        'isBanned' => 'boolean',
+        'isActive' => 'boolean',
+        'isBlocked' => 'boolean',
         'data' => 'object',
         'statusChangedAt' => 'datetime',
         'offlineStatusUpdatedAt' => 'datetime',
