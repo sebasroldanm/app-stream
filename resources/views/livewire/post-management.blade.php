@@ -98,14 +98,15 @@
                                                         @if ($message->video)
                                                             @php
                                                                 $url = telegram_media_url($message->video->file_id);
+                                                                $max_size = 20 * 1024 * 1024;
                                                             @endphp
-                                                            @if ($url)
-                                                                <video width="320" height="240" controls muted wire:key="vid-{{ $message->id }}">
+                                                            @if ($url && $message->video->file_size < $max_size)
+                                                                <video width="320" height="240" controls muted wire:key="vid-{{ $message->id }}" data-id="{{ $message->video->id }}">
                                                                     <source src="{{ $url }}" type="video/mp4">
                                                                     Tu navegador no soporta videos.
                                                                 </video>
                                                             @else
-                                                                <p>Video no disponible</p>
+                                                                <p>Video no disponible {{ number_format($message->video->file_size / 1024 / 1024, 2, ',', '.') }} MB</p>
                                                             @endif
                                                         @endif
                                                         @if ($message->captions)
