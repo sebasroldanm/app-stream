@@ -163,6 +163,10 @@ class Owner extends Model
         return $this->iconGender($this->getGender());
     }
 
+    /**
+     * Get the continent
+     * @return string|null
+     */
     public function getContinent()
     {
         if (!isset($this->data->user->modelTopPosition)) {
@@ -170,4 +174,175 @@ class Owner extends Model
         }
         return $this->data->user->modelTopPosition->continent;
     }
+
+    /**
+     * Get the hair color
+     * @return string|null
+     */
+    public function getHairColor()
+    {
+        if (!isset($this->data->user->user->hairColor)) {
+            return '';
+        }
+        return $this->data->user->user->hairColor;
+    }
+
+    /**
+     * Get the eye color
+     * @return string|null
+     */
+    public function getEyeColor()
+    {
+        if (!isset($this->data->user->user->eyeColor)) {
+            return '';
+        }
+        return $this->data->user->user->eyeColor;
+    }
+
+    /**
+     * Get the body type
+     * @return string|null
+     */
+    public function getBodyType()
+    {
+        if (!isset($this->data->user->user->bodyType)) {
+            return '';
+        }
+        return $this->data->user->user->bodyType;
+    }
+
+    /**
+     * Get the ethnicity
+     * @return string|null
+     */
+    public function getEthnicity()
+    {
+        if (!isset($this->data->user->user->ethnicity)) {
+            return '';
+        }
+        return $this->data->user->user->ethnicity;
+    }
+
+    /**
+     * Get the top position
+     * @return string|null
+     */
+    public function getTopPosition()
+    {
+        if (!isset($this->data->user->modelTopPosition)) {
+            return null;
+        }
+
+        return number_format($this->data->user->modelTopPosition->position, 2);
+    }
+
+    /**
+     * Get the top points
+     * @return string|null
+     */
+    public function getTopPoints()
+    {
+        if (!isset($this->data->user->modelTopPosition)) {
+            return null;
+        }
+
+        return number_format($this->data->user->modelTopPosition->points, 2);
+    }
+
+    /**
+     * Get the rating private
+     * @return float|bool
+     */
+    public function getRatingPrivate()
+    {
+        if (!isset($this->data->user->user->ratingPrivate)) {
+            return false;
+        }
+
+        return $this->data->user->user->ratingPrivate;
+    }
+
+    /**
+     * Get the interests
+     * @return array
+     */
+    public function getInterests()
+    {
+        if (!isset($this->data->user->user->interests)) {
+            return [];
+        }
+
+        return $this->data->user->user->interests;
+    }
+
+    /**
+     * Get the public activities
+     * @return array
+     */
+    public function getPublicActivities()
+    {
+        if (!isset($this->data->user->user->publicActivities)) {
+            return [];
+        }
+
+        return $this->data->user->user->publicActivities;
+    }
+
+    /**
+     * Get the private activities
+     * @return array
+     */
+    public function getPrivateActivities()
+    {
+        if (!isset($this->data->user->user->privateActivities)) {
+            return [];
+        }
+
+        return $this->data->user->user->privateActivities;
+    }
+
+    /**
+     * Get the preview url thumb small
+     * @return string|null
+     */
+    public function getPreviewUrlThumbSmall()
+    {
+        if (!isset($this->data->user->user->previewUrlThumbSmall)) {
+            return null;
+        }
+        return $this->data->user->user->previewUrlThumbSmall;
+    }
+
+    /**
+     * Get the preview url thumb big
+     * @return string|null
+     */
+    public function getPreviewUrlThumbBig()
+    {
+        if (!isset($this->data->user->user->previewUrlThumbBig)) {
+            return null;
+        }
+        return $this->data->user->user->previewUrlThumbBig;
+    }
+
+    /**
+     * Get the preview url thumb large
+     * @return string|null
+     */
+    public function getAvatarUrl()
+    {
+        if (!isset($this->data->user->user->avatarUrl)) {
+            return null;
+        }
+        return $this->data->user->user->avatarUrl;
+    }
+
+    public function getAvatarUrlThumb()
+    {
+        if (!isset($this->data->user->user->avatarUrlThumb)) {
+            return null;
+        }
+        return $this->data->user->user->avatarUrlThumb;
+    }
+
 }

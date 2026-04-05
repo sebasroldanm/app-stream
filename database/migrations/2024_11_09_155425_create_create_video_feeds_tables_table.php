@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->text('description')->nullable();
             $table->string('cost')->nullable();
-            $table->string('format')->nullable();
+            $table->string('format_trailer')->nullable();
+            $table->string('format_video')->nullable();
             $table->string('accessMode')->nullable();
             $table->integer('duration')->nullable();
             $table->string('trailerUrl')->nullable();

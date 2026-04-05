@@ -8,10 +8,24 @@ use Illuminate\Database\Eloquent\Model;
 class VideoFeed extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
-        'feed_id', 'owner_id', 'createdAt', 'title', 'description', 'cost', 'accessMode', 'format_video',
-        'format_video', 'duration', 'trailerUrl', 'coverUrl', 'microCoverUrl', 'likes', 'coverUrls', 'videoUrl'
+        'feed_id',
+        'owner_id',
+        'createdAt',
+        'title',
+        'description',
+        'cost',
+        'accessMode',
+        'format_trailer',
+        'format_video',
+        'duration',
+        'trailerUrl',
+        'coverUrl',
+        'microCoverUrl',
+        'likes',
+        'coverUrls',
+        'videoUrl'
     ];
 
     public function feed()

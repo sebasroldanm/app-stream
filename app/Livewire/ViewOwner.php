@@ -217,10 +217,6 @@ class ViewOwner extends Component
     {
         $this->status_owner = $this->syncOwnerByUsername($this->username);
 
-        if ($this->isBanned) {
-            return redirect()->route('owner.feed', ['username' => $this->username]);
-        }
-
         $this->status_panel = $this->syncPanelByOwnerId($this->id_owner);
 
         $this->status_photos = $this->syncAlbum($this->id_owner, $this->username);

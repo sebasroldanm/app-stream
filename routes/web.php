@@ -12,6 +12,7 @@ use App\Livewire\Explore\NewCO;
 use App\Livewire\Explore\NewMobileCO;
 use App\Livewire\Favorites;
 use App\Livewire\Home;
+use App\Livewire\PostManagement;
 use App\Livewire\Timeline;
 use App\Livewire\ViewOwner;
 use Illuminate\Support\Facades\Route;
@@ -52,6 +53,8 @@ Route::middleware(['auth:customer'])->group(function () {
     Route::get('/actions', Actions::class)->name('actions');
 
     Route::get('/metadata/{model}/{id}', [UtilController::class, 'viewMetadata'])->name('metadata');
+
+    Route::get('/post-management', PostManagement::class)->name('post-management');
 });
 
 Route::get('/media-proxy/{fileId}', [TelegramController::class, 'proxy'])->name('telegram.proxy');

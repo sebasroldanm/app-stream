@@ -6,10 +6,13 @@ use App\Models\Owner;
 use App\Models\Post;
 use App\Models\TelegramChat;
 use App\Models\TelegramMessage;
+use App\Traits\SyncData;
 use Illuminate\Console\Command;
 
 class AssigPostToOwner extends Command
 {
+    use SyncData;
+
     protected $signature = 'app:assig-post-to-owner';
 
     protected $description = 'Command description';

@@ -287,13 +287,13 @@
             </div>
 
             @foreach ($items as $item)
-                <div wire:key="{{ $item->type }}-{{ $item->data->id }}">
-                    @if ($item->type === 'feed')
-                        @include('components.feed', ['feed' => $item->data, 'tagLive' => false])
-                    @else
-                        @include('components.post-feed', ['post' => $item->data])
-                    @endif
-                </div>
+            <div wire:key="{{ $item->type }}-{{ $item->data->id }}">
+                @if ($item->type === 'feed')
+                    @include('components.feed', ['feed' => $item->data, 'tagLive' => false])
+                @else
+                    @include('components.post-feed', ['post' => $item->data])
+                @endif
+            </div>
             @endforeach
             
             @if ($items->count() < $totalItems)

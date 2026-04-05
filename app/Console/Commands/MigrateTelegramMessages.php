@@ -47,8 +47,10 @@ class MigrateTelegramMessages extends Command
         $rows = [];
 
         $bar = $this->output->createProgressBar($end - $init + 1);
-        $bar->setFormat('debug'); 
-        $bar->setFormatDefinition('custom', ' %current%/%max% [%bar%] %percent:3s%% -- ETA: %estimated:-6s% -- Mem: %memory:6s%');
+        $bar->setFormatDefinition(
+            'custom',
+            '%current%/%max% [%bar%] %percent:3s%% | Transcurrido: %elapsed:6s% | Restante: %remaining:6s% | Mem: %memory:6s%'
+        );
         $bar->setFormat('custom');
         $bar->start();
 
