@@ -2,14 +2,13 @@
 
 namespace App\Console\Commands;
 
-use App\Models\TelegramCaption;
 use App\Models\TelegramChat;
 use App\Models\TelegramMessage;
 use App\Models\TelegramPhoto;
 use App\Models\TelegramVideo;
+use App\Services\TelegramService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
 class MigrateTelegramMessages extends Command
@@ -18,7 +17,7 @@ class MigrateTelegramMessages extends Command
 
     protected $description = 'Migrate a Telegram messages to the database via interactive text input';
 
-    public function handle()
+    public function handle(TelegramService $telegramService)
     {
         $this->comment('Migra mensajes de un chat específico mediante un intervalo definido de IDs (inicio y fin).');
 
@@ -74,40 +73,14 @@ class MigrateTelegramMessages extends Command
                 ]);
 
                 if ($content) {
-                    $parsed = $this->parseEntities($content, $entities);
+                    $parsed = $telegramService->parseEntities($content, $entities);
                 } elseif ($message->has('text')) {
-                    $parsed = $this->parseEntities($message->getText(), $message->getEntities());
+                    $parsed = $telegramService->parseEntities($message->getText(), $message->getEntities());
                 } else {
                     $parsed = [];
                 }
 
-                DB::transaction(function () use ($telegramMessage, $parsed) {
-
-                    $positions = [];
-
-                    foreach ($parsed as $index => $item) {
-
-                        $positions[] = $index;
-
-                        TelegramCaption::updateOrCreate(
-                            [
-                                'fk_telegram_messages_id' => $telegramMessage->id,
-                                'position' => $index,
-                            ],
-                            [
-                                'caption' => $item['content'],
-                                'type' => $item['type'],
-                                'offset' => $item['offset'] ?? null,
-                                'length' => $item['length'] ?? null,
-                            ]
-                        );
-                    }
-
-                    // Delete those that no longer exist
-                    TelegramCaption::where('fk_telegram_messages_id', $telegramMessage->id)
-                        ->whereNotIn('position', $positions)
-                        ->delete();
-                });
+                $telegramService->updateCaptions($telegramMessage, $parsed);
 
                 if ($message->has('photo') || $message->has('video')) {
                     if ($message->has('photo')) {
@@ -185,44 +158,4 @@ class MigrateTelegramMessages extends Command
     }
 
 
-    private function parseEntities($text, $entities)
-    {
-        $result = [];
-        $pointer = 0;
-
-        foreach ($entities as $entity) {
-            $offset = $entity['offset'];
-            $length = $entity['length'];
-            $type = $entity['type'];
-
-            if ($offset > $pointer) {
-                $result[] = [
-                    'type' => 'text',
-                    'content' => mb_substr($text, $pointer, $offset - $pointer),
-                    'offset' => $pointer,
-                    'length' => $offset - $pointer,
-                ];
-            }
-
-            $result[] = [
-                'type' => $type,
-                'content' => mb_substr($text, $offset, $length),
-                'offset' => $offset,
-                'length' => $length,
-            ];
-
-            $pointer = $offset + $length;
-        }
-
-        if ($pointer < mb_strlen($text)) {
-            $result[] = [
-                'type' => 'text',
-                'content' => mb_substr($text, $pointer),
-                'offset' => $pointer,
-                'length' => mb_strlen($text) - $pointer,
-            ];
-        }
-
-        return $result;
-    }
 }

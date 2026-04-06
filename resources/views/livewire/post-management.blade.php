@@ -12,6 +12,16 @@
 
     <div id="content-page" class="content-page">
         <div class="container">
+            @if (session()->has('message'))
+                <div class="alert alert-success">
+                    {{ session('message') }}
+                </div>
+            @endif
+            @if (session()->has('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
             <div class="row">
                 <div class="col-lg-12">
                     <div class="iq-card">
@@ -29,6 +39,8 @@
                                             <th>Tipo</th>
                                             <th>Título</th>
                                             <th>Username</th>
+                                            <th>Total Mensajes</th>
+                                            <th>Último ID mensaje</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -39,6 +51,8 @@
                                                 <td>{{ $chat->type }}</td>
                                                 <td>{{ $chat->title }}</td>
                                                 <td>{{ $chat->username }}</td>
+                                                <td>{{ $chat->messages->count() }}</td>
+                                                <td>{{ $chat->messages->max('message_id') }}</td>
                                                 <td>
                                                     <button wire:click="viewPosts({{ $chat->id }})"
                                                         class="btn btn-primary btn-sm">Ver Posts</button>
@@ -77,7 +91,7 @@
                                                 <th>Parental ID</th>
                                                 <th>Fecha</th>
                                                 <th>Contenido</th>
-                                                <th>Owner</th>
+                                                <th>Acciones</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -116,6 +130,7 @@
                                                         @endif
                                                     </td>
                                                     <td>
+                                                        <div class="d-flex align-items-center">
                                                         @if ($message->post?->owner)
                                                             <span class="badge badge-success">{{ $message->post->owner->username }}</span>
                                                         @else
@@ -150,6 +165,13 @@
                                                                 @endif
                                                             </div>
                                                         @endif
+                                                        </div>
+                                                        <hr>
+                                                        <div class="d-flex justify-content-center">
+                                                            <button 
+                                                                wire:click="editCaption({{ $message->id }})"
+                                                                class="btn btn-secondary btn-sm">Editar</button>
+                                                        </div>
                                                     </td>
                                                     {{-- <td>
                                                         <button wire:click="viewPost({{ $post->id }})"
@@ -177,4 +199,32 @@
             </div>
         </div>
     </div>
+
+    @if ($isModalOpen)
+        <div class="modal fade show" tabindex="-1" role="dialog" style="display: block; background: rgba(0,0,0,0.5); z-index: 1050;">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Editar Caption</h5>
+                        <button type="button" class="close" wire:click="closeModal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="editingCaption">Contenido del Caption</label>
+                            <textarea wire:model="editingCaption" id="editingCaption" class="form-control" rows="6" placeholder="Escribe el nuevo caption..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" wire:click="closeModal">Cerrar</button>
+                        <button type="button" class="btn btn-primary" wire:click="saveCaption" wire:loading.attr="disabled">
+                            <span wire:loading wire:target="saveCaption" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Guardar cambios
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 </div>

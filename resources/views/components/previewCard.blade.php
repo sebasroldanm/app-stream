@@ -35,6 +35,15 @@
                     @else
                         @if ($owner->isOnline)
                             <i class="ri-checkbox-blank-circle-fill online m-1"></i>
+                        @elseif ($owner->isDelete)
+                            <i class="ri-close-circle-fill disable m-1" data-bs-toggle="tooltip"
+                                data-bs-placement="top" data-bs-original-title="{{ __('owner/profile.disabled') }}"></i>
+                        @elseif ($owner->notFound)
+                            <i class="ri-close-circle-fill disable m-1" data-bs-toggle="tooltip"
+                                data-bs-placement="top" data-bs-original-title="{{ __('owner/profile.not_found') }}"></i>
+                        @else
+                            <i class="ri-indeterminate-circle-fill offline m-1" data-bs-toggle="tooltip"
+                                data-bs-placement="top" data-bs-original-title="{{ __('owner/profile.offline') . ' ' . \Carbon\Carbon::parse($owner->statusChangedAt)->diffForHumans() }}"></i>
                         @endif
                     @endif
                 </a>

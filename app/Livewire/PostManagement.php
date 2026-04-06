@@ -6,6 +6,7 @@ use App\Models\Owner;
 use App\Models\Post;
 use App\Models\TelegramChat;
 use App\Models\TelegramMessage;
+use App\Services\TelegramService;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -20,6 +21,10 @@ class PostManagement extends Component
     public $searchResults = [];
     public $selectedOwnerId = [];
     public $selectedOwnerUsername = [];
+    
+    public $editingMessageId;
+    public $editingCaption;
+    public $isModalOpen = false;
 
     public function render()
     {
@@ -101,6 +106,52 @@ class PostManagement extends Component
             unset($this->selectedOwnerUsername[$msgId]);
             unset($this->searchOwner[$msgId]);
             unset($this->searchResults[$msgId]);
+        }
+    }
+
+    public function editCaption($messageId)
+    {
+        $message = TelegramMessage::with('captions')->find($messageId);
+        if (!$message) return;
+
+        $this->editingMessageId = $messageId;
+        // Concatenate all captions parts into a single string for editing
+        $this->editingCaption = $message->captions->sortBy('position')->pluck('caption')->implode('');
+        $this->isModalOpen = true;
+    }
+
+    public function closeModal()
+    {
+        $this->isModalOpen = false;
+        $this->reset(['editingMessageId', 'editingCaption']);
+    }
+
+    public function saveCaption(TelegramService $telegramService)
+    {
+        $message = TelegramMessage::with('chat')->find($this->editingMessageId);
+        if (!$message || !$message->chat) {
+            $this->closeModal();
+            return;
+        }
+
+        try {
+            $response = \Telegram\Bot\Laravel\Facades\Telegram::editMessageCaption([
+                'chat_id' => '@' . $message->chat->username,
+                'message_id' => $message->message_id,
+                'caption' => $this->editingCaption,
+            ]);
+
+            $content = $response->getCaption();
+            $entities = $response->getCaptionEntities() ?? [];
+
+            $parsed = $telegramService->parseEntities($content, $entities);
+            $telegramService->updateCaptions($message, $parsed);
+
+            $this->closeModal();
+            session()->flash('message', 'Caption actualizado correctamente.');
+        } catch (\Exception $e) {
+            // Log error or notify user
+            session()->flash('error', 'Error al actualizar en Telegram: ' . $e->getMessage());
         }
     }
 }

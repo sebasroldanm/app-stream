@@ -59,14 +59,14 @@
                                     @if (isset($owner->data->user->modelTopPosition) && $owner->data->user->modelTopPosition->position !== 0)
                                         <li><a href="javascript:void(0);" data-bs-toggle="tooltip"
                                                 data-bs-placement="top"
-                                                data-bs-original-title="{{ __('owner/information/details.position', ['pos' => $owner->data->user->modelTopPosition->position]) }}">
+                                                data-bs-original-title="{{ __('owner/information/details.position', ['position' => $owner->data->user->modelTopPosition->position]) }}">
                                                 <i class="las la-trophy"></i>
                                             </a></li>
                                     @else
                                         @if (isset($owner->data->usercurrPosition) && $owner->data->usercurrPosition !== 0)
                                             <li><a href="javascript:void(0);" data-bs-toggle="tooltip"
                                                     data-bs-placement="top"
-                                                    data-bs-original-title="{{ __('owner/information/details.position', ['pos' => $owner->data->user->modelTopPosition->position]) }}">
+                                                    data-bs-original-title="{{ __('owner/information/details.position', ['position' => $owner->data->user->modelTopPosition->position]) }}">
                                                     <i class="las la-trophy"></i>
                                                 </a></li>
                                         @endif
@@ -114,7 +114,9 @@
                                                     data-bs-placement="top"
                                                     data-bs-original-title="{{ __('owner/profile.not_found_origin') }}"></i>
                                             @else
-                                                    <i data-bs-original-title="{{ \Carbon\Carbon::parse($owner->statusChangedAt)->diffForHumans() }}"></i>
+                                                <i class="ri-indeterminate-circle-fill offline" data-bs-toggle="tooltip"
+                                                    data-bs-placement="top"
+                                                    data-bs-original-title="{{ \Carbon\Carbon::parse($owner->statusChangedAt)->diffForHumans() }}"></i>
                                             @endif
                                         @endif
                                     </h3>
