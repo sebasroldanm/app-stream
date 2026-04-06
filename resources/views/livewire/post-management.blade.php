@@ -125,9 +125,17 @@
                                                             @endif
                                                         @endif
                                                         @if ($message->captions)
+                                                            <p>
                                                             @foreach ($message->captions as $caption)
-                                                                <p>{{ $caption->caption }}</p>
+                                                                @if($caption->type == 'hashtag')
+                                                                    <span class="fw-bold">{{ $caption->caption }}</span>
+                                                                @elseif ($caption->type == 'url')
+                                                                    <a href="{{ $caption->url }}" target="_blank">{{ $caption->url }}</a>
+                                                                @else
+                                                                    {{ $caption->caption }}
+                                                                @endif
                                                             @endforeach
+                                                            </p>
                                                         @endif
                                                     </td>
                                                     <td>

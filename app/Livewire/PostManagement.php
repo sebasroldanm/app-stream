@@ -37,7 +37,8 @@ class PostManagement extends Component
                 ->where('fk_telegram_chats_id', $this->selectedChat->id)
                 ->when($this->messageSearch, function ($query) {
                     $query->where(function ($q) {
-                        $q->where('text', 'like', '%' . $this->messageSearch . '%')
+                        $q->where('id', $this->messageSearch)
+                        ->orWhere('text', 'like', '%' . $this->messageSearch . '%')
                         ->orWhereHas('captions', function ($q2) {
                             $q2->where('caption', 'like', '%' . $this->messageSearch . '%');
                         });
