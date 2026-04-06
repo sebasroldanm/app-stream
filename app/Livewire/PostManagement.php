@@ -56,9 +56,9 @@ class PostManagement extends Component
         $this->resetPage();
     }
 
-    public function viewPosts($chatId)
+    public function selectChat($chatId)
     {
-        $this->selectedChat = TelegramChat::find($chatId);
+        $this->selectedChat = TelegramChat::with(['messages', 'messages.captions', 'messages.photo', 'messages.video', 'messages.post.owner'])->find($chatId);
         $this->resetPage();
     }
 

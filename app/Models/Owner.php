@@ -155,7 +155,7 @@ class Owner extends Model
 
     public function getGender()
     {
-        return $this->data->user->user->gender;
+        return $this->data?->user?->user?->gender;
     }
 
     public function getGenderIcon()
@@ -169,10 +169,7 @@ class Owner extends Model
      */
     public function getContinent()
     {
-        if (!isset($this->data->user->modelTopPosition)) {
-            return '';
-        }
-        return $this->data->user->modelTopPosition->continent;
+        return $this->data?->user?->modelTopPosition?->continent;
     }
 
     /**
@@ -181,10 +178,7 @@ class Owner extends Model
      */
     public function getHairColor()
     {
-        if (!isset($this->data->user->user->hairColor)) {
-            return '';
-        }
-        return $this->data->user->user->hairColor;
+        return $this->data?->user?->user?->hairColor;
     }
 
     /**
@@ -193,10 +187,7 @@ class Owner extends Model
      */
     public function getEyeColor()
     {
-        if (!isset($this->data->user->user->eyeColor)) {
-            return '';
-        }
-        return $this->data->user->user->eyeColor;
+        return $this->data?->user?->user?->eyeColor;
     }
 
     /**
@@ -205,10 +196,7 @@ class Owner extends Model
      */
     public function getBodyType()
     {
-        if (!isset($this->data->user->user->bodyType)) {
-            return '';
-        }
-        return $this->data->user->user->bodyType;
+        return $this->data?->user?->user?->bodyType;
     }
 
     /**
@@ -217,10 +205,7 @@ class Owner extends Model
      */
     public function getEthnicity()
     {
-        if (!isset($this->data->user->user->ethnicity)) {
-            return '';
-        }
-        return $this->data->user->user->ethnicity;
+        return $this->data?->user?->user?->ethnicity;
     }
 
     /**
@@ -229,11 +214,7 @@ class Owner extends Model
      */
     public function getTopPosition()
     {
-        if (!isset($this->data->user->modelTopPosition)) {
-            return null;
-        }
-
-        return number_format($this->data->user->modelTopPosition->position, 2);
+        return number_format($this->data?->user?->modelTopPosition?->position, 2);
     }
 
     /**
@@ -242,11 +223,7 @@ class Owner extends Model
      */
     public function getTopPoints()
     {
-        if (!isset($this->data->user->modelTopPosition)) {
-            return null;
-        }
-
-        return number_format($this->data->user->modelTopPosition->points, 2);
+        return number_format($this->data?->user?->modelTopPosition?->points, 2);
     }
 
     /**
@@ -255,11 +232,7 @@ class Owner extends Model
      */
     public function getRatingPrivate()
     {
-        if (!isset($this->data->user->user->ratingPrivate)) {
-            return false;
-        }
-
-        return $this->data->user->user->ratingPrivate;
+        return $this->data?->user?->user?->ratingPrivate ?? false;
     }
 
     /**
@@ -268,11 +241,7 @@ class Owner extends Model
      */
     public function getInterests()
     {
-        if (!isset($this->data->user->user->interests)) {
-            return [];
-        }
-
-        return $this->data->user->user->interests;
+        return $this->data?->user?->user?->interests ?? [];
     }
 
     /**
@@ -281,11 +250,7 @@ class Owner extends Model
      */
     public function getPublicActivities()
     {
-        if (!isset($this->data->user->user->publicActivities)) {
-            return [];
-        }
-
-        return $this->data->user->user->publicActivities;
+        return $this->data?->user?->user?->publicActivities ?? [];
     }
 
     /**
@@ -294,11 +259,7 @@ class Owner extends Model
      */
     public function getPrivateActivities()
     {
-        if (!isset($this->data->user->user->privateActivities)) {
-            return [];
-        }
-
-        return $this->data->user->user->privateActivities;
+        return $this->data?->user?->user?->privateActivities ?? [];
     }
 
     /**
@@ -307,10 +268,7 @@ class Owner extends Model
      */
     public function getPreviewUrlThumbSmall()
     {
-        if (!isset($this->data->user->user->previewUrlThumbSmall)) {
-            return null;
-        }
-        return $this->data->user->user->previewUrlThumbSmall;
+        return $this->data?->user?->user?->previewUrlThumbSmall;
     }
 
     /**
@@ -319,10 +277,7 @@ class Owner extends Model
      */
     public function getPreviewUrlThumbBig()
     {
-        if (!isset($this->data->user->user->previewUrlThumbBig)) {
-            return null;
-        }
-        return $this->data->user->user->previewUrlThumbBig;
+        return $this->data?->user?->user?->previewUrlThumbBig;
     }
 
     /**
@@ -331,18 +286,12 @@ class Owner extends Model
      */
     public function getAvatarUrl()
     {
-        if (!isset($this->data->user->user->avatarUrl)) {
-            return null;
-        }
-        return $this->data->user->user->avatarUrl;
+        return $this->data?->user?->user?->avatarUrl;
     }
 
     public function getAvatarUrlThumb()
     {
-        if (!isset($this->data->user->user->avatarUrlThumb)) {
-            return null;
-        }
-        return $this->data->user->user->avatarUrlThumb;
+        return $this->data?->user?->user?->avatarUrlThumb;
     }
 
 }

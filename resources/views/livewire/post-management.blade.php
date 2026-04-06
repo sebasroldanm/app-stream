@@ -54,7 +54,7 @@
                                                 <td>{{ $chat->messages->count() }}</td>
                                                 <td>{{ $chat->messages->max('message_id') }}</td>
                                                 <td>
-                                                    <button wire:click="viewPosts({{ $chat->id }})"
+                                                    <button wire:click="selectChat({{ $chat->id }})"
                                                         class="btn btn-primary btn-sm">Ver Posts</button>
                                                 </td>
                                             </tr>
@@ -121,6 +121,7 @@
                                                                 </video>
                                                             @else
                                                                 <p>Video no disponible {{ number_format($message->video->file_size / 1024 / 1024, 2, ',', '.') }} MB</p>
+                                                                <a class="btn btn-primary btn-sm" href="https://t.me/{{ $message->chat->username }}/{{ $message->message_id }}?single" target="_blank">Ver video <i class="fab fa-telegram"></i></a>
                                                             @endif
                                                         @endif
                                                         @if ($message->captions)
