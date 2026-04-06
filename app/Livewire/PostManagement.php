@@ -9,6 +9,7 @@ use App\Models\TelegramMessage;
 use App\Services\TelegramService;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class PostManagement extends Component
 {
@@ -35,7 +36,12 @@ class PostManagement extends Component
             $messages = TelegramMessage::with(['captions', 'photo', 'video', 'post.owner'])
                 ->where('fk_telegram_chats_id', $this->selectedChat->id)
                 ->when($this->messageSearch, function ($query) {
-                    $query->where('text', 'like', '%' . $this->messageSearch . '%');
+                    $query->where(function ($q) {
+                        $q->where('text', 'like', '%' . $this->messageSearch . '%')
+                        ->orWhereHas('captions', function ($q2) {
+                            $q2->where('caption', 'like', '%' . $this->messageSearch . '%');
+                        });
+                    });
                 })
                 ->paginate(10);
         }
@@ -135,17 +141,29 @@ class PostManagement extends Component
         }
 
         try {
-            $response = \Telegram\Bot\Laravel\Facades\Telegram::editMessageCaption([
-                'chat_id' => '@' . $message->chat->username,
-                'message_id' => $message->message_id,
-                'caption' => $this->editingCaption,
-            ]);
+            if (!is_null($message->text)) {
+                $response = Telegram::editMessageText([
+                    'chat_id' => '@' . $message->chat->username,
+                    'message_id' => $message->message_id,
+                    'text' => $this->editingCaption,
+                ]);
+            } else {
+                $response = Telegram::editMessageCaption([
+                    'chat_id' => '@' . $message->chat->username,
+                    'message_id' => $message->message_id,
+                    'caption' => $this->editingCaption,
+                ]);
+            }
 
-            $content = $response->getCaption();
-            $entities = $response->getCaptionEntities() ?? [];
+            $content = $response->getCaption() ?? $response->getText();
+            $entities = $response->getCaptionEntities() ?? $response->getEntities();
 
             $parsed = $telegramService->parseEntities($content, $entities);
             $telegramService->updateCaptions($message, $parsed);
+
+            $message->update([
+                'text' => $response->getText()
+            ]);
 
             $this->closeModal();
             session()->flash('message', 'Caption actualizado correctamente.');

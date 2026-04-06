@@ -87,8 +87,8 @@
                                     <table class="table table-striped table-bordered">
                                         <thead>
                                             <tr>
-                                                <th>ID</th>
-                                                <th>Parental ID</th>
+                                                <th>ID Mensaje</th>
+                                                <th>ID Mensaje Padre</th>
                                                 <th>Fecha</th>
                                                 <th>Contenido</th>
                                                 <th>Acciones</th>
@@ -97,7 +97,7 @@
                                         <tbody>
                                             @foreach ($messages as $message)
                                                 <tr wire:key="msg-{{ $message->id }}">
-                                                    <td>{{ $message->message_id }}</td>
+                                                    <td>{{ $message->id }}</td>
                                                     <td>{{ $message->id_message_parent }}</td>
                                                     <td>{{ $message->send_at }}</td>
                                                     <td>
@@ -132,7 +132,7 @@
                                                     <td>
                                                         <div class="d-flex align-items-center">
                                                         @if ($message->post?->owner)
-                                                            <span class="badge badge-success">{{ $message->post->owner->username }}</span>
+                                                            <span class="badge bg-success">{{ $message->post->owner->username }}</span>
                                                         @else
                                                             <div class="position-relative">
                                                                 @if (isset($selectedOwnerUsername[$message->id]))
