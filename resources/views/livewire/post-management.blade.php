@@ -71,7 +71,7 @@
                         <div class="iq-card">
                             <div class="iq-card-header d-flex justify-content-between">
                                 <div class="iq-header-title">
-                                    <h4 class="card-title">Posts de {{ $selectedChat->title }}</h4>
+                                    <h4 class="card-title">Mensajes del Chat {{ $selectedChat->title }}</h4>
                                 </div>
                                 <div class="iq-header-toolbar d-flex align-items-center">
                                     <div class="mr-3">
