@@ -215,6 +215,7 @@
                     @foreach ($feeds as $feed)
                         <div wire:key="feed-{{ $feed->id }}">
                             @include('components.feed', [
+                                'owner' => $feed->owner,
                                 'feed' => $feed,
                                 'tagLive' => true
                             ])
@@ -358,8 +359,7 @@
                             <ul class="media-story list-inline m-0 p-0">
                                 @foreach ($owner_birthday as $ownr_b)
                                     <li class="d-flex mb-4 align-items-center">
-                                        <img src="{{ $ownr_b->avatar }}" alt="story-img"
-                                            onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ $ownr_b->username }}';"
+                                        <img src="{{ $ownr_b->pic_profile }}" alt="Pic Profile {{ $ownr_b->username }}"
                                             class="rounded-circle img-fluid">
                                         <div class="stories-data ms-3">
                                             <h5>

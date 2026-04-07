@@ -213,9 +213,8 @@ function renderResults(models) {
         html += `
             <li class="d-flex mb-1 align-items-center">
                 <img src="${model.avatarUrl}" 
-                    onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=${model.username}';"
-                     alt="story-img" 
-                     class="rounded-circle img-fluid">
+                    alt="Pic Profile ${model.username}" 
+                    class="rounded-circle img-fluid">
                 <div class="stories-data ms-3">
                     <h5>
                         <a href="/owner/${model.username}" >${model.username}</a>
