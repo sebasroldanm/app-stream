@@ -12,7 +12,7 @@
                     <div class="d-flex justify-content-between">
                         <div class="me-3">
                             <a href="{{ route('owner', $owner->username) }}">
-                                <img class="rounded-circle avatar-60" src="{{ $owner->pic_profile ?? 'https://ui-avatars.com/api/?name=' . $owner->username . '&background=fff&color=fa377b' }}" alt="Avatar {{ $owner->username }}">
+                                <img class="rounded-circle avatar-60" src="{{ $owner->pic_profile }}" alt="Pic profile {{ $owner->username }}">
                             </a>
                         </div>
                         <div class="w-100">

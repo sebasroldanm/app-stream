@@ -293,5 +293,11 @@ class Owner extends Model
     {
         return $this->data?->user?->user?->avatarUrlThumb;
     }
-
+    public function getPicProfileAttribute()
+    {
+        if (empty($this->avatar)) {
+            return "https://ui-avatars.com/api/?name=" . $this->username . "&background=fff&color=fa377b";
+        }
+        return $this->avatar;
+    }
 }

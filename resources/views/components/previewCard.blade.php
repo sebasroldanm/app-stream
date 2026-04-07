@@ -13,18 +13,8 @@
     </div>
     <div class="card-body text-center">
         <div class="group-icon">
-            @if ($owner->pic_profile)
-                <img src="{{ $owner->pic_profile }}" alt="profile-img" loading="lazy"
-                    class="rounded-circle img-fluid avatar-120">
-            @else
-                @if ($owner->avatar)
-                    <img src="{{ $owner->avatar }}" alt="profile-img" loading="lazy"
-                        class="rounded-circle img-fluid avatar-120">
-                @else
-                    <img src="https://ui-avatars.com/api/?name={{ $owner->username }}" alt="profile-img" loading="lazy"
-                        class="rounded-circle img-fluid avatar-120">
-                @endif
-            @endif
+            <img src="{{ $owner->pic_profile }}" alt="profile-img" loading="lazy"
+                class="rounded-circle img-fluid avatar-120">
         </div>
         <div class="group-info pt-3 pb-3">
             <h4>

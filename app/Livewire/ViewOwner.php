@@ -169,12 +169,6 @@ class ViewOwner extends Component
             $intro->url = ($owner->avatar !== "") ? $owner->avatar : $owner->preview;
         }
 
-        if ($owner->avatar === "") {
-            $owner->pic_profile = "https://ui-avatars.com/api/?name=" . $owner->username . "&background=fff&color=fa377b";
-        } else {
-            $owner->pic_profile = $owner->avatar;
-        }
-
         if (Auth::guard('customer')->check()) {
             $is_fav = DB::table('customer_owner_favorites')
                 ->where('owner_id', $owner->id)
