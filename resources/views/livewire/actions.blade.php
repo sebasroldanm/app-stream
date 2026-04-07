@@ -20,6 +20,7 @@
                             <div class="d-grid gap-3 d-grid-template-1fr-19">
                                 <button class="btn btn-primary" wire:click="updateOnline" wire:loading.attr="disabled">{{ __('owner/actions.update_online') }}</button>
                                 <button class="btn btn-primary" wire:click="updateAll" wire:loading.attr="disabled">{{ __('owner/actions.full_update') }}</button>
+                                <button class="btn btn-primary" wire:click="updateFavorites" wire:loading.attr="disabled">{{ __('owner/actions.update_favorites') }}</button>
                             </div>
                         </div>
                     </div>

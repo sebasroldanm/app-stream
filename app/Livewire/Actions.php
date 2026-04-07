@@ -25,4 +25,10 @@ class Actions extends Component
         Artisan::call('app:update-owners-data');
         $this->dispatch('updateAll');
     }
+
+    public function updateFavorites()
+    {
+        Artisan::call('app:update-favorites');
+        $this->dispatch('updateFavorites');
+    }
 }
