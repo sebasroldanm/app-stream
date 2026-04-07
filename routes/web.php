@@ -12,6 +12,7 @@ use App\Livewire\Explore\NewCO;
 use App\Livewire\Explore\NewMobileCO;
 use App\Livewire\Favorites;
 use App\Livewire\Home;
+use App\Livewire\Multiview;
 use App\Livewire\PostManagement;
 use App\Livewire\Timeline;
 use App\Livewire\ViewOwner;
@@ -33,6 +34,8 @@ Route::middleware(['auth:customer'])->group(function () {
     Route::get('/timeline', Timeline::class)->name('timeline');
     Route::get('/about', About::class);
     Route::get('/contact', Contact::class);
+
+    Route::get('/multiview', Multiview::class)->name('multiview');
 
     Route::prefix('owner/{username}')->group(function () {
         Route::get('/', ViewOwner::class)->name('owner');

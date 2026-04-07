@@ -1,6 +1,6 @@
 <div>
-    <div class="card">
-        <video id="live-player">
+    <div class="card bg-dark mb-0">
+        <video id="live-player{{ $isMultiview ? '-' . $owner->id : '' }}">
         </video>
     </div>
     <div class="overlay-text" id="error-message" style="display: none;">
