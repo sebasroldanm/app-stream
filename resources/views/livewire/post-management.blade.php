@@ -141,7 +141,9 @@
                                                     <td>
                                                         <div class="d-flex align-items-center">
                                                         @if ($message->post?->owner)
-                                                            <span class="badge bg-success">{{ $message->post->owner->username }}</span>
+                                                            <a href="{{ route('owner', $message->post->owner->username) }}" target="_blank">
+                                                                <span class="badge bg-success">{{ $message->post->owner->username }}</span>
+                                                            </a>
                                                         @else
                                                             <div class="position-relative">
                                                                 @if (isset($selectedOwnerUsername[$message->id]))
