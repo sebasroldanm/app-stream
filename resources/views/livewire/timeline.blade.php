@@ -458,7 +458,7 @@
                                     <img src="{{ asset('/images/small/img-1.jpg') }}" class="img-fluid rounded"
                                         alt="Responsive image">
                                     <div class="mt-3"><a href="#" class="btn d-block"><i
-                                                class="ri-thumb-up-line me-2"></i> {{ __('pages/timeline.like_page') }}</a></div>
+                                                class="ri-thumb-up-line me-2"></i>Likes Page</a></div>
                                 </li>
                                 <li class="">
                                     <div class="d-flex align-items-center mb-3">

@@ -118,13 +118,6 @@ return [
             'replace_placeholders' => true,
         ],
 
-        'language' => [
-            'driver' => 'single',
-            'path' => storage_path('logs/language.log'),
-            'level' => 'debug',
-            'replace_placeholders' => true,
-        ],
-
         'null' => [
             'driver' => 'monolog',
             'handler' => NullHandler::class,

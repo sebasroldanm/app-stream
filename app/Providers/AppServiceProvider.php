@@ -19,8 +19,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->app->make('translator')->handleMissingKeysUsing(function ($key, $replacements, $locale) {
-            \Illuminate\Support\Facades\Log::channel('language')->info("Missing translation key: [{$key}] for locale: [{$locale}]");
-        });
+        //
     }
 }

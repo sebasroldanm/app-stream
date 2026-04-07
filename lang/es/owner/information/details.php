@@ -59,6 +59,7 @@ return [
         'ethnicityLatino' => 'Latino',
         'ethnicityMultiracial' => 'Multiracial',
         'ethnicityWhite' => 'Blanco',
+        'ethnicityMixed' => 'Mestizo',
     ],
     'profile' => 'Perfil',
     'profile_status' => 'Estado de Perfil',
