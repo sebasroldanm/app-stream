@@ -56,7 +56,7 @@ class Feed extends Component
             ->limit($this->limit)
             ->get();
         
-        $posts = Post::with(['telegramMessage.captions', 'telegramMessage.photo', 'telegramMessage.video'])
+        $posts = Post::with(['telegramMessage.captions', 'telegramMessage.photo', 'telegramMessage.video', 'telegramMessage.chat'])
             ->where('fk_owners_id', $owner->id)
             ->orderBy('published_at', 'desc')
             ->limit($this->limit)

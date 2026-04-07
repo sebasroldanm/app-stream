@@ -289,9 +289,9 @@
             @foreach ($items as $item)
             <div wire:key="{{ $item->type }}-{{ $item->data->id }}">
                 @if ($item->type === 'feed')
-                    @include('components.feed', ['feed' => $item->data, 'tagLive' => false])
+                    @include('components.feed', ['feed' => $item->data, 'owner' => $owner, 'tagLive' => false])
                 @else
-                    @include('components.post-feed', ['post' => $item->data])
+                    @include('components.post-feed', ['post' => $item->data, 'owner' => $owner, 'tagLive' => false])
                 @endif
             </div>
             @endforeach

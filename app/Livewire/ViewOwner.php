@@ -169,12 +169,10 @@ class ViewOwner extends Component
             $intro->url = ($owner->avatar !== "") ? $owner->avatar : $owner->preview;
         }
 
-        if ($owner->avatar !== "") {
-            $owner->pic_profile = $owner->avatar;
-        } elseif ($owner->preview !== "") {
-            $owner->pic_profile = $owner->preview;
+        if ($owner->avatar === "") {
+            $owner->pic_profile = "https://ui-avatars.com/api/?name=" . $owner->username . "&background=fff&color=fa377b";
         } else {
-            $owner->pic_profile = 'https://placehold.co/150x150?text=Profile+Pic';
+            $owner->pic_profile = $owner->avatar;
         }
 
         if (Auth::guard('customer')->check()) {
