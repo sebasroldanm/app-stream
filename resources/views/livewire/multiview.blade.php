@@ -39,13 +39,26 @@
 
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 mb-4">
                 @foreach ($selectedOwners as $ownerId)
-                    @php $ownerModel = \App\Models\Owner::find($ownerId); @endphp
+                    @php 
+                        $ownerModel = \App\Models\Owner::find($ownerId); 
+                        $ownerModel->data = json_decode($ownerModel->data); 
+                        if (isset($ownerModel->data->cam->show)) {
+                            $state = $ownerModel->data->cam->show->mode;
+                            $type = 'badge border border-red text-red text-bold';
+                        }elseif ($ownerModel->data->user->user->isLive) {
+                            $state = 'Live';
+                            $type = 'badge border border-green text-green text-bold';
+                        }else{
+                            $state = 'Offline';
+                            $type = 'badge border border-red text-red text-bold';
+                        }
+                    @endphp
                     @if ($ownerModel)
                         <div class="col" wire:key="owner-{{ $ownerId }}">
                             <div class="card h-100 mb-0 shadow-sm border-primary">
                                 <div
                                     class="card-header d-flex justify-content-between align-items-center py-2 bg-primary text-white">
-                                    <h6 class="mb-0 text-white">{{ $ownerModel->username }}</h6>
+                                    <h6 class="mb-0 text-white">{{ $ownerModel->username }}</h6> - <span class="{{ $type }}">{{ $state }}</span>
                                     <button wire:click="toggleOwner({{ $ownerId }})"
                                         class="btn-close btn-close-white btn-sm" aria-label="Close"></button>
                                 </div>

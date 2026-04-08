@@ -21,6 +21,7 @@ class CreateCustomersTable extends Migration
             $table->timestamp('password_change_required_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

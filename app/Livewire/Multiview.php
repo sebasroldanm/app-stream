@@ -23,10 +23,16 @@ class Multiview extends Component
 
     public function render()
     {
+        $favs = \App\Models\Customer::find(1)->getOwnerFavoriteIds()->toArray();
         $liveOwners = \App\Models\Owner::where('isLive', true)
-            ->where('isActive', true)
-            ->orderBy('name')
+            ->whereIn('id', $favs)
+            ->orderBy('isLive', 'asc')
+            ->orderBy('statusChangedAt', 'desc')
             ->get();
+        
+        foreach ($liveOwners as $key => $owner) {
+            $owner->data = json_decode($owner->data);
+        }
 
         return view('livewire.multiview', [
             'liveOwners' => $liveOwners,
