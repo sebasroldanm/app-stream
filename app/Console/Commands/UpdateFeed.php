@@ -2,10 +2,14 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\SyncOwner;
 use App\Models\Customer;
 use App\Models\Owner;
 use App\Traits\SyncData;
+use Illuminate\Bus\Batch;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Cache;
 
 class UpdateFeed extends Command
 {
@@ -29,41 +33,17 @@ class UpdateFeed extends Command
      */
     public function handle()
     {
-        $this->info('Actualizando feed...');
-
         $favs = Customer::find(1)->getOwnerFavoriteIds()->toArray();
         $owners = Owner::whereIn('id', $favs)->get();
 
-        $bar = $this->output->createProgressBar(count($owners));
-        $bar->setFormatDefinition(
-            'custom',
-            '%current%/%max% [%bar%] %percent:3s%% | Transcurrido: %elapsed:6s% | Restante: %remaining:6s% | Mem: %memory:6s%'
-        );
-        $bar->setFormat('custom');
-        $bar->start();
-
-        $errors = [];
-
-        foreach ($owners as $key => $owner) {
-            try {
-                $this->syncFeedByOwnerId($owner->id);
-                $bar->advance();
-            } catch (\Throwable $th) {
-                $errors[] = $owner->username;
-            } finally {
-                $bar->advance();
-            }
-        }
-
-        $bar->finish();
-        $this->newLine(2);
-        $this->info('Actualizacion de usuarios completada');
-
-        if (!empty($errors)) {
-            $this->error('Errores en la sincronizacion: ' . count($errors));
-            foreach ($errors as $key => $error) {
-                $this->error($error);
-            }
-        }
+        Bus::batch(
+            $owners->map(fn($owner) => (new SyncOwner($owner, 'feed')))->toArray()
+        )
+            ->onQueue('high')
+            ->finally(function (Batch $batch) {
+                Cache::put('Notification', 'Update Feed', 3600);
+                Cache::put('Status', 'Finalizado', 3600);
+            })
+            ->dispatch();
     }
 }

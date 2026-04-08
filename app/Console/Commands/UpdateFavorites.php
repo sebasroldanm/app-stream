@@ -2,10 +2,14 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\SyncOwner;
 use App\Models\Customer;
 use App\Models\Owner;
 use App\Traits\SyncData;
+use Illuminate\Bus\Batch;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class UpdateFavorites extends Command
@@ -30,42 +34,34 @@ class UpdateFavorites extends Command
      */
     public function handle()
     {
-        $this->info('Obteniendo usuarios');
-
         $favs = Customer::find(1)->getOwnerFavoriteIds()->toArray();
         $owners = Owner::whereIn('id', $favs)->get();
 
-        $bar = $this->output->createProgressBar(count($owners));
-        $bar->setFormatDefinition(
-            'custom',
-            '%current%/%max% [%bar%] %percent:3s%% | Transcurrido: %elapsed:6s% | Restante: %remaining:6s% | Mem: %memory:6s%'
-        );
-        $bar->setFormat('custom');
-        $bar->start();
-
-        $errors = [];
-
-        foreach ($owners as $key => $owner) {
-            try {
-                $this->syncAllByUsername($owner->username);
-                $bar->advance();
-            } catch (\Throwable $th) {
-                $errors[] = $owner->username;
-            } finally {
-                $bar->advance();
-            }
-        }
-
-        $bar->finish();
-        $this->newLine(2);
-        $this->info('Actualizacion de usuarios completada');
-
-        if (!empty($errors)) {
-            $this->error('Errores en la sincronizacion: ' . count($errors));
-            foreach ($errors as $key => $error) {
-                $this->error($error);
-            }
-        }
+        Bus::batch(
+            $owners->map(fn($owner) => (new SyncOwner($owner, 'all_not_exception')))->toArray()
+        )
+            ->onQueue('default')
+            ->then(function (Batch $batch) {
+                Cache::forget('online_app');
+                Cache::remember('online_app', 60, function () {
+                    return Owner::where('isOnline', true)->count();
+                });
+            })
+            ->catch(function (Batch $batch, $exception) {
+                Cache::forget('online_app');
+                Cache::remember('online_app', 60, function () {
+                    return Owner::where('isOnline', true)->count();
+                });
+            })
+            ->finally(function (Batch $batch) {
+                Cache::forget('online_app');
+                Cache::remember('online_app', 60, function () {
+                    return Owner::where('isOnline', true)->count();
+                });
+                Cache::put('Notification', 'Update Favorites', 3600);
+                Cache::put('Status', 'Finalizado', 3600);
+            })
+            ->dispatch();
     }
 
     private function syncAllByUsername(string $username)
