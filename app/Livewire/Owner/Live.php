@@ -28,7 +28,6 @@ class Live extends Component
 
     public function render()
     {
-        $this->owner->data = json_decode($this->owner->data);
         $this->broadcastSettings = $this->owner->data->cam->broadcastSettings;
 
         if ($this->owner->isMobile) {

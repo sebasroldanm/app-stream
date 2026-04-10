@@ -253,7 +253,7 @@
                         class="tab-pane fade @if ($showLive) show active @endif" id="live"
                         role="tabpanel">
                         @if ($showLive)
-                            <livewire:owner.live :owner="$owner" lazy />
+                            <livewire:owner.live :owner="$owner" />
                         @endif
                     </div>
                     <div wire:loading.remove
