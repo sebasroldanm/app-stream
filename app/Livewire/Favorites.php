@@ -17,9 +17,11 @@ class Favorites extends Component
             ->orderByDesc('statusChangedAt')
             ->get();
 
-        return view('livewire.favorites', [
+        /** @var \Livewire\Features\SupportPageComponents\ContentRenderer $view */
+        $view = view('livewire.favorites', [
             'favorites' => $favs,
             'favs' => $favs->pluck('id')->toArray()
         ]);
+        return $view->layoutData(['title' => ' | Favoritos']);
     }
 }

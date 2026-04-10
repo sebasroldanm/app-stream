@@ -104,10 +104,7 @@ class SyncOwner implements ShouldQueue
     {
         $this->ownerSyncService->syncOwnerByUsername($owner->username);
         $this->ownerPanelSyncService->syncPanelByOwnerId($owner->id);
-        $this->ownerAlbumSyncService->syncAlbum($owner->id, $owner->username);
         $this->ownerIntroSyncService->syncIntroByOwnerId($owner->id);
-        $this->ownerVideoSyncService->syncVideo($owner->id, $owner->username);
-        $this->ownerFeedSyncService->syncFeedByOwnerId($owner->id);
     }
 
     private function updateFeed($owner)

@@ -119,8 +119,10 @@ class Timeline extends Component
 
         $this->dispatch('initVideos');
 
-        return view('livewire.timeline', [
+        /** @var \Livewire\Features\SupportPageComponents\ContentRenderer $view */
+        $view = view('livewire.timeline', [
             'feeds' => $feeds
         ]);
+        return $view->layoutData(['title' => ' | Timeline']);
     }
 }

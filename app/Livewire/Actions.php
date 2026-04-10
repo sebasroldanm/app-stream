@@ -22,7 +22,9 @@ class Actions extends Component
 
     public function render()
     {
-        return view('livewire.actions');
+        /** @var \Livewire\Features\SupportPageComponents\ContentRenderer $view */
+        $view = view('livewire.actions');
+        return $view->layoutData(['title' => ' | Acciones']);
     }
 
     public function updateOnline()
