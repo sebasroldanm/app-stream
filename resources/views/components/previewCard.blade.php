@@ -38,22 +38,9 @@
                     @endif
                 </a>
             </h4>
-            @if ($owner->name)
-                <p>
-                    @if ($favoriteHeart && in_array($owner->id, $favs))
-                        <span class="badge bg-danger"><i class="las la-heart"></i></span>
-                        {{ $owner->name }}
-                    @else
-                        {{ $owner->name }}
-                    @endif
-                </p>
-            @else
-                @if ($favoriteHeart && in_array($owner->id, $favs))
-                    <p>
-                        <span class="badge bg-danger"><i class="las la-heart"></i></span>
-                    </p>
-                @endif
-            @endif
+
+            <p>{!! $favoriteHeart && in_array($owner->id, $favs) ? '<span class="badge bg-danger"><i class="las la-heart"></i></span>' : '' !!}{!! $owner->name ?? 'No name' !!}</p>
+
         </div>
         <div class="group-details d-inline-block pb-3">
             <ul class="d-flex align-items-center justify-content-between list-inline m-0 p-0">
