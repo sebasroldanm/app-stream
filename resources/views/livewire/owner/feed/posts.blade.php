@@ -1,19 +1,19 @@
-<div class="col-lg-8 row m-0 p-0">
+<div class="col-lg-8">
     <div class="col-sm-12">
-        {{-- @livewire('timeline.post-create') --}}
+        @livewire('timeline.post-create')
     </div>
 
-    @foreach ($feeds as $feed)
-        <div wire:key="feed-{{ $feed->id }}">
+    @foreach ($posts as $key => $post)
+        <div wire:key="{{ $key }}">
             @include('components.feed', [
-                'owner' => $feed->owner,
-                'feed' => $feed,
+                'owner' => $owner,
+                'feed' => $post->data,
                 'tagLive' => true,
             ])
         </div>
     @endforeach
 
-    @if (!isset($totalItems) || $items->count() < $totalItems)
+    @if (!isset($totalItems) || $posts->count() < $totalItems)
         <div x-intersect="$wire.loadMore()" class="col-sm-12 text-center p-4">
             <div wire:loading wire:target="loadMore">
                 <div class="spinner-border text-primary" role="status">

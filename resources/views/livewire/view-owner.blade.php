@@ -249,48 +249,44 @@
             </div>
             <div class="col-sm-12">
                 <div class="tab-content">
-                    <div wire:loading.remove
+                    <div
                         class="tab-pane fade @if ($showLive) show active @endif" id="live"
                         role="tabpanel">
                         @if ($showLive)
                             <livewire:owner.live :owner="$owner" />
                         @endif
                     </div>
-                    <div wire:loading.remove
+                    <div
                         class="tab-pane fade @if ($showFeed) show active @endif" id="feed"
                         role="tabpanel">
                         @if ($showFeed)
                             <livewire:owner.feed :owner="$owner" />
                         @endif
                     </div>
-                    <div wire:loading.remove
+                    <div
                         class="tab-pane fade @if ($showInformation) show active @endif" id="infomation"
                         role="tabpanel">
                         @if ($showInformation)
-                            <livewire:owner.information :owner="$owner" lazy />
+                            <livewire:owner.information :owner="$owner" />
                         @endif
                     </div>
-                    <div wire:loading.remove
+                    <div
                         class="tab-pane fade @if ($showAlbums) show active @endif" id="albums"
                         role="tabpanel">
                         @if ($showAlbums)
-                            <livewire:owner.albums :owner="$owner" lazy />
+                            <livewire:owner.albums :owner="$owner" />
                         @endif
                     </div>
-                    <div wire:loading.remove
+                    <div
                         class="tab-pane fade @if ($showVideos) show active @endif" id="videos"
                         role="tabpanel">
                         @if ($showVideos)
-                            <livewire:owner.videos :owner="$owner" lazy />
+                            <livewire:owner.videos :owner="$owner" />
                         @endif
                     </div>
                 </div>
             </div>
-            <div wire:loading class="col-sm-12 text-center">
-                <img src="{{ asset('images/page-img/page-load-loader.gif ') }}" alt="loader"
-                    style="height: 100px;">
-            </div>
-            <livewire:owner.related :owner="$owner" lazy />
+            <livewire:owner.related :owner="$owner" />
         </div>
     </div>
 </div>
