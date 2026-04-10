@@ -192,54 +192,6 @@ i.online {
     background-color: rgba(255, 0, 0, 0.6);
 }
 
-/* Skeleton Loader */
-:root {
-    --loader-background-color: #EEEEEE;
-    --loader-highlight-color: #DEDEDE;
-}
-
-.skeleton-loader {
-    width: 300px;
-    height: 15px;
-    background: linear-gradient(90deg, var(--loader-background-color) 25%, var(--loader-highlight-color) 50%, var(--loader-background-color) 75%);
-    background-size: 200% 100%;
-    animation: loading 2s infinite ease-in-out;
-    border-radius: 8px;
-}
-
-.avatar-skeleton {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(90deg, var(--loader-background-color) 25%, var(--loader-highlight-color) 50%, var(--loader-background-color) 75%);
-    background-size: 200% 100%;
-    animation: loading 2s infinite ease-in-out;
-    border-radius: 50%;
-    margin-bottom: 20px;
-}
-
-.cover-image-skeleton {
-    width: 130px;
-    height: 150px;
-    background: linear-gradient(90deg, var(--loader-background-color) 25%, var(--loader-highlight-color) 50%, var(--loader-background-color) 75%);
-    background-size: 200% 100%;
-    animation: loading 2s infinite ease-in-out;
-    border-radius: 8px;
-    margin: 10px;
-}
-
-@keyframes loading {
-    0% {
-        background-position: 200% 0;
-    }
-
-    100% {
-        background-position: -200% 0;
-    }
-}
-
-/* Skeleton Loader */
-
-
 /** Explorer */
 
 .image-container {
@@ -447,3 +399,37 @@ i.online {
     overflow-y: auto;
 }
 /* Info Viewers */
+
+/* Skeleton Loader */
+
+:root {
+    --skeleton-bg: #e0e0e0a2;
+    --skeleton-highlight: #ffffffe0;
+}
+
+/* La base de la animación: aplicable a cualquier forma */
+.skeleton-placeholder {
+    background: linear-gradient(90deg, 
+        var(--skeleton-bg) 25%, 
+        var(--skeleton-highlight) 50%, 
+        var(--skeleton-bg) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-loading 2.5s infinite ease-in-out;
+    border-radius: 4px;
+    display: inline-block;
+    border: none;
+    color: transparent !important; /* Oculta texto residual */
+    pointer-events: none; /* Evita clics en carga */
+    user-select: none;
+}
+
+@keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Utilidades de forma para combinar */
+.s-round { border-radius: 50% !important; }
+.s-w-100 { width: 100%; }
+.s-h-50  { height: 50px; } /* Puedes crear las que necesites */
