@@ -5,14 +5,28 @@ namespace App\Livewire\Owner\Feed;
 use App\Models\Feed;
 use App\Models\Owner;
 use App\Models\Post;
+use App\Traits\OwnerProp;
 use Livewire\Component;
+use Livewire\Attributes\Lazy;
 
+#[Lazy]
 class Posts extends Component
 {
-    public Owner $owner;
+    use OwnerProp;
 
     public $limit = 6;
     public $totalItems = 0;
+    public Owner $owner;
+
+    public function mount(Owner $owner)
+    {
+        $this->owner = $owner;
+    }
+
+    public function placeholder()
+    {
+        return view('components.posts.post-placeholder');
+    }
 
     public function render()
     {

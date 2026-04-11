@@ -17,7 +17,7 @@ class Post extends Component
 
     public function placeholder()
     {
-        return view('livewire.timeline.post-placeholder');
+        return view('components.posts.post-placeholder');
     }
 
     public function render()

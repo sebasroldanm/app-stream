@@ -16,7 +16,7 @@ window.addEventListener("initFullviewer", () => {
 });
 
 window.addEventListener("themeApp", (event) => {
-    document.documentElement.setAttribute('data-theme', event.detail.theme);
+    document.documentElement.setAttribute("data-theme", event.detail.theme);
 });
 
 window.addEventListener("notice-age-confirmed", (event) => {
@@ -87,11 +87,10 @@ function initFullviewer() {
 
     imagenes.forEach((imagen) => {
         imagen.addEventListener("click", () => {
-
             const imageSrc = imagen.getAttribute("data-image_vh") || imagen.src;
             imagenModal.src = imageSrc;
 
-            const fullImages  = JSON.parse(imagen.dataset.imagesFull || "[]");
+            const fullImages = JSON.parse(imagen.dataset.imagesFull || "[]");
             const thumbImages = JSON.parse(imagen.dataset.imagesThumb || "[]");
 
             construirThumbs(thumbImages, fullImages, imageSrc);
@@ -134,10 +133,10 @@ function construirThumbs(thumbImages, fullImages, currentImageSrc) {
 
         // Click en el thumb → cambia la imagen del modal
         img.addEventListener("click", () => {
-
             // Actualizar estado visual
-            document.querySelectorAll(".thumb-item")
-                .forEach(el => el.classList.remove("active"));
+            document
+                .querySelectorAll(".thumb-item")
+                .forEach((el) => el.classList.remove("active"));
 
             img.classList.add("active");
 
@@ -156,37 +155,34 @@ function construirThumbs(thumbImages, fullImages, currentImageSrc) {
     });
 }
 
-
-
-
 searchGlobe();
 
 function searchGlobe() {
     let debounceTimer;
 
-    document.getElementById("searchGlobe").addEventListener("input", function(e) {
-        const value = e.target.value.trim();
+    document
+        .getElementById("searchGlobe")
+        .addEventListener("input", function (e) {
+            const value = e.target.value.trim();
 
-        clearTimeout(debounceTimer);
+            clearTimeout(debounceTimer);
 
-        debounceTimer = setTimeout(() => {
+            debounceTimer = setTimeout(() => {
+                // Si está vacío, limpiar resultados y no consultar
+                if (!value) {
+                    document.getElementById("resultSearch").innerHTML = "";
+                    return;
+                }
 
-            // Si está vacío, limpiar resultados y no consultar
-            if (!value) {
-                document.getElementById("resultSearch").innerHTML = "";
-                return;
-            }
-
-            fetch("/search?q=" + encodeURIComponent(value))
-                .then(r => r.json())
-                .then(data => {
-                    console.log("API Response:", data);
-                    renderResults(data.models || []);
-                })
-                .catch(err => console.error(err));
-
-        }, 500);
-    });
+                fetch("/search?q=" + encodeURIComponent(value))
+                    .then((r) => r.json())
+                    .then((data) => {
+                        console.log("API Response:", data);
+                        renderResults(data.models || []);
+                    })
+                    .catch((err) => console.error(err));
+            }, 500);
+        });
 }
 
 function renderResults(models) {
@@ -209,7 +205,7 @@ function renderResults(models) {
             <ul class="media-story list-inline m-0 p-0">
     `;
 
-    models.forEach(model => {
+    models.forEach((model) => {
         html += `
             <li class="d-flex mb-1 align-items-center">
                 <img src="${model.avatarUrl}" 
@@ -232,43 +228,40 @@ function renderResults(models) {
     container.innerHTML = html;
 }
 
-initSwiper();
+let swiperInstance = null;
 
-window.Livewire.on("initSwiper", function () {
-    setTimeout(() => {
-        initSwiper();
-    }, 1);
-});
+const initSwiper = () => {
+    const container = document.querySelector(".related-swiper");
+    if (!container) return;
 
-function initSwiper() {
-    console.log('initSwiper');
-
-    var swiperContainer = document.querySelector('.related-swiper');
-    if (swiperContainer && swiperContainer.swiper) {
-        console.log('Swiper already initialized, skipping');
-        return;
+    if (swiperInstance) {
+        swiperInstance.destroy(true, true);
     }
 
-    new Swiper('.related-swiper', {
-        slidesPerView: 3,
-        spaceBetween: 10,
-        pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
+    swiperInstance = new Swiper(".related-swiper", {
+        slidesPerView: 2,
+        spaceBetween: 15,
+        loop: true,
+        autoplay: {
+            delay: 3500,
+            disableOnInteraction: false,
         },
         navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
         },
         breakpoints: {
-            768: {
-                slidesPerView: 5,
-                spaceBetween: 20,
-            },
-            1024: {
-                slidesPerView: 6,
-                spaceBetween: 20,
-            },
+            640: { slidesPerView: 3 },
+            1024: { slidesPerView: 5 },
+            1400: { slidesPerView: 6 },
         },
     });
-}
+};
+
+initSwiper();
+
+Livewire.on("init-swiper-related", () => {
+    setTimeout(() => {
+        initSwiper();
+    }, 100);
+});

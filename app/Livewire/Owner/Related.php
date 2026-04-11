@@ -16,7 +16,7 @@ class Related extends Component
 {
     public function placeholder()
     {
-        return view('livewire.owner.related-skeleton');
+        return view('livewire.owner.related-placeholder');
     }
     public $owner;
     public $related;
@@ -52,10 +52,13 @@ class Related extends Component
 
     public function render()
     {
-        $favs = Customer::find(Auth::guard('customer')->user()->id)->getOwnerFavoriteIds()->toArray();
+        $user = Auth::guard('customer')->user();
+        $favs = $user ? Customer::find($user->id)->getOwnerFavoriteIds()->toArray() : [];
 
-        $this->dispatch('initSwiper');
-        
+        if (!empty($this->related) && count($this->related->models) > 0) {
+            $this->dispatch('init-swiper-related');
+        }
+
         return view('livewire.owner.related', [
             'favs' => $favs
         ]);

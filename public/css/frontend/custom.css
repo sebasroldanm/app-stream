@@ -1,4 +1,4 @@
-.video-play-button {
+video-play-button {
     display: block;
     width: 104px;
     height: 104px;
@@ -433,3 +433,35 @@ i.online {
 .s-round { border-radius: 50% !important; }
 .s-w-100 { width: 100%; }
 .s-h-50  { height: 50px; } /* Puedes crear las que necesites */
+
+
+.swiper-nav-btn {
+    width: 30px !important;
+    height: 30px !important;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    color: #50b5ff !important; /* Color principal de SocialV */
+}
+
+.swiper-nav-btn::after {
+    font-size: 12px !important;
+    font-weight: bold;
+}
+
+.image-container img {
+    transition: transform 0.3s ease;
+}
+
+.image-container:hover img {
+    transform: scale(1.05);
+}
+
+.bg-dark-50 {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.swiper-button-prev:after,
+.swiper-button-next:after {
+    content: '';
+}

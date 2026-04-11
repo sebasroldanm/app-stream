@@ -45,20 +45,13 @@ class Feed extends Component
             $this->birthDate = $owner->data->user->user->birthDate;
             $this->age = Carbon::now()->diff(Carbon::parse($owner->data->user->user->birthDate))->y;
         }
-
-        $photos = Photos::where('ownerId', $owner->id)->where('url', '!=', '')->limit(9)->get();
-        $videos = Video::where('owner_id', $owner->id)->where('coverUrl', '!=', '')->limit(9)->get();
-
         
-
         $this->dispatch('initFullviewer');
 
         $this->dispatch('initVideos');
 
         return view('livewire.owner.feed', [
             'owner'     => $owner,
-            'photos'    => $photos,
-            'videos'    => $videos,
             'totalItems' => ModelsFeed::where("owner_id", $owner->id)->count() + Post::where('fk_owners_id', $owner->id)->count(),
         ]);
     }
