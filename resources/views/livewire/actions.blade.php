@@ -1,4 +1,4 @@
-<div wire:poll.2s="checkNotifications">
+<div class="container" wire:poll.2s="checkNotifications">
     <div class="header-for-bg">
         <div class="background-header position-relative">
             <img src="{{ asset('/images/page-img/profile-bg3.jpg') }}" class="img-fluid w-100" alt="header-bg">

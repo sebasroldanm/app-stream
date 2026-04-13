@@ -395,7 +395,7 @@ i.online {
 
 /* Info Viewers */
 .viewers-list {
-    max-height: 60vh;
+    max-height: 30vh;
     overflow-y: auto;
 }
 /* Info Viewers */
@@ -465,3 +465,37 @@ i.online {
 .swiper-button-next:after {
     content: '';
 }
+
+
+/* Spin animation Sync Owner */
+.ri-spin-fade {
+    display: inline-block;
+    animation: spin-and-fade 1.5s linear infinite;
+}
+
+@keyframes spin-and-fade {
+    0% {
+        transform: rotate(0deg);
+        color: #00b3ff;
+    }
+    50% {
+        color: #55ff7c;
+    }
+    100% {
+        transform: rotate(360deg);
+        color: #00b3ff;
+    }
+}
+
+.refresh-button[disabled] {
+    cursor: not-allowed;
+    opacity: 0.9;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.ri-refresh-line {
+    transition: color 0.4s ease, transform 0.4s ease;
+    display: inline-block;
+}
+/* Spin animation Sync Owner */

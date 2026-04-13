@@ -23,7 +23,8 @@
                                     @if ($isBanned)
                                         <li>
                                             <a href="javascript:void(0);" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" data-bs-original-title="{{ __('owner/information/details.banned_or_blocked') }}"
+                                                data-bs-placement="top"
+                                                data-bs-original-title="{{ __('owner/information/details.banned_or_blocked') }}"
                                                 class="username_reported">
                                                 <i class="las la-ban"></i>
                                             </a>
@@ -32,7 +33,8 @@
                                     @if ($error_search)
                                         <li>
                                             <a href="javascript:void(0);" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" data-bs-original-title="{{ __('owner/information/details.reported_slowness') }}"
+                                                data-bs-placement="top"
+                                                data-bs-original-title="{{ __('owner/information/details.reported_slowness') }}"
                                                 class="username_reported">
                                                 <i class="las la-exclamation-triangle"></i>
                                             </a>
@@ -73,22 +75,38 @@
                                     @endif
                                     @if ($owner->notFound)
                                         @if (!$force_sync)
-                                            <li><a href="javascript:void(0);" data-bs-toggle="tooltip" wire:click="force_sync_enable"
-                                                    data-bs-placement="top" data-bs-original-title="{{ __('owner/information/details.not_found_origin_unlock') }}">
+                                            <li><a href="javascript:void(0);" data-bs-toggle="tooltip"
+                                                    wire:click="force_sync_enable" data-bs-placement="top"
+                                                    data-bs-original-title="{{ __('owner/information/details.not_found_origin_unlock') }}">
                                                     <i class="ri-alert-line"></i>
                                                 </a></li>
                                         @else
-                                            <li><a href="javascript:void(0);" data-bs-toggle="tooltip" wire:click="updateDataMod"
-                                                    data-bs-placement="top" data-bs-original-title="{{ __('owner/information/details.not_found_origin_search') }}">
-                                                    <i class="ri-refresh-line"></i>
-                                                </a></li>
+                                            <li>
+                                                <a href="javascript:void(0);" 
+                                                wire:click="updateDataMod"
+                                                wire:loading.attr="disabled"
+                                                wire:target="updateDataMod"
+                                                class="refresh-button">
+                                                
+                                                    <i class="ri-refresh-line" 
+                                                    wire:loading.class="ri-spin-fade" 
+                                                    wire:target="updateDataMod"></i>
+                                                </a>
+                                            </li>
                                         @endif
                                     @else
-                                        <li><a wire:click="updateDataMod" href="javascript:void(0);"
-                                                data-bs-toggle="tooltip" data-bs-placement="top"
-                                                data-bs-original-title="{{ __('owner/profile.update') }}">
-                                                <i class="ri-refresh-line"></i>
-                                            </a></li>
+                                        <li>
+                                            <a href="javascript:void(0);" 
+                                            wire:click="updateDataMod"
+                                            wire:loading.attr="disabled"
+                                            wire:target="updateDataMod"
+                                            class="refresh-button">
+                                            
+                                                <i class="ri-refresh-line" 
+                                                wire:loading.class="ri-spin-fade" 
+                                                wire:target="updateDataMod"></i>
+                                            </a>
+                                        </li>
                                     @endif
                                 </ul>
                             </div>
@@ -103,11 +121,13 @@
                                     <h3 class="">{{ $owner->username }}
                                         @if ($owner->isOnline)
                                             <i class="ri-checkbox-blank-circle-fill online m-2" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" data-bs-original-title="{{ __('owner/profile.online') }}"></i>
+                                                data-bs-placement="top"
+                                                data-bs-original-title="{{ __('owner/profile.online') }}"></i>
                                         @else
                                             @if ($owner->isDelete)
                                                 <i class="ri-close-circle-fill disable" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" data-bs-original-title="{{ __('owner/profile.disabled') }}"></i>
+                                                    data-bs-placement="top"
+                                                    data-bs-original-title="{{ __('owner/profile.disabled') }}"></i>
                                             @elseif ($owner->notFound)
                                                 <i class="ri-close-circle-fill disable" data-bs-toggle="tooltip"
                                                     data-bs-placement="top"
@@ -180,7 +200,9 @@
                                             </li>
                                             <li class="text-center ps-3">
                                                 <h6>{{ __('owner/profile.favorites') }}</h6>
-                                                <p class="mb-0">{{ number_format($owner->data->user->user->favoritedCount, 0, ',', '.') }}</p>
+                                                <p class="mb-0">
+                                                    {{ number_format($owner->data->user->user->favoritedCount, 0, ',', '.') }}
+                                                </p>
                                             </li>
                                         </ul>
                                     @endif
@@ -247,46 +269,56 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-12">
-                <div class="tab-content">
-                    <div
-                        class="tab-pane fade @if ($showLive) show active @endif" id="live"
-                        role="tabpanel">
-                        @if ($showLive)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="tab-content">
+
+                <div class="tab-pane fade @if ($showLive) show active @endif" id="live"
+                    role="tabpanel">
+                    @if ($showLive)
+                        <div id="container-live" class="container">
                             <livewire:owner.live :owner="$owner" />
-                        @endif
-                    </div>
-                    <div
-                        class="tab-pane fade @if ($showFeed) show active @endif" id="feed"
-                        role="tabpanel">
-                        @if ($showFeed)
+                        </div>
+                    @endif
+                </div>
+                <div class="tab-pane fade @if ($showFeed) show active @endif" id="feed"
+                    role="tabpanel">
+                    @if ($showFeed)
+                        <div class="container">
                             <livewire:owner.feed :owner="$owner" />
-                        @endif
-                    </div>
-                    <div
-                        class="tab-pane fade @if ($showInformation) show active @endif" id="infomation"
-                        role="tabpanel">
-                        @if ($showInformation)
+                        </div>
+                    @endif
+                </div>
+                <div class="tab-pane fade @if ($showInformation) show active @endif" id="infomation"
+                    role="tabpanel">
+                    @if ($showInformation)
+                        <div class="container">
                             <livewire:owner.information :owner="$owner" />
-                        @endif
-                    </div>
-                    <div
-                        class="tab-pane fade @if ($showAlbums) show active @endif" id="albums"
-                        role="tabpanel">
-                        @if ($showAlbums)
+                        </div>
+                    @endif
+                </div>
+                <div class="tab-pane fade @if ($showAlbums) show active @endif" id="albums"
+                    role="tabpanel">
+                    @if ($showAlbums)
+                        <div class="container">
                             <livewire:owner.albums :owner="$owner" />
-                        @endif
-                    </div>
-                    <div
-                        class="tab-pane fade @if ($showVideos) show active @endif" id="videos"
-                        role="tabpanel">
-                        @if ($showVideos)
+                        </div>
+                    @endif
+                </div>
+                <div class="tab-pane fade @if ($showVideos) show active @endif" id="videos"
+                    role="tabpanel">
+                    @if ($showVideos)
+                        <div class="container">
                             <livewire:owner.videos :owner="$owner" />
-                        @endif
-                    </div>
+                        </div>
+                    @endif
                 </div>
             </div>
-            <livewire:owner.related :owner="$owner" />
         </div>
+    </div>
+    <div class="container">
+        <livewire:owner.related :owner="$owner" />
     </div>
 </div>
