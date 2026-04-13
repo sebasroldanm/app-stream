@@ -1,5 +1,5 @@
 <div>
-    <div class="card bg-dark mb-0">
+    <div class="card bg-dark">
         <video id="live-player{{ $isMultiview ? '-' . $owner->id : '' }}">
         </video>
     </div>

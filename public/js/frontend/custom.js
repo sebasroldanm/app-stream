@@ -9,6 +9,10 @@ window.Livewire.on("initExplorer", function (data) {
     }, 500);
 });
 
+setInterval(() => {
+    initFullviewer();
+}, 1000);
+
 window.addEventListener("initFullviewer", () => {
     setTimeout(() => {
         initFullviewer();
@@ -239,6 +243,7 @@ const initSwiper = () => {
     }
 
     swiperInstance = new Swiper(".related-swiper", {
+        pauseOnMouseEnter: true,
         slidesPerView: 2,
         spaceBetween: 15,
         loop: true,

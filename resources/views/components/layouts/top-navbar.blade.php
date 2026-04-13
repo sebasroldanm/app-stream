@@ -144,7 +144,7 @@
                         </a>
                         <div class="sub-drop dropdown-menu" aria-labelledby="notification-drop">
                             <div class="card shadow-none m-0">
-                                <livewire:owner.top-nav.conversations lazy />
+                                <livewire:owner.top-nav.conversations />
                             </div>
                         </div>
                     </li>
