@@ -218,10 +218,9 @@
                                 class="nav nav-pills d-flex align-items-center justify-content-center profile-feed-items p-0 m-0">
                                 @if ($owner->isLive)
                                     <li class="nav-item col-12 col-sm-2 p-0">
-                                        <a wire:navigate
+                                        <a 
                                             href="{{ route('owner.live', ['username' => $owner->username]) }}"
-                                            class="nav-link live @if ($showLive) active @endif"
-                                            data-bs-toggle="pill" data-bs-target="#live" role="button">
+                                            class="nav-link live @if ($showLive) active @endif">
                                             {{ __('owner/tabs.live') }} <div class="live-icon"></div>
                                         </a>
                                     </li>

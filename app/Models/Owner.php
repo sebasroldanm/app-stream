@@ -300,4 +300,9 @@ class Owner extends Model
         }
         return $this->avatar;
     }
+
+    public function getOwnerCamBroadcastSettingsAttribute()
+    {
+        return $this->data?->cam?->broadcastSettings;
+    }
 }

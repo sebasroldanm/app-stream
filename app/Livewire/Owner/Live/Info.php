@@ -6,8 +6,10 @@ use App\Models\Owner;
 use App\Traits\SyncData;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
+use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
+#[Lazy]
 class Info extends Component
 {
     use SyncData;
@@ -18,6 +20,11 @@ class Info extends Component
 
     public $lastPercent = 0;
     public $percent = 0;
+
+    public function placeholder()
+    {
+        return view('livewire.owner.live.info-placeholder');
+    }
 
     public function render()
     {

@@ -35,6 +35,15 @@ function initFullviewer() {
             document.body.classList.remove("no-scroll");
         }
     });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+            modal.style.display = "none";
+            document.body.classList.remove("no-scroll");
+        }
+    });
+
+
 }
 
 function construirThumbs(thumbImages, fullImages, currentImageSrc) {
