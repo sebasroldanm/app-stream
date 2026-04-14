@@ -28,7 +28,6 @@ class Live extends Component
 
     public function render()
     {
-        sleep(10);
         $this->broadcastSettings = $this->owner->ownerCamBroadcastSettings;
         if ($this->owner->isMobile) {
             $this->mainCol = 'col-12 col-sm-8';

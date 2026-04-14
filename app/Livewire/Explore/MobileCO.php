@@ -6,7 +6,9 @@ use App\Services\Explore\ExploreService;
 use App\Models\Customer;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\Attributes\Lazy;
 
+#[Lazy]
 class MobileCO extends Component
 {
 
@@ -15,6 +17,11 @@ class MobileCO extends Component
     public $limit = 60;
     public $offset = 0;
     public $endResults = false;
+
+    public function placeholder()
+    {
+        return view('livewire.explore.explore-placeholder');
+    }
 
     public function render()
     {

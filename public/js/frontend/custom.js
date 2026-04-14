@@ -41,37 +41,35 @@ function scrollToTop() {
     const scrollToTopButton = document.getElementById("swipeUpContainer");
     if (!scrollToTopButton) return;
 
-    let lastScrollTop = 0;      // Para detectar dirección (sube o baja)
-    let maxScrollReached = 0;   // Para medir cuánto ha subido desde el punto más bajo
+    let lastScrollTop = 0;
+    let maxScrollReached = 0;
 
     window.onscroll = function () {
         let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
 
-        // REGLA 1: Si está cerca del TOP (menos de 200px), siempre ocultar
         if (currentScroll < 200) {
             scrollToTopButton.classList.remove("show");
-            maxScrollReached = currentScroll; // Reiniciamos el rastreo
+            maxScrollReached = currentScroll;
         } 
-        // Si el usuario está bajando
         else if (currentScroll > lastScrollTop) {
-            // REGLA 3: Si vuelve a bajar, el botón desaparece
             scrollToTopButton.classList.remove("show");
-            maxScrollReached = currentScroll; // Actualizamos el punto más bajo alcanzado
+            maxScrollReached = currentScroll;
         } 
-        // Si el usuario está subiendo
         else {
-            // REGLA 2: Aparece solo si la diferencia entre el punto más bajo y el actual es > 100px
             if (maxScrollReached - currentScroll > 100) {
                 scrollToTopButton.classList.add("show");
             }
         }
 
-        // Actualizamos la posición anterior para la siguiente ejecución
         lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
     };
 
     scrollToTopButton.onclick = function () {
+        scrollToTopButton.classList.add('clicked');
         window.scrollTo({ top: 0, behavior: "smooth" });
+        setTimeout(() => {
+            scrollToTopButton.classList.remove('clicked');
+        }, 800);
     };
 }
 

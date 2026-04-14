@@ -6,7 +6,9 @@ use App\Services\Explore\ExploreService;
 use App\Models\Customer;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\Attributes\Lazy;
 
+#[Lazy]
 class NewCO extends Component
 {
     
@@ -16,6 +18,10 @@ class NewCO extends Component
     public $offset = 0;
     public $endResults = false;
 
+    public function placeholder()
+    {
+        return view('livewire.explore.explore-placeholder');
+    }
 
     public function render()
     {

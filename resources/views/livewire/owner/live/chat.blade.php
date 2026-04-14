@@ -68,6 +68,9 @@
                         @elseif($message['type'] == 'knightAdded')
                             <p>King updated: {{ $message['details']['knight']['username'] }} - Level:
                                 {{ $message['details']['knight']['userRanking']['level'] }}</p>
+                        @elseif($message['type'] == 'userSubscribedOnFanClub')
+                            <p>Fan Club: {{ $message['details']['fanClubSubscription']['user']['username'] }} - Cost:
+                                {{ $message['details']['fanClubSubscription']['tokens'] }}</p>
                         @else
                             <p>{{ $message['details']['body'] ?? dd($message) }}</p>
                         @endif

@@ -4,6 +4,7 @@ function initFullviewer() {
     const modal = document.getElementById("viewer_photo");
     const imagenModal = document.getElementById("imagenModal");
     const cerrarBtn = document.querySelector(".cerrar");
+    const swipeUpContainer = document.getElementById("swipeUpContainer");
 
     if (!modal) return;
 
@@ -11,6 +12,8 @@ function initFullviewer() {
         imagen.addEventListener("click", () => {
             const imageSrc = imagen.getAttribute("data-image_vh") || imagen.src;
             imagenModal.src = imageSrc;
+
+            swipeUpContainer.classList.add("d-none");
 
             const fullImages = JSON.parse(imagen.dataset.imagesFull || "[]");
             const thumbImages = JSON.parse(imagen.dataset.imagesThumb || "[]");
@@ -26,6 +29,7 @@ function initFullviewer() {
         cerrarBtn.addEventListener("click", () => {
             modal.style.display = "none";
             document.body.classList.remove("no-scroll");
+            swipeUpContainer.classList.remove("d-none");
         });
     }
 
@@ -33,6 +37,7 @@ function initFullviewer() {
         if (event.target === modal) {
             modal.style.display = "none";
             document.body.classList.remove("no-scroll");
+            swipeUpContainer.classList.remove("d-none");
         }
     });
 
@@ -40,6 +45,7 @@ function initFullviewer() {
         if (event.key === "Escape") {
             modal.style.display = "none";
             document.body.classList.remove("no-scroll");
+            swipeUpContainer.classList.remove("d-none");
         }
     });
 
