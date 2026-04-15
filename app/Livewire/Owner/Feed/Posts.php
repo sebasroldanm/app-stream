@@ -51,16 +51,14 @@ class Posts extends Component
             ->where("owner_id", $owner->id)
             ->orderBy("updatedAt", "desc")
             ->orderBy("id", "desc")
-            ->limit($this->limit)
-            ->get();
+            ->paginate($this->limit);
         
         $posts = Post::with(['telegramMessage.captions', 'telegramMessage.photo', 'telegramMessage.video', 'telegramMessage.chat'])
             ->where('fk_owners_id', $owner->id)
             ->orderBy('published_at', 'desc')
-            ->limit($this->limit)
-            ->get();
+            ->paginate($this->limit);
 
-        $this->totalItems = $feeds->count() + $posts->count();
+        $this->totalItems = $feeds->total() + $posts->total();
 
         $combined = collect();
 
