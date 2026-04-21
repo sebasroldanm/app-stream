@@ -26,8 +26,8 @@
         </div>
         <div class="d-inline-block w-100">
             <div class="form-check d-inline-block mt-2 pt-1">
-                <input type="checkbox" class="form-check-input" id="customCheck11">
-                <label class="form-check-label" for="customCheck11">{{ __('login.remember') }}</label>
+                <input type="checkbox" class="form-check-input" id="remember">
+                <label class="form-check-label" for="remember">{{ __('login.remember') }}</label>
             </div>
             <button type="submit" class="btn btn-primary float-end">{{ __('login.sign_in') }}</button>
         </div>

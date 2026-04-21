@@ -52,8 +52,10 @@ class AuthCustomerController extends Controller
 
         $customer = Customer::where('email', $request->email)->first();
 
+        $remember = $request->has('remember');
+
         if ($customer && Hash::check($request->password, $customer->password)) {
-            Auth::guard('customer')->login($customer);
+            Auth::guard('customer')->login($customer, $remember);
             $customer->update([
                 'last_login_at' => now(),
                 'last_login_ip' => request()->ip(),
