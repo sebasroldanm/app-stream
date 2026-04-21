@@ -40,6 +40,9 @@ class ProcessFeedPost implements ShouldQueue
         }
 
         $post = $this->postData;
+        if (!isset($post->id) || !isset($post->type)) {
+            return;
+        }
         
         // We can just create a clean array/object for storage.
         
@@ -53,12 +56,12 @@ class ProcessFeedPost implements ShouldQueue
             $feed = new Feed();
             $feed->id = $post->id;
         }
-        $feed->likes = $post->likes;
-        $feed->accessMode = $post->accessMode;
-        $feed->owner_id = $post->modelId;
+        $feed->likes = $post->likes ?? 0;
+        $feed->accessMode = $post->accessMode ?? null;
+        $feed->owner_id = $post->modelId ?? null;
         $feed->type = $post->type;
-        $feed->data = json_encode($postDataForStorage);
-        $updatedAt = str_replace('Z.', '.', $post->updatedAt);
+        $feed->data = $postDataForStorage;
+        $updatedAt = str_replace('Z.', '.', $post->updatedAt ?? now()->toIso8601String());
         $feed->updatedAt = Carbon::parse($updatedAt, 'UTC')->setTimezone(config('app.timezone'));
         $feed->save();
 
@@ -77,7 +80,14 @@ class ProcessFeedPost implements ShouldQueue
 
     private function albumUpdated($post_id, $data)
     {
+        if (empty($data)) {
+            return;
+        }
         $data = (object) $data;
+
+        if (!isset($data->id)) {
+            return;
+        }
         
         $album = AlbumFeed::find($data->id);
         $albumDataForStorage = clone $data;
@@ -89,23 +99,26 @@ class ProcessFeedPost implements ShouldQueue
         }
         $album->post_id = $post_id;
         $album->isDeleted = $albumDataForStorage->isDeleted ?? false;
-        $album->owner_id = $albumDataForStorage->userId;
-        $album->name = $albumDataForStorage->name;
-        $album->description = $albumDataForStorage->description;
-        $album->cost = $albumDataForStorage->cost;
-        $album->accessMode = $albumDataForStorage->accessMode;
-        $album->photosCount = $albumDataForStorage->photosCount;
-        $album->likes = $albumDataForStorage->likes;
+        $album->owner_id = $albumDataForStorage->userId ?? null;
+        $album->name = $albumDataForStorage->name ?? null;
+        $album->description = $albumDataForStorage->description ?? null;
+        $album->cost = $albumDataForStorage->cost ?? 0;
+        $album->accessMode = $albumDataForStorage->accessMode ?? null;
+        $album->photosCount = $albumDataForStorage->photosCount ?? 0;
+        $album->likes = $albumDataForStorage->likes ?? 0;
         if (isset($albumDataForStorage->preview)) {
             $album->preview = $albumDataForStorage->preview;
         }
-        $createdAt = str_replace('Z.', '.', $albumDataForStorage->createdAt);
+        $createdAt = str_replace('Z.', '.', $albumDataForStorage->createdAt ?? now()->toIso8601String());
         $album->createdAt = Carbon::parse($createdAt);
         $album->save();
 
         if (isset($data->photos)) {
             foreach ($data->photos as $ph) {
                 $ph = (object) $ph;
+                if (!isset($ph->id)) {
+                    continue;
+                }
                 $photo = PhotoAlbumFeed::find($ph->id);
                 if (!$photo) {
                     $photo = new PhotoAlbumFeed();
@@ -115,22 +128,22 @@ class ProcessFeedPost implements ShouldQueue
                     continue;
                 }
                 $photo->album_feed_id = $album->id;
-                $createdAt = str_replace('Z.', '.', $albumDataForStorage->createdAt);
+                $createdAt = str_replace('Z.', '.', $ph->createdAt ?? $albumDataForStorage->createdAt ?? now()->toIso8601String());
                 $photo->createdAt = Carbon::parse($createdAt);
-                $photo->isDeleted = $ph->isDeleted;
-                $photo->album_id = $ph->albumId;
-                $photo->order = $ph->order;
-                $photo->status = $ph->status;
-                $photo->isNew = $ph->isNew;
-                $photo->primaryColor = $ph->primaryColor;
-                $photo->source = $ph->source;
+                $photo->isDeleted = $ph->isDeleted ?? false;
+                $photo->album_id = $ph->albumId ?? null;
+                $photo->order = $ph->order ?? 0;
+                $photo->status = $ph->status ?? null;
+                $photo->isNew = $ph->isNew ?? false;
+                $photo->primaryColor = $ph->primaryColor ?? null;
+                $photo->source = $ph->source ?? null;
                 if (isset($ph->urlThumb)) {
                     $photo->urlThumb = $ph->urlThumb;
                 }
                 if (isset($ph->urlPreview)) {
                     $photo->urlPreview  = $ph->urlPreview;
                 }
-                $photo->urlThumbMicro = $ph->urlThumbMicro;
+                $photo->urlThumbMicro = $ph->urlThumbMicro ?? null;
                 $photo->save();
 
                 if (isset($ph->url) && empty($photo->picture_upload_id)) {
@@ -142,7 +155,15 @@ class ProcessFeedPost implements ShouldQueue
 
     private function videoAdded($feed_id, $data)
     {
+        if (empty($data)) {
+            return;
+        }
         $data = (object) $data;
+
+        if (!isset($data->id)) {
+            return;
+        }
+
         try {
             $video = VideoFeed::find($data->id);
             if (!$video) {
@@ -150,19 +171,19 @@ class ProcessFeedPost implements ShouldQueue
                 $video->id = $data->id;
             }
             $video->feed_id = $feed_id;
-            $video->owner_id = $data->userId;
-            $createdAt = str_replace('Z.', '.', $data->createdAt);
+            $video->owner_id = $data->userId ?? null;
+            $createdAt = str_replace('Z.', '.', $data->createdAt ?? now()->toIso8601String());
             $video->createdAt = Carbon::parse($createdAt);
-            $video->title = $data->title;
-            $video->description = $data->description;
+            $video->title = $data->title ?? null;
+            $video->description = $data->description ?? null;
             $video->format_trailer = $this->returnFormatByUrl($data->trailerUrl ?? '');
-            $video->cost = $data->cost;
-            $video->accessMode = $data->accessMode;
-            $video->duration = $data->duration;
-            $video->trailerUrl = $data->trailerUrl;
-            $video->coverUrl = $data->coverUrl;
-            $video->microCoverUrl = $data->microCoverUrl;
-            $video->likes = $data->likes;
+            $video->cost = $data->cost ?? 0;
+            $video->accessMode = $data->accessMode ?? null;
+            $video->duration = $data->duration ?? 0;
+            $video->trailerUrl = $data->trailerUrl ?? null;
+            $video->coverUrl = $data->coverUrl ?? null;
+            $video->microCoverUrl = $data->microCoverUrl ?? null;
+            $video->likes = $data->likes ?? 0;
             if (isset($data->coverUrls)) {
                 $video->coverUrls = json_encode($data->coverUrls);
             }
@@ -178,19 +199,27 @@ class ProcessFeedPost implements ShouldQueue
 
     private function postAdded($feed_id, $data, $owner_id)
     {
+        if (empty($data)) {
+            return;
+        }
         $data = (object) $data;
+
+        if (!isset($data->id)) {
+            return;
+        }
+
         $post = PostFeed::find($data->id);
         if (!$post) {
             $post = new PostFeed();
             $post->id = $data->id;
         }
         $post->feed_id = $feed_id;
-        $createdAt = str_replace('Z.', '.', $data->createdAt);
+        $createdAt = str_replace('Z.', '.', $data->createdAt ?? now()->toIso8601String());
         $post->createdAt = Carbon::parse($createdAt);
-        $post->imageLink = $data->imageLink;
-        $post->body = $data->body;
-        $post->likes = $data->likes;
-        $post->accessMode = $data->accessMode;
+        $post->imageLink = $data->imageLink ?? null;
+        $post->body = $data->body ?? null;
+        $post->likes = $data->likes ?? 0;
+        $post->accessMode = $data->accessMode ?? null;
         $post->imageUrl = isset($data->imageUrl) ? $data->imageUrl : null;
         $post->save();
 
@@ -201,22 +230,25 @@ class ProcessFeedPost implements ShouldQueue
         if (isset($data->media)) {
             foreach ($data->media as $key => $med) {
                 $med = (object) $med;
+                if (!isset($med->recordId)) {
+                    continue;
+                }
                 $media = MediaPostFeed::find($med->recordId);
                 if (!$media) {
                     $media = new MediaPostFeed();
                     $media->id = $med->recordId;
                 }
                 $media->post_feed_id = $post->id;
-                $media->type = $med->type;
+                $media->type = $med->type ?? null;
                 if(isset($med->data)) {
                     $medData = (object) $med->data;
-                    $media->data_id = $medData->id;
-                    $createdAt = str_replace('Z.', '.', $medData->createdAt);
+                    $media->data_id = $medData->id ?? null;
+                    $createdAt = str_replace('Z.', '.', $medData->createdAt ?? now()->toIso8601String());
                     $media->createdAt = Carbon::parse($createdAt);
-                    $media->albumId = $medData->albumId;
-                    $media->order = $medData->order;
-                    $media->primaryColor = $medData->primaryColor;
-                    $media->source = $medData->source;
+                    $media->albumId = $medData->albumId ?? null;
+                    $media->order = $medData->order ?? 0;
+                    $media->primaryColor = $medData->primaryColor ?? null;
+                    $media->source = $medData->source ?? null;
                     $media->url = isset($medData->url) ? $medData->url : null;
                     $media->urlThumb = isset($medData->urlThumb) ? $medData->urlThumb : null;
                     $media->urlPreview = isset($medData->urlPreview) ? $medData->urlPreview : null;

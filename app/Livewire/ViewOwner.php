@@ -128,15 +128,13 @@ class ViewOwner extends Component
             || Carbon::parse($owner->lastSync)->diffInHours(Carbon::now()) > 1;
 
         // Re-sync if data is incomplete
-        $ownerData  = isset($owner->data) && !empty($owner->data)
-            ? json_decode($owner->data)
-            : null;
+        $ownerData  = $owner->data;
         $needsSync  = $needsSync || !isset($ownerData->user);
 
         if ($needsSync) {
             $result = $this->syncOwnerByUsername($this->username);
             $owner  = $this->resolveOwnerFromSyncResult($result, $this->username);
-            $ownerData = isset($owner->data) ? json_decode($owner->data) : null;
+            $ownerData = $owner->data;
         }
 
         $this->isBanned = $owner->isBanned || $owner->isBlocked || $owner->isGeoBanned || !$owner->isActive || !$owner->isProfileAvailable;
@@ -159,7 +157,6 @@ class ViewOwner extends Component
         $panels = Panel::where('owner_id', $owner->id)->limit($this->limitPanels)->get();
 
         if ($intro) {
-            $intro->data = json_decode($intro->data);
             if ($intro->type == 'video') {
                 $intro->url = array_values(get_object_vars($intro->data->video->trailers))[0];
             }

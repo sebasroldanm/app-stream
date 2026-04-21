@@ -10,6 +10,10 @@ class Intro extends Model
     use HasFactory;
 
     protected $fillable = ['id', 'type', 'url', 'data', 'owner_id'];
+    
+    protected $casts = [
+        'data' => 'object',
+    ];
 
     public function owner() {
         return $this->hasOne(Owner::class);

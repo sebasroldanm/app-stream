@@ -14,7 +14,7 @@
                 </a>
                 <p class="mb-0">
                     @if ($owner->isLive)
-                        {{ __('sidebar.live') }}
+                        @if ($owner->show_model)<i class="fa fa-lock" aria-hidden="true"></i>@endif {{ __('sidebar.live') }}
                     @else
                         {{ \Carbon\Carbon::parse($owner->statusChangedAt)->diffForHumans() }}
                     @endif

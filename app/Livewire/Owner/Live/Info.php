@@ -34,8 +34,6 @@ class Info extends Component
 
         $this->viewers = $this->updateViewers();
 
-        $this->owner->data = json_decode($this->owner->data);
-
         if (isset($this->owner->data->cam->goal->goal) && $this->owner->data->cam->goal->goal > 0) {
             $percent = ($this->owner->data->cam->goal->spent * 100) / $this->owner->data->cam->goal->goal;
             $this->percent = (round($percent) > 100) ? 100 : round($percent, 1);

@@ -221,7 +221,7 @@
                                         <a 
                                             href="{{ route('owner.live', ['username' => $owner->username]) }}"
                                             class="nav-link live @if ($showLive) active @endif">
-                                            {{ __('owner/tabs.live') }} <div class="live-icon"></div>
+                                            @if ($owner->show_model)<i class="fa fa-lock" aria-hidden="true"></i>@endif {{ __('owner/tabs.live') }} <div class="live-icon"></div>
                                         </a>
                                     </li>
                                 @endif

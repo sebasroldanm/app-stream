@@ -15,11 +15,10 @@ class Player extends Component
     {
         $owner = Owner::find($this->owner->id);
         $url = env("URL_HLS") . "/b-hls-32/" . $owner->id . "/" . $owner->id . ".m3u8";
-        $owner->data = is_string($owner->data) ? json_decode($owner->data) : $owner->data;
 
-        $ratio = $this->aspectRatio($owner->data->cam->broadcastSettings->width, $owner->data->cam->broadcastSettings->height);
-        $height = $owner->data->cam->broadcastSettings->height;
-        $width = $owner->data->cam->broadcastSettings->width;
+        $ratio = $owner->ownerCamBroadcastConfigRatio;
+        $height = $owner->ownerCamBroadcastConfigHeight;
+        $width = $owner->ownerCamBroadcastConfigWidth;
 
         if ($this->isMultiview) {
             $this->dispatch('initMultiview', [

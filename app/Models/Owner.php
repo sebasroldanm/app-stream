@@ -301,8 +301,36 @@ class Owner extends Model
         return $this->avatar;
     }
 
-    public function getOwnerCamBroadcastSettingsAttribute()
+    public function getOwnerCamBroadcastConfigFpsAttribute()
     {
-        return $this->data?->cam?->broadcastSettings;
+        return $this->data?->cam?->broadcastConfig?->flashFps ?? null;
+    }
+
+    public function getOwnerCamBroadcastConfigWidthAttribute()
+    {
+        return $this->data?->cam?->broadcastConfig?->flashWidth ?? null;
+    }
+
+    public function getOwnerCamBroadcastConfigHeightAttribute()
+    {
+        return $this->data?->cam?->broadcastConfig?->flashHeight ?? null;
+    }
+
+    public function getOwnerCamBroadcastConfigRatioAttribute()
+    {
+        if ($this->data?->cam?->broadcastConfig?->flashWidth) {
+            $gcd = function ($a, $b) use (&$gcd) {
+                return $b === 0 ? $a : $gcd($b, $a % $b);
+            };
+
+            $divisor = $gcd($this->data?->cam?->broadcastConfig?->flashWidth, $this->data?->cam?->broadcastConfig?->flashHeight);
+            return $this->data?->cam?->broadcastConfig?->flashWidth / $divisor . ":" . $this->data?->cam?->broadcastConfig?->flashHeight / $divisor;
+        }
+        return "16:9";
+    }
+
+    public function getShowModelAttribute()
+    {
+        return $this->data?->cam?->show?->mode ?? false;
     }
 }

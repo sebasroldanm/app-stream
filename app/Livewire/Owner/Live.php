@@ -28,7 +28,7 @@ class Live extends Component
 
     public function render()
     {
-        $this->broadcastSettings = $this->owner->ownerCamBroadcastSettings;
+        $this->broadcastSettings = $this->owner->ownerCamBroadcastConfig;
         if ($this->owner->isMobile) {
             $this->mainCol = 'col-12 col-sm-8';
             $this->sideCol = 'col-12 col-sm-4';
