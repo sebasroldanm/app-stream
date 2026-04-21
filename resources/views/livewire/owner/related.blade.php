@@ -18,42 +18,7 @@
                     <div class="swiper-wrapper">
                         @foreach ($related->models as $item)
                             <div class="swiper-slide">
-                                <div class="user-post-data position-relative">
-                                    <a href="{{ route('owner', $item->username) }}" class="d-block">
-                                        <div
-                                            class="image-container overflow-hidden rounded shadow-sm position-relative">
-                                            <img src="{{ $item->previewUrlThumbSmall }}"
-                                                class="img-fluid w-100 object-cover"
-                                                style="height: 180px; object-fit: cover;" alt="{{ $item->username }}">
-
-                                            <div class="position-absolute top-0 start-0 m-1">
-                                                <span class="badge bg-dark-50 text-white shadow-sm">
-                                                    <i
-                                                        class="las {{ $item->isMobile ? 'la-mobile-alt' : 'la-laptop' }}"></i>
-                                                </span>
-                                            </div>
-
-                                            @if ($item->isNew)
-                                                <div class="position-absolute top-0 end-0 m-1">
-                                                    <span
-                                                        class="badge bg-warning text-dark fw-bold">{{ __('owner/related.new') }}</span>
-                                                </div>
-                                            @endif
-
-                                            <div class="position-absolute bottom-0 end-0 m-2">
-                                                <span class="badge bg-dark text-white opacity-75">
-                                                    {{ $item->viewersCount }} <i class="las la-eye"></i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="mt-2 text-center">
-                                            <h6 class="mb-0 text-truncate">{{ $item->username }}</h6>
-                                            @if (in_array($item->id, $favs))
-                                                <i class="las la-heart text-danger"></i>
-                                            @endif
-                                        </div>
-                                    </a>
-                                </div>
+                                <x-ownerInfoCard :owner="$item" :favs="$favs" />
                             </div>
                         @endforeach
                     </div>
