@@ -41,7 +41,6 @@
                 @foreach ($selectedOwners as $ownerId)
                     @php 
                         $ownerModel = \App\Models\Owner::find($ownerId); 
-                        $ownerModel->data = json_decode($ownerModel->data); 
                         if (isset($ownerModel->data->cam->show)) {
                             $state = $ownerModel->data->cam->show->mode;
                             $type = 'badge border border-red text-red text-bold';

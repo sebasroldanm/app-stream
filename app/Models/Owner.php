@@ -318,7 +318,7 @@ class Owner extends Model
 
     public function getOwnerCamBroadcastConfigRatioAttribute()
     {
-        if ($this->data?->cam?->broadcastConfig?->flashWidth) {
+        if ($this->data?->cam?->broadcastConfig && $this->data?->cam?->broadcastConfig?->flashWidth) {
             $gcd = function ($a, $b) use (&$gcd) {
                 return $b === 0 ? $a : $gcd($b, $a % $b);
             };

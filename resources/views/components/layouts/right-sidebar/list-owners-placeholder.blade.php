@@ -1,5 +1,5 @@
 <div class="media-height p-3">
-    @for ($i = 0; $i < 10; $i++)
+    @for ($i = 0; $i < 15; $i++)
         <div class="d-flex align-items-center mb-4">
             <div class="iq-profile-avatar">
                 <div class="skeleton-placeholder s-round" style="width: 50px; height: 50px;"></div>

@@ -1,8 +1,5 @@
 <div id="content-page" class="content-page" data-id_owner="{{ $owner->id }}"
     @if ($owner->isLive) wire:init="verifyAsync" @endif>
-    {{-- @php
-        $owner->data = json_decode($owner->data, true);
-    @endphp --}}
     <div class="container">
         <div class="row">
             <div class="col-sm-12">

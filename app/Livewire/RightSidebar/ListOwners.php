@@ -7,6 +7,7 @@ use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Lazy;
+use Livewire\Attributes\On;
 
 #[Lazy]
 class ListOwners extends Component
@@ -31,6 +32,13 @@ class ListOwners extends Component
         return view('components.layouts.right-sidebar.list-owners', [
             'owners' => $this->owners,
         ]);
+    }
+
+    #[On('owners-updated')]
+    public function refresh()
+    {
+        Cache::forget($this->getCacheKey(Auth::guard('customer')->id()));
+        $this->owners = $this->getCachedOwners();
     }
 
     protected function getCachedOwners()

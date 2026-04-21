@@ -17,6 +17,7 @@ class Actions extends Component
             $this->message = Cache::pull('Notification');
             $this->status = Cache::pull('Status');
             $this->dispatch('notify', message: $this->message);
+            $this->dispatch('owners-updated');
         }
     }
 

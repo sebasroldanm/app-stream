@@ -1,6 +1,3 @@
-@php
-    $owner->data = json_decode($owner->data);
-@endphp
 <div class="card mb-0 card_owner_home">
     <div class="top-bg-image top-bg-list-owner container-overlay">
         @if ($owner->data)

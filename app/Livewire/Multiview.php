@@ -30,10 +30,6 @@ class Multiview extends Component
             ->orderBy('statusChangedAt', 'desc')
             ->get();
         
-        foreach ($liveOwners as $key => $owner) {
-            $owner->data = json_decode($owner->data);
-        }
-
         return view('livewire.multiview', [
             'liveOwners' => $liveOwners,
         ]);
