@@ -40,7 +40,6 @@
                 </span>
             </div>
         </div>
-        <div class="see_pic_exp"> Primary </div>
         <div class="mt-2 text-center">
             <h6 class="mb-0 text-truncate">{{ $owner->username }}</h6>
             @if (isset($favs) && in_array($owner->id, $favs))
