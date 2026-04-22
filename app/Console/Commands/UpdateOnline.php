@@ -53,6 +53,8 @@ class UpdateOnline extends Command
                 Cache::remember('online_app', 60, function () {
                     return Owner::where('isOnline', true)->count();
                 });
+                Cache::put('Notification', 'Update Online', 3600);
+                Cache::put('Status', 'Finalizado', 3600);
             })
             ->dispatch();
     }

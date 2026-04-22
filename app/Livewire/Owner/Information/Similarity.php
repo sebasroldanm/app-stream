@@ -5,14 +5,21 @@ namespace App\Livewire\Owner\Information;
 use App\Models\Owner;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
+use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
+#[Lazy]
 class Similarity extends Component
 {
     public Owner $owner;
 
     public $similarity;
     public $see_full = false;
+
+    public function placeholder()
+    {
+        return view('livewire.owner.information.similarity-placeholder');
+    }
 
     public function render()
     {
@@ -43,6 +50,10 @@ class Similarity extends Component
                             $similarity->push((object) $result);
                         }
                     }
+                }
+
+                if ($similarity->isEmpty()) {
+                    return false;
                 }
 
                 return $similarity

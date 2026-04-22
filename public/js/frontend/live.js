@@ -2,6 +2,10 @@
     let player = null;
     let hls = null;
 
+    setTimeout(() => {
+        initLivePlayer();
+    }, 500);
+
     window.Livewire.on("initLive", function (data) {
         // Pequeño delay para asegurar que el DOM esté listo tras el render de Livewire
         setTimeout(() => {

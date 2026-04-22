@@ -1,4 +1,4 @@
-.video-play-button {
+video-play-button {
     display: block;
     width: 104px;
     height: 104px;
@@ -192,92 +192,12 @@ i.online {
     background-color: rgba(255, 0, 0, 0.6);
 }
 
-/* Skeleton Loader */
-:root {
-    --loader-background-color: #EEEEEE;
-    --loader-highlight-color: #DEDEDE;
-}
-
-.skeleton-loader {
-    width: 300px;
-    height: 15px;
-    background: linear-gradient(90deg, var(--loader-background-color) 25%, var(--loader-highlight-color) 50%, var(--loader-background-color) 75%);
-    background-size: 200% 100%;
-    animation: loading 2s infinite ease-in-out;
-    border-radius: 8px;
-}
-
-.avatar-skeleton {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(90deg, var(--loader-background-color) 25%, var(--loader-highlight-color) 50%, var(--loader-background-color) 75%);
-    background-size: 200% 100%;
-    animation: loading 2s infinite ease-in-out;
-    border-radius: 50%;
-    margin-bottom: 20px;
-}
-
-.cover-image-skeleton {
-    width: 130px;
-    height: 150px;
-    background: linear-gradient(90deg, var(--loader-background-color) 25%, var(--loader-highlight-color) 50%, var(--loader-background-color) 75%);
-    background-size: 200% 100%;
-    animation: loading 2s infinite ease-in-out;
-    border-radius: 8px;
-    margin: 10px;
-}
-
-@keyframes loading {
-    0% {
-        background-position: 200% 0;
-    }
-
-    100% {
-        background-position: -200% 0;
-    }
-}
-
-/* Skeleton Loader */
-
-
 /** Explorer */
 
 .image-container {
-    position: relative;
     width: 100%;
     aspect-ratio: 1/1;
 }
-
-.primary-image,
-.secondary-image,
-.tertiary-image {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    transition: opacity 0.3s ease;
-}
-
-.primary-image {
-    opacity: 1;
-}
-
-.secondary-image,
-.tertiary-image {
-    opacity: 0;
-}
-
-/* Clases adicionales para mostrar/ocultar imágenes */
-.show-secondary .primary-image,
-.show-tertiary .primary-image,
-.show-tertiary .secondary-image {
-    opacity: 0;
-}
-
-.show-secondary .secondary-image,
-.show-tertiary .tertiary-image {
-    opacity: 1;
-}
-
 
 .s_icon {
     position: absolute;
@@ -443,7 +363,288 @@ i.online {
 
 /* Info Viewers */
 .viewers-list {
-    max-height: 60vh;
+    max-height: 30vh;
     overflow-y: auto;
 }
 /* Info Viewers */
+
+/* Skeleton Loader */
+
+:root {
+    --skeleton-bg: #e0e0e0a2;
+    --skeleton-highlight: #ffffffe0;
+}
+
+/* La base de la animación: aplicable a cualquier forma */
+.skeleton-placeholder {
+    background: linear-gradient(90deg, 
+        var(--skeleton-bg) 25%, 
+        var(--skeleton-highlight) 50%, 
+        var(--skeleton-bg) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-loading 2.5s infinite ease-in-out;
+    border-radius: 4px;
+    display: inline-block;
+    border: none;
+    color: transparent !important; /* Oculta texto residual */
+    pointer-events: none; /* Evita clics en carga */
+    user-select: none;
+}
+
+@keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Utilidades de forma para combinar */
+.s-round { border-radius: 50% !important; }
+.s-w-100 { width: 100%; }
+.s-h-50  { height: 50px; } /* Puedes crear las que necesites */
+
+
+.swiper-nav-btn {
+    width: 30px !important;
+    height: 30px !important;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    color: #50b5ff !important; /* Color principal de SocialV */
+}
+
+.swiper-nav-btn::after {
+    font-size: 12px !important;
+    font-weight: bold;
+}
+
+.image-container img {
+    transition: transform 0.3s ease;
+}
+
+.image-container:hover img {
+    transform: scale(1.05);
+}
+
+.bg-dark-50 {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.swiper-button-prev:after,
+.swiper-button-next:after {
+    content: '';
+}
+
+
+/* Spin animation Sync Owner */
+.ri-spin-fade {
+    display: inline-block;
+    animation: spin-and-fade 1.5s linear infinite;
+}
+
+@keyframes spin-and-fade {
+    0% {
+        transform: rotate(0deg);
+        color: #00b3ff;
+    }
+    50% {
+        color: #55ff7c;
+    }
+    100% {
+        transform: rotate(360deg);
+        color: #00b3ff;
+    }
+}
+
+.refresh-button[disabled] {
+    cursor: not-allowed;
+    opacity: 0.9;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.ri-refresh-line {
+    transition: color 0.4s ease, transform 0.4s ease;
+    display: inline-block;
+}
+/* Spin animation Sync Owner */
+
+
+/* Swipe Up Button */
+.swipe-container {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translate(-50%, 30px);
+  opacity: 0;
+  visibility: hidden;
+  z-index: 1000;
+  transition: transform 0.5s ease, opacity 0.5s ease, visibility 0.5s;
+}
+
+.swiper-button-next.custom-arrow,
+.swiper-button-prev.custom-arrow {
+    color: #000;
+}
+
+html[data-theme='dark'] .swiper-button-next.custom-arrow,
+html[data-theme='dark'] .swiper-button-prev.custom-arrow {
+    color: #fff;
+}
+
+.swipe-container.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+
+.swipe-up-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #e9e9e980;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid #e9e9e980;
+  border-radius: 20px;
+  padding: 8px 18px;
+  cursor: pointer;
+  animation: floatSutil 2.5s ease-in-out infinite;
+}
+
+html[data-theme='dark'] .swipe-up-btn {
+    background: #00000080;
+    border: 1px solid #00000080;
+    color: #fff;
+}
+
+.swipe-up-btn span {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.swipe-up-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+@keyframes floatSutil {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.swipe-container.clicked {
+  transform: translate(-50%, -300px) scale(0.8); 
+  opacity: 0;
+  transition: transform 0.6s ease-in, opacity 0.4s ease-in;
+  pointer-events: none; 
+}
+
+/* Swipe Up Button */
+
+.card-owner-info {
+    width: 100%;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    position: relative;
+}
+
+html[data-theme='dark'] .card-owner-info {
+    background: #000;
+}
+
+.content-image {
+    aspect-ratio: 1 / 1;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000;
+}
+
+.content-image::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: inherit; 
+    background-size: cover;
+    background-position: center;
+    filter: blur(8px); 
+    transform: scale(1.2); 
+    z-index: 1;
+}
+
+.content-image img {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.swiper-button-next-owner-info,
+.swiper-button-prev-owner-info {
+    position: absolute;
+    top: 50%;
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+    z-index: 10;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffffa6;
+    backdrop-filter: blur(6px);
+    border-radius: 50%;
+    color: #000;
+}
+
+html[data-theme='dark'] .swiper-button-next-owner-info,
+html[data-theme='dark'] .swiper-button-prev-owner-info {
+    background-color: #00000091;
+    backdrop-filter: blur(6px);
+    color: #fff;
+}
+
+.swiper-button-prev-owner-info {
+    left: -20px;
+}
+
+.swiper-button-next-owner-info {
+    right: -20px;
+}
+
+.swiper-button-next-owner-info::after,
+.swiper-button-prev-owner-info::after {
+    font-family: swiper-icons;
+    font-size: 16px;
+    text-transform: none !important;
+    letter-spacing: 0;
+    font-variant: normal;
+    line-height: 1;
+}
+
+.swiper-button-prev-owner-info::after {
+    content: 'prev';
+    transform: translateX(7px);
+}
+
+.swiper-button-next-owner-info::after {
+    content: 'next';
+    transform: translateX(-7px);
+}
+
+.card-content {
+    padding: 20px;
+}
+
+.z-index-10 {
+    z-index: 10;
+}

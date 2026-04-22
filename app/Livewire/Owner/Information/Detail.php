@@ -27,7 +27,7 @@ class Detail extends Component
             $offlineStatusUpdatedAt = Carbon::parse($this->owner->offlineStatusUpdatedAt);
             $wentIdleAt = Carbon::parse($this->owner->data->user->user->wentIdleAt);
             $lasSnapshot = Carbon::parse($this->owner->data->user->user->snapshotTimestamp);
-            $ratingPrivate = $this->owner->data->user->user->ratingPrivate ?? false;
+            $ratingPrivate = $this->owner->getRatingPrivate();
 
             $this->dispatch('initFullviewer');
 

@@ -6,8 +6,10 @@ use App\Models\Owner;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use GuzzleHttp\Client;
+use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
+#[Lazy]
 class Chat extends Component
 {
     public Owner $owner;
@@ -16,6 +18,11 @@ class Chat extends Component
     public function mount(Owner $owner)
     {
         $this->owner = $owner;
+    }
+
+    public function placeholder()
+    {
+        return view('livewire.owner.live.chat-placeholder');
     }
 
     public function render()

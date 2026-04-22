@@ -9,6 +9,62 @@ use Illuminate\Database\Eloquent\Model;
 class Owner extends Model
 {
     use HasFactory, OwnerProp;
+    
+    protected $fillable = [
+        'name',
+        'username',
+        'previousUsername',
+        'lastUsername',
+        'avatar',
+        'preview',
+        'gender',
+        'country',
+        'isMobile',
+        'statusChangedAt',
+        'isLive',
+        'isOnline',
+        'isError',
+        'isDelete',
+        'isInfoCustom',
+        'isMediaCustom',
+        'data',
+        'bodyType',
+        'eyeColor',
+        'age',
+        'birthDate',
+        'favoritedCount',
+        'offlineStatusUpdatedAt',
+        'notFound',
+        'lastSync',
+        'isGeoBanned',
+        'isProfileAvailable',
+        'isBanned',
+        'isActive',
+        'isBlocked',
+    ];
+
+    protected $casts = [
+        'isMobile' => 'boolean',
+        'isLive' => 'boolean',
+        'isOnline' => 'boolean',
+        'isError' => 'boolean',
+        'isDelete' => 'boolean',
+        'isInfoCustom' => 'boolean',
+        'isMediaCustom' => 'boolean',
+        'notFound' => 'boolean',
+        'isGeoBanned' => 'boolean',
+        'isProfileAvailable' => 'boolean',
+        'isBanned' => 'boolean',
+        'isActive' => 'boolean',
+        'isBlocked' => 'boolean',
+        'data' => 'object',
+        'statusChangedAt' => 'datetime',
+        'offlineStatusUpdatedAt' => 'datetime',
+        'lastSync' => 'datetime',
+        'birthDate' => 'date',
+        'favoritedCount' => 'integer',
+        'age' => 'integer',
+    ];
 
     public function intro()
     {
@@ -58,6 +114,11 @@ class Owner extends Model
         return $this->hasMany(OwnerRelation::class, 'owner_id');
     }
 
+    public function posts()
+    {
+        return $this->hasMany(Post::class, 'fk_owners_id');
+    }
+
     public function relatedOwners()
     {
         // This is a bit complex in pure Eloquent for "Many Groups -> Many Owners", 
@@ -94,7 +155,7 @@ class Owner extends Model
 
     public function getGender()
     {
-        return $this->data->user->user->gender;
+        return $this->data?->user?->user?->gender;
     }
 
     public function getGenderIcon()
@@ -102,11 +163,174 @@ class Owner extends Model
         return $this->iconGender($this->getGender());
     }
 
+    /**
+     * Get the continent
+     * @return string|null
+     */
     public function getContinent()
     {
-        if (!isset($this->data->user->modelTopPosition)) {
-            return '';
+        return $this->data?->user?->modelTopPosition?->continent;
+    }
+
+    /**
+     * Get the hair color
+     * @return string|null
+     */
+    public function getHairColor()
+    {
+        return $this->data?->user?->user?->hairColor;
+    }
+
+    /**
+     * Get the eye color
+     * @return string|null
+     */
+    public function getEyeColor()
+    {
+        return $this->data?->user?->user?->eyeColor;
+    }
+
+    /**
+     * Get the body type
+     * @return string|null
+     */
+    public function getBodyType()
+    {
+        return $this->data?->user?->user?->bodyType;
+    }
+
+    /**
+     * Get the ethnicity
+     * @return string|null
+     */
+    public function getEthnicity()
+    {
+        return $this->data?->user?->user?->ethnicity;
+    }
+
+    /**
+     * Get the top position
+     * @return string|null
+     */
+    public function getTopPosition()
+    {
+        return number_format($this->data?->user?->modelTopPosition?->position, 2);
+    }
+
+    /**
+     * Get the top points
+     * @return string|null
+     */
+    public function getTopPoints()
+    {
+        return number_format($this->data?->user?->modelTopPosition?->points, 2);
+    }
+
+    /**
+     * Get the rating private
+     * @return float|bool
+     */
+    public function getRatingPrivate()
+    {
+        return $this->data?->user?->user?->ratingPrivate ?? false;
+    }
+
+    /**
+     * Get the interests
+     * @return array
+     */
+    public function getInterests()
+    {
+        return $this->data?->user?->user?->interests ?? [];
+    }
+
+    /**
+     * Get the public activities
+     * @return array
+     */
+    public function getPublicActivities()
+    {
+        return $this->data?->user?->user?->publicActivities ?? [];
+    }
+
+    /**
+     * Get the private activities
+     * @return array
+     */
+    public function getPrivateActivities()
+    {
+        return $this->data?->user?->user?->privateActivities ?? [];
+    }
+
+    /**
+     * Get the preview url thumb small
+     * @return string|null
+     */
+    public function getPreviewUrlThumbSmall()
+    {
+        return $this->data?->user?->user?->previewUrlThumbSmall;
+    }
+
+    /**
+     * Get the preview url thumb big
+     * @return string|null
+     */
+    public function getPreviewUrlThumbBig()
+    {
+        return $this->data?->user?->user?->previewUrlThumbBig;
+    }
+
+    /**
+     * Get the preview url thumb large
+     * @return string|null
+     */
+    public function getAvatarUrl()
+    {
+        return $this->data?->user?->user?->avatarUrl;
+    }
+
+    public function getAvatarUrlThumb()
+    {
+        return $this->data?->user?->user?->avatarUrlThumb;
+    }
+    public function getPicProfileAttribute()
+    {
+        if (empty($this->avatar)) {
+            return "https://ui-avatars.com/api/?name=" . $this->username . "&background=fff&color=fa377b";
         }
-        return $this->data->user->modelTopPosition->continent;
+        return $this->avatar;
+    }
+
+    public function getOwnerCamBroadcastConfigFpsAttribute()
+    {
+        return $this->data?->cam?->broadcastConfig?->flashFps ?? null;
+    }
+
+    public function getOwnerCamBroadcastConfigWidthAttribute()
+    {
+        return $this->data?->cam?->broadcastConfig?->flashWidth ?? null;
+    }
+
+    public function getOwnerCamBroadcastConfigHeightAttribute()
+    {
+        return $this->data?->cam?->broadcastConfig?->flashHeight ?? null;
+    }
+
+    public function getOwnerCamBroadcastConfigRatioAttribute()
+    {
+        if ($this->data?->cam?->broadcastConfig && $this->data?->cam?->broadcastConfig?->flashWidth) {
+            $gcd = function ($a, $b) use (&$gcd) {
+                return $b === 0 ? $a : $gcd($b, $a % $b);
+            };
+
+            $divisor = $gcd($this->data?->cam?->broadcastConfig?->flashWidth, $this->data?->cam?->broadcastConfig?->flashHeight);
+            return $this->data?->cam?->broadcastConfig?->flashWidth / $divisor . ":" . $this->data?->cam?->broadcastConfig?->flashHeight / $divisor;
+        }
+        return "16:9";
+    }
+
+    public function getShowModelAttribute()
+    {
+        return $this->data?->cam?->show?->mode ?? false;
     }
 }

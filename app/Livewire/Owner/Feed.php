@@ -5,6 +5,7 @@ namespace App\Livewire\Owner;
 use App\Models\Feed as ModelsFeed;
 use App\Models\Owner;
 use App\Models\Photos;
+use App\Models\Post;
 use App\Models\Video;
 use App\Traits\OwnerProp;
 use App\Traits\SyncData;
@@ -44,27 +45,14 @@ class Feed extends Component
             $this->birthDate = $owner->data->user->user->birthDate;
             $this->age = Carbon::now()->diff(Carbon::parse($owner->data->user->user->birthDate))->y;
         }
-
-        $photos = Photos::where('ownerId', $owner->id)->where('url', '!=', '')->limit(9)->get();
-        $videos = Video::where('owner_id', $owner->id)->where('coverUrl', '!=', '')->limit(9)->get();
-
-        $feeds = ModelsFeed::with(["owner", "albumFeed.photos", "videoFeed", "postFeed.mediaPostFeeds"])
-            ->where("owner_id", $owner->id)
-            ->orderBy("updatedAt", "desc")
-            ->orderBy("id", "desc")
-            ->limit($this->limit)
-            ->get();
-
+        
         $this->dispatch('initFullviewer');
 
         $this->dispatch('initVideos');
 
         return view('livewire.owner.feed', [
             'owner'     => $owner,
-            'photos'    => $photos,
-            'videos'    => $videos,
-            'feeds'     => $feeds,
-            'totalFeeds' => ModelsFeed::where("owner_id", $owner->id)->count(),
+            'totalItems' => ModelsFeed::where("owner_id", $owner->id)->count() + Post::where('fk_owners_id', $owner->id)->count(),
         ]);
     }
 

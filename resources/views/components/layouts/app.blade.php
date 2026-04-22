@@ -96,9 +96,14 @@
 
 
     @php $version = date('YmdHi'); @endphp
+    <script src="{{ asset('js/frontend/search.js') }}?v={{ $version }}"></script>
+    <script src="{{ asset('js/frontend/fullviewer.js') }}?v={{ $version }}"></script>
+    <script src="{{ asset('js/frontend/swiper-init.js') }}?v={{ $version }}"></script>
+    <script src="{{ asset('js/frontend/layout-utils.js') }}?v={{ $version }}"></script>
     <script src="{{ asset('js/frontend/custom.js') }}?v={{ $version }}"></script>
     <script src="{{ asset('js/frontend/video.js') }}?v={{ $version }}"></script>
     <script src="{{ asset('js/frontend/live.js') }}?v={{ $version }}"></script>
+
 
 
 </body>

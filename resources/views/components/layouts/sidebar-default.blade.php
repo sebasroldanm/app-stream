@@ -28,6 +28,11 @@
                         <i class="las la-cog"></i><span>{{ __('sidebar.actions') }}</span>
                     </a>
                 </li>
+                <li class="@if (Route::is('post-management')) active @endif">
+                    <a href="{{ route('post-management') }}" wire:navigate class=" ">
+                        <i class="las la-file-alt"></i><span>{{ __('sidebar.post-management') }}</span>
+                    </a>
+                </li>
                 {{-- <li class=" ">
                     <a href="../app/todo.html" class=" ">
                         <i class="las la-check-circle"></i><span>Todo</span>

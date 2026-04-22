@@ -62,7 +62,7 @@ class OwnerIntroSyncService
 
             $intro->type = $data['type'];
             $intro->url = $data[$data['type']]['url'] ?? null;
-            $intro->data = $content;
+            $intro->data = $data;
             $intro->owner_id = $id;
 
             $intro->save();

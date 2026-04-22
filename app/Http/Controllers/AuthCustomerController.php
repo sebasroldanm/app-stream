@@ -12,8 +12,34 @@ class AuthCustomerController extends Controller
 {
     use SyncData;
 
-    public function index() {
-        return view('login');
+    public function index()
+    {
+        return view('auth.login');
+    }
+
+    public function signup()
+    {
+        return view('auth.signup');
+    }
+
+    public function register(Request $request)
+    {
+        // Validar campos
+        $request->validate([
+            'username' => 'required|string|max:255|unique:customers,username',
+            'email' => 'required|email|unique:customers,email',
+            'password' => 'required|min:8',
+        ]);
+
+        $customer = Customer::create([
+            'username' => $request->username,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        Auth::guard('customer')->login($customer);
+
+        return redirect()->route('home');
     }
 
     public function login(Request $request)
@@ -26,8 +52,10 @@ class AuthCustomerController extends Controller
 
         $customer = Customer::where('email', $request->email)->first();
 
+        $remember = $request->has('remember');
+
         if ($customer && Hash::check($request->password, $customer->password)) {
-            Auth::guard('customer')->login($customer);
+            Auth::guard('customer')->login($customer, $remember);
             $customer->update([
                 'last_login_at' => now(),
                 'last_login_ip' => request()->ip(),
@@ -47,10 +75,11 @@ class AuthCustomerController extends Controller
         return redirect()->route('login');
     }
 
-    public function test()
+    public function test(Request $request)
     {
-        dd($this->syncFeedByOwnerId(191226603));
+        return;
     }
+    
 
     public function search(Request $request)
     {
@@ -63,7 +92,7 @@ class AuthCustomerController extends Controller
         $keyword = $request->q;
 
         $response = $this->searchGlobal($keyword);
-        
+
         return response()->json($response);
     }
 }

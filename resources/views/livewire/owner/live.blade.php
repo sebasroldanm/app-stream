@@ -5,7 +5,14 @@
             <livewire:owner.live.info :owner="$owner" />
         </div>
         <div class="{{ $sideCol }}">
-            <livewire:owner.live.chat :owner="$owner" />
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <div class="header-title">
+                        <h4 class="card-title">Chat</h4>
+                    </div>
+                </div>
+                <livewire:owner.live.chat :owner="$owner" />
+            </div>
         </div>
     </div>
 

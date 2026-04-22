@@ -2,9 +2,10 @@
 
 return [
     'personal' => 'Personal',
+    'position' => 'Posición :position',
     'id' => 'ID',
     'name' => 'Nombre',
-    'genders' => 'Género',
+    'gender' => 'Género',
     'genders' => [
         'female' => 'Femenino',
         'male' => 'Masculino',
@@ -30,6 +31,7 @@ return [
         'bodyTypeCurvy' => 'Curva',
         'bodyTypeBBW' => 'BBW',
         'bodyTypeBig' => 'Big',
+        'bodyTypeLarge' => 'Grande',
     ],
     'eye_color' => 'Color de ojos',
     'eye_colors' => [
@@ -57,10 +59,13 @@ return [
         'ethnicityLatino' => 'Latino',
         'ethnicityMultiracial' => 'Multiracial',
         'ethnicityWhite' => 'Blanco',
+        'ethnicityMixed' => 'Mestizo',
     ],
     'profile' => 'Perfil',
     'profile_status' => 'Estado de Perfil',
     'profile_not_found' => 'No encontrado en el Servidor principal, buscar en similitudes',
+    'not_found_origin_unlock' => 'Desbloquear para ver el servidor de origen',
+    'not_found_origin_search' => 'Buscar en similitudes',
     'profile_top_position' => 'Posición en el Top',
     'ranking_info' => ':position en el género :icon con :points puntos en :continent',
     'region' => 'Región',
@@ -90,4 +95,6 @@ return [
     'avatar' => 'Avatar',
     'last_seen' => 'Última vez visto',
     'go_to_site' => 'Ir al sitio',
+    'reported_slowness' => 'Reportado por lentitud',
+    'banned_or_blocked' => 'Baneado o Bloqueado',
 ];

@@ -5,6 +5,10 @@ window.addEventListener("initVideos", () => {
     }, 500);
 });
 
+setInterval(() => {
+    initVideos();
+}, 1000);
+
 window.Livewire.on("initVideos", () => {
     setTimeout(() => {
         // console.log("initVideos wire");

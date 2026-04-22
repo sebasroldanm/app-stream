@@ -1,8 +1,5 @@
 <div id="content-page" class="content-page" data-id_owner="{{ $owner->id }}"
     @if ($owner->isLive) wire:init="verifyAsync" @endif>
-    {{-- @php
-        $owner->data = json_decode($owner->data, true);
-    @endphp --}}
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
@@ -20,10 +17,21 @@
                                 @endif
 
                                 <ul class="header-nav list-inline d-flex flex-wrap justify-end p-0 m-0">
+                                    @if ($isBanned)
+                                        <li>
+                                            <a href="javascript:void(0);" data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                data-bs-original-title="{{ __('owner/information/details.banned_or_blocked') }}"
+                                                class="username_reported">
+                                                <i class="las la-ban"></i>
+                                            </a>
+                                        </li>
+                                    @endif
                                     @if ($error_search)
                                         <li>
                                             <a href="javascript:void(0);" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" data-bs-original-title="{{ __('owner/information/details.reported_slowness') }}"
+                                                data-bs-placement="top"
+                                                data-bs-original-title="{{ __('owner/information/details.reported_slowness') }}"
                                                 class="username_reported">
                                                 <i class="las la-exclamation-triangle"></i>
                                             </a>
@@ -50,36 +58,52 @@
                                     @if (isset($owner->data->user->modelTopPosition) && $owner->data->user->modelTopPosition->position !== 0)
                                         <li><a href="javascript:void(0);" data-bs-toggle="tooltip"
                                                 data-bs-placement="top"
-                                                data-bs-original-title="{{ __('owner/information/details.position', ['pos' => $owner->data->user->modelTopPosition->position]) }}">
+                                                data-bs-original-title="{{ __('owner/information/details.position', ['position' => $owner->data->user->modelTopPosition->position]) }}">
                                                 <i class="las la-trophy"></i>
                                             </a></li>
                                     @else
                                         @if (isset($owner->data->usercurrPosition) && $owner->data->usercurrPosition !== 0)
                                             <li><a href="javascript:void(0);" data-bs-toggle="tooltip"
                                                     data-bs-placement="top"
-                                                    data-bs-original-title="{{ __('owner/information/details.position', ['pos' => $owner->data->user->modelTopPosition->position]) }}">
+                                                    data-bs-original-title="{{ __('owner/information/details.position', ['position' => $owner->data->user->modelTopPosition->position]) }}">
                                                     <i class="las la-trophy"></i>
                                                 </a></li>
                                         @endif
                                     @endif
                                     @if ($owner->notFound)
                                         @if (!$force_sync)
-                                            <li><a href="javascript:void(0);" data-bs-toggle="tooltip" wire:click="force_sync_enable"
-                                                    data-bs-placement="top" data-bs-original-title="{{ __('owner/information/details.not_found_origin_unlock') }}">
+                                            <li><a href="javascript:void(0);" data-bs-toggle="tooltip"
+                                                    wire:click="force_sync_enable" data-bs-placement="top"
+                                                    data-bs-original-title="{{ __('owner/information/details.not_found_origin_unlock') }}">
                                                     <i class="ri-alert-line"></i>
                                                 </a></li>
                                         @else
-                                            <li><a href="javascript:void(0);" data-bs-toggle="tooltip" wire:click="updateDataMod"
-                                                    data-bs-placement="top" data-bs-original-title="{{ __('owner/information/details.not_found_origin_search') }}">
-                                                    <i class="ri-refresh-line"></i>
-                                                </a></li>
+                                            <li>
+                                                <a href="javascript:void(0);" 
+                                                wire:click="updateDataMod"
+                                                wire:loading.attr="disabled"
+                                                wire:target="updateDataMod"
+                                                class="refresh-button">
+                                                
+                                                    <i class="ri-refresh-line" 
+                                                    wire:loading.class="ri-spin-fade" 
+                                                    wire:target="updateDataMod"></i>
+                                                </a>
+                                            </li>
                                         @endif
                                     @else
-                                        <li><a wire:click="updateDataMod" href="javascript:void(0);"
-                                                data-bs-toggle="tooltip" data-bs-placement="top"
-                                                data-bs-original-title="{{ __('owner/profile.update') }}">
-                                                <i class="ri-refresh-line"></i>
-                                            </a></li>
+                                        <li>
+                                            <a href="javascript:void(0);" 
+                                            wire:click="updateDataMod"
+                                            wire:loading.attr="disabled"
+                                            wire:target="updateDataMod"
+                                            class="refresh-button">
+                                            
+                                                <i class="ri-refresh-line" 
+                                                wire:loading.class="ri-spin-fade" 
+                                                wire:target="updateDataMod"></i>
+                                            </a>
+                                        </li>
                                     @endif
                                 </ul>
                             </div>
@@ -87,7 +111,6 @@
                                 <div class="profile-img">
                                     <a href="javascript:void(0);">
                                         <img src="{{ $owner->pic_profile }}" alt="profile-img"
-                                            onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ $owner->username }}';"
                                             class="avatar-130 img-fluid @if ($owner->isLive) live @endif fullviewer" />
                                     </a>
                                 </div>
@@ -95,17 +118,21 @@
                                     <h3 class="">{{ $owner->username }}
                                         @if ($owner->isOnline)
                                             <i class="ri-checkbox-blank-circle-fill online m-2" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" data-bs-original-title="{{ __('owner/profile.online') }}"></i>
+                                                data-bs-placement="top"
+                                                data-bs-original-title="{{ __('owner/profile.online') }}"></i>
                                         @else
                                             @if ($owner->isDelete)
                                                 <i class="ri-close-circle-fill disable" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" data-bs-original-title="{{ __('owner/profile.disabled') }}"></i>
+                                                    data-bs-placement="top"
+                                                    data-bs-original-title="{{ __('owner/profile.disabled') }}"></i>
                                             @elseif ($owner->notFound)
                                                 <i class="ri-close-circle-fill disable" data-bs-toggle="tooltip"
                                                     data-bs-placement="top"
                                                     data-bs-original-title="{{ __('owner/profile.not_found_origin') }}"></i>
                                             @else
-                                                    <i data-bs-original-title="{{ \Carbon\Carbon::parse($owner->statusChangedAt)->diffForHumans() }}"></i>
+                                                <i class="ri-indeterminate-circle-fill offline" data-bs-toggle="tooltip"
+                                                    data-bs-placement="top"
+                                                    data-bs-original-title="{{ \Carbon\Carbon::parse($owner->statusChangedAt)->diffForHumans() }}"></i>
                                             @endif
                                         @endif
                                     </h3>
@@ -170,7 +197,9 @@
                                             </li>
                                             <li class="text-center ps-3">
                                                 <h6>{{ __('owner/profile.favorites') }}</h6>
-                                                <p class="mb-0">{{ number_format($owner->data->user->user->favoritedCount, 0, ',', '.') }}</p>
+                                                <p class="mb-0">
+                                                    {{ number_format($owner->data->user->user->favoritedCount, 0, ',', '.') }}
+                                                </p>
                                             </li>
                                         </ul>
                                     @endif
@@ -186,11 +215,10 @@
                                 class="nav nav-pills d-flex align-items-center justify-content-center profile-feed-items p-0 m-0">
                                 @if ($owner->isLive)
                                     <li class="nav-item col-12 col-sm-2 p-0">
-                                        <a wire:navigate
+                                        <a 
                                             href="{{ route('owner.live', ['username' => $owner->username]) }}"
-                                            class="nav-link live @if ($showLive) active @endif"
-                                            data-bs-toggle="pill" data-bs-target="#live" role="button">
-                                            {{ __('owner/tabs.live') }} <div class="live-icon"></div>
+                                            class="nav-link live @if ($showLive) active @endif">
+                                            @if ($owner->show_model)<i class="fa fa-lock" aria-hidden="true"></i>@endif {{ __('owner/tabs.live') }} <div class="live-icon"></div>
                                         </a>
                                     </li>
                                 @endif
@@ -237,50 +265,56 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-12">
-                <div class="tab-content">
-                    <div wire:loading.remove
-                        class="tab-pane fade @if ($showLive) show active @endif" id="live"
-                        role="tabpanel">
-                        @if ($showLive)
-                            <livewire:owner.live :owner="$owner" lazy />
-                        @endif
-                    </div>
-                    <div wire:loading.remove
-                        class="tab-pane fade @if ($showFeed) show active @endif" id="feed"
-                        role="tabpanel">
-                        @if ($showFeed)
-                            <livewire:owner.feed :owner="$owner" lazy />
-                        @endif
-                    </div>
-                    <div wire:loading.remove
-                        class="tab-pane fade @if ($showInformation) show active @endif" id="infomation"
-                        role="tabpanel">
-                        @if ($showInformation)
-                            <livewire:owner.information :owner="$owner" lazy />
-                        @endif
-                    </div>
-                    <div wire:loading.remove
-                        class="tab-pane fade @if ($showAlbums) show active @endif" id="albums"
-                        role="tabpanel">
-                        @if ($showAlbums)
-                            <livewire:owner.albums :owner="$owner" lazy />
-                        @endif
-                    </div>
-                    <div wire:loading.remove
-                        class="tab-pane fade @if ($showVideos) show active @endif" id="videos"
-                        role="tabpanel">
-                        @if ($showVideos)
-                            <livewire:owner.videos :owner="$owner" lazy />
-                        @endif
-                    </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="tab-content">
+
+                <div class="tab-pane fade @if ($showLive) show active @endif" id="live"
+                    role="tabpanel">
+                    @if ($showLive)
+                        <div id="container-live" class="container">
+                            <livewire:owner.live :owner="$owner" />
+                        </div>
+                    @endif
+                </div>
+                <div class="tab-pane fade @if ($showFeed) show active @endif" id="feed"
+                    role="tabpanel">
+                    @if ($showFeed)
+                        <div class="container">
+                            <livewire:owner.feed :owner="$owner" />
+                        </div>
+                    @endif
+                </div>
+                <div class="tab-pane fade @if ($showInformation) show active @endif" id="infomation"
+                    role="tabpanel">
+                    @if ($showInformation)
+                        <div class="container">
+                            <livewire:owner.information :owner="$owner" />
+                        </div>
+                    @endif
+                </div>
+                <div class="tab-pane fade @if ($showAlbums) show active @endif" id="albums"
+                    role="tabpanel">
+                    @if ($showAlbums)
+                        <div class="container">
+                            <livewire:owner.albums :owner="$owner" />
+                        </div>
+                    @endif
+                </div>
+                <div class="tab-pane fade @if ($showVideos) show active @endif" id="videos"
+                    role="tabpanel">
+                    @if ($showVideos)
+                        <div class="container">
+                            <livewire:owner.videos :owner="$owner" />
+                        </div>
+                    @endif
                 </div>
             </div>
-            <div wire:loading class="col-sm-12 text-center">
-                <img src="{{ asset('images/page-img/page-load-loader.gif ') }}" alt="loader"
-                    style="height: 100px;">
-            </div>
-            <livewire:owner.related :owner="$owner" lazy />
         </div>
+    </div>
+    <div class="container">
+        <livewire:owner.related :owner="$owner" />
     </div>
 </div>

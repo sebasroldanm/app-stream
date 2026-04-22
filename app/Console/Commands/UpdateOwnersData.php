@@ -60,6 +60,8 @@ class UpdateOwnersData extends Command
                 Cache::remember('online_app', 60, function () {
                     return Owner::where('isOnline', true)->count();
                 });
+                Cache::put('Notification', 'Update Owners Data', 3600);
+                Cache::put('Status', 'Finalizado', 3600);
             })
             ->dispatch();
     }

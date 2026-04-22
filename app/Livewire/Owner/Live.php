@@ -8,8 +8,8 @@ use Livewire\Component;
 class Live extends Component
 {
     public Owner $owner;
-    public $mainCol = 'col-9';
-    public $sideCol = 'col-3';
+    public $mainCol = 'col-12 col-sm-9';
+    public $sideCol = 'col-12 col-sm-3';
 
     public $broadcastSettings = [];
 
@@ -28,9 +28,7 @@ class Live extends Component
 
     public function render()
     {
-        $this->owner->data = json_decode($this->owner->data);
-        $this->broadcastSettings = $this->owner->data->cam->broadcastSettings;
-
+        $this->broadcastSettings = $this->owner->ownerCamBroadcastConfig;
         if ($this->owner->isMobile) {
             $this->mainCol = 'col-12 col-sm-8';
             $this->sideCol = 'col-12 col-sm-4';
