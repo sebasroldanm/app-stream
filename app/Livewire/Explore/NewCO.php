@@ -7,11 +7,13 @@ use App\Models\Customer;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\Attributes\Lazy;
+use App\Traits\OwnerProp;
 
 #[Lazy]
 class NewCO extends Component
 {
-    
+    use OwnerProp;
+
     public $data;
     public $owners = [];
     public $limit = 60;
@@ -29,7 +31,7 @@ class NewCO extends Component
 
         $favs = Customer::find(Auth::guard('customer')->user()->id)->getOwnerFavoriteIds()->toArray();
 
-        $this->dispatch('initExplorer');
+        $this->dispatch('init-swiper');
 
         return view('livewire.explore.new-c-o', [
             'favs' => $favs

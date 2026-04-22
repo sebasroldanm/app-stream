@@ -12,10 +12,10 @@ const initAllSwipers = () => {
             slidesPerView: 2,
             spaceBetween: 15,
             loop: true,
-            // autoplay: {
-            //     delay: 20000,
-            //     disableOnInteraction: true,
-            // },
+            autoplay: {
+                delay: 30000,
+                disableOnInteraction: true,
+            },
             navigation: {
                 nextEl: ".related-models-wrapper .custom-arrow.swiper-button-next",
                 prevEl: ".related-models-wrapper .custom-arrow.swiper-button-prev",
@@ -44,6 +44,10 @@ const initAllSwipers = () => {
         const ins = new Swiper(el, {
             nested: true, // CLAVE: Permite que funcione dentro del swiper padre
             loop: true,
+            autoplay: {
+                delay: 10000,
+                disableOnInteraction: true,
+            },
             allowTouchMove: false,
             simulateTouch: false,
             navigation: {
@@ -60,7 +64,7 @@ document.addEventListener("DOMContentLoaded", initAllSwipers);
 
 // Integration with Livewire (Optimized)
 document.addEventListener("livewire:init", () => {
-    Livewire.on("init-swiper-related", () => {
+    Livewire.on("init-swiper", () => {
         setTimeout(initAllSwipers, 150);
     });
 });

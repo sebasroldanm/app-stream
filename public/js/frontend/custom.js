@@ -8,12 +8,6 @@ window.Livewire.on("initMasonry", function (data) {
     initFullviewer();
 });
 
-window.Livewire.on("initExplorer", function (data) {
-    setTimeout(() => {
-        reloadExplorer();
-    }, 500);
-});
-
 // Periodically check for Fullviewer initialization (fallback for dynamic content)
 setInterval(() => {
     initFullviewer();

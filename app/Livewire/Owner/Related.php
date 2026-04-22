@@ -56,7 +56,7 @@ class Related extends Component
         $favs = $user ? Customer::find($user->id)->getOwnerFavoriteIds()->toArray() : [];
 
         if (!empty($this->related) && count($this->related->models) > 0) {
-            $this->dispatch('init-swiper-related');
+            $this->dispatch('init-swiper');
         }
 
         return view('livewire.owner.related', [
