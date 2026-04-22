@@ -18,7 +18,17 @@
                     <div class="swiper-wrapper">
                         @foreach ($related->models as $item)
                             <div class="swiper-slide">
-                                <x-ownerInfoCard :owner="$item" :favs="$favs" />
+                                <x-ownerInfoCard 
+                                    :isFav="in_array($item->id, $favs)" 
+                                    :primaryImage="$item->previewUrlThumbSmall"
+                                    :secondaryImage="'https://img.doppiocdn.net/thumbs/' . $item->verifiedSnapshotTimestamp . '/' . $item->id"
+                                    :ternaryImage="'https://img.doppiocdn.net/thumbs/' . $item->popularSnapshotTimestamp . '/' . $item->id"
+                                    :isNew="$item->isNew"
+                                    :isMobile="$item->isMobile"
+                                    :viewersCount="$item->viewersCount"
+                                    :username="$item->username"
+                                    :idOwner="$item->id"
+                                />
                             </div>
                         @endforeach
                     </div>

@@ -1,50 +1,58 @@
-<div class="user-post-data position-relative">
-    <a href="{{ route('owner', $owner->username) }}" class="d-block">
-        <div class="image-container overflow-hidden rounded shadow-sm position-relative">
-
-            <!-- Primary image -->
-            @if (isset($owner->pic_profile))
-                <!-- Pensado para Owner -->
-                <img src="{{ $owner->pic_profile }}" class="card-img-top _overlay" alt="#">
-            @else
-                <img src="{{ $owner->previewUrlThumbSmall }}" class="card-img-top _overlay" alt="#">
-            @endif
-
-            {{-- <!-- Secondary image -->
-            @if (isset($owner->popularSnapshotTimestamp))
-                <img src="https://img.doppiocdn.net/thumbs/{{ $owner->popularSnapshotTimestamp }}/{{ $owner->id }}"
-                    class="card-img-top _overlay" alt="#">
-            @endif
-
-            <!-- Tertiary image -->
-            @if (isset($owner->verifiedSnapshotTimestamp))
-                <img src="https://img.doppiocdn.net/thumbs/{{ $owner->verifiedSnapshotTimestamp }}/{{ $owner->id }}"
-                    class="card-img-top _overlay" alt="#">
-            @endif --}}
-
-            <div class="position-absolute top-0 start-0 m-1">
-                <span class="badge bg-dark-50 text-white shadow-sm">
-                    <i class="las {{ $owner->isMobile ? 'la-mobile-alt' : 'la-laptop' }}"></i>
-                </span>
-            </div>
-
-            @if ($owner->isNew)
-                <div class="position-absolute top-0 end-0 m-1">
-                    <span class="badge bg-warning text-dark fw-bold">{{ __('owner/related.new') }}</span>
+<div class="card-owner-info">
+    <div class="swiper mySwiperOwner">
+        <div class="swiper-wrapper">
+            @isset($primaryImage)
+                <div class="swiper-slide">
+                    <div class="content-image" style="background-image: url('{{ $primaryImage }}');">
+                        <img src="{{ $primaryImage }}" alt="{{ $username }}">
+                    </div>
                 </div>
-            @endif
+            @endisset
+            @isset($secondaryImage)
+                <div class="swiper-slide">
+                    <div class="content-image" style="background-image: url('{{ $secondaryImage }}');">
+                        <img src="{{ $secondaryImage }}" alt="{{ $username }}">
+                    </div>
+                </div>
+            @endisset
+            @isset($ternaryImage)
+                <div class="swiper-slide">
+                    <div class="content-image" style="background-image: url('{{ $ternaryImage }}');">
+                        <img src="{{ $ternaryImage }}" alt="{{ $username }}">
+                    </div>
+                </div>
+            @endisset
+        </div>
 
-            <div class="position-absolute bottom-0 end-0 m-2">
+        <div class="swiper-button-next-owner-info"></div>
+        <div class="swiper-button-prev-owner-info"></div>
+        @isset($viewersCount)
+            <div class="position-absolute bottom-0 end-0 m-2 z-index-10">
                 <span class="badge bg-dark text-white opacity-75">
-                    {{ $owner->viewersCount }} <i class="las la-eye"></i>
+                    {{ $viewersCount }} <i class="las la-eye"></i>
                 </span>
             </div>
-        </div>
-        <div class="mt-2 text-center">
-            <h6 class="mb-0 text-truncate">{{ $owner->username }}</h6>
-            @if (isset($favs) && in_array($owner->id, $favs))
-                <i class="las la-heart text-danger"></i>
-            @endif
-        </div>
-    </a>
+        @endisset
+        @if (isset($isMobile) || isset($isFav))
+            <div class="position-absolute top-0 start-0 m-1 z-index-10">
+                <span class="badge bg-dark-50 text-white shadow-sm">
+                    @if (isset($isMobile))
+                        <i class="las {{ $isMobile ? 'la-mobile-alt' : 'la-laptop' }}"></i>
+                    @endif
+                    @if (isset($isFav) && $isFav)
+                        <i class="las la-heart text-danger"></i>
+                    @endif
+                </span>
+            </div>
+        @endisset
+        @if (isset($isNew) && $isNew)
+            <div class="position-absolute top-0 end-0 m-1 z-index-10">
+                <span class="badge bg-warning text-dark fw-bold">{{ __('owner/related.new') }}</span>
+            </div>
+        @endif
+    </div>
+
+    <div class="card-content text-center">
+        <h6 class="text-truncate">{{ $username }}</h6>
+    </div>
 </div>

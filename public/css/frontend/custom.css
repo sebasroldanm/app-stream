@@ -481,6 +481,16 @@ i.online {
   transition: transform 0.5s ease, opacity 0.5s ease, visibility 0.5s;
 }
 
+.swiper-button-next.custom-arrow,
+.swiper-button-prev.custom-arrow {
+    color: #000;
+}
+
+html[data-theme='dark'] .swiper-button-next.custom-arrow,
+html[data-theme='dark'] .swiper-button-prev.custom-arrow {
+    color: #fff;
+}
+
 .swipe-container.show {
   opacity: 1;
   visibility: visible;
@@ -491,16 +501,20 @@ i.online {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: rgba(0, 0, 0, 0.5);
+  background: #e9e9e980;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid #e9e9e980;
   border-radius: 20px;
   padding: 8px 18px;
   cursor: pointer;
-  
   animation: floatSutil 2.5s ease-in-out infinite;
+}
+
+html[data-theme='dark'] .swipe-up-btn {
+    background: #00000080;
+    border: 1px solid #00000080;
+    color: #fff;
 }
 
 .swipe-up-btn span {
@@ -527,3 +541,110 @@ i.online {
 }
 
 /* Swipe Up Button */
+
+.card-owner-info {
+    width: 100%;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    position: relative;
+}
+
+html[data-theme='dark'] .card-owner-info {
+    background: #000;
+}
+
+.content-image {
+    aspect-ratio: 1 / 1;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000;
+}
+
+.content-image::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: inherit; 
+    background-size: cover;
+    background-position: center;
+    filter: blur(8px); 
+    transform: scale(1.2); 
+    z-index: 1;
+}
+
+.content-image img {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.swiper-button-next-owner-info,
+.swiper-button-prev-owner-info {
+    position: absolute;
+    top: 50%;
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+    z-index: 10;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffffa6;
+    backdrop-filter: blur(6px);
+    border-radius: 50%;
+    color: #000;
+}
+
+html[data-theme='dark'] .swiper-button-next-owner-info,
+html[data-theme='dark'] .swiper-button-prev-owner-info {
+    background-color: #00000091;
+    backdrop-filter: blur(6px);
+    color: #fff;
+}
+
+.swiper-button-prev-owner-info {
+    left: -20px;
+}
+
+.swiper-button-next-owner-info {
+    right: -20px;
+}
+
+.swiper-button-next-owner-info::after,
+.swiper-button-prev-owner-info::after {
+    font-family: swiper-icons;
+    font-size: 16px;
+    text-transform: none !important;
+    letter-spacing: 0;
+    font-variant: normal;
+    line-height: 1;
+}
+
+.swiper-button-prev-owner-info::after {
+    content: 'prev';
+    transform: translateX(7px);
+}
+
+.swiper-button-next-owner-info::after {
+    content: 'next';
+    transform: translateX(-7px);
+}
+
+.card-content {
+    padding: 20px;
+}
+
+.z-index-10 {
+    z-index: 10;
+}
