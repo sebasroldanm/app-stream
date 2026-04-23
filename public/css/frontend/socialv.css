@@ -20914,14 +20914,14 @@ span.avatar-status {
 }
 
 .chat-detail {
-    display: -webkit-box;
+    /* display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
     -webkit-box-pack: end;
     -webkit-justify-content: flex-end;
     -ms-flex-pack: end;
-    justify-content: flex-end
+    justify-content: flex-end */
 }
 
 .chat-detail .chat-message .chat-time {
@@ -20943,7 +20943,8 @@ span.avatar-status {
     color: #fff;
     background: #50b5ff;
     -webkit-border-radius: .938rem;
-    border-radius: .938rem
+    border-radius: .938rem;
+    width: fit-content;
 }
 
 .chat-message>p {
@@ -20951,14 +20952,14 @@ span.avatar-status {
 }
 
 .chat-left {
-    display: -webkit-box;
+    /* display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
     -webkit-box-pack: start;
     -webkit-justify-content: flex-start;
     -ms-flex-pack: start;
-    justify-content: flex-start
+    justify-content: flex-start */
 }
 
 .chat-left .chat-message::after {

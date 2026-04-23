@@ -102,6 +102,7 @@
     <script src="{{ asset('js/frontend/layout-utils.js') }}?v={{ $version }}"></script>
     <script src="{{ asset('js/frontend/custom.js') }}?v={{ $version }}"></script>
     <script src="{{ asset('js/frontend/video.js') }}?v={{ $version }}"></script>
+    <script src="{{ asset('js/frontend/video-component.js') }}?v={{ $version }}"></script>
     <script src="{{ asset('js/frontend/live.js') }}?v={{ $version }}"></script>
 
 

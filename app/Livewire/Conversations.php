@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Owner;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
 use Psy\CodeCleaner\AssignThisVariablePass;
 
@@ -17,19 +18,8 @@ class Conversations extends Component
     {
         $conversations = $this->getConversations();
 
-        foreach ($conversations->conversations as $conv) {
-            $owner = Owner::find($conv->counterpartId);
-            if (!$owner) {
-                $conv->message->avatar = "https://ui-avatars.com/api/?name=US&background=fff&color=fa377b";
-                $conv->message->username = "User";
-            } else {
-                $conv->message->avatar = $owner->pic_profile;
-                $conv->message->username = $owner->username;
-                $conv->message->isLive = $owner->isLive;
-            }
-            $conv->message->created_at = Carbon::parse($conv->message->createdAt)->diffForHumans();
-        }
-        
+
+
         /** @var \Livewire\Features\SupportPageComponents\ContentRenderer $view */
         $view = view('livewire.conversations', compact('conversations'));
 
@@ -40,64 +30,95 @@ class Conversations extends Component
     {
         $this->selectedConversation = $idMessage;
         $this->messages = $this->getOwnerMessages($idMessage);
-        // dd($this->messages);
     }
 
     public function getConversations()
     {
-        $client = new Client([
-            'verify' => false,
-            'timeout' => 15,
-        ]);
+        $cookieClient = env('COOKIE_CLIENT');
+        $cacheKey = 'conversations_user_' . $cookieClient;
 
-        $url = env('API_SERVER') . '/api/front/v2/users/' . env('COOKIE_CLIENT') . '/conversations';
-        $query = [
-            'offset' => 0,
-            'limit' => 10,
-            'uniq'   => 'f0h9ck6ub3vra2t1',
-        ];
+        $conversations = Cache::remember($cacheKey, now()->addHours(2), function () use ($cookieClient) {
 
-        $response = $client->get($url, [
-            'headers' => [
-                'accept'        => 'application/json, text/plain, */*',
-                'user-agent'    => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-                'front-version' => '11.4.72',
-                'cookie' => env('COOKIE_SERVER'),
-            ],
-            'query' => $query
-        ]);
+            $client = new Client([
+                'verify' => false,
+                'timeout' => 15,
+            ]);
 
-        return json_decode($response->getBody()->getContents());
+            $url = env('API_SERVER') . '/api/front/v2/users/' . $cookieClient . '/conversations';
+            $query = [
+                'offset' => 0,
+                'limit' => 10,
+                'uniq'   => 'f0h9ck6ub3vra2t1',
+            ];
+
+            $response = $client->get($url, [
+                'headers' => [
+                    'accept'        => 'application/json, text/plain, */*',
+                    'user-agent'    => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+                    'front-version' => '11.4.72',
+                    'cookie'        => env('COOKIE_SERVER'),
+                ],
+                'query' => $query
+            ]);
+
+            $data = json_decode($response->getBody()->getContents());
+
+            foreach ($data->conversations as $conv) {
+                $owner = Owner::find($conv->counterpartId);
+
+                if (!$owner) {
+                    $conv->message->avatar = "https://ui-avatars.com/api/?name=US&background=fff&color=fa377b";
+                    $conv->message->username = "User";
+                } else {
+                    $conv->message->avatar = $owner->pic_profile;
+                    $conv->message->username = $owner->username;
+                    $conv->message->isLive = $owner->isLive;
+                }
+                $conv->message->created_at = Carbon::parse($conv->message->createdAt)->diffForHumans();
+            }
+
+            return $data;
+        });
+
+        return $conversations;
     }
 
     public function getOwnerMessages($idMessage, $beforeIdMessage = null)
     {
-        $client = new Client([
-            'verify' => false,
-            'timeout' => 15,
-        ]);
+        $cookieClient = env('COOKIE_CLIENT');
+        $cacheKey = 'messages_' . $cookieClient . '_' . $idMessage;
 
-        $url = env('API_SERVER') . '/api/front/v2/users/' . env('COOKIE_CLIENT') . '/conversations' . '/' . $idMessage;
-        $query = [
-            'offset' => 0,
-            'limit' => 10,
-            'uniq'   => 'f0h9ck6ub3vra2t1',
-        ];
+        $messages = Cache::remember($cacheKey, now()->addHours(2), function () use ($cookieClient, $idMessage, $beforeIdMessage) {
 
-        if ($beforeIdMessage) {
-            $query['beforeMassMessageId'] = $beforeIdMessage;
-        }
+            $client = new Client([
+                'verify' => false,
+                'timeout' => 15,
+            ]);
 
-        $response = $client->get($url, [
-            'headers' => [
-                'accept'        => 'application/json, text/plain, */*',
-                'user-agent'    => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-                'front-version' => '11.4.72',
-                'cookie' => env('COOKIE_SERVER'),
-            ],
-            'query' => $query
-        ]);
+            $url = env('API_SERVER') . '/api/front/v2/users/' . $cookieClient . '/conversations' . '/' . $idMessage;
+            $query = [
+                'offset' => 0,
+                'limit' => 10,
+                'uniq'   => 'f0h9ck6ub3vra2t1',
+            ];
 
-        return json_decode($response->getBody()->getContents());
+            if ($beforeIdMessage) {
+                $query['beforeMassMessageId'] = $beforeIdMessage;
+            }
+
+            $response = $client->get($url, [
+                'headers' => [
+                    'accept'        => 'application/json, text/plain, */*',
+                    'user-agent'    => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+                    'front-version' => '11.4.72',
+                    'cookie' => env('COOKIE_SERVER'),
+                ],
+                'query' => $query
+            ]);
+
+            return json_decode($response->getBody()->getContents());
+        });
+
+        return $messages;
     }
 }

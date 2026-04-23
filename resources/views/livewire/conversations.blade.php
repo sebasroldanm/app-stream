@@ -69,7 +69,8 @@
                                     <ul class="iq-chat-ui nav flex-column nav-pills">
                                         @foreach ($conversations->conversations as $conv)
                                             <li>
-                                                <div class="d-flex align-items-center my-2" role=button wire:click="selectConversation('{{ $conv->counterpartId }}')">
+                                                <div class="d-flex align-items-center my-2" role=button
+                                                    wire:click="selectConversation('{{ $conv->counterpartId }}')">
                                                     <div class="avatar mr-2">
                                                         <img src="{{ $conv->message->avatar }}" alt="chatuserimage"
                                                             class="avatar-50 ">
@@ -77,12 +78,16 @@
                                                                 class="ri-checkbox-blank-circle-fill text-success"></i></span>
                                                     </div>
                                                     <div class="chat-sidebar-name ms-1">
-                                                        <h6 title="{{$conv->message->username}}" class="mb-0">{{ Str::limit($conv->message->username, 16) }}</h6>
-                                                        <span title="{{$conv->message->body}}">{{ Str::limit($conv->message->body, 12) }}</span>
+                                                        <h6 title="{{ $conv->message->username }}" class="mb-0">
+                                                            {{ Str::limit($conv->message->username, 16) }}</h6>
+                                                        <span
+                                                            title="{{ $conv->message->body }}">{{ Str::limit($conv->message->body, 12) }}</span>
                                                     </div>
                                                     <div class="chat-meta float-right text-center mt-2 mr-1">
-                                                        <div class="chat-msg-counter bg-primary text-white">{{ $conv->unread }}</div>
-                                                        <span class="text-nowrap">{{ $conv->message->created_at }}</span>
+                                                        <div class="chat-msg-counter bg-primary text-white">
+                                                            {{ $conv->unread }}</div>
+                                                        <span
+                                                            class="text-nowrap">{{ $conv->message->created_at }}</span>
                                                     </div>
                                                 </div>
                                             </li>
@@ -110,7 +115,8 @@
                                                         <i class="ri-menu-3-line"></i>
                                                     </div>
                                                     <div class="avatar chat-user-profile m-0 mr-3">
-                                                        <img src="{{ $messages->model->avatarUrl }}" alt="avatar" class="avatar-50 ">
+                                                        <img src="{{ $messages->model->avatarUrl }}" alt="avatar"
+                                                            class="avatar-50 ">
                                                         <span class="avatar-status"><i
                                                                 class="ri-checkbox-blank-circle-fill text-success"></i></span>
                                                     </div>
@@ -122,13 +128,16 @@
                                                                 class="ri-close-fill"></i></button>
                                                         <div class="user mb-4">
                                                             <a class="avatar m-0">
-                                                                <img src="{{ $messages->model->avatarUrl }}" alt="avatar">
+                                                                <img src="{{ $messages->model->avatarUrl }}"
+                                                                    alt="avatar">
                                                             </a>
                                                             <div class="user-name mt-4">
                                                                 <h4>{{ $messages->model->username }}</h4>
                                                             </div>
                                                             <div class="user-desc">
-                                                                <p>Amigos desde {{ \Carbon\Carbon::parse($messages->friendship->createdAt)->diffForHumans() }}</p>
+                                                                <p>Amigos desde
+                                                                    {{ \Carbon\Carbon::parse($messages->friendship->createdAt)->diffForHumans() }}
+                                                                </p>
                                                             </div>
                                                         </div>
                                                         {{-- <hr>
@@ -163,13 +172,16 @@
                                                     </div>
                                                 </div>
                                                 <div class="chat-header-icons d-flex">
-                                                    <a href="javascript:void();" class="chat-icon-phone iq-bg-primary">
+                                                    <a href="javascript:void();"
+                                                        class="chat-icon-phone iq-bg-primary">
                                                         <i class="ri-phone-line"></i>
                                                     </a>
-                                                    <a href="javascript:void();" class="chat-icon-video iq-bg-primary">
+                                                    <a href="javascript:void();"
+                                                        class="chat-icon-video iq-bg-primary">
                                                         <i class="ri-vidicon-line"></i>
                                                     </a>
-                                                    <a href="javascript:void();" class="chat-icon-delete iq-bg-primary">
+                                                    <a href="javascript:void();"
+                                                        class="chat-icon-delete iq-bg-primary">
                                                         <i class="ri-delete-bin-line"></i>
                                                     </a>
                                                     <span class="dropdown iq-bg-primary">
@@ -208,46 +220,113 @@
                                                 </div>
                                             </div> --}}
                                             @foreach ($messages->messages as $message)
-                                                <div class="chat chat-left">
-                                                    <div class="chat-user">
+                                                <div class="chat chat-left row">
+                                                    <div class="chat-user col-lg-1">
                                                         <a class="avatar m-0">
-                                                            <img src="{{ $messages->model->avatarUrl }}" alt="avatar" class="avatar-35 ">
+                                                            <img src="{{ $messages->model->avatarUrl }}"
+                                                                alt="avatar" class="avatar-35 ">
                                                         </a>
-                                                        <span class="chat-time mt-1">{{ \Carbon\Carbon::parse($message->createdAt)->diffForHumans() }}</span>
+                                                        <span
+                                                            class="chat-time mt-1">{{ \Carbon\Carbon::parse($message->createdAt)->diffForHumans() }}</span>
                                                     </div>
-                                                    <div class="chat-detail">
+                                                    <div class="chat-detail col-lg-11">
                                                         <div class="chat-message">
                                                             <p>{{ $message->body }}</p>
                                                             @if ($message->media)
                                                                 {{-- Photo --}}
                                                                 @if (isset($message->media->photo))
-                                                                    <img class="photo-message img-fluid rounded fullviewer" src="{{ $message->media->photo->url ?? $message->media->photo->urlPreview }}" alt="photo" class="img-fluid rounded">
+                                                                    @php
+                                                                        $photo = $message->media->photo;
+                                                                        if (isset($photo->url)) {
+                                                                            $url = $photo->url;
+                                                                        } elseif (isset($photo->urlThumb)) {
+                                                                            $url = $photo->urlThumb;
+                                                                        } elseif (isset($photo->urlPreview)) {
+                                                                            $url = $photo->urlPreview;
+                                                                        } elseif (isset($photo->urlThumbMicro)) {
+                                                                            $url = $photo->urlThumbMicro;
+                                                                        } else {
+                                                                            $url = null;
+                                                                        }
+                                                                    @endphp
+                                                                    <img class="photo-message img-fluid rounded fullviewer"
+                                                                        src="{{ $url }}" alt="photo"
+                                                                        class="img-fluid rounded">
                                                                 @endif
                                                                 {{-- Photo --}}
                                                                 {{-- Album --}}
                                                                 @if (isset($message->media->album))
                                                                     @foreach ($message->media->album->photos as $photo)
-                                                                        <img class="photo-album img-fluid rounded fullviewer" src="{{ $photo->url ?? '"$photo->thumbnailUrl"' }}" alt="photo" class="img-fluid rounded">
+                                                                        @php
+                                                                            if (isset($photo->url)) {
+                                                                                $url = $photo->url;
+                                                                            } elseif (isset($photo->urlThumb)) {
+                                                                                $url = $photo->urlThumb;
+                                                                            } elseif (isset($photo->urlPreview)) {
+                                                                                $url = $photo->urlPreview;
+                                                                            } elseif (isset($photo->urlThumbMicro)) {
+                                                                                $url = $photo->urlThumbMicro;
+                                                                            } else {
+                                                                                $url = null;
+                                                                            }
+                                                                        @endphp
+                                                                        <img class="photo-album img-fluid rounded fullviewer mb-1"
+                                                                            src="{{ $url }}" alt="photo"
+                                                                            class="img-fluid rounded"
+                                                                            data-images-full='@json(collect($message->media->album->photos)->pluck('url'))'
+                                                                            data-images-thumb='@json(collect($message->media->album->photos)->pluck('urlThumb'))'>
                                                                     @endforeach
                                                                 @endif
                                                                 {{-- Album --}}
                                                                 {{-- Video --}}
                                                                 @if (isset($message->media->video))
                                                                     @if (isset($message->media->video->videoUrl))
-                                                                        <video class="video-message w-100" src="{{ $message->media->video->videoUrl }}" alt="video" class="img-fluid rounded"></video>
+                                                                        <x-video-component 
+                                                                            :poster="$message->media->video->coverUrl" 
+                                                                            :video="$message->media->video->videoUrl"
+                                                                        />
                                                                     @else
-                                                                        <video class="video-message w-100" src="{{ $message->media->video->trailerUrl }}" alt="video" class="img-fluid rounded"></video>
+                                                                        <x-video-component 
+                                                                            :poster="$message->media->video->coverUrl" 
+                                                                            :video="$message->media->video->trailerUrl"
+                                                                        />
                                                                     @endif
                                                                 @endif
                                                                 {{-- Video --}}
                                                                 {{-- Mixed --}}
                                                                 @if (isset($message->media->mixed))
                                                                     @foreach ($message->media->mixed as $mixMedia)
-                                                                        @if ($mixMedia->type == "photo")
-                                                                            <img class="photo-mixed img-fluid rounded fullviewer" src="{{ isset($mixMedia->url) ? $mixMedia->url : '$mixMedia->thumbnailUrl' }}" alt="photo" class="img-fluid rounded">
+                                                                        @if ($mixMedia->type == 'photo')
+                                                                            @php
+                                                                                if (isset($mixMedia->url)) {
+                                                                                    $url = $mixMedia->url;
+                                                                                } elseif (isset($mixMedia->urlThumb)) {
+                                                                                    $url = $mixMedia->urlThumb;
+                                                                                } elseif (isset($mixMedia->urlPreview)) {
+                                                                                    $url = $mixMedia->urlPreview;
+                                                                                } elseif (isset($mixMedia->urlThumbMicro)) {
+                                                                                    $url = $mixMedia->urlThumbMicro;
+                                                                                } else {
+                                                                                    $url = null;
+                                                                                }
+                                                                            @endphp
+                                                                            <img class="photo-mixed img-fluid rounded fullviewer mb-1"
+                                                                                src="{{ $url }}"
+                                                                                alt="photo"
+                                                                                class="img-fluid rounded">
                                                                         @endif
-                                                                        @if ($mixMedia->type == "video")
-                                                                            <video class="video-mixed w-100" src="{{ isset($mixMedia->url) ? $mixMedia->url : '$mixMedia->thumbnailUrl' }}" alt="video" class="img-fluid rounded"></video>
+                                                                        @if ($mixMedia->type == 'video')
+                                                                            @if (isset($mixMedia->videoUrl))
+                                                                                <x-video-component 
+                                                                                    :poster="$mixMedia->coverUrl" 
+                                                                                    :video="$mixMedia->videoUrl"
+                                                                                />
+                                                                            @else
+                                                                                <x-video-component 
+                                                                                    :poster="$mixMedia->coverUrl" 
+                                                                                    :video="$mixMedia->trailerUrl"
+                                                                                />
+                                                                            @endif
                                                                         @endif
                                                                     @endforeach
                                                                 @endif
