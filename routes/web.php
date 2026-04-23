@@ -6,6 +6,7 @@ use App\Http\Controllers\UtilController;
 use App\Livewire\About;
 use App\Livewire\Actions;
 use App\Livewire\Contact;
+use App\Livewire\Conversations;
 use App\Livewire\Explore;
 use App\Livewire\Explore\MobileCO;
 use App\Livewire\Explore\NewCO;
@@ -58,6 +59,8 @@ Route::middleware(['auth:customer'])->group(function () {
     Route::get('/metadata/{model}/{id}', [UtilController::class, 'viewMetadata'])->name('metadata');
 
     Route::get('/post-management', PostManagement::class)->name('post-management');
+
+    Route::get('/conversations', Conversations::class)->name('conversations');
 });
 
 Route::get('/media-proxy/{fileId}', [TelegramController::class, 'proxy'])->name('telegram.proxy');

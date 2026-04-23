@@ -20758,7 +20758,7 @@ html[data-theme='dark'] .iq-footer ul li a {
 }
 
 .chat-sidebar-name span {
-    color: #777d74;
+    /* color: #777d74; */
     font-size: .75rem
 }
 
@@ -20815,8 +20815,8 @@ span.avatar-status {
 .chat-sidebar-channel {
     overflow-y: scroll;
     overflow-x: hidden;
-    height: -webkit-calc(100vh - 13rem);
-    height: calc(100vh - 13rem);
+    height: -webkit-calc(100vh - 20.6rem);
+    height: calc(100vh - 20.6rem);
     margin-bottom: .938rem
 }
 
@@ -20878,12 +20878,18 @@ span.avatar-status {
 
 .chat-content {
     position: relative;
-    height: -webkit-calc(100vh - 11rem);
-    height: calc(100vh - 11rem);
+    height: -webkit-calc(100vh - 14.6rem);
+    height: calc(100vh - 14.6rem);
     text-align: center;
     padding: 1.4rem;
     overflow-y: scroll;
     overflow-x: hidden
+}
+
+.chat-right {
+    display: flex;
+    -webkit-box-pack: end;
+    justify-content: flex-end;
 }
 
 .chat-content .chat-left .chat-message {
@@ -20988,8 +20994,8 @@ span.avatar-status {
     -webkit-align-items: center;
     -ms-flex-align: center;
     align-items: center;
-    height: -webkit-calc(100vh - 10rem);
-    height: calc(100vh - 10rem);
+    height: -webkit-calc(100vh - 20.6rem);
+    height: calc(100vh - 20.6rem);
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
     -webkit-flex-direction: column;
