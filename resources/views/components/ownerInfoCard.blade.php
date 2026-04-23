@@ -1,6 +1,6 @@
 <div class="card-owner-info">
     <a href="{{ route('owner', $username) }}">
-        <div class="swiper mySwiperOwner">
+        <div class="swiper mySwiperOwner" data-settings="{{ json_encode($settings ?? []) }}">
             <div class="swiper-wrapper">
                 @isset($primaryImage)
                     <div class="swiper-slide">

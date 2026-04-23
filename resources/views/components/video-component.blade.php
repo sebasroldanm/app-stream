@@ -28,7 +28,7 @@
         src="{{ $poster }}" 
         alt="Video Preview" 
         class="video-component-poster w-100 h-100 object-fit-cover"
-        style="display: block; transition: filter 0.3s ease; object-fit: cover;"
+        style="display: block; transition: filter 0.3s ease;"
         loading="lazy"
     >
 

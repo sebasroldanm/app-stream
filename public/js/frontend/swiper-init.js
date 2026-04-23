@@ -41,6 +41,8 @@ const initAllSwipers = () => {
         const nextBtn = el.querySelector(".swiper-button-next-owner-info");
         const prevBtn = el.querySelector(".swiper-button-prev-owner-info");
 
+        const settings = JSON.parse(el.getAttribute("data-settings") || "{}");
+
         const ins = new Swiper(el, {
             nested: true, // CLAVE: Permite que funcione dentro del swiper padre
             loop: true,
@@ -48,8 +50,7 @@ const initAllSwipers = () => {
                 delay: 10000,
                 disableOnInteraction: true,
             },
-            allowTouchMove: false,
-            simulateTouch: false,
+            ...settings,
             navigation: {
                 nextEl: nextBtn,
                 prevEl: prevBtn,

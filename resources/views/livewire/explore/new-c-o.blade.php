@@ -27,6 +27,11 @@
                                 :username="$owner->username"
                                 :idOwner="$owner->id"
                                 :country="$this->flagCountry($owner->country)"
+                                :settings="[
+                                    'autoplay' => false,
+                                    'allowTouchMove' => true,
+                                    'simulateTouch' => true,
+                                ]"
                             />
                         </div>
                     @endforeach
