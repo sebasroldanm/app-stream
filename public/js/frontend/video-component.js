@@ -14,7 +14,9 @@ window.initVideoComponent = function(container, videoUrl, videoFormat) {
     // Crear el elemento de video
     const videoElement = document.createElement('video');
     videoElement.style.width = '100%';
+    videoElement.style.height = '100%';
     videoElement.style.display = 'block';
+    videoElement.style.objectFit = 'cover';
     videoElement.playsInline = true;
     
     // Limpiar contenedor y añadir video

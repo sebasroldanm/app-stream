@@ -7,7 +7,6 @@ use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
-use Psy\CodeCleaner\AssignThisVariablePass;
 
 class Conversations extends Component
 {
