@@ -64,10 +64,19 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="chat-sidebar-channel scroller mt-4 pl-3">
-                                    <h5 class="">Mensajes ({{ $conversations->conversationsCount }})</h5>
+                                <div class="chat-sidebar-channel scroller mt-4 pl-3"
+                                    x-data="{
+                                        handleSidebarScroll() {
+                                            if (this.$el.scrollTop + this.$el.clientHeight >= this.$el.scrollHeight - 5) {
+                                                $wire.loadMoreConversations();
+                                            }
+                                        }
+                                    }"
+                                    @scroll.debounce.100ms="handleSidebarScroll()"
+                                >
+                                    <h5 class="">Mensajes ({{ $conversationsData->conversationsCount ?? 0 }})</h5>
                                     <ul class="iq-chat-ui nav flex-column nav-pills">
-                                        @foreach ($conversations->conversations as $conv)
+                                        @foreach ($conversationsData->conversations as $conv)
                                             <li>
                                                 <div class="d-flex align-items-center my-2" role=button
                                                     wire:click="selectConversation('{{ $conv->counterpartId }}')">
@@ -205,7 +214,29 @@
                                                 </div>
                                             </header>
                                         </div>
-                                        <div class="chat-content scroller">
+                                        <div class="chat-content scroller" 
+                                            style="overflow-anchor: none;"
+                                            x-data="{
+                                                scrollToBottom() {
+                                                    this.$el.scrollTop = this.$el.scrollHeight;
+                                                },
+                                                handleScroll() {
+                                                    if (this.$el.scrollTop === 0) {
+                                                        $wire.loadMoreMessages();
+                                                    }
+                                                }
+                                            }"
+                                            x-init="scrollToBottom()"
+                                            @scroll.debounce.100ms="handleScroll()"
+                                            @scroll-to-bottom.window="$nextTick(() => scrollToBottom())"
+                                            @messages-prepended.window="() => {
+                                                const oldScrollHeight = $el.scrollHeight;
+                                                $nextTick(() => {
+                                                    const newScrollHeight = $el.scrollHeight;
+                                                    $el.scrollTop = newScrollHeight - oldScrollHeight;
+                                                });
+                                            }"
+                                        >
                                             {{-- <div class="chat chat-right">
                                                 <div class="chat-detail">
                                                     <div class="chat-message">
@@ -220,16 +251,21 @@
                                                 </div>
                                             </div> --}}
                                             @foreach ($messages->messages as $message)
-                                                <div class="chat chat-left row">
-                                                    <div class="chat-user col-lg-1">
-                                                        <a class="avatar m-0">
-                                                            <img src="{{ $messages->model->avatarUrl }}"
-                                                                alt="avatar" class="avatar-35 ">
-                                                        </a>
-                                                        <span
-                                                            class="chat-time mt-1">{{ \Carbon\Carbon::parse($message->createdAt)->diffForHumans() }}</span>
-                                                    </div>
-                                                    <div class="chat-detail col-lg-11">
+                                                @php
+                                                    $isOwner = $message->senderId == env('COOKIE_CLIENT');
+                                                @endphp
+                                                <div class="chat {{ $isOwner ? 'chat-right' : 'chat-left' }} row">
+                                                    @if (!$isOwner)
+                                                        <div class="chat-user col-lg-1">
+                                                            <a class="avatar m-0">
+                                                                <img src="{{ $messages->model->avatarUrl }}"
+                                                                    alt="avatar" class="avatar-35 ">
+                                                            </a>
+                                                            <span
+                                                                class="chat-time mt-1">{{ \Carbon\Carbon::parse($message->createdAt)->diffForHumans() }}</span>
+                                                        </div>
+                                                    @endif
+                                                    <div class="chat-detail {{ $isOwner ? 'col-lg-11 text-right' : 'col-lg-11' }}">
                                                         <div class="chat-message">
                                                             <p>{{ $message->body }}</p>
                                                             @if ($message->media)
@@ -334,6 +370,14 @@
                                                             @endif
                                                         </div>
                                                     </div>
+                                                    @if ($isOwner)
+                                                        <div class="chat-user col-lg-1">
+                                                            <a class="avatar m-0">
+                                                                <img src="images/user/1.jpg" alt="avatar" class="avatar-35 ">
+                                                            </a>
+                                                            <span class="chat-time mt-1">{{ \Carbon\Carbon::parse($message->createdAt)->diffForHumans() }}</span>
+                                                        </div>
+                                                    @endif
                                                 </div>
                                             @endforeach
                                             <div class="chat-footer p-3">
