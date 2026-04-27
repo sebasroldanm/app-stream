@@ -21029,7 +21029,8 @@ span.iq-start-icon {
     position: absolute;
     top: 0;
     width: 360px;
-    background: #fff;
+    background: #ffffffcc;
+    backdrop-filter: blur(10px);
     right: auto;
     overflow: hidden;
     left: auto;
@@ -21045,6 +21046,10 @@ span.iq-start-icon {
     -webkit-border-radius: 5px;
     border-radius: 5px;
     visibility: hidden
+}
+
+html[data-theme='dark'] .chat-user-detail-popup {
+    background: #1e1e1e99;
 }
 
 .chat-user-detail-popup.show {

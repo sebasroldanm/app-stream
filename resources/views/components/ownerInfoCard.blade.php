@@ -30,9 +30,9 @@
                 <div class="swiper-button-prev-owner-info"></div>
             @endif
             @isset($viewersCount)
-                <div class="position-absolute bottom-0 end-0 m-2 z-index-10">
+                <div class="position-absolute bottom-0 end-0 m-1 z-index-10">
                     <span class="badge bg-dark text-white opacity-75">
-                        {{ $viewersCount }} <i class="las la-eye"></i>
+                        {{ number_format($viewersCount, 0, '', '.') }} <i class="las la-eye"></i>
                     </span>
                 </div>
             @endisset
@@ -51,6 +51,30 @@
                     </span>
                 </div>
             @endisset
+            @if (isset($isGames) || isset($gender))
+                <div class="position-absolute bottom-0 start-0 m-1 z-index-10">
+                    <span class="badge bg-dark-50 text-white shadow-sm">
+                        @if (isset($isGames) && $isGames)
+                            <i class="las la-dice"></i>
+                        @endif
+                        @if (isset($gender))
+                            @switch($gender)
+                                @case("group")
+                                    <i class="las la-users"></i>
+                                    @break
+                                @case("male")
+                                    <i class="las la-male"></i>
+                                    @break
+                                @case("female")
+                                    <i class="las la-female"></i>
+                                    @break
+                                @default
+                                    {{-- {{ $gender }} --}}
+                            @endswitch
+                        @endif
+                    </span>
+                </div>
+            @endif
             @if (isset($isNew) && $isNew)
                 <div class="position-absolute top-0 end-0 m-1 z-index-10">
                     <span class="badge bg-warning text-dark fw-bold">{{ __('owner/related.new') }}</span>

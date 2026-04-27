@@ -136,7 +136,7 @@
                                                         <button type="submit" class="close-popup p-3"><i
                                                                 class="ri-close-fill"></i></button>
                                                         <div class="user mb-4">
-                                                            <a class="avatar m-0">
+                                                            <a class="avatar m-0" href="{{ route('owner', $messages->model->username) }}" target="_blank">
                                                                 <img src="{{ $messages->model->avatarUrl }}"
                                                                     alt="avatar">
                                                             </a>

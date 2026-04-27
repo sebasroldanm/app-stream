@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Owner;
 use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
+use Livewire\Attributes\On;
 
 class TopNavbar extends Component
 {
@@ -32,8 +33,17 @@ class TopNavbar extends Component
 
         $this->dispatch('themeApp', theme: $this->themeApp);
     }
+
     public function render()
     {
         return view('components.layouts.top-navbar');
+    }
+
+    #[On('owners-updated')]
+    public function updateOnline()
+    {
+        $this->online_app = Cache::remember('online_app', 60, function () {
+            return Owner::where('isOnline', true)->count();
+        });
     }
 }
