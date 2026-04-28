@@ -125,6 +125,15 @@ trait OwnerProp
                 case 'br':
                     $html .= '<span class="fi fi-br fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Brasil"></span>';
                     break;
+                case 'hu':
+                    $html .= '<span class="fi fi-hu fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Hungaro"></span>';
+                    break;
+                case 'gu':
+                    $html .= '<span class="fi fi-gu fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Gujarati"></span>';
+                    break;
+                case 'bn':
+                    $html .= '<span class="fi fi-bn fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Bengali"></span>';
+                    break;
                 default:
                     $html .= '<span class="fi fi-xx fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="' . $lang . '"></span>';
                     break;

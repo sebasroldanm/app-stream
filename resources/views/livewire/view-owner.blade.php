@@ -6,6 +6,15 @@
                 <div class="card">
                     <div class="card-body profile-page p-0">
                         <div class="profile-header">
+                            @if (in_array($intro->type, ['image', 'avatar']))
+                                <div class="ambient">
+                                    <img src="{{ $intro->url }}" alt="profile-bg" class="img-fluid intro-owner w-100 object-fit-cover">
+                                </div>
+                            @else
+                                <video class="ambient" autoplay muted loop>
+                                    <source src="{{ $intro->url }}" type="video/mp4">
+                                </video>
+                            @endif
                             <div class="position-relative intro-owner container-overlay">
                                 @if (in_array($intro->type, ['image', 'avatar']))
                                     <img src="{{ $intro->url }}" alt="profile-bg" onerror="this.style.display='none';"

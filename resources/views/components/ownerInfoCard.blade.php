@@ -75,9 +75,29 @@
                     </span>
                 </div>
             @endif
-            @if (isset($isNew) && $isNew)
+            @if (isset($isNew) || isset($status))
                 <div class="position-absolute top-0 end-0 m-1 z-index-10">
-                    <span class="badge bg-warning text-dark fw-bold">{{ __('owner/related.new') }}</span>
+                    @if (isset($isNew) && $isNew)
+                        <span class="badge bg-warning text-dark fw-bold">{{ __('owner/related.new') }}</span>
+                    @endif
+                    @if (isset($status))
+                        @switch($status)
+                            @case("public")
+                                {{-- <span class="badge bg-success text-white"><i class="ri-eye-fill"></i></span> --}}
+                                @break
+                            @case("p2p")
+                                <span class="badge bg-warning text-dark"><i class="ri-eye-off-fill"></i></span>
+                                @break
+                            @case("private")
+                                <span class="badge bg-danger text-white"><i class="ri-lock-fill"></i></span>
+                                @break
+                            @case("groupShow")
+                                <span class="badge bg-success text-white"><i class="ri-group-line"></i></span>
+                                @break
+                            @default
+                                {{ $status }}
+                        @endswitch
+                    @endif
                 </div>
             @endif
         </div>

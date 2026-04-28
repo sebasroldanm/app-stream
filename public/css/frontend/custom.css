@@ -1,3 +1,7 @@
+.object-fit-cover {
+    object-fit: cover;
+}
+
 video-play-button {
     display: block;
     width: 104px;
@@ -662,3 +666,18 @@ html[data-theme='dark'] .swiper-button-prev-owner-info {
 }
 
 /* Conversations */
+
+
+/* Intro Video */
+    .ambient {
+        position: absolute;
+        top: 160px;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(1.2);
+        width: 100%;
+        z-index: 0;
+        filter: blur(60px) brightness(1.2) saturate(1.8);
+        opacity: 0.6;
+        pointer-events: none;
+    }
+/* Intro Video */

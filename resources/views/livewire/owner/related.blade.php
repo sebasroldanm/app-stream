@@ -33,6 +33,7 @@
                                         'allowTouchMove' => false,
                                         'simulateTouch' => false,
                                     ]"
+                                    :status="$item->status"
                                 />
                             </div>
                         @endforeach
