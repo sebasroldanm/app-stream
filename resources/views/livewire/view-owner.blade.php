@@ -3,6 +3,11 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
+                @if ($owner->isBirthday())
+                    <div id="birthday-alert" class="alert text-white bg-success" role="alert">
+                        <div class="text-center"><i class="ri-cake-2-line"></i> ¡Feliz cumpleaños {{ $owner->name }}!</div>
+                    </div>
+                @endif
                 <div class="card">
                     <div class="card-body profile-page p-0">
                         <div class="profile-header">

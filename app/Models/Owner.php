@@ -333,4 +333,12 @@ class Owner extends Model
     {
         return $this->data?->cam?->show?->mode ?? false;
     }
+    
+    public function isBirthday()
+    {
+        if (isset($this->birthDate)) {
+            return $this->birthDate->format('m-d') === date('m-d');
+        }
+        return false;
+    }
 }

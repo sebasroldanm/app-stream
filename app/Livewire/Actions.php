@@ -8,8 +8,9 @@ use Livewire\Component;
 
 class Actions extends Component
 {
-    public $message = null;
-    public $status = null;
+    public string $message = '';
+    public string $status = '';
+    public $lastUpdate;
 
     public function checkNotifications()
     {
@@ -23,6 +24,11 @@ class Actions extends Component
 
     public function render()
     {
+        if ($this->lastUpdate < now()->subMinutes(2)) {
+            $this->updateFavorites();
+            $this->updateOnline();
+        }
+
         /** @var \Livewire\Features\SupportPageComponents\ContentRenderer $view */
         $view = view('livewire.actions');
         return $view->layoutData(['title' => ' | Acciones']);
@@ -42,6 +48,7 @@ class Actions extends Component
 
     public function updateFavorites()
     {
+        $this->lastUpdate = now();
         Artisan::call('app:update-favorites');
         $this->dispatch('updateFavorites');
     }

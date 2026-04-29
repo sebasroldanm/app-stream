@@ -4692,7 +4692,7 @@ fieldset:disabled .btn {
 
 .dropdown-menu {
     position: absolute;
-    z-index: 1000;
+    z-index: 100;
     display: none;
     min-width: 10rem;
     padding: 0 0;
@@ -13999,7 +13999,7 @@ html[data-theme='dark'] .modal-footer {
     right: 0;
     width: 100%;
     display: inline-block;
-    z-index: 1000;
+    z-index: 100;
     background: #ffffff66;
     backdrop-filter: blur(14px);
     margin: 0;
@@ -14452,7 +14452,7 @@ html[data-theme='dark'] .header-for-bg .data-block {
     body.sidebar-main .iq-sidebar {
         width: 16.25rem;
         left: 0;
-        z-index: 1000;
+        z-index: 100;
         top: 4.5rem
     }
 
@@ -14776,7 +14776,7 @@ html[data-theme='dark'] .card .card-header {
     -webkit-box-shadow: 0 0 1.25rem 0 rgba(0, 0, 0, .1);
     box-shadow: 0 0 1.25rem 0 rgba(0, 0, 0, .1);
     position: fixed;
-    z-index: 1000;
+    z-index: 100;
     top: 4.688rem;
     width: 250px;
     height: 100%;
