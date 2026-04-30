@@ -333,7 +333,24 @@ class Owner extends Model
     {
         return $this->data?->cam?->show?->mode ?? false;
     }
-    
+
+    public function getShowModelOrStatusAttribute()
+    {
+        $showMode = $this->show_mode;
+        if ($showMode) {
+            return $showMode;
+        } else {
+            if (!$this->isActive) {
+                $showMode = 'inactive';
+            } else if ($this->isBlocked) {
+                $showMode = 'blocked';
+            } else {
+                $showMode = null;
+            }
+        }
+        return $showMode;
+    }
+
     public function isBirthday()
     {
         if (isset($this->birthDate)) {

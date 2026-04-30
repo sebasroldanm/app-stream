@@ -34,8 +34,8 @@
         <div class="card">
             <div class="card-body">
                 <h5>{{ __('owner/live/info.status') }}</h5>
-                @if ($owner->show_model)
-                    <p class="card-text">{{ $owner->show_model }}</p>
+                @if ($owner->show_mode)
+                    <p class="card-text">{{ $owner->show_mode }}</p>
                 @else
                     @php
                         if ($owner->data->user->user->isLive) {

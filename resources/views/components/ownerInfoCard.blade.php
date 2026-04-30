@@ -31,16 +31,16 @@
                             <span class="badge bg-warning text-dark p-1"><i class="ri-eye-off-fill"></i><p class="mb-0 mt-1">{{ __('components/ownerInfoCard.p2p') }}</p></span>
                             @break
                         @case("private")
-                            <span class="badge bg-danger text-dark mt-1 pt-1"><i class="ri-lock-fill"></i><p class="mb-0">{{ __('components/ownerInfoCard.private') }}</p></span>
+                            <span class="badge bg-danger text-dark mt-1 pt-1"><i class="ri-lock-fill"></i><p class="mb-0 mt-1">{{ __('components/ownerInfoCard.private') }}</p></span>
                             @break
                         @case("groupShow")
-                            <span class="badge bg-success text-white"><i class="ri-group-line"></i></span>
+                            <span class="badge bg-success text-white"><i class="ri-group-line"></i><p class="mb-0 mt-1">{{ __('components/ownerInfoCard.groupShow') }}</p></span>
                             @break
                         @case("blocked")
-                            <span class="badge bg-danger text-dark mt-1 pt-1"><i class="ri-eye-off-fill"></i><p class="mb-0">{{ __('components/ownerInfoCard.blocked') }}</p></span>
+                            <span class="badge bg-danger text-dark mt-1 pt-1"><i class="ri-eye-off-fill"></i><p class="mb-0 mt-1">{{ __('components/ownerInfoCard.blocked') }}</p></span>
                             @break
                         @case("inactive")
-                            <span class="badge bg-dark text-white mt-1 pt-1"><i class="ri-eye-off-fill"></i><p class="mb-0">{{ __('components/ownerInfoCard.inactive') }}</p></span>
+                            <span class="badge bg-dark text-white mt-1 pt-1"><i class="ri-eye-off-fill"></i><p class="mb-0 mt-1">{{ __('components/ownerInfoCard.inactive') }}</p></span>
                             @break
                         @default
                             {{ $status }}
