@@ -370,6 +370,12 @@ i.online {
     max-height: 30vh;
     overflow-y: auto;
 }
+.status-live-badge {
+    background-color: #000000bd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 /* Info Viewers */
 
 /* Skeleton Loader */
@@ -391,8 +397,8 @@ i.online {
     border-radius: 4px;
     display: inline-block;
     border: none;
-    color: transparent !important; /* Oculta texto residual */
-    pointer-events: none; /* Evita clics en carga */
+    color: transparent !important;
+    pointer-events: none;
     user-select: none;
 }
 
@@ -404,7 +410,7 @@ i.online {
 /* Utilidades de forma para combinar */
 .s-round { border-radius: 50% !important; }
 .s-w-100 { width: 100%; }
-.s-h-50  { height: 50px; } /* Puedes crear las que necesites */
+.s-h-50  { height: 50px; }
 
 
 .swiper-nav-btn {
@@ -413,7 +419,7 @@ i.online {
     background: white;
     border-radius: 50%;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    color: #50b5ff !important; /* Color principal de SocialV */
+    color: #50b5ff !important;
 }
 
 .swiper-nav-btn::after {
@@ -599,7 +605,7 @@ html[data-theme='dark'] .card-owner-info {
     width: 40px;
     height: 40px;
     margin-top: -20px;
-    z-index: 10;
+    z-index: 15;
     cursor: pointer;
     display: flex;
     align-items: center;

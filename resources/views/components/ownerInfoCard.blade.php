@@ -29,13 +29,13 @@
                 <div class="swiper-button-next-owner-info"></div>
                 <div class="swiper-button-prev-owner-info"></div>
             @endif
-            @isset($viewersCount)
+            @if (isset($viewersCount) && $viewersCount)
                 <div class="position-absolute bottom-0 end-0 m-1 z-index-10">
                     <span class="badge bg-dark text-white opacity-75">
                         {{ number_format($viewersCount, 0, '', '.') }} <i class="las la-eye"></i>
                     </span>
                 </div>
-            @endisset
+            @endif
             @if (isset($isMobile) || isset($isFav) || isset($country))
                 <div class="position-absolute top-0 start-0 m-1 z-index-10">
                     <span class="badge bg-dark-50 text-white shadow-sm">
@@ -50,7 +50,7 @@
                         @endif
                     </span>
                 </div>
-            @endisset
+            @endif
             @if (isset($isGames) || isset($gender))
                 <div class="position-absolute bottom-0 start-0 m-1 z-index-10">
                     <span class="badge bg-dark-50 text-white shadow-sm">
@@ -75,28 +75,36 @@
                     </span>
                 </div>
             @endif
-            @if (isset($isNew) || isset($status))
+            @if (isset($status))
+                <div class="position-absolute top-0 start-0 z-index-10 w-100 h-100 status-live-badge">
+                    @switch($status)
+                        @case("public")
+                            {{-- <span class="badge bg-success text-white"><i class="ri-eye-fill"></i></span> --}}
+                            @break
+                        @case("p2p")
+                            <span class="badge bg-warning text-dark p-1"><i class="ri-eye-off-fill"></i><p class="mb-0 mt-1">{{ __('components/ownerInfoCard.p2p') }}</p></span>
+                            @break
+                        @case("private")
+                            <span class="badge bg-danger text-dark mt-1 pt-1"><i class="ri-lock-fill"></i><p class="mb-0">{{ __('components/ownerInfoCard.private') }}</p></span>
+                            @break
+                        @case("groupShow")
+                            <span class="badge bg-success text-white"><i class="ri-group-line"></i></span>
+                            @break
+                        @default
+                            {{ $status }}
+                    @endswitch
+                </div>
+            @endif
+            @if (isset($isNew) || isset($isLive) || isset($lastLive))
                 <div class="position-absolute top-0 end-0 m-1 z-index-10">
                     @if (isset($isNew) && $isNew)
                         <span class="badge bg-warning text-dark fw-bold">{{ __('owner/related.new') }}</span>
                     @endif
-                    @if (isset($status))
-                        @switch($status)
-                            @case("public")
-                                {{-- <span class="badge bg-success text-white"><i class="ri-eye-fill"></i></span> --}}
-                                @break
-                            @case("p2p")
-                                <span class="badge bg-warning text-dark"><i class="ri-eye-off-fill"></i></span>
-                                @break
-                            @case("private")
-                                <span class="badge bg-danger text-white"><i class="ri-lock-fill"></i></span>
-                                @break
-                            @case("groupShow")
-                                <span class="badge bg-success text-white"><i class="ri-group-line"></i></span>
-                                @break
-                            @default
-                                {{ $status }}
-                        @endswitch
+                    @if (isset($isLive) && $isLive)
+                        <span class="badge bg-danger text-white"><span class="text-white">{{ __('components/ownerInfoCard.live') }} </span></span>
+                    @endif
+                    @if (isset($lastLive) && !$isLive)
+                        <span class="badge bg-dark opacity-50 text-white shadow-sm"><i class="lar la-clock"></i> {{ $lastLive }}</span>
                     @endif
                 </div>
             @endif
