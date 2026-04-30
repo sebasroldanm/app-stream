@@ -371,11 +371,17 @@ i.online {
     overflow-y: auto;
 }
 .status-live-badge {
-    background-color: #000000bd;
+    background-color: #00000082;
+    backdrop-filter: blur(2px);
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: all 0.15s ease-in-out;
 }
+.status-live-badge:hover {
+    background-color: #00000021;
+    backdrop-filter: blur(0);
+} 
 /* Info Viewers */
 
 /* Skeleton Loader */

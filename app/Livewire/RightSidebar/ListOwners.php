@@ -68,6 +68,7 @@ class ListOwners extends Component
     {
         return Owner::favoritedByCustomers($customerId)
             ->where('isOnline', true)
+            ->orderByDesc('isLive')
             ->orderByDesc('statusChangedAt')
             ->get();
     }
@@ -76,6 +77,7 @@ class ListOwners extends Component
     {
         return Owner::where('isOnline', true)
             ->notFavoritedByCustomer($customerId)
+            ->orderByDesc('isLive')
             ->orderByDesc('statusChangedAt')
             ->limit($this->onlineLimit)
             ->get();

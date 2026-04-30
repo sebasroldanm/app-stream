@@ -34,8 +34,10 @@ class UpdateFavorites extends Command
      */
     public function handle()
     {
-        $favs = Customer::find(1)->getOwnerFavoriteIds()->toArray();
-        $owners = Owner::whereIn('id', $favs)->get();
+        $owners = Owner::favoritedByCustomers(1)
+            ->where('isActive', true)
+            ->where('isBlocked', false)
+            ->get();
 
         Bus::batch(
             $owners->map(fn($owner) => (new SyncOwner($owner, 'all_not_exception')))->toArray()

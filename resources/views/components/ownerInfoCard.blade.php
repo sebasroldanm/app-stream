@@ -24,7 +24,29 @@
                     </div>
                 @endisset
             </div>
-
+            @if (isset($status) && $status != 'public')
+                <div class="position-absolute top-0 start-0 z-index-10 w-100 h-100 status-live-badge">
+                    @switch($status)
+                        @case("p2p")
+                            <span class="badge bg-warning text-dark p-1"><i class="ri-eye-off-fill"></i><p class="mb-0 mt-1">{{ __('components/ownerInfoCard.p2p') }}</p></span>
+                            @break
+                        @case("private")
+                            <span class="badge bg-danger text-dark mt-1 pt-1"><i class="ri-lock-fill"></i><p class="mb-0">{{ __('components/ownerInfoCard.private') }}</p></span>
+                            @break
+                        @case("groupShow")
+                            <span class="badge bg-success text-white"><i class="ri-group-line"></i></span>
+                            @break
+                        @case("blocked")
+                            <span class="badge bg-danger text-dark mt-1 pt-1"><i class="ri-eye-off-fill"></i><p class="mb-0">{{ __('components/ownerInfoCard.blocked') }}</p></span>
+                            @break
+                        @case("inactive")
+                            <span class="badge bg-dark text-white mt-1 pt-1"><i class="ri-eye-off-fill"></i><p class="mb-0">{{ __('components/ownerInfoCard.inactive') }}</p></span>
+                            @break
+                        @default
+                            {{ $status }}
+                    @endswitch
+                </div>
+            @endif
             @if (isset($primaryImage) && isset($secondaryImage))
                 <div class="swiper-button-next-owner-info"></div>
                 <div class="swiper-button-prev-owner-info"></div>
@@ -73,26 +95,6 @@
                             @endswitch
                         @endif
                     </span>
-                </div>
-            @endif
-            @if (isset($status))
-                <div class="position-absolute top-0 start-0 z-index-10 w-100 h-100 status-live-badge">
-                    @switch($status)
-                        @case("public")
-                            {{-- <span class="badge bg-success text-white"><i class="ri-eye-fill"></i></span> --}}
-                            @break
-                        @case("p2p")
-                            <span class="badge bg-warning text-dark p-1"><i class="ri-eye-off-fill"></i><p class="mb-0 mt-1">{{ __('components/ownerInfoCard.p2p') }}</p></span>
-                            @break
-                        @case("private")
-                            <span class="badge bg-danger text-dark mt-1 pt-1"><i class="ri-lock-fill"></i><p class="mb-0">{{ __('components/ownerInfoCard.private') }}</p></span>
-                            @break
-                        @case("groupShow")
-                            <span class="badge bg-success text-white"><i class="ri-group-line"></i></span>
-                            @break
-                        @default
-                            {{ $status }}
-                    @endswitch
                 </div>
             @endif
             @if (isset($isNew) || isset($isLive) || isset($lastLive))
