@@ -18,11 +18,11 @@
                     <div class="swiper-wrapper">
                         @foreach ($related->models as $item)
                             <div class="swiper-slide">
-                                <x-ownerInfoCard 
-                                    :isFav="in_array($item->id, $favs)" 
-                                    :primaryImage="'https://img.doppiocdn.net/thumbs/' . $item->verifiedSnapshotTimestamp . '/' . $item->id"
+                                <x-ownerInfoCard
+                                    :isFav="in_array($item->id, $favs)"
+                                    :primaryImage="(isset($item->verifiedSnapshotTimestamp) && $item->verifiedSnapshotTimestamp) ? 'https://img.doppiocdn.net/thumbs/' . $item->verifiedSnapshotTimestamp . '/' . $item->id : null"
                                     :secondaryImage="$item->previewUrlThumbSmall"
-                                    :ternaryImage="'https://img.doppiocdn.net/thumbs/' . $item->popularSnapshotTimestamp . '/' . $item->id"
+                                    :ternaryImage="(isset($item->popularSnapshotTimestamp) && $item->popularSnapshotTimestamp) ? 'https://img.doppiocdn.net/thumbs/' . $item->popularSnapshotTimestamp . '/' . $item->id : null"
                                     :isNew="$item->isNew"
                                     :isMobile="$item->isMobile"
                                     :viewersCount="$item->viewersCount"

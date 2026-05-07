@@ -2,27 +2,27 @@
     <a href="{{ route('owner', $username) }}">
         <div class="swiper mySwiperOwner" data-settings="{{ json_encode($settings ?? []) }}">
             <div class="swiper-wrapper">
-                @isset($primaryImage)
+                @if(isset($primaryImage) && $primaryImage)
                     <div class="swiper-slide">
                         <div class="content-image" style="background-image: url('{{ $primaryImage }}');">
                             <img src="{{ $primaryImage }}" alt="{{ $username }}">
                         </div>
                     </div>
-                @endisset
-                @isset($secondaryImage)
+                @endif
+                @if(isset($secondaryImage) && $secondaryImage)
                     <div class="swiper-slide">
                         <div class="content-image" style="background-image: url('{{ $secondaryImage }}');">
                             <img src="{{ $secondaryImage }}" alt="{{ $username }}">
                         </div>
                     </div>
-                @endisset
-                @isset($ternaryImage)
+                @endif
+                @if(isset($ternaryImage) && $ternaryImage)
                     <div class="swiper-slide">
                         <div class="content-image" style="background-image: url('{{ $ternaryImage }}');">
                             <img src="{{ $ternaryImage }}" alt="{{ $username }}">
                         </div>
                     </div>
-                @endisset
+                @endif
             </div>
             @if (isset($status) && $status != 'public')
                 <div class="position-absolute top-0 start-0 z-index-10 w-100 h-100 status-live-badge">
