@@ -78,8 +78,9 @@ return [
 
         // Provider para clientes
         'customers' => [
-            'driver' => 'eloquent',
+            'driver' => 'eloquent-webauthn',
             'model' => App\Models\Customer::class,
+            'password_fallback' => true,
         ],
     ],
 

@@ -3,6 +3,8 @@
 use App\Http\Controllers\AuthCustomerController;
 use App\Http\Controllers\TelegramController;
 use App\Http\Controllers\UtilController;
+use App\Http\Controllers\WebAuthn\WebAuthnLoginController;
+use App\Http\Controllers\WebAuthn\WebAuthnRegisterController;
 use App\Livewire\About;
 use App\Livewire\Actions;
 use App\Livewire\Contact;
@@ -18,8 +20,7 @@ use App\Livewire\PostManagement;
 use App\Livewire\Timeline;
 use App\Livewire\ViewOwner;
 use Illuminate\Support\Facades\Route;
-
-use App\Traits\SyncData;
+use Laragear\WebAuthn\Http\Routes as WebAuthnRoutes;
 
 
 Route::get('/login', [AuthCustomerController::class, 'index'])->name('login');
@@ -61,6 +62,23 @@ Route::middleware(['auth:customer'])->group(function () {
     Route::get('/post-management', PostManagement::class)->name('post-management');
 
     Route::get('/conversations', Conversations::class)->name('conversations');
+
+    Route::get('/passkey/register', [AuthCustomerController::class, 'passkeyRegister'])
+        ->name('passkey.register');
+
+    Route::post('/passkey/register', [AuthCustomerController::class, 'passkeyRegisterSubmit'])
+        ->name('passkey.register.submit');
+
+    Route::post('/webauthn/register/options', [WebAuthnRegisterController::class, 'options']);
+
+    Route::post('/webauthn/register', [WebAuthnRegisterController::class, 'register']);
+});
+
+Route::middleware('guest:customer')->group(function () {
+
+    Route::post('/webauthn/login/options', [WebAuthnLoginController::class, 'options']);
+
+    Route::post('/webauthn/login', [WebAuthnLoginController::class, 'login']);
 });
 
 Route::get('/media-proxy/{fileId}', [TelegramController::class, 'proxy'])->name('telegram.proxy');

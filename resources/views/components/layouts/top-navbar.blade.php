@@ -251,7 +251,7 @@
                                     </div>
                                 </div>
                                 <div class="card-body p-0 ">
-                                    <a href="../app/profile.html" class="iq-sub-card iq-bg-primary-hover">
+                                    <a href="{{ route('passkey.register') }}" class="iq-sub-card iq-bg-primary-hover">
                                         <div class="d-flex align-items-center">
                                             <div class="rounded card-icon bg-soft-primary">
                                                 <i class="ri-file-user-line"></i>
