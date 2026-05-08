@@ -88,10 +88,10 @@
 
                             @if ($hasChanges)
                                 <div class="ms-auto d-flex align-items-center">
-                                    <button class="btn btn-primary me-2" wire:click="applyFilters">
+                                    <button class="btn btn-primary me-2" wire:click="applyFilters" wire:loading.attr="disabled">
                                         <i class="ri-check-line me-1"></i>Aplicar
                                     </button>
-                                    <button class="btn btn-soft-secondary" wire:click="resetFilters">
+                                    <button class="btn btn-soft-secondary" wire:click="resetFilters" wire:loading.attr="disabled">
                                         <i class="ri-refresh-line me-1"></i>Limpiar
                                     </button>
                                 </div>
@@ -100,49 +100,53 @@
                     </div>
                 </div>
 
-
-
-
-
                 <div class="col-lg-12 mt-4">
-                    <div class="row">
-                        @foreach ($owners as $owner)
-                            <div class="col-6 col-md-4 col-lg-3 col-xl-2 mb-4">
-                                <x-ownerInfoCard :isFav="in_array($owner->id, $favs)" :primaryImage="'https://img.doppiocdn.net/thumbs/' .
-                                    ($owner->verifiedSnapshotTimestamp ?? $owner->snapshotTimestamp) .
-                                    '/' .
-                                    $owner->id" :secondaryImage="$owner->previewUrlThumbSmall" :ternaryImage="'https://img.doppiocdn.net/thumbs/' .
-                                    $owner->popularSnapshotTimestamp .
-                                    '/' .
-                                    $owner->id"
-                                    :isNew="$owner->isNew" :isMobile="$owner->isMobile" :viewersCount="$owner->viewersCount" :username="$owner->username"
-                                    :idOwner="$owner->id" :country="$this->flagCountry($owner->country)" :settings="[
-                                        'autoplay' => false,
-                                        'allowTouchMove' => true,
-                                        'simulateTouch' => true,
-                                    ]" />
+                    {{-- Grid real: se oculta mientras se aplican filtros --}}
+                    <div wire:loading.remove wire:target="applyFilters, resetFilters">
+                        <div class="row">
+                            @foreach ($owners as $owner)
+                                <div class="col-6 col-md-4 col-lg-3 col-xl-2 mb-4">
+                                    <x-ownerInfoCard :isFav="in_array($owner->id, $favs)" :primaryImage="'https://img.doppiocdn.net/thumbs/' .
+                                        ($owner->verifiedSnapshotTimestamp ?? $owner->snapshotTimestamp) .
+                                        '/' .
+                                        $owner->id" :secondaryImage="$owner->previewUrlThumbSmall" :ternaryImage="'https://img.doppiocdn.net/thumbs/' .
+                                        $owner->popularSnapshotTimestamp .
+                                        '/' .
+                                        $owner->id"
+                                        :isNew="$owner->isNew" :isMobile="$owner->isMobile" :viewersCount="$owner->viewersCount" :username="$owner->username"
+                                        :idOwner="$owner->id" :country="$this->flagCountry($owner->country)" :settings="[
+                                            'autoplay' => false,
+                                            'allowTouchMove' => true,
+                                            'simulateTouch' => true,
+                                        ]" />
+                                </div>
+                            @endforeach
+                        </div>
+
+                        @if (!$endResults && count($owners) > 0)
+                            <div x-intersect="$wire.nextPage()" class="text-center mt-4 mb-5">
+                                <div wire:loading wire:target="nextPage">
+                                    <div class="spinner-border text-primary" role="status"></div>
+                                    <p class="mt-2">Cargando más...</p>
+                                </div>
                             </div>
-                        @endforeach
+                        @elseif($endResults && count($owners) > 0)
+                            <div class="text-center mt-4 mb-5">
+                                <p class="">No hay más resultados</p>
+                            </div>
+                        @elseif(count($owners) === 0)
+                            <div class="text-center mt-5 mb-5">
+                                <i class="ri-search-line ri-4x  mb-3 d-block"></i>
+                                <h4>No se encontraron resultados</h4>
+                                <p>Prueba ajustando los filtros.</p>
+                            </div>
+                        @endif
                     </div>
 
-                    @if (!$endResults && count($owners) > 0)
-                        <div x-intersect="$wire.nextPage()" class="text-center mt-4 mb-5">
-                            <div wire:loading wire:target="nextPage">
-                                <div class="spinner-border text-primary" role="status"></div>
-                                <p class="mt-2">Cargando más...</p>
-                            </div>
-                        </div>
-                    @elseif($endResults && count($owners) > 0)
-                        <div class="text-center mt-4 mb-5">
-                            <p class="">No hay más resultados</p>
-                        </div>
-                    @elseif(count($owners) === 0)
-                        <div class="text-center mt-5 mb-5">
-                            <i class="ri-search-line ri-4x  mb-3 d-block"></i>
-                            <h4>No se encontraron resultados</h4>
-                            <p>Prueba ajustando los filtros.</p>
-                        </div>
-                    @endif
+                    {{-- Grid de Skeleton: se muestra mientras se aplican filtros --}}
+                    <div wire:loading.block wire:target="applyFilters, resetFilters" class="w-100">
+                        @include('livewire.explore.skeleton-grid')
+                    </div>
                 </div>
 
 

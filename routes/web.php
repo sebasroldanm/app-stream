@@ -20,7 +20,6 @@ use App\Livewire\PostManagement;
 use App\Livewire\Timeline;
 use App\Livewire\ViewOwner;
 use Illuminate\Support\Facades\Route;
-use Laragear\WebAuthn\Http\Routes as WebAuthnRoutes;
 
 
 Route::get('/login', [AuthCustomerController::class, 'index'])->name('login');

@@ -16,18 +16,30 @@
                                     <img src="{{ $intro->url }}" alt="profile-bg" class="img-fluid intro-owner w-100 object-fit-cover">
                                 </div>
                             @else
-                                <video class="ambient" autoplay muted loop>
-                                    <source src="{{ $intro->url }}" type="video/mp4">
-                                </video>
+                                @if (request()->routeIs('owner.live'))
+                                    <video class="ambient">
+                                        <source src="{{ $intro->url }}" type="video/mp4">
+                                    </video>
+                                @else
+                                    <video class="ambient" autoplay muted loop>
+                                        <source src="{{ $intro->url }}" type="video/mp4">
+                                    </video>
+                                @endif
                             @endif
                             <div class="position-relative intro-owner container-overlay">
                                 @if (in_array($intro->type, ['image', 'avatar']))
                                     <img src="{{ $intro->url }}" alt="profile-bg" onerror="this.style.display='none';"
                                         class="rounded img-fluid _overlay @if ($intro->type == 'avatar') blur_avatar @endif fullviewer">
                                 @else
-                                    <video autoplay loop muted class="rounded _overlay">
-                                        <source src="{{ $intro->url }}" type="video/mp4">
-                                    </video>
+                                    @if (request()->routeIs('owner.live'))
+                                        <video class="rounded _overlay">
+                                            <source src="{{ $intro->url }}" type="video/mp4">
+                                        </video>
+                                    @else
+                                        <video autoplay muted loop class="rounded _overlay">
+                                            <source src="{{ $intro->url }}" type="video/mp4">
+                                        </video>
+                                    @endif
                                 @endif
 
                                 <ul class="header-nav list-inline d-flex flex-wrap justify-end p-0 m-0">

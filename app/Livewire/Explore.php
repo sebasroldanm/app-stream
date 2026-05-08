@@ -7,9 +7,10 @@ use App\Services\Explore\ExploreService;
 use App\Traits\OwnerProp;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-
+use Livewire\Attributes\Lazy;
 use Livewire\Attributes\Url;
 
+#[Lazy]
 class Explore extends Component
 {
     use OwnerProp;
@@ -94,6 +95,10 @@ class Explore extends Component
         } else {
             $this->endResults = true;
         }
+    }
+
+    public function placeholder() {
+        return view('livewire.explore.explore-placeholder');
     }
 
     public function render()
