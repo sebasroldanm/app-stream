@@ -40,7 +40,7 @@ class UpdateFavorites extends Command
             ->get();
 
         Bus::batch(
-            $owners->map(fn($owner) => (new SyncOwner($owner, 'all_not_exception')))->toArray()
+            $owners->map(fn($owner) => (new SyncOwner($owner, 'owner')))->toArray()
         )
             ->onQueue('default')
             ->then(function (Batch $batch) {
@@ -59,9 +59,7 @@ class UpdateFavorites extends Command
                 Cache::forget('online_app');
                 Cache::remember('online_app', 60, function () {
                     return Owner::where('isOnline', true)->count();
-                });
-                Cache::put('Notification', 'Update Favorites', 3600);
-                Cache::put('Status', 'Finalizado', 3600);
+                });    
             })
             ->dispatch();
     }

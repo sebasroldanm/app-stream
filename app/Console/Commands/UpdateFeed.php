@@ -41,8 +41,6 @@ class UpdateFeed extends Command
         )
             ->onQueue('high')
             ->finally(function (Batch $batch) {
-                Cache::put('Notification', 'Update Feed', 3600);
-                Cache::put('Status', 'Finalizado', 3600);
             })
             ->dispatch();
     }
