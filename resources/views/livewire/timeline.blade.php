@@ -3,7 +3,7 @@
     <div id="content-page" class="content-page">
         <div class="container">
             <div class="row">
-                
+                @livewire('timeline.stories')
                 @livewire('timeline.post')
 
                 <div class="col-lg-4">
