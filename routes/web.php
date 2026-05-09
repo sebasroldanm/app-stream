@@ -1,26 +1,32 @@
 <?php
 
 use App\Http\Controllers\AuthCustomerController;
+use App\Http\Controllers\TelegramController;
 use App\Http\Controllers\UtilController;
+use App\Http\Controllers\WebAuthn\WebAuthnLoginController;
+use App\Http\Controllers\WebAuthn\WebAuthnRegisterController;
 use App\Livewire\About;
 use App\Livewire\Actions;
 use App\Livewire\Contact;
+use App\Livewire\Conversations;
 use App\Livewire\Explore;
 use App\Livewire\Explore\MobileCO;
 use App\Livewire\Explore\NewCO;
 use App\Livewire\Explore\NewMobileCO;
 use App\Livewire\Favorites;
 use App\Livewire\Home;
+use App\Livewire\Multiview;
+use App\Livewire\PostManagement;
 use App\Livewire\Timeline;
 use App\Livewire\ViewOwner;
 use Illuminate\Support\Facades\Route;
-
-use App\Traits\SyncData;
 
 
 Route::get('/login', [AuthCustomerController::class, 'index'])->name('login');
 Route::post('/login', [AuthCustomerController::class, 'login'])->name('customer.login.submit');
 Route::get('/logout', [AuthCustomerController::class, 'logout'])->name('customer.logout');
+Route::get('/signup', [AuthCustomerController::class, 'signup'])->name('customer.signup');
+Route::post('/signup', [AuthCustomerController::class, 'register'])->name('customer.signup.submit');
 
 Route::get('/test', [AuthCustomerController::class, 'test']);
 
@@ -29,6 +35,8 @@ Route::middleware(['auth:customer'])->group(function () {
     Route::get('/timeline', Timeline::class)->name('timeline');
     Route::get('/about', About::class);
     Route::get('/contact', Contact::class);
+
+    Route::get('/multiview', Multiview::class)->name('multiview');
 
     Route::prefix('owner/{username}')->group(function () {
         Route::get('/', ViewOwner::class)->name('owner');
@@ -49,7 +57,30 @@ Route::middleware(['auth:customer'])->group(function () {
     Route::get('/actions', Actions::class)->name('actions');
 
     Route::get('/metadata/{model}/{id}', [UtilController::class, 'viewMetadata'])->name('metadata');
+
+    Route::get('/post-management', PostManagement::class)->name('post-management');
+
+    Route::get('/conversations', Conversations::class)->name('conversations');
+
+    Route::get('/passkey/register', [AuthCustomerController::class, 'passkeyRegister'])
+        ->name('passkey.register');
+
+    Route::post('/passkey/register', [AuthCustomerController::class, 'passkeyRegisterSubmit'])
+        ->name('passkey.register.submit');
+
+    Route::post('/webauthn/register/options', [WebAuthnRegisterController::class, 'options']);
+
+    Route::post('/webauthn/register', [WebAuthnRegisterController::class, 'register']);
 });
+
+Route::middleware('guest:customer')->group(function () {
+
+    Route::post('/webauthn/login/options', [WebAuthnLoginController::class, 'options']);
+
+    Route::post('/webauthn/login', [WebAuthnLoginController::class, 'login']);
+});
+
+Route::get('/media-proxy/{fileId}', [TelegramController::class, 'proxy'])->name('telegram.proxy');
 
 Route::get('/search', [AuthCustomerController::class, 'search'])->name('searchGlobal');
 Route::get('/dashboard', function () {

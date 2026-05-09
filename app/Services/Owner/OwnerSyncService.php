@@ -76,7 +76,12 @@ class OwnerSyncService
                     } else {
                         $owner->statusChangedAt = Carbon::parse($statusRaw)->subHours(5);
                     }
-                    $owner->data = $content;
+                    $owner->data = $data;
+                    $owner->isProfileAvailable = $data['user']['isProfileAvailable'];
+                    $owner->isBanned = $data['user']['isBanned'];
+                    $owner->isGeoBanned = $data['user']['isGeoBanned'];
+                    $owner->isActive = $data['user']['isActive'];
+                    $owner->isBlocked = $dataUser['isBlocked'];
                     $owner->save();
 
                     return $owner->id;

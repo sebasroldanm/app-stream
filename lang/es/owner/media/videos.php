@@ -11,6 +11,8 @@ return [
             'verified' => 'Verificado',
             'fanClub' => 'Club de fans',
             'paidOrFanClub' => 'De pago o club de fans',
-        ]
+            'friends' => 'Amigos',
+        ],
+        'cost' => 'Costo',
     ],
 ];

@@ -2,13 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Auth\Authenticatable as AuthAuthenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
+use Laragear\WebAuthn\WebAuthnAuthentication;
+use Laragear\WebAuthn\WebAuthnData;
 
-class Customer extends Authenticatable implements AuthenticatableContract
+class Customer extends Authenticatable implements AuthenticatableContract, WebAuthnAuthenticatable
 {
-    use Notifiable;
+    use Notifiable, SoftDeletes, AuthAuthenticatable, WebAuthnAuthentication;
 
     protected $fillable = [
         'username',
@@ -32,6 +37,14 @@ class Customer extends Authenticatable implements AuthenticatableContract
         'last_login_at' => 'datetime',
         'password_change_required_at' => 'datetime',
     ];
+
+    public function webAuthnData(): WebAuthnData
+    {
+        return new WebAuthnData(
+            (string) $this->email,
+            (string) $this->username
+        );
+    }
 
     public function ownerFavorites()
     {

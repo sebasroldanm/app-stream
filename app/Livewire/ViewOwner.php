@@ -20,6 +20,7 @@ class ViewOwner extends Component
 
     public $username;
     public $id_owner;
+    public $isBanned = false;
     public $error_search = false;
 
     public $limitAlbums = 6;
@@ -48,7 +49,7 @@ class ViewOwner extends Component
             $owner = Owner::find($this->username);
             return redirect()->route('owner.feed', $owner->username);
         }
-        
+
         $this->username = $username;
 
         $routeName = request()->route()->getName();
@@ -106,65 +107,56 @@ class ViewOwner extends Component
 
     public function render()
     {
-        // //PROV
-        // $this->syncOwnerByUsername($this->username);
-        // //PROV
-        $escapedOwner = str_replace('-', '\\-', $this->username);
-        $owner = Owner::whereRaw("MATCH(username) AGAINST(? IN BOOLEAN MODE)", ['"' . $escapedOwner . '"'])->first();
-        $new_username = "";
-        if (empty($owner)) {
-            $new_username = $this->syncOwnerByUsername($this->username);
-            $owner = Owner::whereRaw("MATCH(username) AGAINST(? IN BOOLEAN MODE)", ['"' . $escapedOwner . '"'])->first();
-        }
-        
-        if (!empty($new_username) && is_string($new_username)) {
-            $this->username = $new_username;
-        }
-        
-        if (is_null($owner) || strcasecmp($owner->username, $this->username) !== 0) {
-            $this->error_search = true;
-            $own_id = $this->syncOwnerByUsername($this->username);
-            if (is_numeric($own_id)) {
-                $owner = Owner::find($own_id);
-            } else {
-                $owner = Owner::where('username', $this->username)->first();
-            }
+        // Search simple and direct by username
+        $owner = Owner::whereRaw('LOWER(username) = LOWER(?)', [$this->username])->first();
+
+        // If not exists locally, sync once
+        if (is_null($owner)) {
+            $result = $this->syncOwnerByUsername($this->username);
+            $owner  = $this->resolveOwnerFromSyncResult($result, $this->username);
         }
 
         if (is_null($owner)) {
             return view('livewire.404');
         }
 
-        if (is_null($owner->lastSync) || Carbon::parse($owner->lastSync)->diffInHours(Carbon::now()) > 1) {
-            $own_id = $this->syncOwnerByUsername($this->username);
-            if (is_numeric($own_id)) {
-                $owner = Owner::find($own_id);
-            } else {
-                $owner = Owner::where('username', $this->username)->first();
-            }
+        // Update canonical username if changed
+        $this->username = $owner->username;
+
+        // Re-sync only if cache is expired (>1 hour)
+        $needsSync = is_null($owner->lastSync)
+            || Carbon::parse($owner->lastSync)->diffInHours(Carbon::now()) > 1;
+
+        // Re-sync if data is incomplete
+        $ownerData  = $owner->data;
+        $needsSync  = $needsSync || !isset($ownerData->user);
+
+        if ($needsSync) {
+            $result = $this->syncOwnerByUsername($this->username);
+            $owner  = $this->resolveOwnerFromSyncResult($result, $this->username);
+            $ownerData = $owner->data;
         }
 
-        if ($this->username !== $owner->username) {
+        $this->isBanned = $owner->isBanned || $owner->isBlocked || $owner->isGeoBanned || !$owner->isActive || !$owner->isProfileAvailable;
+
+        if (is_null($owner)) {
+            return view('livewire.404');
+        }
+
+        // Redirect if canonical username differs
+        if (strcasecmp($this->username, $owner->username) !== 0) {
             return redirect()->route('owner.feed', $owner->username);
         }
 
-        $owner->data = isset($owner->data) && !empty($owner->data) ? json_decode($owner->data) : null;
-        if (!isset($owner->data->user)) {
-            $own_id = $this->syncOwnerByUsername($this->username);
-            if (is_numeric($own_id)) {
-                $owner = Owner::find($own_id);
-            } else {
-                $owner = Owner::where('username', $this->username)->first();
-            }
-        }
+        $owner->data = $ownerData;
         $this->id_owner = $owner->id;
+
         $intro = Intro::where('owner_id', $owner->id)->orderBy('id', 'desc')->first();
         $albums = Album::with('photos')->where('owner_id', $owner->id)->get();
         $videos = Video::where('owner_id', $owner->id)->limit($this->limitVideos)->get();
         $panels = Panel::where('owner_id', $owner->id)->limit($this->limitPanels)->get();
 
         if ($intro) {
-            $intro->data = json_decode($intro->data);
             if ($intro->type == 'video') {
                 $intro->url = array_values(get_object_vars($intro->data->video->trailers))[0];
             }
@@ -172,14 +164,6 @@ class ViewOwner extends Component
             $intro = new Intro();
             $intro->type = 'avatar';
             $intro->url = ($owner->avatar !== "") ? $owner->avatar : $owner->preview;
-        }
-
-        if ($owner->avatar !== "") {
-            $owner->pic_profile = $owner->avatar;
-        } elseif ($owner->preview !== "") {
-            $owner->pic_profile = $owner->preview;
-        } else {
-            $owner->pic_profile = 'https://placehold.co/150x150?text=Profile+Pic';
         }
 
         if (Auth::guard('customer')->check()) {
@@ -253,5 +237,13 @@ class ViewOwner extends Component
     {
         $this->force_sync = true;
         Owner::where('id', $this->id_owner)->update(['notFound' => false]);
+    }
+
+    private function resolveOwnerFromSyncResult(mixed $result, string $username): ?Owner
+    {
+        if (is_numeric($result)) {
+            return Owner::find($result);
+        }
+        return Owner::whereRaw('LOWER(username) = LOWER(?)', [$username])->first();
     }
 }

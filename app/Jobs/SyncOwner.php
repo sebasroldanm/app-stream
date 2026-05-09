@@ -67,13 +67,15 @@ class SyncOwner implements ShouldQueue
             case 'owner':
                 $this->updateOwner($owner);
                 break;
+            case 'all_not_exception':
+                $this->updateAllNotException($owner);
+                break;
+            case 'feed':
+                $this->updateFeed($owner);
+                break;
             default:
                 $this->updateOwner($owner);
                 break;
-        }
-
-        if ($type === 'all') {
-            $this->updateAll($owner);
         }
 
     }
@@ -95,6 +97,18 @@ class SyncOwner implements ShouldQueue
         $this->ownerAlbumSyncService->syncAlbum($owner->id, $owner->username);
         $this->ownerIntroSyncService->syncIntroByOwnerId($owner->id);
         $this->ownerVideoSyncService->syncVideo($owner->id, $owner->username);
+        $this->ownerFeedSyncService->syncFeedByOwnerId($owner->id);
+    }
+
+    private function updateAllNotException($owner)
+    {
+        $this->ownerSyncService->syncOwnerByUsername($owner->username);
+        $this->ownerPanelSyncService->syncPanelByOwnerId($owner->id);
+        $this->ownerIntroSyncService->syncIntroByOwnerId($owner->id);
+    }
+
+    private function updateFeed($owner)
+    {
         $this->ownerFeedSyncService->syncFeedByOwnerId($owner->id);
     }
 }

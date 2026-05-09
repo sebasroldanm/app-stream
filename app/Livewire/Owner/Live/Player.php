@@ -9,24 +9,35 @@ use Livewire\Component;
 class Player extends Component
 {
     public Owner $owner;
+    public bool $isMultiview = false;
 
     public function render()
     {
         $owner = Owner::find($this->owner->id);
         $url = env("URL_HLS") . "/b-hls-32/" . $owner->id . "/" . $owner->id . ".m3u8";
-        $owner->data = json_decode($owner->data);
 
-        $ratio = $this->aspectRatio($owner->data->cam->broadcastSettings->width, $owner->data->cam->broadcastSettings->height);
-        $height = $owner->data->cam->broadcastSettings->height;
-        $width = $owner->data->cam->broadcastSettings->width;
+        $ratio = $owner->ownerCamBroadcastConfigRatio;
+        $height = $owner->ownerCamBroadcastConfigHeight;
+        $width = $owner->ownerCamBroadcastConfigWidth;
 
-        $this->dispatch('initLive', [
-            'url' => trim($url),
-            'poster' => $owner->preview,
-            'ratio' => $ratio,
-            'height' => $height,
-            'width' => $width,
-        ]);
+        if ($this->isMultiview) {
+            $this->dispatch('initMultiview', [
+                'id' => $owner->id,
+                'url' => trim($url),
+                'poster' => $owner->preview,
+                'ratio' => $ratio,
+                'height' => $height,
+                'width' => $width,
+            ]);
+        } else {
+            $this->dispatch('initLive', [
+                'url' => trim($url),
+                'poster' => $owner->preview,
+                'ratio' => $ratio,
+                'height' => $height,
+                'width' => $width,
+            ]);
+        }
         return view('livewire.owner.live.player', compact('ratio', 'height', 'width'));
     }
 

@@ -1,7 +1,13 @@
 <footer class="iq-footer">
-    <button id="scrollToTop" class="btn btn-primary" style="position: fixed; right: 50%; bottom: 5px; display: none;">
-        {{ __('footer.scroll_to_top') }}
-    </button>
+    <div id="swipeUpContainer" class="swipe-container">
+        <button class="swipe-up-btn" aria-label="Volver arriba">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <polyline points="18 15 12 9 6 15"></polyline>
+            </svg>
+            <span>{{ __('footer.scroll_to_top') }}</span>
+        </button>
+    </div>
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-6">

@@ -84,7 +84,9 @@ class Home extends Component
                 ->get();
         }
 
-        return view('livewire.home', compact('owners'));
+        /** @var \Livewire\Features\SupportPageComponents\ContentRenderer $view */
+        $view = view('livewire.home', compact('owners'));
+        return $view->layoutData(['title' => ' | Inicio']);
     }
 
     public function addOwner()

@@ -17,7 +17,7 @@ class UtilController extends Controller
             case 'feed':
                 $response = Feed::with(['albumFeed.photos', 'videoFeed', 'postFeed.mediaPostFeeds'])->find($id);
                 if ($response) {
-                    $response->data = json_decode($response->data);
+                    // $response->data = json_decode($response->data);
                     $response->lastUsername = json_decode($response->lastUsername);
                 }
                 break;

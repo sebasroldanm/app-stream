@@ -1,6 +1,3 @@
-@php
-    $owner->data = json_decode($owner->data);
-@endphp
 <div class="card mb-0 card_owner_home">
     <div class="top-bg-image top-bg-list-owner container-overlay">
         @if ($owner->data)
@@ -13,18 +10,8 @@
     </div>
     <div class="card-body text-center">
         <div class="group-icon">
-            @if ($owner->pic_profile)
-                <img src="{{ $owner->pic_profile }}" alt="profile-img" loading="lazy"
-                    class="rounded-circle img-fluid avatar-120">
-            @else
-                @if ($owner->avatar)
-                    <img src="{{ $owner->avatar }}" alt="profile-img" loading="lazy"
-                        class="rounded-circle img-fluid avatar-120">
-                @else
-                    <img src="https://ui-avatars.com/api/?name={{ $owner->username }}" alt="profile-img" loading="lazy"
-                        class="rounded-circle img-fluid avatar-120">
-                @endif
-            @endif
+            <img src="{{ $owner->pic_profile }}" alt="profile-img" loading="lazy"
+                class="rounded-circle img-fluid avatar-120">
         </div>
         <div class="group-info pt-3 pb-3">
             <h4>
@@ -35,26 +22,22 @@
                     @else
                         @if ($owner->isOnline)
                             <i class="ri-checkbox-blank-circle-fill online m-1"></i>
+                        @elseif ($owner->isDelete)
+                            <i class="ri-close-circle-fill disable m-1" data-bs-toggle="tooltip"
+                                data-bs-placement="top" data-bs-original-title="{{ __('owner/profile.disabled') }}"></i>
+                        @elseif ($owner->notFound)
+                            <i class="ri-close-circle-fill disable m-1" data-bs-toggle="tooltip"
+                                data-bs-placement="top" data-bs-original-title="{{ __('owner/profile.not_found') }}"></i>
+                        @else
+                            <i class="ri-indeterminate-circle-fill offline m-1" data-bs-toggle="tooltip"
+                                data-bs-placement="top" data-bs-original-title="{{ __('owner/profile.offline') . ' ' . \Carbon\Carbon::parse($owner->statusChangedAt)->diffForHumans() }}"></i>
                         @endif
                     @endif
                 </a>
             </h4>
-            @if ($owner->name)
-                <p>
-                    @if ($favoriteHeart && in_array($owner->id, $favs))
-                        <span class="badge bg-danger"><i class="las la-heart"></i></span>
-                        {{ $owner->name }}
-                    @else
-                        {{ $owner->name }}
-                    @endif
-                </p>
-            @else
-                @if ($favoriteHeart && in_array($owner->id, $favs))
-                    <p>
-                        <span class="badge bg-danger"><i class="las la-heart"></i></span>
-                    </p>
-                @endif
-            @endif
+
+            <p>{!! $favoriteHeart && in_array($owner->id, $favs) ? '<span class="badge bg-danger"><i class="las la-heart"></i></span>' : '' !!}{!! $owner->name ?? 'No name' !!}</p>
+
         </div>
         <div class="group-details d-inline-block pb-3">
             <ul class="d-flex align-items-center justify-content-between list-inline m-0 p-0">

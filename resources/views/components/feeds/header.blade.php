@@ -2,15 +2,13 @@
     <div class="d-flex justify-content-between">
         @php
             $classIcon = '';
-            if ($tagLive && $feed->owner->isOnline) {
+            if ($tagLive && $feed->owner->isLive) {
                 $classIcon = 'iq-profile-avatar status-live';
             }
         @endphp
         <div class="me-3 {{ $classIcon }}">
             <a href="{{ route('owner', $feed->owner->username) }}">
-                <img class="rounded-circle avatar-60" src="{{ $feed->owner->avatar }}"
-                    onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ $feed->owner->username }}';"
-                    alt="">
+                <img class="rounded-circle avatar-60" src="{{ $owner->pic_profile }}" alt="Pic profile {{ $owner->username }}">
             </a>
         </div>
         <div class="w-100">

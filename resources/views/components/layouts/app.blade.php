@@ -94,11 +94,19 @@
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
 
     @php $version = date('YmdHi'); @endphp
+    <script src="{{ asset('js/frontend/search.js') }}?v={{ $version }}"></script>
+    <script src="{{ asset('js/frontend/fullviewer.js') }}?v={{ $version }}"></script>
+    <script src="{{ asset('js/frontend/swiper-init.js') }}?v={{ $version }}"></script>
+    <script src="{{ asset('js/frontend/layout-utils.js') }}?v={{ $version }}"></script>
     <script src="{{ asset('js/frontend/custom.js') }}?v={{ $version }}"></script>
     <script src="{{ asset('js/frontend/video.js') }}?v={{ $version }}"></script>
+    <script src="{{ asset('js/frontend/video-component.js') }}?v={{ $version }}"></script>
     <script src="{{ asset('js/frontend/live.js') }}?v={{ $version }}"></script>
+    <script src="{{ asset('js/frontend/celebrations/birthday.js') }}?v={{ $version }}"></script>
 
 
 </body>

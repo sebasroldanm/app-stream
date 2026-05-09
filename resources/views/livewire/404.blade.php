@@ -1,7 +1,4 @@
 <div id="content-page" class="content-page">
-    {{-- @php
-        $owner->data = json_decode($owner->data, true);
-    @endphp --}}
     <div class="container">
         <div class="row">
             <div class="col-sm-12">

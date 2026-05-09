@@ -10,8 +10,20 @@ class Intro extends Model
     use HasFactory;
 
     protected $fillable = ['id', 'type', 'url', 'data', 'owner_id'];
+    
+    protected $casts = [
+        'data' => 'object',
+    ];
 
     public function owner() {
         return $this->hasOne(Owner::class);
+    }
+
+    public function getIntroImageUrlAttribute() {
+        if ($this->type === 'image') {
+            return $this->url;
+        }
+
+        return collect($this->data->video->previews)->sortKeys()->last();
     }
 }

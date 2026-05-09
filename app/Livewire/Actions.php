@@ -2,27 +2,41 @@
 
 namespace App\Livewire;
 
-use App\Models\Owner;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
 
 class Actions extends Component
 {
+    public string $message = '';
+    public string $status = '';
+    public $lastUpdate;
+
     public function render()
     {
-        return view('livewire.actions');
+        /** @var \Livewire\Features\SupportPageComponents\ContentRenderer $view */
+        $view = view('livewire.actions');
+        return $view->layoutData(['title' => ' | Acciones']);
     }
 
     public function updateOnline()
     {
         Artisan::call('app:update-online');
-        $this->dispatch('updateOnline');
     }
 
     public function updateAll()
     {
         Artisan::call('app:update-owners-data');
-        $this->dispatch('updateAll');
+    }
+
+    public function updateFavorites()
+    {
+        $this->lastUpdate = now();
+        Artisan::call('app:update-favorites');
+    }
+
+    public function updateFeed()
+    {
+        Artisan::call('app:update-feed');
     }
 }

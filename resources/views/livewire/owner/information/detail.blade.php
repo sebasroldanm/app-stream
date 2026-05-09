@@ -56,22 +56,22 @@
             <div class="col-3">
                 <h6>{{ __('owner/information/details.body_type') }}</h6>
             </div>
-            <div class="col-9">{{ __('owner/information/details.body_types.' . $owner->data->user->user->bodyType) }}</div>
+            <div class="col-9">{{ __('owner/information/details.body_types.' . $owner->getBodyType()) }}</div>
 
             <div class="col-3">
                 <h6>{{ __('owner/information/details.eye_color') }}</h6>
             </div>
-            <div class="col-9">{{ __('owner/information/details.eye_colors.' . $owner->data->user->user->eyeColor) }}</div>
+            <div class="col-9">{{ __('owner/information/details.eye_colors.' . $owner->getEyeColor()) }}</div>
 
             <div class="col-3">
                 <h6>{{ __('owner/information/details.hair_color') }}</h6>
             </div>
-            <div class="col-9">{{ __('owner/information/details.hair_colors.' . $owner->data->user->user->hairColor) }}</div>
+            <div class="col-9">{{ __('owner/information/details.hair_colors.' . $owner->getHairColor()) }}</div>
 
             <div class="col-3">
                 <h6>{{ __('owner/information/details.ethnicity') }}</h6>
             </div>
-            <div class="col-9">{{ __('owner/information/details.ethnicities.' . $owner->data->user->user->ethnicity) }}</div>
+            <div class="col-9">{{ __('owner/information/details.ethnicities.' . $owner->getEthnicity()) }}</div>
         </div>
         {{-- Personal --}}
 
@@ -89,16 +89,16 @@
                     <span>{{ __('owner/information/details.profile_not_found') }}</span>
                 </div>
             @endif
-            @if (isset($owner->data->user->modelTopPosition) && $owner->data->user->modelTopPosition->position !== 0)
+            @if ($owner->topPosition)
                 <div class="col-3">
                     <h6>{{ __('owner/information/details.profile_top_position') }}</h6>
                 </div>
                 <div class="col-9">
                     <span>
                         {!! __('owner/information/details.ranking_info', [
-                            'position'  => number_format($owner->data->user->modelTopPosition->position, 0, ',', '.'),
+                            'position'  => $owner->getTopPosition(),
                             'icon'      => $owner->getGenderIcon(),
-                            'points'    => number_format($owner->data->user->modelTopPosition->points, 0, ',', '.'),
+                            'points'    => $owner->getTopPoints(),
                             'continent' => __('owner/information/details.regions' . $owner->getContinent()),
                         ]) !!}
                     </span>
@@ -132,11 +132,11 @@
                     <div class="rating">
                         <div class="stars-back">★★★★★</div>
                         <div class="stars-front"
-                            style="width: {{ ($owner->data->user->user->ratingPrivate / 5) * 100 }}%">
+                            style="width: {{ ($ratingPrivate / 5) * 100 }}%">
                             ★★★★★
                         </div>
                     </div>
-                    <span>{{ number_format($owner->data->user->user->ratingPrivate, 1, ',', '.') }} / 5</span>
+                    <span>{{ number_format($ratingPrivate, 1, ',', '.') }} / 5</span>
                 </div>
             @endif
 
@@ -152,14 +152,14 @@
         {{-- Perfil --}}
 
         {{-- Intereses --}}
-        @if ($owner->data->user->user->interests)
+        @if ($owner->getInterests())
             <h4 class="mt-4">
                 {{ __('owner/information/details.interests') }}
             </h4>
             <hr>
             <div class="row">
                 <div class="col-12">
-                    @foreach ($owner->data->user->user->interests as $interest)
+                    @foreach ($owner->getInterests() as $interest)
                         <span
                             class="badge badge-pill border border-secondary text-secondary mt-2">{{ $interest }}</span>
                     @endforeach
@@ -169,7 +169,7 @@
         {{-- Intereses --}}
 
         {{-- Actividades --}}
-        @if ($owner->data->user->user->publicActivities && $owner->data->user->user->privateActivities)
+        @if ($owner->getPublicActivities() && $owner->getPrivateActivities())
             <h4 class="mt-4">
                 {{ __('owner/information/details.activities') }}
             </h4>
@@ -179,7 +179,7 @@
                     <h6>{{ __('owner/information/details.public_activities') }}</h6>
                 </div>
                 <div class="col-9">
-                    @foreach ($owner->data->user->user->publicActivities as $activity)
+                    @foreach ($owner->getPublicActivities() as $activity)
                         <span class="badge badge-pill border border-success text-success mt-2">{{ $activity }}</span>
                     @endforeach
                 </div>
@@ -187,7 +187,7 @@
                     <h6>{{ __('owner/information/details.private_activities') }}</h6>
                 </div>
                 <div class="col-9">
-                    @foreach ($owner->data->user->user->privateActivities as $activity)
+                    @foreach ($owner->getPrivateActivities() as $activity)
                         <span class="badge badge-pill border border-info text-info mt-2">{{ $activity }}</span>
                     @endforeach
                 </div>
@@ -201,25 +201,25 @@
         </h4>
         <hr>
         <div class="row">
-            @if ($owner->data->user->user->previewUrlThumbSmall)
+            @if ($owner->getPreviewUrlThumbSmall())
                 <div class="col-3">
                     <h6>{{ __('owner/information/details.preview') }}</h6>
                 </div>
                 <div class="col-9">
-                    <img src="{{ $owner->data->user->user->previewUrlThumbSmall }}" data-image_vh="{{ $owner->data->user->user->previewUrlThumbBig }}"
+                    <img src="{{ $owner->getPreviewUrlThumbSmall() }}" data-image_vh="{{ $owner->getPreviewUrlThumbBig() }}"
                     alt="gallary-image" class="img-fluid fullviewer rounded" />
                 </div>
             @endif
-            @if ($owner->data->user->user->avatarUrl && $owner->data->user->user->previewUrlThumbSmall)
+            @if ($owner->getAvatarUrl() && $owner->getPreviewUrlThumbSmall())
                 <div class="col-12 mt-3">
                 </div>
             @endif
-            @if ($owner->data->user->user->avatarUrl)
+            @if ($owner->getAvatarUrl())
                 <div class="col-3">
                     <h6>{{ __('owner/information/details.avatar') }}</h6>
                 </div>
                 <div class="col-9">
-                    <img src="{{ $owner->data->user->user->avatarUrlThumb }}" data-image_vh="{{ $owner->data->user->user->avatarUrl }}"
+                    <img src="{{ $owner->getAvatarUrlThumb() }}" data-image_vh="{{ $owner->getAvatarUrl() }}"
                         alt="gallary-image" class="img-fluid fullviewer rounded" />
                 </div>
             @endif

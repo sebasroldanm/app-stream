@@ -2,23 +2,6 @@
 
 namespace App\Traits;
 
-use App\Jobs\UploadImageService;
-use App\Models\Album;
-use App\Models\AlbumFeed;
-use App\Models\Feed;
-use App\Models\Intro;
-use App\Models\Log;
-use App\Models\MediaPostFeed;
-use App\Models\Owner;
-use App\Models\Panel;
-use App\Models\PhotoAlbumFeed;
-use App\Models\Photos;
-use App\Models\PostFeed;
-use App\Models\Video;
-use App\Models\VideoFeed;
-use Carbon\Carbon;
-use GuzzleHttp\Client;
-
 trait SyncData
 {
     use OwnerProp;

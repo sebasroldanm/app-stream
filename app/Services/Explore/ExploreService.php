@@ -34,6 +34,7 @@ class ExploreService
                     'filterGroupTags' => json_encode($filterTags),
                     'sortBy' => 'trending',
                     'parentTag' => $parentTag,
+                    'uniq' => 'if7p50zjagdl2wrc'
                 ],
             ]);
 

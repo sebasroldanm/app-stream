@@ -26,7 +26,7 @@ return new class extends Migration
             $table->timestamp('createdAt');
             $table->json('data')->nullable();
 
-            $table->foreign('albumId')->references('id')->on('albums');
+            // $table->foreign('albumId')->references('id')->on('albums');
             $table->foreign('ownerId')->references('id')->on('owners');
             $table->timestamps();
         });

@@ -13,6 +13,10 @@ class Feed extends Model
         'likes', 'accessMode', 'owner_id', 'type', 'data'
     ];
 
+    protected $casts = [
+        'data' => 'object',
+    ];
+
     public function owner() {
         return $this->hasOne(Owner::class, 'id', 'owner_id');
     }

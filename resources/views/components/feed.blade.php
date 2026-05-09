@@ -1,13 +1,13 @@
 @if (
     $feed->type === 'offlineStatusChanged' ||
-        (($feed->type !== 'offlineStatusChanged' && $feed->postFeed->count() > 0) ||
-            $feed->albumFeed->count() > 0 ||
-            $feed->videoFeed->count() > 0))
+        (($feed->type !== 'offlineStatusChanged' && $feed->postFeed && $feed->postFeed->count() > 0) ||
+            $feed->albumFeed && $feed->albumFeed->count() > 0 ||
+            $feed->videoFeed && $feed->videoFeed->count() > 0))
     <div class="col-12">
         <div class="card">
             <div class="card-body">
                 <div class="post-item">
-                    @include('components.feeds.header', ['feed' => $feed, 'tagLive' => $tagLive])
+                    @include('components.feeds.header', ['feed' => $feed, 'owner' => $owner, 'tagLive' => $tagLive])
 
                     @if ($feed->type == 'offlineStatusChanged')
                         @include('components.feeds.offline', ['feed' => $feed])

@@ -6,15 +6,24 @@ use App\Services\Explore\ExploreService;
 use App\Models\Customer;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\Attributes\Lazy;
+use App\Traits\OwnerProp;
 
+#[Lazy]
 class NewMobileCO extends Component
 {
+    use OwnerProp;
 
     public $data;
     public $owners = [];
     public $limit = 60;
     public $offset = 0;
     public $endResults = false;
+
+    public function placeholder()
+    {
+        return view('livewire.explore.explore-placeholder');
+    }
     
     public function render()
     {
@@ -22,7 +31,7 @@ class NewMobileCO extends Component
 
         $favs = Customer::find(Auth::guard('customer')->user()->id)->getOwnerFavoriteIds()->toArray();
 
-        $this->dispatch('initExplorer');
+        $this->dispatch('init-swiper');
 
         return view('livewire.explore.new-mobile-c-o', [
             'favs' => $favs

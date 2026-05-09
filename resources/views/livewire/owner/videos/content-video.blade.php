@@ -25,20 +25,31 @@
                             <div class="col-9">
                                 {{ $duration }}
                             </div>
+                            @if (in_array($video->accessMode, ['paid', 'paidOrFanClub']))
+                                <div class="col-3">
+                                    <h6>{{ __('owner/media/videos.content.cost') }}</h6>
+                                </div>
+                                <div class="col-9">
+                                    {{ $video->data->cost }}
+                                </div>
+                            @endif
                         </div>
                         {{-- <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> --}}
                     </div>
                 </div>
                 <div class="col-md-12 mt-2">
-                    {{-- Main Video --}}
                     <div class="col-lg-12">
-                        <video class="video_feed" data-poster="{{ $video->coverUrl }}"
-                            @if ($video->videoUrl) data-video="{{ $video->videoUrl }}"
-                            data-format="{{ $this->returnFormatByUrl($video->videoUrl) }}"
-                            @else
-                                data-video="{{ $video->trailerUrl }}"
-                                data-format="{{ $this->returnFormatByUrl($video->trailerUrl) }}" @endif>
-                        </video>
+                        @if ($video->videoUrl)
+                            <x-video-component 
+                                :poster="$video->coverUrl" 
+                                :video="$video->videoUrl"
+                            />
+                        @else
+                            <x-video-component 
+                                :poster="$video->coverUrl" 
+                                :video="$video->trailerUrl"
+                            />
+                        @endif
                     </div>
                 </div>
             </div>

@@ -39,7 +39,7 @@ class Snapshots extends Component
             return false;
         }
 
-        $owner_data = json_decode($owner->data);
+        $owner_data = $owner->data;
         if (! $owner_data) {
             return false;
         }

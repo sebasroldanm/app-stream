@@ -16,4 +16,12 @@ return [
     'slide_3_title' => 'Manten al día',
     'slide_3_content' => 'Toma el control de lo que quieres ver.',
     'dont_have_account' => '¿No tienes una cuenta?',
+    'sign_up_title' => 'Regístrate',
+    'sign_up_subtitle' => 'Regístrate para ver el contenido.',
+    'sign_up_button' => 'Registrarse',
+    'username' => 'Usuario',
+    'full_name' => 'Nombre completo',
+    'i_accept' => 'Acepto los',
+    'terms' => 'Términos y condiciones',
+    'already_have_account' => '¿Ya tienes cuenta?',
 ];

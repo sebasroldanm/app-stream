@@ -1,7 +1,4 @@
 <div>
-    @php
-        $data_mod->data = json_decode($data_mod->data, true);
-    @endphp
     <div class="cover-photo"></div>
     <div class="text-center profile-header">
         <img src="{{ $data_mod->avatar ? $data_mod->avatar : 'https://placehold.co/150x150?text=Profile+Pic' }}"
