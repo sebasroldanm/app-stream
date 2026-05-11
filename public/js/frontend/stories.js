@@ -31,35 +31,8 @@ class StoryManager {
     }
 
     _bindUI() {
-        const safeAdd = (id, event, fn) => {
-            const el = document.getElementById(id);
-            if (!el) return;
-            // Limpiar listeners previos clonando el nodo
-            const newEl = el.cloneNode(true);
-            el.parentNode.replaceChild(newEl, el);
-            newEl.addEventListener(event, fn);
-        };
-
-        safeAdd("closeStoryBtn", "click", () => this.close());
-        safeAdd("storyBtnPrev", "click", () => this._prevUser());
-        safeAdd("storyBtnNext", "click", () => this._nextUser());
-        safeAdd("storyBtnSlidePrev", "click", () => this._prev());
-        safeAdd("storyBtnSlideNext", "click", () => this._next());
-        safeAdd("storyBtnPause", "click", () => this._togglePause());
-
-        // Delegación de clics del rail (círculos)
-        // Usamos un flag global para no duplicar el listener en el document
-        if (!window._storyClickHandled) {
-            document.addEventListener('click', (e) => {
-                const item = e.target.closest('[data-story-index]');
-                if (!item) return;
-                const idx = parseInt(item.dataset.storyIndex, 10);
-                if (!isNaN(idx) && window.storyManager) {
-                    window.storyManager.open(idx);
-                }
-            });
-            window._storyClickHandled = true;
-        }
+        // Los eventos ahora se manejan vía Alpine.js en el Blade (x-on:click)
+        // para máxima compatibilidad con Livewire.
     }
 
     // ─── OPEN / CLOSE ────────────────────────────────────────────────────────
@@ -370,6 +343,13 @@ function initStoryManager() {
     window.storyManager = new StoryManager();
 }
 
+window.initStoryManager = initStoryManager;
+
 document.addEventListener("DOMContentLoaded", initStoryManager);
 document.addEventListener("livewire:navigated", initStoryManager);
-document.addEventListener("livewire:load", initStoryManager);
+document.addEventListener("livewire:init", initStoryManager);
+
+// Auto-inicialización inmediata si el componente ya está en el DOM
+if (document.getElementById("stories-component-root")) {
+    initStoryManager();
+}
