@@ -14,7 +14,7 @@ class Player extends Component
     public function render()
     {
         $owner = Owner::find($this->owner->id);
-        $url = env("URL_HLS") . "/b-hls-32/" . $owner->id . "/" . $owner->id . ".m3u8";
+        $url = env("URL_HLS") . "/" . $owner->id . "/master/" . $owner->id . ".m3u8";
 
         $ratio = $owner->ownerCamBroadcastConfigRatio;
         $height = $owner->ownerCamBroadcastConfigHeight;

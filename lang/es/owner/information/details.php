@@ -49,6 +49,7 @@ return [
         'hairColorBlack' => 'Negro',
         'hairColorRed' => 'Rojo',
         'hairColorColorful' => 'Colorido',
+        'hairColorOther' => 'Otro',
     ],
     'ethnicity' => 'Etnia',
     'ethnicities' => [

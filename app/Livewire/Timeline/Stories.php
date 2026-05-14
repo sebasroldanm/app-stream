@@ -3,6 +3,7 @@
 namespace App\Livewire\Timeline;
 
 use App\Models\Feed;
+use App\Traits\SyncData;
 use Carbon\Carbon;
 use Livewire\Attributes\Lazy;
 use Livewire\Component;
@@ -10,11 +11,19 @@ use Livewire\Component;
 #[Lazy]
 class Stories extends Component
 {
+    use SyncData;
+
+    public $owner_id;
+
     public function render()
     {
         $stories = $this->getStories();
 
-        return view('livewire.timeline.stories', compact('stories'));
+        if ($stories) {
+            return view('livewire.timeline.stories', compact('stories'));
+        }
+
+        return "<div></div>";
     }
 
     public function placeholder()
@@ -24,10 +33,14 @@ class Stories extends Component
 
     public function getStories()
     {
+
         $stories = Feed::query()
             ->where('updatedAt', '>', now()->subDays(1))
             ->whereIn('type', ['offlineStatusChanged'])
             ->orderByDesc('updatedAt')
+            ->when($this->owner_id, function ($query) {
+                return $query->where('owner_id', $this->owner_id);
+            })
             ->get();
 
         $stories = $stories
@@ -47,8 +60,6 @@ class Stories extends Component
 
                 foreach ($userStories as $story) {
                     $data = $story->data;
-
-                    // dd($data->data->offlineStatus ?? $data);
 
                     $contents[] = [
                         'type' => 'text',

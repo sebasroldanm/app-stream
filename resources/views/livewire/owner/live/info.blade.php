@@ -1,4 +1,6 @@
-<div class="row" wire:poll.10s.visible>
+<div class="row" 
+     wire:poll.10s.visible 
+     x-data="progressComponent(@entangle('percent'))">
     <div class="col-6">
         <div class="card">
             <div class="card-body">

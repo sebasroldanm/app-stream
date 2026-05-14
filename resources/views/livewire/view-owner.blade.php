@@ -251,38 +251,34 @@
 
                                 <li
                                     class="nav-item col-6 @if ($owner->isLive) col-sm-2 @else col-sm-3 @endif p-0">
-                                    <a wire:navigate
+                                    <a
                                         href="{{ route('owner.feed', ['username' => $owner->username]) }}"
-                                        class="nav-link @if ($showFeed) active @endif"
-                                        data-bs-toggle="pill" data-bs-target="#feed" role="button">
+                                        class="nav-link @if ($showFeed) active @endif">
                                         {{ __('owner/tabs.feed') }}
                                     </a>
                                 </li>
 
                                 <li class="nav-item col-6 col-sm-3 p-0">
-                                    <a wire:navigate
+                                    <a
                                         href="{{ route('owner.information', ['username' => $owner->username]) }}"
-                                        class="nav-link @if ($showInformation) active @endif"
-                                        data-bs-toggle="pill" data-bs-target="#infomation" role="button">
+                                        class="nav-link @if ($showInformation) active @endif">
                                         {{ __('owner/tabs.info') }}
                                     </a>
                                 </li>
 
                                 <li
                                     class="nav-item col-6 @if ($owner->isLive) col-sm-2 @else col-sm-3 @endif p-0">
-                                    <a wire:navigate
+                                    <a
                                         href="{{ route('owner.albums', ['username' => $owner->username]) }}"
-                                        class="nav-link @if ($showAlbums) active @endif"
-                                        data-bs-toggle="pill" data-bs-target="#albums" role="button">
+                                        class="nav-link @if ($showAlbums) active @endif">
                                         {{ __('owner/tabs.albums') }}
                                     </a>
                                 </li>
 
                                 <li class="nav-item col-6 col-sm-3 p-0">
-                                    <a wire:navigate
+                                    <a
                                         href="{{ route('owner.videos', ['username' => $owner->username]) }}"
-                                        class="nav-link @if ($showVideos) active @endif"
-                                        data-bs-toggle="pill" data-bs-target="#videos" role="button">
+                                        class="nav-link @if ($showVideos) active @endif">
                                         {{ __('owner/tabs.videos') }}
                                     </a>
                                 </li>
