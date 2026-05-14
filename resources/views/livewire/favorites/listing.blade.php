@@ -2,7 +2,7 @@
     <div class="row">
         @foreach ($favorites as $favorite)
             {{-- <x-previewCard :owner="$favorite" :favs="$favs" :favorite-heart="false" :snapshots="false"/> --}}
-            <div class="col-md-2">
+            <div class="col-4 col-md-3 col-lg-2 mb-2">
                 <x-ownerInfoCard 
                     :primaryImage="$favorite->isLive ? 'https://img.doppiocdn.net/thumbs/' . $favorite->data->user->user->snapshotTimestamp . '/' . $favorite->id : null"
                     :secondaryImage="$favorite->pic_profile"

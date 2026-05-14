@@ -1,7 +1,7 @@
 <div class="row">
     @for ($i = 0; $i < 18; $i++)
-        <div class="col-6 col-md-4 col-lg-3 col-xl-2 mb-4">
-            <div class="card mb-3">
+        <div class="col-4 col-md-3 col-lg-2">
+            <div class="card mb-2">
                 <div class="card_explorer_image">
                     <div class="image-container">
                         {{-- Skeleton de la imagen principal --}}
@@ -12,7 +12,7 @@
                     <div class="card-body p-1 text-center">
                         {{-- Skeleton del username --}}
                         <div class="skeleton-placeholder mx-auto" 
-                             style="width: 80%; height: 12px; margin-top: 5px; margin-bottom: 5px;">
+                             style="width: 80%; height: 12px;">
                         </div>
                     </div>
                 </div>
