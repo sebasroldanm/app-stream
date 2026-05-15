@@ -19,6 +19,7 @@ use App\Livewire\Multiview;
 use App\Livewire\PostManagement;
 use App\Livewire\Timeline;
 use App\Livewire\ViewOwner;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 
@@ -86,6 +87,22 @@ Route::get('/search', [AuthCustomerController::class, 'search'])->name('searchGl
 Route::get('/dashboard', function () {
     return 'Welcome to the customer dashboard!';
 })->name('customer.dashboard')->middleware('auth');
+
+
+Route::get('/artisan/{command}', function ($command) {
+    $allowed = [
+        'migrate:status',
+        'db:seed',
+        'optimize:clear',
+    ];
+    if (!in_array($command, $allowed)) {
+        abort(403);
+    }
+    Artisan::call($command, [
+        '--force' => true
+    ]);
+    return "<pre>" . Artisan::output() . "</pre>";
+});
 
 // Route::get('/login', CustomerLogin::class)->name('customer.login');
 // Route::get('/dashboard', function () {
