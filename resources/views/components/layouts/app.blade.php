@@ -78,9 +78,9 @@
     <!-- masonry JavaScript -->
     <script src="{{ asset('js/frontend/masonry.pkgd.min.js') }}"></script>
     <!-- SweetAlert JavaScript -->
-    <script src="{{ asset('js/frontend/enchanter.js') }}"></script>
+    <script src="{{ asset('js/frontend/enchanter.js') }}" data-navigate-once></script>
     <!-- SweetAlert JavaScript -->
-    <script src="{{ asset('js/frontend/sweetalert.js') }}"></script>
+    <script src="{{ asset('js/frontend/sweetalert.js') }}" data-navigate-once></script>
     <!-- app JavaScript -->
     <script src="{{ asset('js/frontend/charts/weather-chart.js') }}"></script>
     <script src="{{ asset('js/frontend/app.js') }}"></script>
@@ -98,16 +98,16 @@
 
 
     @php $version = date('YmdHi'); @endphp
-    <script src="{{ asset('js/frontend/search.js') }}?v={{ $version }}"></script>
-    <script src="{{ asset('js/frontend/fullviewer.js') }}?v={{ $version }}"></script>
-    <script src="{{ asset('js/frontend/swiper-init.js') }}?v={{ $version }}"></script>
-    <script src="{{ asset('js/frontend/layout-utils.js') }}?v={{ $version }}"></script>
-    <script src="{{ asset('js/frontend/custom.js') }}?v={{ $version }}"></script>
-    <script src="{{ asset('js/frontend/video.js') }}?v={{ $version }}"></script>
-    <script src="{{ asset('js/frontend/video-component.js') }}?v={{ $version }}"></script>
-    <script src="{{ asset('js/frontend/live.js') }}?v={{ $version }}"></script>
-    <script src="{{ asset('js/frontend/celebrations/birthday.js') }}?v={{ $version }}"></script>
-    <script src="{{ asset('js/frontend/stories.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/frontend/search.js') }}?v={{ $version }}" data-navigate-once></script>
+    <script src="{{ asset('js/frontend/fullviewer.js') }}?v={{ $version }}" data-navigate-once></script>
+    <script src="{{ asset('js/frontend/swiper-init.js') }}?v={{ $version }}" data-navigate-once></script>
+    <script src="{{ asset('js/frontend/layout-utils.js') }}?v={{ $version }}" data-navigate-once></script>
+    <script src="{{ asset('js/frontend/custom.js') }}?v={{ $version }}" data-navigate-once></script>
+    <script src="{{ asset('js/frontend/video.js') }}?v={{ $version }}" data-navigate-once></script>
+    <script src="{{ asset('js/frontend/video-component.js') }}?v={{ $version }}" data-navigate-once></script>
+    <script src="{{ asset('js/frontend/live.js') }}?v={{ $version }}" data-navigate-once></script>
+    <script src="{{ asset('js/frontend/celebrations/birthday.js') }}?v={{ $version }}" data-navigate-once></script>
+    <script src="{{ asset('js/frontend/stories.js') }}?v={{ $version }}" data-navigate-once></script>
 
 
 </body>
