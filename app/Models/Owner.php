@@ -343,7 +343,7 @@ class Owner extends Model
 
     public function getShowModelOrStatusAttribute()
     {
-        $showMode = $this->show_mode;
+        $showMode = $this->getShowModelAttribute();
         if ($showMode) {
             return $showMode;
         } else {
