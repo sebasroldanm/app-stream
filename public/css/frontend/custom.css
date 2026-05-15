@@ -677,18 +677,74 @@ html[data-theme='dark'] .swiper-button-prev-owner-info {
 }
 
 /* Conversations */
-
+[x-cloak] { display: none !important; }
 
 /* Intro Video */
-    .ambient {
-        position: absolute;
-        top: 160px;
-        left: 50%;
-        transform: translate(-50%, -50%) scale(1.2);
-        width: 100%;
-        z-index: 0;
-        filter: blur(60px) brightness(1.2) saturate(1.8);
-        opacity: 0.6;
-        pointer-events: none;
-    }
+.ambient {
+    position: absolute;
+    top: 160px;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1.2);
+    width: 100%;
+    z-index: 0;
+    filter: blur(60px) brightness(1.2) saturate(1.8);
+    opacity: 0.6;
+    pointer-events: none;
+}
 /* Intro Video */
+
+/* Live Player */
+.live-player-wrapper .status-text {
+    font-size: 0.75rem;
+}
+
+.live-player-wrapper .transmission-info {
+    font-size: 0.7rem;
+}
+
+.live-player-wrapper .player-logs {
+    height: 120px;
+    overflow-y: auto;
+}
+
+.live-player-wrapper .logs-title {
+    font-size: 0.75rem;
+}
+
+.live-player-wrapper .log-item {
+    font-size: 0.7rem;
+    line-height: 1.2;
+}
+
+.live-player-wrapper .no-logs {
+    font-size: 0.7rem;
+}
+
+.plyr-video {
+    aspect-ratio: 16 / 9 !important;
+}
+
+.player-logs::-webkit-scrollbar {
+    width: 4px;
+}
+
+.player-logs::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 4px;
+}
+
+.live-player-wrapper .plyr {
+    --plyr-color-main: #fa377b;
+}
+
+.live-player-wrapper .plyr video {
+    object-fit: contain;
+    background: #000;
+}
+
+.live-player-wrapper .plyr__poster {
+    background-size: contain !important;
+    background-color: #000 !important;
+    background-position: center !important;
+}
+

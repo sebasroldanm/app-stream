@@ -17,13 +17,13 @@
                 <!-- Left: Status/Error messages -->
                 <div class="d-flex align-items-center gap-2 flex-wrap">
                     <template x-if="status">
-                        <div class="d-flex align-items-center gap-1"
-                            :class="status === 'danger' ? 'text-danger' : 'text-warning'" style="font-size: 0.75rem;">
+                        <div class="d-flex align-items-center gap-1 status-text"
+                            :class="status === 'danger' ? 'text-danger' : 'text-warning'">
                             <i :class="status === 'danger' ? 'ri-error-warning-fill' : 'ri-alert-fill'"></i>
                             <span x-text="statusMessage"></span>
                         </div>
                     </template>
-                    <span class="text-white-50" style="font-size: 0.7rem;" x-show="transmissionInfo"
+                    <span class="text-white-50 transmission-info" x-show="transmissionInfo"
                         x-text="transmissionInfo"></span>
                 </div>
 
@@ -47,43 +47,16 @@
 
             @if ($showLogs)
                 <div x-show="logsOpen" x-transition
-                    class="player-logs bg-black p-1 rounded border border-secondary-subtle mt-2"
-                    style="height: 120px; overflow-y: auto; display: none;">
-                    <div class="text-success-emphasis mb-1 border-bottom border-secondary-subtle pb-1"
-                        style="font-size: 0.75rem;">Log de Plyr:</div>
+                    class="player-logs bg-black p-1 rounded border border-secondary-subtle mt-2">
+                    <div class="text-success-emphasis mb-1 border-bottom border-secondary-subtle pb-1 logs-title">Log del reproductor: {{ $url }}</div>
                     <template x-for="(log, index) in logs" :key="index">
-                        <div class="text-muted" style="font-size: 0.7rem; line-height: 1.2;" x-text="log"></div>
+                        <div class="text-muted log-item" x-text="log"></div>
                     </template>
-                    <div x-show="logs.length === 0" class="text-muted italic" style="font-size: 0.7rem;">No hay logs
+                    <div x-show="logs.length === 0" class="text-muted italic no-logs">No hay logs
                         registrados.</div>
                 </div>
             @endif
         </div>
     @endif
 
-    <style>
-        .player-logs::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .player-logs::-webkit-scrollbar-thumb {
-            background: #444;
-            border-radius: 4px;
-        }
-
-        .live-player-wrapper .plyr {
-            --plyr-color-main: #fa377b;
-        }
-
-        .live-player-wrapper .plyr video {
-            object-fit: contain;
-            background: #000;
-        }
-
-        .live-player-wrapper .plyr__poster {
-            background-size: contain !important;
-            background-color: #000 !important;
-            background-position: center !important;
-        }
-    </style>
 </div>

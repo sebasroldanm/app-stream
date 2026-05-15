@@ -11,6 +11,15 @@ document.addEventListener("alpine:init", () => {
         config: config,
 
         init() {
+            // Watch para detectar cambios en la URL (cuando Livewire refresca el Owner)
+            this.$watch('config.url', (newUrl, oldUrl) => {
+                if (newUrl !== oldUrl) {
+                    this.addLog("La URL ha cambiado, reiniciando reproductor...");
+                    this.destroy();
+                    this.initPlayer();
+                }
+            });
+
             // Pequeño delay para asegurar que el DOM esté listo
             setTimeout(() => {
                 this.initPlayer();
@@ -39,7 +48,10 @@ document.addEventListener("alpine:init", () => {
             };
 
             if (Hls.isSupported()) {
-                this.hls = new Hls();
+                this.hls = new Hls({
+                    manifestLoadingMaxRetry: 4,
+                    manifestLoadingRetryDelay: 1000,
+                });
                 this.hls.loadSource(this.config.url);
 
                 this.player = new Plyr(videoElement, plyrOptions);
@@ -73,10 +85,16 @@ document.addEventListener("alpine:init", () => {
                         switch (data.type) {
                             case Hls.ErrorTypes.NETWORK_ERROR:
                                 this.statusMessage =
-                                    "Conexión inestable" + errorDetail;
+                                    "Conexión interrumpida" + errorDetail;
                                 this.addLog(
-                                    `Error de red: ${this.statusMessage} - URL: ${this.config.url}`,
+                                    `Error de red: ${this.statusMessage}. Consultando estado del Owner...`,
                                 );
+                                
+                                // Intentamos refrescar los datos del Owner vía Livewire
+                                if (this.$wire) {
+                                    this.$wire.refreshOwner();
+                                }
+                                
                                 this.hls.startLoad();
                                 break;
                             case Hls.ErrorTypes.MEDIA_ERROR:
