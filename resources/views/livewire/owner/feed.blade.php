@@ -1,6 +1,7 @@
 <div class="card-body p-0">
     <div class="row">
         <div class="col-lg-4">
+            @livewire('stories', ['owner_id' => $owner->id])
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <div class="header-title">
@@ -14,7 +15,7 @@
                                 <div class="card-body">
                                     @if (isset($owner->data))
 
-                                        @if ($description !== false)
+                                        @if ($description !== false && $description !== '')
                                             <p>{{ $description }}</p>
                                             <hr>
                                         @endif

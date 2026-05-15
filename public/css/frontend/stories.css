@@ -78,6 +78,69 @@
     text-align: center;
 }
 
+/* ─── 1.1 SQUARE STORIES (OWNER FEED) ─────────────────────────── */
+.story-square-item {
+    position: relative;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 80%; /* Mantiene relación 1:1 con respecto al ancho total del contenedor */
+    border-radius: 16px;
+    background-color: #1a1a1a;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: block;
+    margin-bottom: 20px;
+}
+
+.story-square-item:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 20px 40px -15px rgba(0,0,0,0.6);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.story-square-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 60%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 16px;
+    z-index: 1;
+}
+
+.story-square-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.story-square-label {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.story-count {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 800;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
 /* ─── 2. MODAL FULLSCREEN ──────────────────────────────────────── */
 .stories-fullscreen {
     position: fixed;

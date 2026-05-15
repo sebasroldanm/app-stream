@@ -108,7 +108,7 @@ class ViewOwner extends Component
     public function render()
     {
         // Search simple and direct by username
-        $owner = Owner::whereRaw('LOWER(username) = LOWER(?)', [$this->username])->first();
+        $owner = Owner::where('username', $this->username)->first();
 
         // If not exists locally, sync once
         if (is_null($owner)) {
@@ -244,6 +244,6 @@ class ViewOwner extends Component
         if (is_numeric($result)) {
             return Owner::find($result);
         }
-        return Owner::whereRaw('LOWER(username) = LOWER(?)', [$username])->first();
+        return Owner::where('username', $username)->first();
     }
 }

@@ -8,7 +8,7 @@
                     </a>
                 </li>
                 <li class="@if (Route::is('explore')) active @endif">
-                    <a href="{{ route('explore') }}" wire:navigate class=" ">
+                    <a href="{{ route('explore', ['countries' => 'tagLanguageColombian']) }}">
                         <i class="las la-search-location"></i><span>{{ __('sidebar.explore') }}</span>
                     </a>
                 </li>

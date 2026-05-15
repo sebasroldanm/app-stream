@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\OwnerProp;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Owner extends Model
 {
@@ -83,15 +84,21 @@ class Owner extends Model
 
     public function scopeFavoritedByCustomers($query, $customerId)
     {
-        return $query->whereHas('customers', function ($q) use ($customerId) {
-            $q->where('customer_id', $customerId);
+        return $query->whereExists(function ($q) use ($customerId) {
+            $q->select(DB::raw(1))
+                ->from('customer_owner_favorites')
+                ->whereColumn('customer_owner_favorites.owner_id', 'owners.id')
+                ->where('customer_owner_favorites.customer_id', $customerId);
         });
     }
 
     public function scopeNotFavoritedByCustomer($query, $customerId)
     {
-        return $query->whereDoesntHave('customers', function ($q) use ($customerId) {
-            $q->where('customer_id', $customerId);
+        return $query->whereNotExists(function ($q) use ($customerId) {
+            $q->select(DB::raw(1))
+                ->from('customer_owner_favorites')
+                ->whereColumn('customer_owner_favorites.owner_id', 'owners.id')
+                ->where('customer_owner_favorites.customer_id', $customerId);
         });
     }
 

@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Livewire\Timeline;
+namespace App\Livewire;
 
 use App\Models\Feed;
+use App\Traits\SyncData;
 use Carbon\Carbon;
 use Livewire\Attributes\Lazy;
 use Livewire\Component;
@@ -10,25 +11,45 @@ use Livewire\Component;
 #[Lazy]
 class Stories extends Component
 {
+    use SyncData;
+
+    public $owner_id;
+
     public function render()
     {
+        sleep(2);
         $stories = $this->getStories();
 
-        return view('livewire.timeline.stories', compact('stories'));
+        if ($stories) {
+            return view('components.stories.stories', [
+                'stories' => $stories,
+                'owner_id' => $this->owner_id
+            ]);
+        }
+
+        return "<div></div>";
     }
 
     public function placeholder()
     {
-        return view('livewire.timeline.stories-placeholder');
+        return view('components.stories.stories-placeholder');
     }
 
     public function getStories()
     {
-        $stories = Feed::query()
-            ->where('updatedAt', '>', now()->subDays(1))
-            ->whereIn('type', ['offlineStatusChanged'])
-            ->orderByDesc('updatedAt')
-            ->get();
+        if ($this->owner_id) {
+            $stories = Feed::query()
+                ->whereIn('type', ['offlineStatusChanged'])
+                ->where('owner_id', $this->owner_id)
+                ->orderByDesc('updatedAt')
+                ->get();
+        } else {
+            $stories = Feed::query()
+                ->where('updatedAt', '>', now()->subDays(1))
+                ->whereIn('type', ['offlineStatusChanged'])
+                ->orderByDesc('updatedAt')
+                ->get();
+        }
 
         $stories = $stories
             ->groupBy('owner_id')
@@ -47,8 +68,6 @@ class Stories extends Component
 
                 foreach ($userStories as $story) {
                     $data = $story->data;
-
-                    // dd($data->data->offlineStatus ?? $data);
 
                     $contents[] = [
                         'type' => 'text',

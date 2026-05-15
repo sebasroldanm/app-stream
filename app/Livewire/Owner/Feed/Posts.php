@@ -50,7 +50,7 @@ class Posts extends Component
         $feeds = Feed::with(["owner", "albumFeed.photos", "videoFeed", "postFeed.mediaPostFeeds"])
             ->where("owner_id", $owner->id)
             ->orderBy("updatedAt", "desc")
-            ->orderBy("id", "desc")
+            // ->orderBy("id", "desc")
             ->paginate($this->limit);
         
         $posts = Post::with(['telegramMessage.captions', 'telegramMessage.photo', 'telegramMessage.video', 'telegramMessage.chat'])

@@ -18,7 +18,6 @@ class Info extends Component
 
     public $viewers = [];
 
-    public $lastPercent = 0;
     public $percent = 0;
 
     public function placeholder()
@@ -37,17 +36,6 @@ class Info extends Component
         if (isset($this->owner->data->cam->goal->goal) && $this->owner->data->cam->goal->goal > 0) {
             $percent = ($this->owner->data->cam->goal->spent * 100) / $this->owner->data->cam->goal->goal;
             $this->percent = (round($percent) > 100) ? 100 : round($percent, 1);
-
-            if ($this->lastPercent != $percent) {
-                $this->lastPercent = $percent;
-                $this->dispatch('updateBarInfo', [
-                    'left' => $this->owner->data->cam->goal->left,
-                    'goal' => $this->owner->data->cam->goal->goal,
-                    'spent' => $this->owner->data->cam->goal->spent,
-                    'description' => $this->owner->data->cam->goal->description,
-                    'percent' => $this->percent,
-                ]);
-            }
         }
 
         // Implementar

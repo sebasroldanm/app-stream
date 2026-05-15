@@ -3,52 +3,33 @@
 namespace App\Livewire\Owner\Live;
 
 use App\Models\Owner;
-use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Player extends Component
 {
     public Owner $owner;
     public bool $isMultiview = false;
+    public bool $showInfo = true;
+    public bool $showControls = true;
+    public bool $autoplay = true;
+    public bool $muted = true;
+    public bool $canExpandLayout = false;
+    public bool $showExpandButton = true;
+    public bool $showLogs = true;
 
     public function render()
     {
-        $owner = Owner::find($this->owner->id);
-        $url = env("URL_HLS") . "/b-hls-32/" . $owner->id . "/" . $owner->id . ".m3u8";
+        $url = env("URL_HLS") . "/" . $this->owner->id . "/master/" . $this->owner->id . ".m3u8";
 
-        $ratio = $owner->ownerCamBroadcastConfigRatio;
-        $height = $owner->ownerCamBroadcastConfigHeight;
-        $width = $owner->ownerCamBroadcastConfigWidth;
+        $height = $this->owner->ownerCamBroadcastConfigHeight;
+        $width = $this->owner->ownerCamBroadcastConfigWidth;
+        $poster = $this->owner->preview;
 
-        if ($this->isMultiview) {
-            $this->dispatch('initMultiview', [
-                'id' => $owner->id,
-                'url' => trim($url),
-                'poster' => $owner->preview,
-                'ratio' => $ratio,
-                'height' => $height,
-                'width' => $width,
-            ]);
-        } else {
-            $this->dispatch('initLive', [
-                'url' => trim($url),
-                'poster' => $owner->preview,
-                'ratio' => $ratio,
-                'height' => $height,
-                'width' => $width,
-            ]);
-        }
-        return view('livewire.owner.live.player', compact('ratio', 'height', 'width'));
-    }
-
-    private function aspectRatio($width, $height)
-    {
-        $gcd = function ($a, $b) use (&$gcd) {
-            return $b === 0 ? $a : $gcd($b, $a % $b);
-        };
-
-        $divisor = $gcd($width, $height);
-
-        return ($width / $divisor) . ':' . ($height / $divisor);
+        return view('livewire.owner.live.player', [
+            'url' => trim($url),
+            'poster' => $poster,
+            'height' => $height,
+            'width' => $width,
+        ]);
     }
 }

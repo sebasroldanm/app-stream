@@ -12,7 +12,8 @@
         "laravel/framework": "^12.0",
         "laravel/pulse": "^1.3",
         "laravel/tinker": "^2.10",
-        "livewire/livewire": "^3.5"
+        "livewire/livewire": "^3.5",
+        "predis/predis": "^3.4"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

@@ -1,4 +1,6 @@
-<div class="row" wire:poll.10s.visible>
+<div class="row" 
+     wire:poll.10s.visible 
+     x-data="progressComponent(@entangle('percent'))">
     <div class="col-6">
         <div class="card">
             <div class="card-body">
@@ -39,7 +41,12 @@
                 @else
                     @php
                         if ($owner->data->user->user->isLive) {
-                            $state = 'Live';
+                            if ($owner->data->cam->show) {
+                                $state = $owner->data->cam->show->mode;
+                                $type = 'badge border border-success text-success text-bold';
+                            }else{
+                                $state = 'Live';
+                            }
                             $type = 'badge border border-red text-red text-bold';
                         } elseif ($owner->data->user->user->isOnline) {
                             $state = 'Online';

@@ -26,18 +26,23 @@
                                 <div class="dropdown-menu p-3" aria-labelledby="dropdownCountries"
                                     style="min-width: 300px; max-height: 400px; overflow-y: auto;" wire:ignore.self>
                                     @foreach ($countryList as $continent => $countries)
-                                        <h6 class="dropdown-header">{{ $continent }}</h6>
-                                        @foreach ($countries as $tag => $label)
-                                            <div class="form-check ms-3" wire:key="country-{{ $tag }}">
-                                                <input class="form-check-input" type="checkbox"
-                                                    value="{{ $tag }}" id="chk_{{ $tag }}"
-                                                    wire:model.live="tempCountries">
-                                                <label class="form-check-label text-white"
-                                                    for="chk_{{ $tag }}">
-                                                    {{ $label }}
-                                                </label>
-                                            </div>
-                                        @endforeach
+                                        <h6 class="mb-2">{{ $continent }}</h6>
+                                        <div class="row">
+                                            @foreach ($countries as $tag => $label)
+                                                <div class="form-check col-12 col-sm-6" wire:key="country-{{ $tag }}">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        value="{{ $tag }}" id="chk_{{ $tag }}"
+                                                        wire:model.live="tempCountries">
+                                                    <label class="form-check-label text-white"
+                                                        for="chk_{{ $tag }}">
+                                                        {{ $label }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                        @if (!$loop->last)
+                                            <hr>
+                                        @endif
                                     @endforeach
                                 </div>
                             </div>
@@ -105,7 +110,7 @@
                     <div wire:loading.remove wire:target="applyFilters, resetFilters">
                         <div class="row">
                             @foreach ($owners as $owner)
-                                <div class="col-6 col-md-4 col-lg-3 col-xl-2 mb-4">
+                                <div class="col-4 col-md-3 col-lg-2 mb-2">
                                     <x-ownerInfoCard :isFav="in_array($owner->id, $favs)" :primaryImage="'https://img.doppiocdn.net/thumbs/' .
                                         ($owner->verifiedSnapshotTimestamp ?? $owner->snapshotTimestamp) .
                                         '/' .

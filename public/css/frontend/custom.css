@@ -242,7 +242,6 @@ i.online {
 /* Estilos del modal (inicialmente oculto) */
 .modal_vp {
     display: none;
-    /* Oculto por defecto */
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -250,8 +249,8 @@ i.online {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.8);
-    /* Fondo oscuro semitransparente */
+    background-color: #00000066;
+    backdrop-filter: blur(6px);
     justify-content: center;
     align-items: center;
 }
