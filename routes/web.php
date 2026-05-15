@@ -91,6 +91,7 @@ Route::get('/dashboard', function () {
 
 Route::get('/artisan/{command}', function ($command) {
     $allowed = [
+        'migrate',
         'migrate:status',
         'db:seed',
         'optimize:clear',
@@ -98,9 +99,7 @@ Route::get('/artisan/{command}', function ($command) {
     if (!in_array($command, $allowed)) {
         abort(403);
     }
-    Artisan::call($command, [
-        '--force' => true
-    ]);
+    Artisan::call($command);
     return "<pre>" . Artisan::output() . "</pre>";
 });
 
