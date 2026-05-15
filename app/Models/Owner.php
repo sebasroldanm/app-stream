@@ -336,14 +336,14 @@ class Owner extends Model
         return "16:9";
     }
 
-    public function getShowModelAttribute()
+    public function getShowModeAttribute()
     {
         return $this->data?->cam?->show?->mode ?? false;
     }
 
     public function getShowModelOrStatusAttribute()
     {
-        $showMode = $this->getShowModelAttribute();
+        $showMode = $this->getShowModeAttribute();
         if ($showMode) {
             return $showMode;
         } else {

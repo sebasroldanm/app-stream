@@ -3,6 +3,7 @@
 namespace App\Livewire\Owner\Live;
 
 use App\Models\Owner;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Player extends Component
@@ -33,6 +34,7 @@ class Player extends Component
         ]);
     }
 
+    #[On('owner-status-updated')]
     public function refreshOwner()
     {
         $this->owner->refresh();

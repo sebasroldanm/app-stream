@@ -5,10 +5,23 @@
     muted: {{ $muted ? 'true' : 'false' }},
     showControls: {{ $showControls ? 'true' : 'false' }},
     canExpandLayout: {{ $canExpandLayout ? 'true' : 'false' }},
-    ownerId: {{ $owner->id }}
+    ownerId: {{ $owner->id }},
+    inShow: {{ $owner->show_mode ? 'true' : 'false' }}
 })" class="live-player-wrapper">
     <div class="card bg-dark overflow-hidden mb-1 position-relative">
-        <video x-ref="video" class="plyr-video" playsinline poster="{{ $poster }}"></video>
+        <template x-if="config.inShow">
+            <div class="private-show-overlay d-flex flex-column align-items-center justify-content-center bg-black text-white p-4" 
+                 style="min-height: 400px; width: 100%;">
+                <div class="text-center">
+                    <i class="ri-lock-fill ri-4x mb-3 text-warning"></i>
+                    <h3 class="text-white">Show Privado Activo</h3>
+                    <p class="text-white-50">El usuario está actualmente en un show de tipo: <span class="badge bg-primary">{{ $owner->show_mode }}</span></p>
+                    <p class="small text-muted">El reproductor se reiniciará automáticamente cuando finalice el show.</p>
+                </div>
+            </div>
+        </template>
+
+        <video x-show="!config.inShow" x-ref="video" class="plyr-video" playsinline poster="{{ $poster }}"></video>
     </div>
 
     @if ($showInfo)

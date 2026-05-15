@@ -20,6 +20,8 @@ class Info extends Component
 
     public $percent = 0;
 
+    public $lastState = null;
+
     public function placeholder()
     {
         return view('livewire.owner.live.info-placeholder');
@@ -30,6 +32,17 @@ class Info extends Component
         $this->syncOwnerByUsername($this->owner->username);
 
         $this->owner = Owner::where('id', $this->owner->id)->first();
+
+        // Detectar cambios de estado
+        $currentState = [
+            'isLive' => $this->owner->isLive,
+            'showMode' => $this->owner->show_mode,
+        ];
+
+        if ($this->lastState !== null && $this->lastState !== $currentState) {
+            $this->dispatch('owner-status-updated');
+        }
+        $this->lastState = $currentState;
 
         $this->viewers = $this->updateViewers();
 

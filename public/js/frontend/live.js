@@ -13,16 +13,31 @@ document.addEventListener("alpine:init", () => {
         init() {
             // Watch para detectar cambios en la URL (cuando Livewire refresca el Owner)
             this.$watch('config.url', (newUrl, oldUrl) => {
-                if (newUrl !== oldUrl) {
+                if (newUrl !== oldUrl && !this.config.inShow) {
                     this.addLog("La URL ha cambiado, reiniciando reproductor...");
                     this.destroy();
                     this.initPlayer();
                 }
             });
 
+            // Watch para detectar cambios en el estado de Show
+            this.$watch('config.inShow', (inShow) => {
+                if (inShow) {
+                    this.addLog("Iniciando Show Privado, deteniendo reproductor...");
+                    this.destroy();
+                } else {
+                    this.addLog("Show Privado finalizado, reiniciando reproductor...");
+                    this.initPlayer();
+                }
+            });
+
             // Pequeño delay para asegurar que el DOM esté listo
             setTimeout(() => {
-                this.initPlayer();
+                if (!this.config.inShow) {
+                    this.initPlayer();
+                } else {
+                    this.addLog("Show Privado activo al cargar, reproductor en pausa.");
+                }
             }, 100);
         },
 
