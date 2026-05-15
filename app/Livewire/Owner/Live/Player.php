@@ -23,7 +23,7 @@ class Player extends Component
 
         $height = $this->owner->ownerCamBroadcastConfigHeight;
         $width = $this->owner->ownerCamBroadcastConfigWidth;
-        $poster = $this->owner->preview;
+        $poster = $this->getPoster($this->owner);
 
         return view('livewire.owner.live.player', [
             'url' => trim($url),
@@ -31,5 +31,17 @@ class Player extends Component
             'height' => $height,
             'width' => $width,
         ]);
+    }
+
+    public function refreshOwner()
+    {
+        $this->owner->refresh();
+    }
+
+    private function getPoster(Owner $owner)
+    {
+        return $owner->data->user->user->snapshotTimestamp && $owner->data->user->user->snapshotTimestamp != ''
+            ? 'https://img.doppiocdn.net/thumbs/' . $owner->data->user->user->snapshotTimestamp . '/' . $owner->id
+            : $owner->preview;
     }
 }
