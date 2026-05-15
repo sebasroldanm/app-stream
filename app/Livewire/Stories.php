@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Timeline;
+namespace App\Livewire;
 
 use App\Models\Feed;
 use App\Traits\SyncData;
@@ -17,10 +17,14 @@ class Stories extends Component
 
     public function render()
     {
+        sleep(2);
         $stories = $this->getStories();
 
         if ($stories) {
-            return view('livewire.timeline.stories', compact('stories'));
+            return view('components.stories.stories', [
+                'stories' => $stories,
+                'owner_id' => $this->owner_id
+            ]);
         }
 
         return "<div></div>";
@@ -28,20 +32,24 @@ class Stories extends Component
 
     public function placeholder()
     {
-        return view('livewire.timeline.stories-placeholder');
+        return view('components.stories.stories-placeholder');
     }
 
     public function getStories()
     {
-
-        $stories = Feed::query()
-            ->where('updatedAt', '>', now()->subDays(1))
-            ->whereIn('type', ['offlineStatusChanged'])
-            ->orderByDesc('updatedAt')
-            ->when($this->owner_id, function ($query) {
-                return $query->where('owner_id', $this->owner_id);
-            })
-            ->get();
+        if ($this->owner_id) {
+            $stories = Feed::query()
+                ->whereIn('type', ['offlineStatusChanged'])
+                ->where('owner_id', $this->owner_id)
+                ->orderByDesc('updatedAt')
+                ->get();
+        } else {
+            $stories = Feed::query()
+                ->where('updatedAt', '>', now()->subDays(1))
+                ->whereIn('type', ['offlineStatusChanged'])
+                ->orderByDesc('updatedAt')
+                ->get();
+        }
 
         $stories = $stories
             ->groupBy('owner_id')

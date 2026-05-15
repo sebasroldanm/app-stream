@@ -1,9 +1,23 @@
-@props(['stories', 'showRail' => true])
+@props(['stories', 'showRail' => true, 'owner_id' => null])
 
-<div id="stories-component-root" class="col-lg-12"
+<div id="stories-component-root" class="{{ $owner_id ? '' : 'col-lg-12' }}"
     data-stories="{{ json_encode($stories, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE) }}">
 
-    @if ($showRail)
+    @if ($owner_id && !empty($stories))
+        <div class="story-square-item"
+            x-on:click="if(!window.storyManager && typeof initStoryManager === 'function') initStoryManager(); window.storyManager ? window.storyManager.open(0) : console.log('Esperando a StoryManager...')"
+            style="background-image: url('{{ $stories[0]['avatar'] }}');"
+            data-story-index="0">
+            <div class="story-square-overlay">
+                <div class="story-square-content">
+                    <span class="story-square-label">{{ __('Historias') }}</span>
+                    <div class="story-count">
+                        {{ count($stories[0]['contents']) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    @elseif ($showRail)
         <div class="card-body stories-rail" id="storiesRail">
             @foreach ($stories as $index => $story)
                 <div class="story-circle-item" 
@@ -89,7 +103,8 @@
 
     </div><!-- /.stories-fullscreen -->
     @once
-        <link rel="stylesheet" href="{{ asset('css/frontend/stories.css') }}">
+        @php $version = date('YmdHis'); @endphp
+        <link rel="stylesheet" href="{{ asset('css/frontend/stories.css') }}?v={{ $version }}">
     @endonce
     
     <script>
