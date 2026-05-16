@@ -13,7 +13,7 @@ document.addEventListener("alpine:init", () => {
         init() {
             // Watch para detectar cambios en la URL (cuando Livewire refresca el Owner)
             this.$watch('config.url', (newUrl, oldUrl) => {
-                if (newUrl !== oldUrl && !this.config.inShow) {
+                if (newUrl !== oldUrl && !this.config.inShow && this.config.isLive) {
                     this.addLog("La URL ha cambiado, reiniciando reproductor...");
                     this.destroy();
                     this.initPlayer();
@@ -26,17 +26,34 @@ document.addEventListener("alpine:init", () => {
                     this.addLog("Iniciando Show Privado, deteniendo reproductor...");
                     this.destroy();
                 } else {
-                    this.addLog("Show Privado finalizado, reiniciando reproductor...");
+                    if (this.config.isLive) {
+                        this.addLog("Show Privado finalizado, reiniciando reproductor...");
+                        this.initPlayer();
+                    }
+                }
+            });
+
+            // Watch para detectar cambios en el estado Live
+            this.$watch('config.isLive', (isLive) => {
+                if (isLive && !this.config.inShow) {
+                    this.addLog("Iniciando transmisión, cargando reproductor...");
                     this.initPlayer();
+                } else if (!isLive) {
+                    this.addLog("Transmisión finalizada, deteniendo reproductor...");
+                    this.destroy();
                 }
             });
 
             // Pequeño delay para asegurar que el DOM esté listo
             setTimeout(() => {
-                if (!this.config.inShow) {
+                if (!this.config.inShow && this.config.isLive) {
                     this.initPlayer();
                 } else {
-                    this.addLog("Show Privado activo al cargar, reproductor en pausa.");
+                    if (this.config.inShow) {
+                        this.addLog("Show Privado activo al cargar, reproductor en pausa.");
+                    } else if (!this.config.isLive) {
+                        this.addLog("Usuario no está transmitiendo al cargar.");
+                    }
                 }
             }, 100);
         },

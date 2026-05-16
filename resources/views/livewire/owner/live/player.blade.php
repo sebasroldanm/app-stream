@@ -6,22 +6,61 @@
     showControls: {{ $showControls ? 'true' : 'false' }},
     canExpandLayout: {{ $canExpandLayout ? 'true' : 'false' }},
     ownerId: {{ $owner->id }},
-    inShow: {{ $owner->show_mode ? 'true' : 'false' }}
-})" class="live-player-wrapper">
-    <div class="card bg-dark overflow-hidden mb-1 position-relative">
-        <template x-if="config.inShow">
-            <div class="private-show-overlay d-flex flex-column align-items-center justify-content-center bg-black text-white p-4" 
-                 style="min-height: 400px; width: 100%;">
+    inShow: {{ $inShow ? 'true' : 'false' }},
+    isLive: {{ $isLive ? 'true' : 'false' }},
+    isOnline: {{ $isOnline ? 'true' : 'false' }},
+    statusChangedAt: '{{ $statusChangedAt }}',
+    offlineStatusUpdatedAt: '{{ $offlineStatusUpdatedAt }}'
+})" 
+x-effect="
+    config.isLive = {{ $isLive ? 'true' : 'false' }};
+    config.isOnline = {{ $isOnline ? 'true' : 'false' }};
+    config.inShow = {{ $inShow ? 'true' : 'false' }};
+    config.poster = '{{ $poster }}';
+    config.url = '{{ $url }}';
+    config.statusChangedAt = '{{ $statusChangedAt }}';
+    config.offlineStatusUpdatedAt = '{{ $offlineStatusUpdatedAt }}';
+"
+class="live-player-wrapper">
+    <div class="card bg-dark overflow-hidden mb-1 position-relative" style="aspect-ratio: 16 / 9;">
+        <!-- Universal Background Blur -->
+        <div class="player-poster-blur" :style="'background-image: url(' + config.poster + ')'"></div>
+        
+        <!-- Overlays Layer -->
+        <div class="player-state-overlay" x-show="config.inShow || !config.isLive">
+            <!-- Private Show -->
+            <template x-if="config.inShow">
                 <div class="text-center">
                     <i class="ri-lock-fill ri-4x mb-3 text-warning"></i>
                     <h3 class="text-white">Show Privado Activo</h3>
-                    <p class="text-white-50">El usuario está actualmente en un show de tipo: <span class="badge bg-primary">{{ $owner->show_mode }}</span></p>
+                    <p class="text-white-50">El usuario está actualmente en un show de tipo: <span class="badge bg-primary">{{ $inShow }}</span></p>
                     <p class="small text-muted">El reproductor se reiniciará automáticamente cuando finalice el show.</p>
                 </div>
-            </div>
-        </template>
+            </template>
 
-        <video x-show="!config.inShow" x-ref="video" class="plyr-video" playsinline poster="{{ $poster }}"></video>
+            <!-- Online but not transmitting -->
+            <template x-if="!config.inShow && config.isOnline && !config.isLive">
+                <div class="text-center">
+                    <i class="ri-signal-tower-fill ri-4x mb-3 text-success"></i>
+                    <h3 class="text-white">Online</h3>
+                    <p class="text-white-50">El usuario está online pero no está transmitiendo.</p>
+                    <p class="small text-muted">Última transmisión: <span class="text-white">{{ $statusChangedAt }}</span></p>
+                </div>
+            </template>
+
+            <!-- Offline -->
+            <template x-if="!config.isOnline">
+                <div class="text-center">
+                    <i class="ri-moon-clear-fill ri-4x mb-3 text-white-50"></i>
+                    <h3 class="text-white">Offline</h3>
+                    <p class="text-white-50">El usuario se encuentra actualmente desconectado.</p>
+                    <p class="small text-muted">Visto por última vez: <span class="text-white">{{ $offlineStatusUpdatedAt }}</span></p>
+                </div>
+            </template>
+        </div>
+
+        <!-- Video Layer -->
+        <video x-show="!config.inShow && config.isLive" x-ref="video" class="plyr-video" playsinline :poster="config.poster"></video>
     </div>
 
     @if ($showInfo)

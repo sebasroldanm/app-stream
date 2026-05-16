@@ -31,6 +31,11 @@ class Player extends Component
             'poster' => $poster,
             'height' => $height,
             'width' => $width,
+            'isLive' => $this->owner->isLive,
+            'isOnline' => $this->owner->isOnline,
+            'statusChangedAt' => $this->owner->statusChangedAt?->diffForHumans() ?? '',
+            'offlineStatusUpdatedAt' => $this->owner->offlineStatusUpdatedAt?->diffForHumans() ?? '',
+            'inShow' => $this->owner->show_mode,
         ]);
     }
 
