@@ -1,4 +1,5 @@
-<div x-data="livePlayer({
+<div wire:key="player-{{ $owner->id }}"
+x-data="livePlayer({
     url: '{{ $url }}',
     poster: '{{ $poster }}',
     autoplay: {{ $autoplay ? 'true' : 'false' }},
@@ -13,13 +14,13 @@
     offlineStatusUpdatedAt: '{{ $offlineStatusUpdatedAt }}'
 })" 
 x-effect="
-    config.isLive = {{ $isLive ? 'true' : 'false' }};
-    config.isOnline = {{ $isOnline ? 'true' : 'false' }};
-    config.inShow = {{ $inShow ? 'true' : 'false' }};
-    config.poster = '{{ $poster }}';
-    config.url = '{{ $url }}';
-    config.statusChangedAt = '{{ $statusChangedAt }}';
-    config.offlineStatusUpdatedAt = '{{ $offlineStatusUpdatedAt }}';
+    config.isLive = $wire.isLive;
+    config.isOnline = $wire.isOnline;
+    config.inShow = $wire.inShow ? true : false;
+    config.poster = $wire.poster;
+    config.url = $wire.url;
+    config.statusChangedAt = $wire.statusChangedAt;
+    config.offlineStatusUpdatedAt = $wire.offlineStatusUpdatedAt;
 "
 class="live-player-wrapper">
     <div class="card bg-dark overflow-hidden mb-1 position-relative" style="aspect-ratio: 16 / 9;">
@@ -32,9 +33,9 @@ class="live-player-wrapper">
             <template x-if="config.inShow">
                 <div class="text-center">
                     <i class="ri-lock-fill ri-4x mb-3 text-warning"></i>
-                    <h3 class="text-white">Show Privado Activo</h3>
-                    <p class="text-white-50">El usuario está actualmente en un show de tipo: <span class="badge bg-primary">{{ $inShow }}</span></p>
-                    <p class="small text-muted">El reproductor se reiniciará automáticamente cuando finalice el show.</p>
+                    <h3 class="text-white">{{ __('owner/live/player.private_show_title') }}</h3>
+                    <p class="text-white-50">{{ __('owner/live/player.private_show_text_prefix') }} <span class="badge bg-primary">{{ $inShow }}</span></p>
+                    <p class="small text-muted">{{ __('owner/live/player.private_show_footer') }}</p>
                 </div>
             </template>
 
@@ -42,19 +43,19 @@ class="live-player-wrapper">
             <template x-if="!config.inShow && config.isOnline && !config.isLive">
                 <div class="text-center">
                     <i class="ri-signal-tower-fill ri-4x mb-3 text-success"></i>
-                    <h3 class="text-white">Online</h3>
-                    <p class="text-white-50">El usuario está online pero no está transmitiendo.</p>
-                    <p class="small text-muted">Última transmisión: <span class="text-white">{{ $statusChangedAt }}</span></p>
+                    <h3 class="text-white">{{ __('owner/live/player.online_title') }}</h3>
+                    <p class="text-white-50">{{ __('owner/live/player.online_text') }}</p>
+                    <p class="small text-muted">{{ __('owner/live/player.last_transmission') }}: <span class="text-white">{{ $statusChangedAt }}</span></p>
                 </div>
             </template>
 
             <!-- Offline -->
-            <template x-if="!config.isOnline">
+            <template x-if="!config.isOnline && !config.inShow">
                 <div class="text-center">
                     <i class="ri-moon-clear-fill ri-4x mb-3 text-white-50"></i>
-                    <h3 class="text-white">Offline</h3>
-                    <p class="text-white-50">El usuario se encuentra actualmente desconectado.</p>
-                    <p class="small text-muted">Visto por última vez: <span class="text-white">{{ $offlineStatusUpdatedAt }}</span></p>
+                    <h3 class="text-white">{{ __('owner/live/player.offline_title') }}</h3>
+                    <p class="text-white-50">{{ __('owner/live/player.offline_text') }}</p>
+                    <p class="small text-muted">{{ __('owner/live/player.last_seen') }}: <span class="text-white">{{ $offlineStatusUpdatedAt }}</span></p>
                 </div>
             </template>
         </div>
@@ -84,14 +85,14 @@ class="live-player-wrapper">
                     @if ($showLogs)
                         <button @click="logsOpen = !logsOpen"
                             class="btn btn-sm px-1 py-0 border border-secondary-subtle"
-                            :class="logsOpen ? 'btn-primary' : 'btn-dark'" title="Ver logs">
+                            :class="logsOpen ? 'btn-primary' : 'btn-dark'" title="{{ __('owner/live/player.view_logs') }}">
                             <i class="ri-bug-line"></i>
                         </button>
                     @endif
 
                     @if ($showExpandButton)
                         <button @click="toggleExpand()" class="btn btn-primary btn-sm px-2 py-0">
-                            <span x-text="expanded ? 'Contraer' : 'Ampliar'"></span>
+                            <span x-text="expanded ? '{{ __('owner/live/player.collapse') }}' : '{{ __('owner/live/player.expand') }}'"></span>
                         </button>
                     @endif
                 </div>
@@ -100,12 +101,11 @@ class="live-player-wrapper">
             @if ($showLogs)
                 <div x-show="logsOpen" x-transition
                     class="player-logs bg-black p-1 rounded border border-secondary-subtle mt-2">
-                    <div class="text-success-emphasis mb-1 border-bottom border-secondary-subtle pb-1 logs-title">Log del reproductor: {{ $url }}</div>
+                    <div class="text-success-emphasis mb-1 border-bottom border-secondary-subtle pb-1 logs-title">{{ __('owner/live/player.player_log') }}: {{ $url }}</div>
                     <template x-for="(log, index) in logs" :key="index">
                         <div class="text-muted log-item" x-text="log"></div>
                     </template>
-                    <div x-show="logs.length === 0" class="text-muted italic no-logs">No hay logs
-                        registrados.</div>
+                    <div x-show="logs.length === 0" class="text-muted italic no-logs">{{ __('owner/live/player.no_logs') }}</div>
                 </div>
             @endif
         </div>

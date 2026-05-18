@@ -36,7 +36,9 @@ class Info extends Component
         // Detectar cambios de estado
         $currentState = [
             'isLive' => $this->owner->isLive,
+            'isOnline' => $this->owner->isOnline,
             'showMode' => $this->owner->show_mode,
+            'snapshot' => $this->owner->data?->user?->user?->snapshotTimestamp ?? null,
         ];
 
         if ($this->lastState !== null && $this->lastState !== $currentState) {
