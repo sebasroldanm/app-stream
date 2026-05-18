@@ -14,7 +14,7 @@
                         'allowTouchMove' => true,
                         'simulateTouch' => true,
                     ]"
-                    :status="$favorite->show_model_or_status"
+                    :status="$favorite->general_condition"
                     :isLive="$favorite->isLive"
                     :lastLive="!$favorite->isLive ? \Carbon\Carbon::parse($favorite->statusChangedAt)->diffForHumans(['short' => true]) : null"
                 />

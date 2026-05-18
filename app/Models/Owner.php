@@ -336,12 +336,21 @@ class Owner extends Model
         return "16:9";
     }
 
+    public function getSnapshotTimestampAttribute()
+    {
+        return $this->data?->user?->user?->snapshotTimestamp ?? null;
+    }
+
     public function getShowModeAttribute()
     {
         return $this->data?->cam?->show?->mode ?? false;
     }
 
-    public function getShowModelOrStatusAttribute()
+    /**
+     * Get show mode or status owner
+     * @return string|null
+     */
+    public function getGeneralConditionAttribute()
     {
         $showMode = $this->getShowModeAttribute();
         if ($showMode) {
@@ -364,5 +373,37 @@ class Owner extends Model
             return $this->birthDate->format('m-d') === date('m-d');
         }
         return false;
+    }
+
+    public function getGoalDescriptionAttribute() : ?string {
+        if ($this->data?->cam?->goal) {
+            return $this->data->cam->goal->description;
+        }
+        return null;
+    }
+
+    public function getGoalTargetAttribute() : ?int {
+        if ($this->data?->cam?->goal) {
+            return $this->data->cam->goal->goal;
+        }
+        return null;
+    }
+
+    public function getGoalCurrentAttribute() : ?int {
+        if ($this->data?->cam?->goal) {
+            return $this->data->cam->goal->spent;
+        }
+        return null;
+    }
+
+    public function getGoalEnableAttribute() : bool {
+        if ($this->data?->cam?->goal) {
+            return (bool) $this->data->cam->goal->isEnabled;
+        }
+        return false;
+    }
+
+    public function getCamTopicAttribute() : ?string {
+        return $this->data?->cam?->topic ?? null;
     }
 }

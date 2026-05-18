@@ -16,11 +16,13 @@ class Info extends Component
 
     public Owner $owner;
 
-    public $viewers = [];
+    public object $viewers;
 
     public $percent = 0;
 
-    public $lastState = null;
+    public $lastState = [];
+
+    public $views_count = 0;
 
     public function placeholder()
     {
@@ -38,7 +40,7 @@ class Info extends Component
             'isLive' => $this->owner->isLive,
             'isOnline' => $this->owner->isOnline,
             'showMode' => $this->owner->show_mode,
-            'snapshot' => $this->owner->data?->user?->user?->snapshotTimestamp ?? null,
+            'snapshot' => $this->owner->snapshot_timestamp,
         ];
 
         if ($this->lastState !== null && $this->lastState !== $currentState) {
@@ -48,8 +50,10 @@ class Info extends Component
 
         $this->viewers = $this->updateViewers();
 
-        if (isset($this->owner->data->cam->goal->goal) && $this->owner->data->cam->goal->goal > 0) {
-            $percent = ($this->owner->data->cam->goal->spent * 100) / $this->owner->data->cam->goal->goal;
+        $this->views_count = $this->viewers->guests + $this->viewers->spies + $this->viewers->invisibles + $this->viewers->greens + $this->viewers->golds + $this->viewers->regulars;
+
+        if ($this->owner->goal_target && $this->owner->goal_target > 0) {
+            $percent = ($this->owner->goal_current * 100) / $this->owner->goal_target;
             $this->percent = (round($percent) > 100) ? 100 : round($percent, 1);
         }
 

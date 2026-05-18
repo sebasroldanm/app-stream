@@ -5,11 +5,8 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">{{ __('owner/live/info.goal') }}</h5>
-                @if (isset($owner->data->cam->goal))
-                    @php
-                        $goal = $owner->data->cam->goal;
-                    @endphp
-                    <h5>{{ $goal->description }}</h5>
+                @if ($owner->goal_description)
+                    <h5>{{ $owner->goal_description }}</h5>
 
                     <div class="progress" style="height: 20px;" wire:ignore>
                         <div id="progressBar"
@@ -20,14 +17,14 @@
                         </div>
                     </div>
 
-                    <p class="card-text">{{ __('owner/live/info.goal') }} {{ $goal->spent }} / {{ $goal->goal }}
+                    <p class="card-text">{{ __('owner/live/info.goal') }} {{ $owner->goal_current }} / {{ $owner->goal_target }}
                     </p>
                 @else
                     <p class="card-text">{{ __('owner/live/info.no_goal') }}</p>
                 @endif
-                @if (isset($owner->data->cam->topic))
+                @if ($owner->cam_topic)
                     <h5>{{ __('owner/live/info.topic') }}:</h5>
-                    <p class="card-text">{{ $owner->data->cam->topic }}</p>
+                    <p class="card-text">{{ $owner->cam_topic }}</p>
                 @endif
             </div>
         </div>
@@ -36,38 +33,20 @@
         <div class="card">
             <div class="card-body">
                 <h5>{{ __('owner/live/info.status') }}</h5>
-                @if ($owner->show_mode)
-                    <p class="card-text">{{ $owner->show_mode }}</p>
-                @else
-                    @php
-                        if ($owner->data->user->user->isLive) {
-                            if ($owner->data->cam->show) {
-                                $state = $owner->data->cam->show->mode;
-                                $type = 'badge border border-success text-success text-bold';
-                            }else{
-                                $state = 'Live';
-                            }
-                            $type = 'badge border border-red text-red text-bold';
-                        } elseif ($owner->data->user->user->isOnline) {
-                            $state = 'Online';
-                            $type = 'badge border border-success text-success text-bold';
-                        } else {
-                            $state = 'Offline';
-                            $type = 'badge border border-secondary text-secondary text-bold';
-                        }
-                    @endphp
-                    <span class="badge {{ $type }}">{{ $state }}</span>
-                @endif
-
                 @php
-                    $views_count =
-                        $viewers->guests +
-                        $viewers->spies +
-                        $viewers->invisibles +
-                        $viewers->greens +
-                        $viewers->golds +
-                        $viewers->regulars;
+                    if ($owner->isLive) {
+                        $state = $owner->show_mode;
+                        $type = 'badge border-danger text-danger text-bold';
+                    } elseif ($owner->isOnline) {
+                        $state = 'Online';
+                        $type = 'badge border-success text-success text-bold';
+                    } else {
+                        $state = 'Offline';
+                        $type = 'badge border-secondary text-secondary text-bold';
+                    }
                 @endphp
+                <span class="badge {{ $type }}">{{ $state }}</span>
+
                 <h5 class="card-title">{{ __('owner/live/info.viewers') }}: <span>{{ $views_count }}</span></h5>
 
                 <h5 class="card-title">{{ __('owner/live/info.king') }}</h5>
