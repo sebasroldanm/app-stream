@@ -54,10 +54,26 @@ class Info extends Component
 
         $this->percent = $this->owner->latestGoal?->getPercentage() ?? 0;
 
-        // Implementar
-        // https://design.spiderbees.com/bootstrap5/html-dark/chat.html
+        if ($this->owner->isLive) {
+            if ($this->owner->show_mode == null) {
+                $state = "Live";
+            } else {
+                $state = $this->owner->show_mode;
+            }
+            $type = 'badge border border-danger text-danger text-bold';
+        } else if ($this->owner->isOnline) {
+            $state = 'Online';
+            $type = 'badge border border-success text-success text-bold';
+        } else {
+            $state = 'Offline';
+            $type = 'badge border border-secondary text-secondary text-bold';
+        }
 
-        return view('livewire.owner.live.info');
+        $historyGoals = $this->owner->latestGoal?->historyWithoutSpent;
+
+        // dd($historyGoals);
+
+        return view('livewire.owner.live.info', compact('state', 'type', 'historyGoals'));
     }
 
     private function updateViewers()

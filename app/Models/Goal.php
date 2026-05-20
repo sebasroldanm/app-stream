@@ -30,6 +30,22 @@ class Goal extends Model
         return $this->belongsTo(Owner::class, 'owner_id', 'id');
     }
 
+    public function historyGoals()
+    {
+        return $this->hasMany(GoalHistory::class)->orderBy('created_at', 'desc');
+    }
+
+    public function historyWithoutSpent()
+    {
+        return $this->hasMany(GoalHistory::class)
+            ->where(function ($query) {
+                $query->whereNotNull('new_data->description')
+                      ->orWhereNotNull('new_data->goal')
+                      ->orWhereNotNull('new_data->isEnabled');
+            })
+            ->orderBy('created_at', 'desc');
+    }
+
     public function getPercentage(int $decimal = 0)
     {
         if (!$this->goal) {

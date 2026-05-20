@@ -1,23 +1,58 @@
-<div class="row" 
-     wire:poll.10s.visible 
-     x-data="progressComponent(@entangle('percent'))">
+<div class="row" wire:poll.10s.visible x-data="progressComponent(@entangle('percent'))">
     <div class="col-6">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">{{ __('owner/live/info.goal') }}</h5>
+                <h5 class="card-title d-flex align-items-center">
+                    {{ __('owner/live/info.goal') }}
+                    <i tabindex="0" class="las la-info-circle ms-2 text-primary" style="cursor: pointer; outline: none;"
+                        x-data="{ popover: null }" x-init="popover = new bootstrap.Popover($el, {
+                            html: true,
+                            trigger: 'focus',
+                            title: '{{ __('owner/live/info.history_goals') }}',
+                            content: function() { return document.getElementById('history-goals-content-{{ $owner->id }}').innerHTML; }
+                        })" @remove.window="if(popover) popover.dispose()">
+                    </i>
+                </h5>
+
+                <div id="history-goals-content-{{ $owner->id }}" class="d-none">
+                    @if (isset($historyGoals) && $historyGoals->count() > 0)
+                        @foreach ($historyGoals as $hgoal)
+                            @switch($hgoal->event)
+                                @case('created')
+                                    <span
+                                        class="text-white">{{ __('owner/live/info.goals.created', ['time' => $hgoal->created_at->diffForHumans()]) }}</span>
+                                @break
+
+                                @case('updated')
+                                    @foreach ($hgoal->new_data as $field => $newValue)
+                                        @if ($field == 'goal')
+                                            <p class="text-white">
+                                                {{ __('owner/live/info.goals.updated.goal', ['old' => number_format($hgoal->old_data['goal'], 0, ',', '.'), 'new' => number_format($newValue, 0, ',', '.'), 'time' => $hgoal->created_at->diffForHumans()]) }}
+                                            </p>
+                                        @endif
+                                    @endforeach
+                                @break
+
+                                @default
+                            @endswitch
+                        @endforeach
+                    @else
+                        <p class="mb-0 text-muted">{{ __('owner/live/info.no_history_goals') }}</p>
+                    @endif
+                </div>
                 @if ($owner->goal_description)
                     <h5>{{ $owner->goal_description }}</h5>
 
                     <div class="progress" style="height: 20px;" wire:ignore>
-                        <div id="progressBar"
-                            class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                        <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success"
                             role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0"
                             aria-valuemax="100">
                             <span id="progressText"></span>
                         </div>
                     </div>
 
-                    <p class="card-text">{{ __('owner/live/info.goal') }} {{ $owner->goal_current }} / {{ $owner->goal_target }}
+                    <p class="card-text">{{ __('owner/live/info.goal') }} {{ $owner->goal_current }} /
+                        {{ $owner->goal_target }}
                     </p>
                 @else
                     <p class="card-text">{{ __('owner/live/info.no_goal') }}</p>
@@ -33,18 +68,6 @@
         <div class="card">
             <div class="card-body">
                 <h5>{{ __('owner/live/info.status') }}</h5>
-                @php
-                    if ($owner->isLive) {
-                        $state = $owner->show_mode;
-                        $type = 'badge border-danger text-danger text-bold';
-                    } elseif ($owner->isOnline) {
-                        $state = 'Online';
-                        $type = 'badge border-success text-success text-bold';
-                    } else {
-                        $state = 'Offline';
-                        $type = 'badge border-secondary text-secondary text-bold';
-                    }
-                @endphp
                 <span class="badge {{ $type }}">{{ $state }}</span>
 
                 <h5 class="card-title">{{ __('owner/live/info.viewers') }}: <span>{{ $views_count }}</span></h5>

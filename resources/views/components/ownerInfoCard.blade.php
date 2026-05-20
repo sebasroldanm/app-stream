@@ -70,7 +70,8 @@
             {{-- Badget Bottom Left --}}
             @if (isset($lastGoal))
                 <div class="position-absolute bottom-0 start-0 m-1 z-index-10">
-                    <span class="badge bg-dark-50 text-white shadow-sm">
+                    <span class="badge bg-dark-50 text-white shadow-sm" data-bs-toggle="tooltip" data-bs-placement="top"
+                        title="{{ $lastGoalDescription }}" x-data x-init="new bootstrap.Tooltip($el)">
                         <i class="las la-trophy text-warning me-1"></i>{{ $lastGoal }} %
                     </span>
                 </div>

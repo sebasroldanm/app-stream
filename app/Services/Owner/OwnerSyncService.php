@@ -216,7 +216,7 @@ class OwnerSyncService
                 ->whereNull('deleted_at')
                 ->get();
 
-            if ($currentGoal->count() > 1) {
+            if ($currentGoal->count() >= 1) {
                 $currentGoal->each->delete();
             }
         }
