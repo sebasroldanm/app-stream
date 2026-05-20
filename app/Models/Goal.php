@@ -29,4 +29,17 @@ class Goal extends Model
     {
         return $this->belongsTo(Owner::class, 'owner_id', 'id');
     }
+
+    public function getPercentage(int $decimal = 0)
+    {
+        if (!$this->goal) {
+            return null;
+        }
+        if ($this->goal == 0) {
+            return 0;
+        }
+        $calculated = ($this->spent * 100) / $this->goal;
+
+        return ($decimal == 0) ? (int) $calculated : round($calculated, $decimal);
+    }
 }

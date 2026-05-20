@@ -52,10 +52,7 @@ class Info extends Component
 
         $this->views_count = $this->viewers->guests + $this->viewers->spies + $this->viewers->invisibles + $this->viewers->greens + $this->viewers->golds + $this->viewers->regulars;
 
-        if ($this->owner->goal_target && $this->owner->goal_target > 0) {
-            $percent = ($this->owner->goal_current * 100) / $this->owner->goal_target;
-            $this->percent = (round($percent) > 100) ? 100 : round($percent, 1);
-        }
+        $this->percent = $this->owner->latestGoal?->getPercentage() ?? 0;
 
         // Implementar
         // https://design.spiderbees.com/bootstrap5/html-dark/chat.html

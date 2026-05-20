@@ -17,6 +17,7 @@
                     :status="$favorite->general_condition"
                     :isLive="$favorite->isLive"
                     :lastLive="!$favorite->isLive ? \Carbon\Carbon::parse($favorite->statusChangedAt)->diffForHumans(['short' => true]) : null"
+                    :lastGoal="$favorite->latestGoal?->getPercentage()"
                 />
             </div>
         @endforeach

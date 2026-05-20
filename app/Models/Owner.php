@@ -147,6 +147,16 @@ class Owner extends Model
         // And `activeGroup` to get the group if we assume 1.
     }
 
+    public function goals()
+    {
+        return $this->hasMany(Goal::class);
+    }
+
+    public function latestGoal()
+    {
+        return $this->hasOne(Goal::class)->latestOfMany();
+    }
+
     public function getRelationGroupAttribute()
     {
         return $this->relations()->with('group')->first()?->group;
