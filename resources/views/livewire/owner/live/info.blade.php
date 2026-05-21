@@ -41,7 +41,7 @@
                     @endif
                 </div>
                 @if ($owner->goal_description)
-                    <h5>{{ $owner->goal_description }}</h5>
+                    <h6>{{ $owner->goal_description }}</h6>
 
                     <div class="progress" style="height: 20px;" wire:ignore>
                         <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success"

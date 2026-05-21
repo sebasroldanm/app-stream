@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class Owner extends Model
 {
     use HasFactory, OwnerProp;
-    
+
     protected $fillable = [
         'name',
         'username',
@@ -155,6 +155,11 @@ class Owner extends Model
     public function latestGoal()
     {
         return $this->hasOne(Goal::class)->latestOfMany();
+    }
+
+    public function superChats()
+    {
+        return $this->hasMany(SuperChat::class);
     }
 
     public function getRelationGroupAttribute()
@@ -385,35 +390,40 @@ class Owner extends Model
         return false;
     }
 
-    public function getGoalDescriptionAttribute() : ?string {
+    public function getGoalDescriptionAttribute(): ?string
+    {
         if ($this->data?->cam?->goal) {
             return $this->data->cam->goal->description;
         }
         return null;
     }
 
-    public function getGoalTargetAttribute() : ?int {
+    public function getGoalTargetAttribute(): ?int
+    {
         if ($this->data?->cam?->goal) {
             return $this->data->cam->goal->goal;
         }
         return null;
     }
 
-    public function getGoalCurrentAttribute() : ?int {
+    public function getGoalCurrentAttribute(): ?int
+    {
         if ($this->data?->cam?->goal) {
             return $this->data->cam->goal->spent;
         }
         return null;
     }
 
-    public function getGoalEnableAttribute() : bool {
+    public function getGoalEnableAttribute(): bool
+    {
         if ($this->data?->cam?->goal) {
             return (bool) $this->data->cam->goal->isEnabled;
         }
         return false;
     }
 
-    public function getCamTopicAttribute() : ?string {
+    public function getCamTopicAttribute(): ?string
+    {
         return $this->data?->cam?->topic ?? null;
     }
 }
