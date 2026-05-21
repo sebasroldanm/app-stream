@@ -60,7 +60,7 @@ class OwnerChatService
             }
 
             if (!empty($toInsert)) {
-                SuperChat::insert($toInsert);
+                SuperChat::insertOrIgnore($toInsert);
             }
         }
 
