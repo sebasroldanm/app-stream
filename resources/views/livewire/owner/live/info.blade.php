@@ -7,7 +7,7 @@
                     <i tabindex="0" class="las la-info-circle ms-2 text-primary" style="cursor: pointer; outline: none;"
                         x-data="{ popover: null }" x-init="popover = new bootstrap.Popover($el, {
                             html: true,
-                            trigger: 'focus',
+                            trigger: 'hover',
                             title: '{{ __('owner/live/info.history_goals') }}',
                             content: function() { return document.getElementById('history-goals-content-{{ $owner->id }}').innerHTML; }
                         })" @remove.window="if(popover) popover.dispose()">
