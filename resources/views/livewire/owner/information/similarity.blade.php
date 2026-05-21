@@ -52,14 +52,25 @@
                                                 }
                                                 $similarity = (1 - floatval($result->distance)) * 100;
                                             @endphp
-                                            <p class="mb-0">{{ __('owner/ia/results.probability') }}: <span class="badge bg-{{ $class }}"> {{ __('owner/ia/results.similarity_'.$result->probability) }}</span></p>
-                                            <p class="mb-0">{{ __('owner/ia/results.similarity') }}: {{ round($similarity, 2) }}%</p>
-                                            <p class="mb-0">{{ __('owner/ia/results.platform') }}: {{ $result->platform }}</p>
+                                            <p class="mb-0">{{ __('owner/ia/results.probability') }}: <span
+                                                    class="badge bg-{{ $class }}">
+                                                    {{ __('owner/ia/results.similarity_' . $result->probability) }}</span>
+                                                @if ($this->related && in_array($result->model, $this->related))
+                                                    <i class="las la-link ms-1"></i>
+                                                @endif
+                                            </p>
+                                            <p class="mb-0">{{ __('owner/ia/results.similarity') }}:
+                                                {{ round($similarity, 2) }}%</p>
+                                            <p class="mb-0">{{ __('owner/ia/results.platform') }}:
+                                                {{ $result->platform }}</p>
                                             <p class="mb-0">{{ __('owner/ia/results.conexion') }}:
                                                 {{ \Carbon\Carbon::parse($result->seen)->diffForHumans() }}
                                             </p>
                                             <p class="mb-0">{{ __('owner/ia/results.profile') }}:
                                                 {{ \Carbon\Carbon::parse($result->accountSeen)->diffForHumans() }}
+                                                @if ($this->favorites && in_array($result->model, $this->favorites))
+                                                    <i class="las la-heart text-danger ms-1"></i>
+                                                @endif
                                             </p>
                                         </div>
                                     </div>
@@ -67,7 +78,8 @@
                             </div>
                             <div class="col-12 py-2 text-center">
                                 @if ($result->platform == 'sc')
-                                    <a href="{{ route('owner.feed', $result->model) }}" class="btn btn-success" target="_blank">{{ __('owner/ia/results.see_here') }}</a>
+                                    <a href="{{ route('owner.feed', $result->model) }}" class="btn btn-success"
+                                        target="_blank">{{ __('owner/ia/results.see_here') }}</a>
                                 @else
                                     <a href="{{ $result->urls->externalProfile }}" target="_blank"
                                         class="btn btn-danger">{{ __('owner/ia/results.visit_external_site') }}</a>

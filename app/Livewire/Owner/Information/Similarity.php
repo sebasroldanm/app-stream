@@ -4,6 +4,7 @@ namespace App\Livewire\Owner\Information;
 
 use App\Models\Owner;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Lazy;
 use Livewire\Component;
@@ -15,6 +16,8 @@ class Similarity extends Component
 
     public $similarity;
     public $see_full = false;
+    public $favorites = [];
+    public $related = [];
 
     public function placeholder()
     {
@@ -24,6 +27,8 @@ class Similarity extends Component
     public function render()
     {
         $this->initSimility();
+        $this->getFavorites();
+        $this->getRelated();
 
         return view('livewire.owner.information.similarity');
     }
@@ -60,10 +65,37 @@ class Similarity extends Component
                     ->unique('model')
                     ->sortBy('distance')
                     ->take(200);
-
             } catch (\Throwable $th) {
                 return false;
             }
         });
+    }
+
+    private function getFavorites()
+    {
+        $this->favorites = Owner::select("username")
+            ->favoritedByCustomers(Auth::guard('customer')->user()->id)
+            ->whereNotNull("username")
+            ->where("username", "!=", "")
+            ->get()
+            ->pluck("username")
+            ->toArray();
+    }
+
+    private function getRelated()
+    {
+        $group = $this->owner->relation_group;
+
+        if ($group) {
+            $this->related = $group->relations()
+                ->with('owner')
+                ->where('owner_id', '!=', $this->owner->id)
+                ->get()
+                ->pluck('owner.username')
+                ->filter()
+                ->toArray();
+        } else {
+            $this->related = [];
+        }
     }
 }
