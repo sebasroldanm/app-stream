@@ -86,29 +86,8 @@ class Conversations extends Component
 
         $conversations = Cache::remember($cacheKey, now()->addHours(2), function () use ($cookieClient, $offset, $limit) {
 
-            $client = new Client([
-                'verify' => false,
-                'timeout' => 15,
-            ]);
-
-            $url = env('API_SERVER') . '/api/front/v2/users/' . $cookieClient . '/conversations';
-            $query = [
-                'offset' => $offset,
-                'limit' => $limit,
-                'uniq'   => 'f0h9ck6ub3vra2t1',
-            ];
-
-            $response = $client->get($url, [
-                'headers' => [
-                    'accept'        => 'application/json, text/plain, */*',
-                    'user-agent'    => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-                    'front-version' => '11.4.72',
-                    'cookie'        => env('COOKIE_SERVER'),
-                ],
-                'query' => $query
-            ]);
-
-            $data = json_decode($response->getBody()->getContents());
+            $service = app(\App\Services\Owner\OwnerConversationService::class);
+            $data = $service->getConversations($cookieClient, $offset, $limit);
 
             foreach ($data->conversations as $conv) {
                 $owner = Owner::find($conv->counterpartId);
@@ -137,33 +116,8 @@ class Conversations extends Component
 
         $messages = Cache::remember($cacheKey, now()->addHours(2), function () use ($cookieClient, $idMessage, $beforeIdMessage) {
 
-            $client = new Client([
-                'verify' => false,
-                'timeout' => 15,
-            ]);
-
-            $url = env('API_SERVER') . '/api/front/v2/users/' . $cookieClient . '/conversations' . '/' . $idMessage;
-            $query = [
-                'offset' => 0,
-                'limit' => 10,
-                'uniq'   => 'f0h9ck6ub3vra2t1',
-            ];
-
-            if ($beforeIdMessage) {
-                $query['beforeMassMessageId'] = $beforeIdMessage;
-            }
-
-            $response = $client->get($url, [
-                'headers' => [
-                    'accept'        => 'application/json, text/plain, */*',
-                    'user-agent'    => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-                    'front-version' => '11.4.72',
-                    'cookie' => env('COOKIE_SERVER'),
-                ],
-                'query' => $query
-            ]);
-
-            return json_decode($response->getBody()->getContents());
+            $service = app(\App\Services\Owner\OwnerConversationService::class);
+            return $service->getOwnerMessages($cookieClient, $idMessage, $beforeIdMessage);
         });
 
         return $messages;
