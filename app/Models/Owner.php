@@ -323,6 +323,11 @@ class Owner extends Model
         return $this->avatar;
     }
 
+    public function getWentIdleAtAttribute()
+    {
+        return $this->data?->user?->user?->wentIdleAt ?? null;
+    }
+
     public function getOwnerCamBroadcastConfigFpsAttribute()
     {
         return $this->data?->cam?->broadcastConfig?->flashFps ?? null;

@@ -13,13 +13,19 @@ return new class extends Migration
     {
         Schema::create('conversations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('owner_id')->nullable();
             $table->unsignedBigInteger('counterpartId')->nullable();
             $table->integer('unread')->default(0);
             $table->boolean('isBookmark')->default(false);
             $table->boolean('hasTokens')->default(false);
             $table->boolean('hasUnreadWithTokens')->default(false);
+            $table->dateTime('lastMessage')->nullable();
+            $table->json('metadataFriendship')->nullable();
+            $table->json('metadataOwner')->nullable();
             $table->timestamps();
+
+            $table->index('lastMessage');
+            $table->index('counterpartId');
+            $table->index('updated_at');
         });
     }
 

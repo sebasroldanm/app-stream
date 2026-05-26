@@ -26,6 +26,9 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('conversation_id')->references('id')->on('conversations')->onDelete('cascade');
+
+            $table->index(['conversation_id', 'createdAt']);
+            $table->index(['conversation_id', 'updated_at']);
         });
     }
 

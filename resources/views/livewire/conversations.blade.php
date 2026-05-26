@@ -5,98 +5,79 @@
                 <div class="iq-card-body chat-page p-0">
                     <div class="chat-data-block">
                         <div class="row">
-                            <div class="col-lg-3 chat-data-left scroller">
+                            <div class="col-lg-3 chat-data-left">
                                 <div class="chat-search pt-3 pl-3">
                                     <div class="d-flex align-items-center">
                                         <div class="chat-profile mr-3">
-                                            <img src="images/user/1.jpg" alt="chat-user" class="avatar-60 ">
+                                            <img src="https://ui-avatars.com/api/?name={{ auth()->guard('customer')->user()->username }}&background=fa377b&color=fff"
+                                                alt="chat-user" class="avatar-60 ">
                                         </div>
                                         <div class="chat-caption">
-                                            <h5 class="mb-0">Bni Jordan</h5>
-                                            <p class="m-0">Web Designer</p>
+                                            <h5 class="mb-0">{{ auth()->guard('customer')->user()->username }}</h5>
+                                            <p class="m-0">{{ __('conversation.online') }}</p>
                                         </div>
                                         <button type="submit" class="close-btn-res p-3"><i
                                                 class="ri-close-fill"></i></button>
                                     </div>
-                                    <div id="user-detail-popup" class="scroller">
-                                        <div class="user-profile">
-                                            <button type="submit" class="close-popup p-3"><i
-                                                    class="ri-close-fill"></i></button>
-                                            <div class="user text-center mb-4">
-                                                <a class="avatar m-0">
-                                                    <img src="images/user/1.jpg" alt="avatar">
-                                                </a>
-                                                <div class="user-name mt-4">
-                                                    <h4>Bni Jordan</h4>
-                                                </div>
-                                                <div class="user-desc">
-                                                    <p>Web Designer</p>
-                                                </div>
-                                            </div>
-                                            <hr>
-                                            <div class="user-detail text-left mt-4 pl-4 pr-4">
-                                                <h5 class="mt-4 mb-4">About</h5>
-                                                <p>It is long established fact that a reader will be distracted bt the
-                                                    reddable.</p>
-                                                <h5 class="mt-3 mb-3">Status</h5>
-                                                <ul class="user-status p-0">
-                                                    <li class="mb-1"><i
-                                                            class="ri-checkbox-blank-circle-fill text-success pr-1"></i><span>Online</span>
-                                                    </li>
-                                                    <li class="mb-1"><i
-                                                            class="ri-checkbox-blank-circle-fill text-warning pr-1"></i><span>Away</span>
-                                                    </li>
-                                                    <li class="mb-1"><i
-                                                            class="ri-checkbox-blank-circle-fill text-danger pr-1"></i><span>Do
-                                                            Not Disturb</span></li>
-                                                    <li class="mb-1"><i
-                                                            class="ri-checkbox-blank-circle-fill text-light pr-1"></i><span>Offline</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="chat-searchbar mt-4">
                                         <div class="form-group chat-search-data m-0">
                                             <input type="text" class="form-control round" id="chat-search"
-                                                placeholder="Search">
+                                                placeholder="{{ __('conversation.search') }}">
                                             <i class="ri-search-line"></i>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="chat-sidebar-channel scroller mt-4 pl-3"
-                                    x-data="{
-                                        handleSidebarScroll() {
-                                            if (this.$el.scrollTop + this.$el.clientHeight >= this.$el.scrollHeight - 5) {
-                                                $wire.loadMoreConversations();
-                                            }
+                                <div class="chat-sidebar-channel scroller mt-4 pl-3" x-data="{
+                                    handleSidebarScroll() {
+                                        if (this.$el.scrollTop + this.$el.clientHeight >= this.$el.scrollHeight - 5) {
+                                            $wire.loadMoreConversations();
                                         }
-                                    }"
-                                    @scroll.debounce.100ms="handleSidebarScroll()"
-                                >
-                                    <h5 class="">Mensajes ({{ $conversationsData->conversationsCount ?? 0 }})</h5>
+                                    }
+                                }"
+                                    @scroll.debounce.100ms="handleSidebarScroll()">
+                                    <h5 class="">
+                                        {{ __('conversation.conversations', ['count' => $conversationsData->conversationsCount ?? 0]) }}
+                                    </h5>
                                     <ul class="iq-chat-ui nav flex-column nav-pills">
                                         @foreach ($conversationsData->conversations as $conv)
+                                            @php
+                                                $latestMsg = $conv->latestMessage;
+                                                $avatar = $owner->pic_profile;
+                                                $username = $owner->username;
+                                                $latestBody = $latestMsg ? $latestMsg->body : '';
+                                                $timeDiff = $latestMsg
+                                                    ? \Carbon\Carbon::parse($latestMsg->createdAt)->diffForHumans(
+                                                        null,
+                                                        false,
+                                                        true,
+                                                        1,
+                                                    )
+                                                    : '';
+                                                $isLive = $owner->isLive;
+                                            @endphp
                                             <li>
                                                 <div class="d-flex align-items-center my-2" role=button
-                                                    wire:click="selectConversation('{{ $conv->counterpartId }}')">
+                                                    wire:click="selectConversation('{{ $conv->owner->id }}')">
                                                     <div class="avatar mr-2">
-                                                        <img src="{{ $conv->message->avatar }}" alt="chatuserimage"
+                                                        <img src="{{ $avatar }}" alt="chatuserimage"
                                                             class="avatar-50 ">
-                                                        <span class="avatar-status"><i
-                                                                class="ri-checkbox-blank-circle-fill text-success"></i></span>
+                                                        @if ($isLive)
+                                                            <span class="avatar-status"><i
+                                                                    class="ri-checkbox-blank-circle-fill text-success"></i></span>
+                                                        @endif
                                                     </div>
                                                     <div class="chat-sidebar-name ms-1">
-                                                        <h6 title="{{ $conv->message->username }}" class="mb-0">
-                                                            {{ Str::limit($conv->message->username, 16) }}</h6>
+                                                        <h6 title="{{ $username }}" class="mb-0">
+                                                            {{ Str::limit($username, 16) }}</h6>
                                                         <span
-                                                            title="{{ $conv->message->body }}">{{ Str::limit($conv->message->body, 12) }}</span>
+                                                            title="{{ $latestBody }}">{{ Str::limit($latestBody, 12) }}</span>
                                                     </div>
                                                     <div class="chat-meta float-right text-center mt-2 mr-1">
-                                                        <div class="chat-msg-counter bg-primary text-white">
-                                                            {{ $conv->unread }}</div>
-                                                        <span
-                                                            class="text-nowrap">{{ $conv->message->created_at }}</span>
+                                                        @if ($conv->unread > 0)
+                                                            <div class="chat-msg-counter bg-primary text-white">
+                                                                {{ $conv->unread }}</div>
+                                                        @endif
+                                                        <span class="text-nowrap">{{ $timeDiff }}</span>
                                                     </div>
                                                 </div>
                                             </li>
@@ -111,8 +92,9 @@
                                             <div class="chat-start">
                                                 <span class="iq-start-icon text-primary"><i
                                                         class="ri-message-3-line"></i></span>
-                                                <button id="chat-start" class="btn mt-3">Start
-                                                    Conversation!</button>
+                                                <button id="chat-start" class="btn mt-3">
+                                                    {{ __('conversation.start_conversation') }}
+                                                </button>
                                             </div>
                                         </div>
                                     @else
@@ -124,28 +106,35 @@
                                                         <i class="ri-menu-3-line"></i>
                                                     </div>
                                                     <div class="avatar chat-user-profile m-0 mr-3">
-                                                        <img src="{{ $messages->model->avatarUrl }}" alt="avatar"
-                                                            class="avatar-50 ">
+                                                        <img src="{{ $messages->conversation->owner->pic_profile }}"
+                                                            alt="avatar" class="avatar-50 ">
                                                         <span class="avatar-status"><i
                                                                 class="ri-checkbox-blank-circle-fill text-success"></i></span>
                                                     </div>
-                                                    <h5 class="mb-0 ms-2">{{ $messages->model->username }}</h5>
+                                                    <h5 class="mb-0 ms-2">
+                                                        {{ $messages->conversation->owner->username }}</h5>
                                                 </div>
                                                 <div class="chat-user-detail-popup scroller">
                                                     <div class="user-profile text-center">
                                                         <button type="submit" class="close-popup p-3"><i
                                                                 class="ri-close-fill"></i></button>
                                                         <div class="user mb-4">
-                                                            <a class="avatar m-0" href="{{ route('owner', $messages->model->username) }}" target="_blank">
-                                                                <img src="{{ $messages->model->avatarUrl }}"
-                                                                    alt="avatar">
+                                                            <a class="avatar m-0"
+                                                                href="{{ route('owner', $messages->conversation->owner->username) }}"
+                                                                target="_blank">
+                                                                <img src="{{ $messages->conversation->owner->pic_profile }}"
+                                                                    class="img-fluid rounded px-2" alt="avatar">
                                                             </a>
                                                             <div class="user-name mt-4">
-                                                                <h4>{{ $messages->model->username }}</h4>
+                                                                <h4>{{ $messages->conversation->owner->username }}</h4>
                                                             </div>
                                                             <div class="user-desc">
-                                                                <p>Amigos desde
-                                                                    {{ \Carbon\Carbon::parse($messages->friendship->createdAt)->diffForHumans() }}
+                                                                <p>
+                                                                    @if ($messages->conversation->metadataFriendship)
+                                                                        {{ __('conversation.friend_since', ['date' => \Carbon\Carbon::parse($messages->conversation->metadataFriendship['createdAt'])->diffForHumans(null, false, true, 1)]) }}
+                                                                    @else
+                                                                        {{ __('conversation.not_friends') }}
+                                                                    @endif
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -181,16 +170,13 @@
                                                     </div>
                                                 </div>
                                                 <div class="chat-header-icons d-flex">
-                                                    <a href="javascript:void();"
-                                                        class="chat-icon-phone iq-bg-primary">
+                                                    <a href="javascript:void();" class="chat-icon-phone iq-bg-primary">
                                                         <i class="ri-phone-line"></i>
                                                     </a>
-                                                    <a href="javascript:void();"
-                                                        class="chat-icon-video iq-bg-primary">
+                                                    <a href="javascript:void();" class="chat-icon-video iq-bg-primary">
                                                         <i class="ri-vidicon-line"></i>
                                                     </a>
-                                                    <a href="javascript:void();"
-                                                        class="chat-icon-delete iq-bg-primary">
+                                                    <a href="javascript:void();" class="chat-icon-delete iq-bg-primary">
                                                         <i class="ri-delete-bin-line"></i>
                                                     </a>
                                                     <span class="dropdown iq-bg-primary">
@@ -214,19 +200,17 @@
                                                 </div>
                                             </header>
                                         </div>
-                                        <div class="chat-content scroller" 
-                                            style="overflow-anchor: none;"
+                                        <div class="chat-content scroller" style="overflow-anchor: none;"
                                             x-data="{
                                                 scrollToBottom() {
-                                                    this.$el.scrollTop = this.$el.scrollHeight;
-                                                },
-                                                handleScroll() {
-                                                    if (this.$el.scrollTop === 0) {
-                                                        $wire.loadMoreMessages();
+                                                        this.$el.scrollTop = this.$el.scrollHeight;
+                                                    },
+                                                    handleScroll() {
+                                                        if (this.$el.scrollTop === 0) {
+                                                            $wire.loadMoreMessages();
+                                                        }
                                                     }
-                                                }
-                                            }"
-                                            x-init="scrollToBottom()"
+                                            }" x-init="scrollToBottom()"
                                             @scroll.debounce.100ms="handleScroll()"
                                             @scroll-to-bottom.window="$nextTick(() => scrollToBottom())"
                                             @messages-prepended.window="() => {
@@ -235,8 +219,7 @@
                                                     const newScrollHeight = $el.scrollHeight;
                                                     $el.scrollTop = newScrollHeight - oldScrollHeight;
                                                 });
-                                            }"
-                                        >
+                                            }">
                                             {{-- <div class="chat chat-right">
                                                 <div class="chat-detail">
                                                     <div class="chat-message">
@@ -258,14 +241,15 @@
                                                     @if (!$isOwner)
                                                         <div class="chat-user col-lg-1">
                                                             <a class="avatar m-0">
-                                                                <img src="{{ $messages->model->avatarUrl }}"
+                                                                <img src="{{ $messages->conversation->owner->pic_profile }}"
                                                                     alt="avatar" class="avatar-35 ">
                                                             </a>
                                                             <span
-                                                                class="chat-time mt-1">{{ \Carbon\Carbon::parse($message->createdAt)->diffForHumans() }}</span>
+                                                                class="chat-time mt-1">{{ \Carbon\Carbon::parse($message->createdAt)->diffForHumans(null, false, true, 1) }}</span>
                                                         </div>
                                                     @endif
-                                                    <div class="chat-detail {{ $isOwner ? 'col-lg-11 text-right' : 'col-lg-11' }}">
+                                                    <div
+                                                        class="chat-detail {{ $isOwner ? 'col-lg-11 align-items-center d-flex justify-content-end' : 'col-lg-11' }}">
                                                         <div class="chat-message">
                                                             <p>{{ $message->body }}</p>
                                                             @if ($message->media)
@@ -317,15 +301,12 @@
                                                                 {{-- Video --}}
                                                                 @if (isset($message->media->video))
                                                                     @if (isset($message->media->video->videoUrl))
-                                                                        <x-video-component 
-                                                                            :poster="$message->media->video->coverUrl" 
-                                                                            :video="$message->media->video->videoUrl"
-                                                                        />
+                                                                        <x-video-component :poster="$message->media->video->coverUrl"
+                                                                            :video="$message->media->video->videoUrl" />
                                                                     @else
-                                                                        <x-video-component 
-                                                                            :poster="$message->media->video->coverUrl" 
-                                                                            :video="$message->media->video->trailerUrl"
-                                                                        />
+                                                                        <x-video-component :poster="$message->media->video->coverUrl"
+                                                                            :video="$message->media->video
+                                                                                ->trailerUrl" />
                                                                     @endif
                                                                 @endif
                                                                 {{-- Video --}}
@@ -338,9 +319,13 @@
                                                                                     $url = $mixMedia->url;
                                                                                 } elseif (isset($mixMedia->urlThumb)) {
                                                                                     $url = $mixMedia->urlThumb;
-                                                                                } elseif (isset($mixMedia->urlPreview)) {
+                                                                                } elseif (
+                                                                                    isset($mixMedia->urlPreview)
+                                                                                ) {
                                                                                     $url = $mixMedia->urlPreview;
-                                                                                } elseif (isset($mixMedia->urlThumbMicro)) {
+                                                                                } elseif (
+                                                                                    isset($mixMedia->urlThumbMicro)
+                                                                                ) {
                                                                                     $url = $mixMedia->urlThumbMicro;
                                                                                 } else {
                                                                                     $url = null;
@@ -353,15 +338,11 @@
                                                                         @endif
                                                                         @if ($mixMedia->type == 'video')
                                                                             @if (isset($mixMedia->videoUrl))
-                                                                                <x-video-component 
-                                                                                    :poster="$mixMedia->coverUrl" 
-                                                                                    :video="$mixMedia->videoUrl"
-                                                                                />
+                                                                                <x-video-component :poster="$mixMedia->coverUrl"
+                                                                                    :video="$mixMedia->videoUrl" />
                                                                             @else
-                                                                                <x-video-component 
-                                                                                    :poster="$mixMedia->coverUrl" 
-                                                                                    :video="$mixMedia->trailerUrl"
-                                                                                />
+                                                                                <x-video-component :poster="$mixMedia->coverUrl"
+                                                                                    :video="$mixMedia->trailerUrl" />
                                                                             @endif
                                                                         @endif
                                                                     @endforeach
@@ -373,9 +354,11 @@
                                                     @if ($isOwner)
                                                         <div class="chat-user col-lg-1">
                                                             <a class="avatar m-0">
-                                                                <img src="images/user/1.jpg" alt="avatar" class="avatar-35 ">
+                                                                <img src="images/user/1.jpg" alt="avatar"
+                                                                    class="avatar-35 ">
                                                             </a>
-                                                            <span class="chat-time mt-1">{{ \Carbon\Carbon::parse($message->createdAt)->diffForHumans() }}</span>
+                                                            <span
+                                                                class="chat-time mt-1">{{ \Carbon\Carbon::parse($message->createdAt)->diffForHumans() }}</span>
                                                         </div>
                                                     @endif
                                                 </div>
@@ -389,11 +372,11 @@
                                                                 aria-hidden="true"></i></a>
                                                     </div>
                                                     <input type="text" class="form-control mr-3"
-                                                        placeholder="Type your message">
+                                                        placeholder="{{ __('conversation.type_message') }}">
                                                     <button type="submit"
                                                         class="btn btn-primary d-flex align-items-center p-2"><i
                                                             class="fa fa-paper-plane-o" aria-hidden="true"></i><span
-                                                            class="d-none d-lg-block ml-1">Send</span></button>
+                                                            class="d-none d-lg-block ml-1">{{ __('conversation.send') }}</span></button>
                                                 </form>
                                             </div>
                                         </div>
