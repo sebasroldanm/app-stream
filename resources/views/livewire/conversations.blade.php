@@ -1,0 +1,393 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="iq-card">
+                <div class="iq-card-body chat-page p-0">
+                    <div class="chat-data-block">
+                        <div class="row">
+                            <div class="col-lg-3 chat-data-left">
+                                <div class="chat-search pt-3 pl-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="chat-profile mr-3">
+                                            <img src="https://ui-avatars.com/api/?name={{ auth()->guard('customer')->user()->username }}&background=fa377b&color=fff"
+                                                alt="chat-user" class="avatar-60 ">
+                                        </div>
+                                        <div class="chat-caption">
+                                            <h5 class="mb-0">{{ auth()->guard('customer')->user()->username }}</h5>
+                                            <p class="m-0">{{ __('conversation.online') }}</p>
+                                        </div>
+                                        <button type="submit" class="close-btn-res p-3"><i
+                                                class="ri-close-fill"></i></button>
+                                    </div>
+                                    <div class="chat-searchbar mt-4">
+                                        <div class="form-group chat-search-data m-0">
+                                            <input type="text" class="form-control round" id="chat-search"
+                                                placeholder="{{ __('conversation.search') }}">
+                                            <i class="ri-search-line"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="chat-sidebar-channel scroller mt-4 pl-3" x-data="{
+                                    handleSidebarScroll() {
+                                        if (this.$el.scrollTop + this.$el.clientHeight >= this.$el.scrollHeight - 5) {
+                                            $wire.loadMoreConversations();
+                                        }
+                                    }
+                                }"
+                                    @scroll.debounce.100ms="handleSidebarScroll()">
+                                    <h5 class="">
+                                        {{ __('conversation.conversations', ['count' => $conversationsData->conversationsCount ?? 0]) }}
+                                    </h5>
+                                    <ul class="iq-chat-ui nav flex-column nav-pills">
+                                        @foreach ($conversationsData->conversations as $conv)
+                                            @php
+                                                $owner = $conv->owner;
+                                                $latestMsg = $conv->latestMessage;
+                                                $avatar = $owner->pic_profile;
+                                                $username = $owner->username;
+                                                $latestBody = $latestMsg ? $latestMsg->body : '';
+                                                $timeDiff = $latestMsg
+                                                    ? \Carbon\Carbon::parse($latestMsg->createdAt)->diffForHumans(
+                                                        null,
+                                                        false,
+                                                        true,
+                                                        1,
+                                                    )
+                                                    : '';
+                                                $isLive = $owner->isLive;
+                                            @endphp
+                                            <li>
+                                                <div class="d-flex align-items-center my-2" role=button
+                                                    wire:click="selectConversation('{{ $conv->owner->id }}')">
+                                                    <div class="avatar mr-2">
+                                                        <img src="{{ $avatar }}" alt="chatuserimage"
+                                                            class="avatar-50 ">
+                                                        @if ($isLive)
+                                                            <span class="avatar-status"><i
+                                                                    class="ri-checkbox-blank-circle-fill text-success"></i></span>
+                                                        @endif
+                                                    </div>
+                                                    <div class="chat-sidebar-name ms-1">
+                                                        <h6 title="{{ $username }}" class="mb-0">
+                                                            {{ Str::limit($username, 16) }}</h6>
+                                                        <span
+                                                            title="{{ $latestBody }}">{{ Str::limit($latestBody, 12) }}</span>
+                                                    </div>
+                                                    <div class="chat-meta float-right text-center mt-2 mr-1">
+                                                        @if ($conv->unread > 0)
+                                                            <div class="chat-msg-counter bg-primary text-white">
+                                                                {{ $conv->unread }}</div>
+                                                        @endif
+                                                        <span class="text-nowrap">{{ $timeDiff }}</span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-lg-9 chat-data p-0 chat-data-right">
+                                <div class="tab-content">
+                                    @if (is_null($selectedConversation))
+                                        <div class="tab-pane fade active show" id="default-block" role="tabpanel">
+                                            <div class="chat-start">
+                                                <span class="iq-start-icon text-primary"><i
+                                                        class="ri-message-3-line"></i></span>
+                                                <button id="chat-start" class="btn mt-3">
+                                                    {{ __('conversation.start_conversation') }}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div class="chat-head">
+                                            <header
+                                                class="d-flex justify-content-between align-items-center pt-3 pr-3 pb-3">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="sidebar-toggle">
+                                                        <i class="ri-menu-3-line"></i>
+                                                    </div>
+                                                    <div class="avatar chat-user-profile m-0 mr-3">
+                                                        <img src="{{ $messages->conversation->owner->pic_profile }}"
+                                                            alt="avatar" class="avatar-50 ">
+                                                        <span class="avatar-status"><i
+                                                                class="ri-checkbox-blank-circle-fill text-success"></i></span>
+                                                    </div>
+                                                    <h5 class="mb-0 ms-2">
+                                                        {{ $messages->conversation->owner->username }}</h5>
+                                                </div>
+                                                <div class="chat-user-detail-popup scroller">
+                                                    <div class="user-profile text-center">
+                                                        <button type="submit" class="close-popup p-3"><i
+                                                                class="ri-close-fill"></i></button>
+                                                        <div class="user mb-4">
+                                                            <a class="avatar m-0"
+                                                                href="{{ route('owner', $messages->conversation->owner->username) }}"
+                                                                target="_blank">
+                                                                <img src="{{ $messages->conversation->owner->pic_profile }}"
+                                                                    class="img-fluid rounded px-2" alt="avatar">
+                                                            </a>
+                                                            <div class="user-name mt-4">
+                                                                <h4>{{ $messages->conversation->owner->username }}</h4>
+                                                            </div>
+                                                            <div class="user-desc">
+                                                                <p>
+                                                                    @if ($messages->conversation->metadataFriendship)
+                                                                        {{ __('conversation.friend_since', ['date' => \Carbon\Carbon::parse($messages->conversation->metadataFriendship['createdAt'])->diffForHumans(null, false, true, 1)]) }}
+                                                                    @else
+                                                                        {{ __('conversation.not_friends') }}
+                                                                    @endif
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        {{-- <hr>
+                                                        <div class="chatuser-detail text-left mt-4">
+                                                            <div class="row">
+                                                                <div class="col-6 col-md-6 title">Bni Name:</div>
+                                                                <div class="col-6 col-md-6 text-right">Bni</div>
+                                                            </div>
+                                                            <hr>
+                                                            <div class="row">
+                                                                <div class="col-6 col-md-6 title">Tel:</div>
+                                                                <div class="col-6 col-md-6 text-right">072 143 9920
+                                                                </div>
+                                                            </div>
+                                                            <hr>
+                                                            <div class="row">
+                                                                <div class="col-6 col-md-6 title">Date Of Birth:</div>
+                                                                <div class="col-6 col-md-6 text-right">July 12, 1989
+                                                                </div>
+                                                            </div>
+                                                            <hr>
+                                                            <div class="row">
+                                                                <div class="col-6 col-md-6 title">Gender:</div>
+                                                                <div class="col-6 col-md-6 text-right">Male</div>
+                                                            </div>
+                                                            <hr>
+                                                            <div class="row">
+                                                                <div class="col-6 col-md-6 title">Language:</div>
+                                                                <div class="col-6 col-md-6 text-right">Engliah</div>
+                                                            </div>
+                                                        </div> --}}
+                                                    </div>
+                                                </div>
+                                                <div class="chat-header-icons d-flex">
+                                                    <a href="javascript:void();" class="chat-icon-phone iq-bg-primary">
+                                                        <i class="ri-phone-line"></i>
+                                                    </a>
+                                                    <a href="javascript:void();" class="chat-icon-video iq-bg-primary">
+                                                        <i class="ri-vidicon-line"></i>
+                                                    </a>
+                                                    <a href="javascript:void();" class="chat-icon-delete iq-bg-primary">
+                                                        <i class="ri-delete-bin-line"></i>
+                                                    </a>
+                                                    <span class="dropdown iq-bg-primary">
+                                                        <i class="ri-more-2-line cursor-pointer dropdown-toggle nav-hide-arrow cursor-pointer pr-0"
+                                                            id="dropdownMenuButton02" data-toggle="dropdown"
+                                                            aria-haspopup="true" aria-expanded="false"
+                                                            role="menu"></i>
+                                                        <span class="dropdown-menu dropdown-menu-right"
+                                                            aria-labelledby="dropdownMenuButton02">
+                                                            <a class="dropdown-item" href="JavaScript:void(0);"><i
+                                                                    class="fa fa-thumb-tack" aria-hidden="true"></i>
+                                                                Pin to top</a>
+                                                            <a class="dropdown-item" href="JavaScript:void(0);"><i
+                                                                    class="fa fa-trash-o" aria-hidden="true"></i>
+                                                                Delete chat</a>
+                                                            <a class="dropdown-item" href="JavaScript:void(0);"><i
+                                                                    class="fa fa-ban" aria-hidden="true"></i>
+                                                                Block</a>
+                                                        </span>
+                                                    </span>
+                                                </div>
+                                            </header>
+                                        </div>
+                                        <div class="chat-content scroller" style="overflow-anchor: none;"
+                                            x-data="{
+                                                scrollToBottom() {
+                                                        this.$el.scrollTop = this.$el.scrollHeight;
+                                                    },
+                                                    handleScroll() {
+                                                        if (this.$el.scrollTop === 0) {
+                                                            $wire.loadMoreMessages();
+                                                        }
+                                                    }
+                                            }" x-init="scrollToBottom()"
+                                            @scroll.debounce.100ms="handleScroll()"
+                                            @scroll-to-bottom.window="$nextTick(() => scrollToBottom())"
+                                            @messages-prepended.window="() => {
+                                                const oldScrollHeight = $el.scrollHeight;
+                                                $nextTick(() => {
+                                                    const newScrollHeight = $el.scrollHeight;
+                                                    $el.scrollTop = newScrollHeight - oldScrollHeight;
+                                                });
+                                            }">
+                                            {{-- <div class="chat chat-right">
+                                                <div class="chat-detail">
+                                                    <div class="chat-message">
+                                                        <p>How can we help? We're here for you! 😄</p>
+                                                    </div>
+                                                </div>
+                                                <div class="chat-user">
+                                                    <a class="avatar m-0">
+                                                        <img src="images/user/1.jpg" alt="avatar" class="avatar-35 ">
+                                                    </a>
+                                                    <span class="chat-time mt-1">6:45</span>
+                                                </div>
+                                            </div> --}}
+                                            @foreach ($messages->messages as $message)
+                                                @php
+                                                    $isOwner = $message->senderId == env('COOKIE_CLIENT');
+                                                @endphp
+                                                <div class="chat {{ $isOwner ? 'chat-right' : 'chat-left' }} row">
+                                                    @if (!$isOwner)
+                                                        <div class="chat-user col-lg-1">
+                                                            <a class="avatar m-0">
+                                                                <img src="{{ $messages->conversation->owner->pic_profile }}"
+                                                                    alt="avatar" class="avatar-35 ">
+                                                            </a>
+                                                            <span
+                                                                class="chat-time mt-1">{{ \Carbon\Carbon::parse($message->createdAt)->diffForHumans(null, false, true, 1) }}</span>
+                                                        </div>
+                                                    @endif
+                                                    <div
+                                                        class="chat-detail {{ $isOwner ? 'col-lg-11 align-items-center d-flex justify-content-end' : 'col-lg-11' }}">
+                                                        <div class="chat-message">
+                                                            <p>{{ $message->body }}</p>
+                                                            @if ($message->media)
+                                                                {{-- Photo --}}
+                                                                @if (isset($message->media->photo))
+                                                                    @php
+                                                                        $photo = $message->media->photo;
+                                                                        if (isset($photo->url)) {
+                                                                            $url = $photo->url;
+                                                                        } elseif (isset($photo->urlThumb)) {
+                                                                            $url = $photo->urlThumb;
+                                                                        } elseif (isset($photo->urlPreview)) {
+                                                                            $url = $photo->urlPreview;
+                                                                        } elseif (isset($photo->urlThumbMicro)) {
+                                                                            $url = $photo->urlThumbMicro;
+                                                                        } else {
+                                                                            $url = null;
+                                                                        }
+                                                                    @endphp
+                                                                    <img class="photo-message img-fluid rounded fullviewer"
+                                                                        src="{{ $url }}" alt="photo"
+                                                                        class="img-fluid rounded">
+                                                                @endif
+                                                                {{-- Photo --}}
+                                                                {{-- Album --}}
+                                                                @if (isset($message->media->album))
+                                                                    @foreach ($message->media->album->photos as $photo)
+                                                                        @php
+                                                                            if (isset($photo->url)) {
+                                                                                $url = $photo->url;
+                                                                            } elseif (isset($photo->urlThumb)) {
+                                                                                $url = $photo->urlThumb;
+                                                                            } elseif (isset($photo->urlPreview)) {
+                                                                                $url = $photo->urlPreview;
+                                                                            } elseif (isset($photo->urlThumbMicro)) {
+                                                                                $url = $photo->urlThumbMicro;
+                                                                            } else {
+                                                                                $url = null;
+                                                                            }
+                                                                        @endphp
+                                                                        <img class="photo-album img-fluid rounded fullviewer mb-1"
+                                                                            src="{{ $url }}" alt="photo"
+                                                                            class="img-fluid rounded"
+                                                                            data-images-full='@json(collect($message->media->album->photos)->pluck('url'))'
+                                                                            data-images-thumb='@json(collect($message->media->album->photos)->pluck('urlThumb'))'>
+                                                                    @endforeach
+                                                                @endif
+                                                                {{-- Album --}}
+                                                                {{-- Video --}}
+                                                                @if (isset($message->media->video))
+                                                                    @if (isset($message->media->video->videoUrl))
+                                                                        <x-video-component :poster="$message->media->video->coverUrl"
+                                                                            :video="$message->media->video->videoUrl" />
+                                                                    @else
+                                                                        <x-video-component :poster="$message->media->video->coverUrl"
+                                                                            :video="$message->media->video
+                                                                                ->trailerUrl" />
+                                                                    @endif
+                                                                @endif
+                                                                {{-- Video --}}
+                                                                {{-- Mixed --}}
+                                                                @if (isset($message->media->mixed))
+                                                                    @foreach ($message->media->mixed as $mixMedia)
+                                                                        @if ($mixMedia->type == 'photo')
+                                                                            @php
+                                                                                if (isset($mixMedia->url)) {
+                                                                                    $url = $mixMedia->url;
+                                                                                } elseif (isset($mixMedia->urlThumb)) {
+                                                                                    $url = $mixMedia->urlThumb;
+                                                                                } elseif (
+                                                                                    isset($mixMedia->urlPreview)
+                                                                                ) {
+                                                                                    $url = $mixMedia->urlPreview;
+                                                                                } elseif (
+                                                                                    isset($mixMedia->urlThumbMicro)
+                                                                                ) {
+                                                                                    $url = $mixMedia->urlThumbMicro;
+                                                                                } else {
+                                                                                    $url = null;
+                                                                                }
+                                                                            @endphp
+                                                                            <img class="photo-mixed img-fluid rounded fullviewer mb-1"
+                                                                                src="{{ $url }}"
+                                                                                alt="photo"
+                                                                                class="img-fluid rounded">
+                                                                        @endif
+                                                                        @if ($mixMedia->type == 'video')
+                                                                            @if (isset($mixMedia->videoUrl))
+                                                                                <x-video-component :poster="$mixMedia->coverUrl"
+                                                                                    :video="$mixMedia->videoUrl" />
+                                                                            @else
+                                                                                <x-video-component :poster="$mixMedia->coverUrl"
+                                                                                    :video="$mixMedia->trailerUrl" />
+                                                                            @endif
+                                                                        @endif
+                                                                    @endforeach
+                                                                @endif
+                                                                {{-- Mixed --}}
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                    @if ($isOwner)
+                                                        <div class="chat-user col-lg-1">
+                                                            <a class="avatar m-0">
+                                                                <img src="images/user/1.jpg" alt="avatar"
+                                                                    class="avatar-35 ">
+                                                            </a>
+                                                            <span
+                                                                class="chat-time mt-1">{{ \Carbon\Carbon::parse($message->createdAt)->diffForHumans() }}</span>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            @endforeach
+                                            <div class="chat-footer p-3">
+                                                <form class="d-flex align-items-center" action="javascript:void(0);">
+                                                    <div class="chat-attagement d-flex">
+                                                        <a href="javascript:void();"><i class="fa fa-smile-o pr-3"
+                                                                aria-hidden="true"></i></a>
+                                                        <a href="javascript:void();"><i class="fa fa-paperclip pr-3"
+                                                                aria-hidden="true"></i></a>
+                                                    </div>
+                                                    <input type="text" class="form-control mr-3"
+                                                        placeholder="{{ __('conversation.type_message') }}">
+                                                    <button type="submit"
+                                                        class="btn btn-primary d-flex align-items-center p-2"><i
+                                                            class="fa fa-paper-plane-o" aria-hidden="true"></i><span
+                                                            class="d-none d-lg-block ml-1">{{ __('conversation.send') }}</span></button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

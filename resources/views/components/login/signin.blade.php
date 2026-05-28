@@ -1,4 +1,7 @@
 <div class="sign-in-from">
+
+    <script src="https://cdn.jsdelivr.net/npm/@laragear/webpass@2/dist/webpass.js"></script>
+
     <h1 class="mb-0">{{ __('login.sign_in') }}</h1>
     <p>{{ __('login.subtitle') }}</p>
     @if ($errors->any())
@@ -36,5 +39,56 @@
                     href="{{ route('customer.signup') }}">{{ __('login.sign_up') }}</a></span>
         </div>
     </form>
-</div>
 
+    <hr>
+
+    <button type="button" id="passkey-login" class="btn btn-dark w-100">
+        Ingresar con Passkey
+    </button>
+
+
+    <script>
+        document.getElementById('passkey-login')
+            .addEventListener('click', async () => {
+
+                try {
+
+                    if (Webpass.isUnsupported()) {
+
+                        alert('Tu navegador no soporta Passkeys');
+
+                        return;
+                    }
+
+                    const webpass = Webpass.create({
+                        findCsrfToken: true
+                    });
+
+                    const {
+                        success,
+                        error
+                    } = await webpass.assert(
+                        '/webauthn/login/options',
+                        '/webauthn/login'
+                    );
+
+                    console.log(success, error);
+
+                    if (success) {
+
+                        window.location.href = '/';
+
+                        return;
+                    }
+
+                    alert(error ?? 'No fue posible autenticarse');
+
+                } catch (e) {
+
+                    console.error(e);
+
+                    alert('No fue posible autenticarse');
+                }
+            });
+    </script>
+</div>

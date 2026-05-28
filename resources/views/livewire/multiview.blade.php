@@ -62,7 +62,14 @@
                                         class="btn-close btn-close-white btn-sm" aria-label="Close"></button>
                                 </div>
                                 <div class="card-body p-0 bg-dark" style="min-height: 200px;">
-                                    <livewire:owner.live.player :owner="$ownerModel" :isMultiview="true" :key="'player-' . $ownerId" />
+                                    <livewire:owner.live.player 
+                                        :owner="$ownerModel" 
+                                        :isMultiview="true" 
+                                        :key="'player-' . $ownerId" 
+                                        :canExpandLayout="false" 
+                                        :showExpandButton="false"
+                                        :showLogs="false"
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -72,7 +79,3 @@
         </div>
     </div>
 </div>
-
-@push('scripts')
-    <script src="{{ asset('js/frontend/multiview.js') }}"></script>
-@endpush

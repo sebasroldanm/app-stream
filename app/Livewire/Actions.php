@@ -8,18 +8,9 @@ use Livewire\Component;
 
 class Actions extends Component
 {
-    public $message = null;
-    public $status = null;
-
-    public function checkNotifications()
-    {
-        if (Cache::has('Notification')) {
-            $this->message = Cache::pull('Notification');
-            $this->status = Cache::pull('Status');
-            $this->dispatch('notify', message: $this->message);
-            $this->dispatch('owners-updated');
-        }
-    }
+    public string $message = '';
+    public string $status = '';
+    public $lastUpdate;
 
     public function render()
     {
@@ -31,24 +22,21 @@ class Actions extends Component
     public function updateOnline()
     {
         Artisan::call('app:update-online');
-        $this->dispatch('updateOnline');
     }
 
     public function updateAll()
     {
         Artisan::call('app:update-owners-data');
-        $this->dispatch('updateAll');
     }
 
     public function updateFavorites()
     {
+        $this->lastUpdate = now();
         Artisan::call('app:update-favorites');
-        $this->dispatch('updateFavorites');
     }
 
     public function updateFeed()
     {
         Artisan::call('app:update-feed');
-        $this->dispatch('updateFeed');
     }
 }

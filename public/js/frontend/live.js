@@ -1,107 +1,297 @@
-(function () {
-    let player = null;
-    let hls = null;
+document.addEventListener("alpine:init", () => {
+    Alpine.data("livePlayer", (config) => ({
+        player: null,
+        hls: null,
+        status: "", // 'warning' | 'danger'
+        statusMessage: "",
+        transmissionInfo: "",
+        logs: [],
+        logsOpen: false,
+        expanded: false,
+        config: config,
+        gracePeriodTimeout: null,
 
-    setTimeout(() => {
-        initLivePlayer();
-    }, 500);
-
-    window.Livewire.on("initLive", function (data) {
-        // Pequeño delay para asegurar que el DOM esté listo tras el render de Livewire
-        setTimeout(() => {
-            initLivePlayer(data[0]);
-        }, 200);
-    });
-
-    function initLivePlayer(data) {
-        console.log("Iniciando reproductor LIVE", data);
-        
-        const videoElement = document.getElementById("live-player");
-        if (!videoElement) {
-            console.error("ERROR: No se encontró el elemento #live-player en el DOM");
-            return;
-        }
-
-        const videoSource = data.url;
-        const poster = data.cover;
-        const height = data.height;
-        const width = data.width;
-        const ratio = data.ratio;
-
-        // Limpieza robusta de instancias previas
-        if (hls) {
-            console.log("Destruyendo instancia HLS previa");
-            hls.destroy();
-            hls = null;
-        }
-        if (player) {
-            console.log("Destruyendo instancia Plyr previa");
-            player.destroy();
-            player = null;
-        }
-
-        // Plyr Options
-        const plyrOptions = {
-            controls: [
-                "play-large",
-                "play",
-                "mute",
-                "volume",
-                "fullscreen",
-            ],
-            debug: false,
-            autoplay: true,
-            muted: true, // Autoplay generalmente requiere mute
-            volume: 1,
-            ratio: "16:9",
-            poster: poster
-        };
-
-        if (Hls.isSupported()) {
-            console.log("HLS es soportado, inicializando para Live...");
-            hls = new Hls();
-            hls.loadSource(videoSource);
-            
-            // Inicializar Plyr antes de atachar HLS para que Plyr tome control del tag
-            player = new Plyr(videoElement, plyrOptions);
-            hls.attachMedia(player.media);
-
-            hls.on(Hls.Events.MANIFEST_PARSED, function () {
-                console.log("HLS: Manifiesto cargado, intentando reproducir Live");
-                player.play().catch(error => {
-                    console.error("Error al intentar reproducir Live:", error);
-                });
-            });
-
-            hls.on(Hls.Events.ERROR, function (event, data) {
-                 if (data.fatal) {
-                    switch (data.type) {
-                        case Hls.ErrorTypes.NETWORK_ERROR:
-                            console.error("Fatal network error encountered, trying to recover");
-                            hls.startLoad();
-                            break;
-                        case Hls.ErrorTypes.MEDIA_ERROR:
-                            console.error("Fatal media error encountered, trying to recover");
-                            hls.recoverMediaError();
-                            break;
-                        default:
-                            console.error("Fatal error, cannot recover");
-                            hls.destroy();
-                            break;
+        init() {
+            // Watch para detectar cambios en la URL (cuando Livewire refresca el Owner)
+            this.$watch('config.url', (newUrl, oldUrl) => {
+                if (newUrl !== oldUrl && !this.config.inShow && this.config.isLive) {
+                    this.addLog("La URL ha cambiado, actualizando fuente...");
+                    if (this.hls) {
+                        this.hls.loadSource(newUrl);
+                        this.hls.startLoad();
+                    } else if (this.player && this.$refs.video && this.$refs.video.canPlayType("application/vnd.apple.mpegurl")) {
+                        this.$refs.video.src = newUrl;
+                        if (this.config.autoplay) this.player.play();
+                    } else {
+                        this.destroy();
+                        this.initPlayer();
                     }
                 }
             });
 
-        } else if (videoElement.canPlayType("application/vnd.apple.mpegurl")) {
-            console.log("HLS nativo detectado (Safari)");
-            videoElement.src = videoSource;
-            player = new Plyr(videoElement, plyrOptions);
-            player.play();
-        } else {
-            console.error("Formato no soportado para Live en este navegador");
-            // Mostrar mensaje de error en UI si es necesario
-            const errorMsg = document.getElementById('error-message');
-            if(errorMsg) errorMsg.style.display = 'block';
-        }
-    }
-})();
+            // Watch para detectar cambios en el estado de Show
+            this.$watch('config.inShow', (inShow) => {
+                if (inShow) {
+                    this.addLog("Iniciando Show Privado, deteniendo reproductor...");
+                    this.destroy();
+                } else {
+                    if (this.config.isLive) {
+                        this.addLog("Show Privado finalizado, reiniciando reproductor...");
+                        this.initPlayer();
+                    }
+                }
+            });
+
+            // Watch para detectar cambios en el estado Live
+            this.$watch('config.isLive', (isLive) => {
+                if (isLive && !this.config.inShow) {
+                    if (this.gracePeriodTimeout) {
+                        clearTimeout(this.gracePeriodTimeout);
+                        this.gracePeriodTimeout = null;
+                        this.addLog("Transmisión recuperada en tiempo de gracia.");
+                    }
+                    if (!this.player) {
+                        this.addLog("Iniciando transmisión, cargando reproductor...");
+                        this.initPlayer();
+                    }
+                } else if (!isLive) {
+                    if (!this.gracePeriodTimeout && this.player) {
+                        this.addLog("Transmisión inestable. Esperando tiempo de gracia (60s)...");
+                        this.gracePeriodTimeout = setTimeout(() => {
+                            this.addLog("Transmisión finalizada, deteniendo reproductor...");
+                            this.destroy();
+                        }, 60000);
+                    } else if (!this.player) {
+                        // Si ya está destruido o no se ha creado, no hacemos nada
+                    }
+                }
+            });
+
+            // Pequeño delay para asegurar que el DOM esté listo
+            setTimeout(() => {
+                if (!this.config.inShow && this.config.isLive) {
+                    this.initPlayer();
+                } else {
+                    if (this.config.inShow) {
+                        this.addLog("Show Privado activo al cargar, reproductor en pausa.");
+                    } else if (!this.config.isLive) {
+                        this.addLog("Usuario no está transmitiendo al cargar.");
+                    }
+                }
+            }, 100);
+        },
+
+        initPlayer() {
+            const videoElement = this.$refs.video;
+            if (!videoElement) {
+                console.error(
+                    "ERROR: No se encontró el elemento video ref en el DOM",
+                );
+                return;
+            }
+
+            const plyrOptions = {
+                controls: this.config.showControls
+                    ? ["play-large", "play", "mute", "volume", "fullscreen"]
+                    : [],
+                debug: false,
+                autoplay: this.config.autoplay,
+                muted: this.config.muted,
+                volume: 1,
+                ratio: "16:9", // Forzamos proporción 16:9 siempre
+                poster: this.config.poster,
+            };
+
+            if (Hls.isSupported()) {
+                this.hls = new Hls({
+                    manifestLoadingMaxRetry: 4,
+                    manifestLoadingRetryDelay: 1000,
+                });
+                this.hls.loadSource(this.config.url);
+
+                this.player = new Plyr(videoElement, plyrOptions);
+                this.hls.attachMedia(this.player.media);
+
+                this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    this.addLog("HLS: Manifiesto cargado");
+                    this.addLog(`URL: ${this.config.url}`);
+                    if (this.config.autoplay) {
+                        this.player.play().catch((error) => {
+                            this.addLog("Autoplay bloqueado por el navegador");
+                        });
+                    }
+                });
+
+                this.hls.on(Hls.Events.LEVEL_SWITCHED, (event, data) => {
+                    const level = this.hls.levels[data.level];
+                    if (level) {
+                        this.transmissionInfo = `${level.width}x${level.height} (${(level.bitrate / 1000).toFixed(0)}kbps)`;
+                        this.addLog(`Calidad: ${this.transmissionInfo}`);
+                    }
+                });
+
+                this.hls.on(Hls.Events.ERROR, (event, data) => {
+                    if (data.fatal) {
+                        this.status = "danger";
+                        const errorDetail = data.networkDetails
+                            ? ` (${data.networkDetails.response || data.networkDetails.statusText})`
+                            : "";
+
+                        switch (data.type) {
+                            case Hls.ErrorTypes.NETWORK_ERROR:
+                                this.statusMessage =
+                                    "Conexión interrumpida" + errorDetail;
+                                this.addLog(
+                                    `Error de red: ${this.statusMessage}. Consultando estado del Owner...`,
+                                );
+                                
+                                // Intentamos refrescar los datos del Owner vía Livewire
+                                if (this.$wire) {
+                                    this.$wire.refreshOwner();
+                                }
+                                
+                                this.hls.startLoad();
+                                break;
+                            case Hls.ErrorTypes.MEDIA_ERROR:
+                                this.statusMessage = "Error de medios";
+                                this.addLog(
+                                    `Error de medios - Recuperando... URL: ${this.config.url}`,
+                                );
+                                this.hls.recoverMediaError();
+                                break;
+                            default:
+                                this.statusMessage = "Error fatal";
+                                this.addLog(
+                                    `Error fatal irrecuperable - URL: ${this.config.url}`,
+                                );
+                                if (this.hls) {
+                                    this.hls.destroy();
+                                    this.hls = null;
+                                }
+                                if (this.$wire) {
+                                    this.$wire.refreshOwner();
+                                }
+                                break;
+                        }
+                    }
+                });
+            } else if (
+                videoElement.canPlayType("application/vnd.apple.mpegurl")
+            ) {
+                videoElement.src = this.config.url;
+                this.player = new Plyr(videoElement, plyrOptions);
+                if (this.config.autoplay) this.player.play();
+            } else {
+                this.status = "danger";
+                this.statusMessage = "No soportado";
+                this.addLog("Formato no soportado en este navegador");
+            }
+
+            if (this.player) {
+                this.player.on("playing", () => {
+                    this.status = "";
+                    this.statusMessage = "";
+                    this.addLog("Reproduciendo");
+                });
+
+                this.player.on("waiting", () => {
+                    this.status = "warning";
+                    this.statusMessage = "Cargando...";
+                    this.addLog("Buffering");
+                });
+
+                this.player.on("pause", () => {
+                    this.status = "warning";
+                    this.statusMessage = "Pausado";
+                    this.addLog("Pausado");
+                });
+
+                this.player.on("error", (e) => {
+                    this.status = "danger";
+                    this.statusMessage = "Error de Plyr";
+                    this.addLog("Error del reproductor");
+                });
+            }
+        },
+
+        addLog(msg) {
+            const time = new Date().toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+            });
+            this.logs.unshift(`${time} - ${msg}`);
+            if (this.logs.length > 4) this.logs.pop();
+        },
+
+        toggleExpand() {
+            this.expanded = !this.expanded;
+
+            // Lógica de expansión de contenedor (anteriormente en custom.js)
+            const liveContainer = document.getElementById("container-live");
+            if (
+                this.config.canExpandLayout &&
+                liveContainer &&
+                window.innerWidth > 1449
+            ) {
+                if (this.expanded) {
+                    // Expandir
+                    if (
+                        !document
+                            .querySelector(".wrapper-menu")
+                            ?.classList.contains("open")
+                    ) {
+                        sessionStorage.setItem("menu-open", "true");
+                        document.querySelector(".wrapper-menu")?.click();
+                    }
+                    if (
+                        !document
+                            .querySelector(".right-sidebar-mini")
+                            ?.classList.contains("right-sidebar")
+                    ) {
+                        sessionStorage.setItem("sidebar-open", "true");
+                        document
+                            .querySelector(".right-sidebar-toggle")
+                            ?.click();
+                    }
+                    liveContainer.classList.remove("container");
+                    liveContainer.classList.add("container-fluid");
+                } else {
+                    // Contraer
+                    liveContainer.classList.remove("container-fluid");
+                    liveContainer.classList.add("container");
+                    if (sessionStorage.getItem("menu-open") === "true") {
+                        document.querySelector(".wrapper-menu")?.click();
+                        sessionStorage.removeItem("menu-open");
+                    }
+                    if (sessionStorage.getItem("sidebar-open") === "true") {
+                        document
+                            .querySelector(".right-sidebar-toggle")
+                            ?.click();
+                        sessionStorage.removeItem("sidebar-open");
+                    }
+                }
+            }
+
+            this.$dispatch("live-player-toggle-expand", {
+                expanded: this.expanded,
+                ownerId: this.config.ownerId,
+            });
+        },
+
+        destroy() {
+            if (this.gracePeriodTimeout) {
+                clearTimeout(this.gracePeriodTimeout);
+                this.gracePeriodTimeout = null;
+            }
+            if (this.hls) {
+                this.hls.destroy();
+                this.hls = null;
+            }
+            if (this.player) {
+                this.player.destroy();
+                this.player = null;
+            }
+        },
+    }));
+});

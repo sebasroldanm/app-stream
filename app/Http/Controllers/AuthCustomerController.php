@@ -39,6 +39,10 @@ class AuthCustomerController extends Controller
 
         Auth::guard('customer')->login($customer);
 
+        if ($request->enable_passkey) {
+            return redirect()->route('passkey.register');
+        }
+
         return redirect()->route('home');
     }
 
@@ -94,5 +98,10 @@ class AuthCustomerController extends Controller
         $response = $this->searchGlobal($keyword);
 
         return response()->json($response);
+    }
+
+    public function passkeyRegister(Request $request)
+    {
+        return view('auth.passkey');
     }
 }

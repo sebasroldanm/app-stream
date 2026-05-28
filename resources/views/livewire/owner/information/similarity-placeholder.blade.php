@@ -5,9 +5,6 @@
         </h4>
     </div>
     <div class="row">
-        <div class="col-md-12 mb-2">
-            <div class="skeleton-placeholder" style="width: 120px; height: 15px; border-radius: 5px;"></div>
-        </div>
 
         @for ($i = 0; $i < 4; $i++)
             <div class="col-md-6 col-lg-6 mb-3">

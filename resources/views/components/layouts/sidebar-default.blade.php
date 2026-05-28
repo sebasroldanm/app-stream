@@ -8,7 +8,7 @@
                     </a>
                 </li>
                 <li class="@if (Route::is('explore')) active @endif">
-                    <a href="{{ route('explore') }}" wire:navigate class=" ">
+                    <a href="{{ route('explore', ['countries' => 'tagLanguageColombian']) }}">
                         <i class="las la-search-location"></i><span>{{ __('sidebar.explore') }}</span>
                     </a>
                 </li>
@@ -31,6 +31,11 @@
                 <li class="@if (Route::is('post-management')) active @endif">
                     <a href="{{ route('post-management') }}" wire:navigate class=" ">
                         <i class="las la-file-alt"></i><span>{{ __('sidebar.post-management') }}</span>
+                    </a>
+                </li>
+                <li class="@if (Route::is('conversations')) active @endif">
+                    <a href="{{ route('conversations') }}" wire:navigate class=" ">
+                        <i class="las la-comments"></i><span>{{ __('sidebar.conversations') }}</span>
                     </a>
                 </li>
                 {{-- <li class=" ">

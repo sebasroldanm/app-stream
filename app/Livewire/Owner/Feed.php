@@ -4,9 +4,7 @@ namespace App\Livewire\Owner;
 
 use App\Models\Feed as ModelsFeed;
 use App\Models\Owner;
-use App\Models\Photos;
 use App\Models\Post;
-use App\Models\Video;
 use App\Traits\OwnerProp;
 use App\Traits\SyncData;
 use Carbon\Carbon;
@@ -31,7 +29,7 @@ class Feed extends Component
     public function render()
     {
         $owner = $this->owner;
-        
+
         if (is_string($this->owner->data)) {
             $this->owner->data = json_decode($this->owner->data, false);
         }
@@ -45,7 +43,7 @@ class Feed extends Component
             $this->birthDate = $owner->data->user->user->birthDate;
             $this->age = Carbon::now()->diff(Carbon::parse($owner->data->user->user->birthDate))->y;
         }
-        
+
         $this->dispatch('initFullviewer');
 
         $this->dispatch('initVideos');

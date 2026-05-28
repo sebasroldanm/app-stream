@@ -2,10 +2,10 @@
 
 namespace App\Services\Owner;
 
+use App\Models\Goal;
 use App\Models\Owner;
 use App\Services\Logger\ServiceLogger;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log as LaravelLog;
 
 class OwnerSyncService
 {
@@ -84,6 +84,8 @@ class OwnerSyncService
                     $owner->isBlocked = $dataUser['isBlocked'];
                     $owner->save();
 
+                    $this->syncGoals($owner);
+
                     return $owner->id;
                 }
             }
@@ -126,7 +128,7 @@ class OwnerSyncService
                 $owner->isOnline = false;
                 $owner->save();
             }
-            
+
             $this->logger->logError(
                 'service/owner_sync',
                 $th->getMessage(),
@@ -159,7 +161,7 @@ class OwnerSyncService
             $decoded = json_decode($jsonHistory, true);
             $history = (is_array($decoded) ? $decoded : []);
         }
-        
+
         foreach ($history as $entry) {
             if (isset($entry['username']) && $entry['username'] === $username) {
                 return json_encode($history, JSON_UNESCAPED_UNICODE);
@@ -172,5 +174,51 @@ class OwnerSyncService
         ];
 
         return json_encode($history, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function syncGoals(Owner $owner): void
+    {
+        if ($owner->goal_description) {
+
+            $currentGoal = Goal::where('owner_id', $owner->id)
+                ->whereNull('deleted_at')
+                ->first();
+
+            if (!$currentGoal) {
+                Goal::create([
+                    'owner_id' => $owner->id,
+                    'description' => $owner->goal_description,
+                    'goal' => $owner->goal_target,
+                    'spent' => $owner->goal_current,
+                    'isEnabled' => $owner->goal_enable,
+                ]);
+            } else {
+
+                if ($currentGoal->description !== $owner->goal_description) {
+                    $currentGoal->delete();
+                    Goal::create([
+                        'owner_id' => $owner->id,
+                        'description' => $owner->goal_description,
+                        'goal' => $owner->goal_target,
+                        'spent' => $owner->goal_current,
+                        'isEnabled' => $owner->goal_enable,
+                    ]);
+                } else {
+                    $currentGoal->update([
+                        'goal' => $owner->goal_target,
+                        'spent' => $owner->goal_current,
+                        'isEnabled' => $owner->goal_enable,
+                    ]);
+                }
+            }
+        } else {
+            $currentGoal = Goal::where('owner_id', $owner->id)
+                ->whereNull('deleted_at')
+                ->get();
+
+            if ($currentGoal->count() >= 1) {
+                $currentGoal->each->delete();
+            }
+        }
     }
 }

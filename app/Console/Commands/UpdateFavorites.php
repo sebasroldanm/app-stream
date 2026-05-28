@@ -34,11 +34,13 @@ class UpdateFavorites extends Command
      */
     public function handle()
     {
-        $favs = Customer::find(1)->getOwnerFavoriteIds()->toArray();
-        $owners = Owner::whereIn('id', $favs)->get();
+        $owners = Owner::favoritedByCustomers(1)
+            ->where('isActive', true)
+            ->where('isBlocked', false)
+            ->get();
 
         Bus::batch(
-            $owners->map(fn($owner) => (new SyncOwner($owner, 'all_not_exception')))->toArray()
+            $owners->map(fn($owner) => (new SyncOwner($owner, 'owner')))->toArray()
         )
             ->onQueue('default')
             ->then(function (Batch $batch) {
@@ -57,9 +59,7 @@ class UpdateFavorites extends Command
                 Cache::forget('online_app');
                 Cache::remember('online_app', 60, function () {
                     return Owner::where('isOnline', true)->count();
-                });
-                Cache::put('Notification', 'Update Favorites', 3600);
-                Cache::put('Status', 'Finalizado', 3600);
+                });    
             })
             ->dispatch();
     }

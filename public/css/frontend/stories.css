@@ -1,0 +1,528 @@
+/* ═══════════════════════════════════════════════════════════════
+   STORIES — CSS
+   Estructura:
+     1. Rail (círculos)
+     2. Modal fullscreen + backdrop
+     3. Card 9:16
+     4. Slides y media
+     5. Header y acciones
+     6. Barras de progreso
+     7. Botones de navegación (slides y usuarios)
+     8. Hint / utils
+     9. Responsive
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── 1. RAIL ──────────────────────────────────────────────────── */
+.stories-rail {
+    /* background-color: #000;
+    padding: 12px 0 12px 12px;
+    border-bottom: 1px solid #2c2c2c; */
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+.stories-rail::-webkit-scrollbar {
+    display: none;
+}
+
+.story-circle-item {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 16px;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+    vertical-align: top;
+    user-select: none;
+}
+
+.story-circle-item:active {
+    transform: scale(0.94);
+}
+
+.circle-ring {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #feda77, #dd2a7b, #8134af);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 6px;
+}
+
+.story-avatar {
+    width: 64px;
+    height: 64px;
+    background-color: #262626;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2.5px solid #000;
+}
+
+.story-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.story-name {
+    font-size: 11px;
+    font-weight: 500;
+    color: #f5f5f5;
+    max-width: 70px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: center;
+}
+
+/* ─── 1.1 SQUARE STORIES (OWNER FEED) ─────────────────────────── */
+.story-square-item {
+    position: relative;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 80%;
+    border-radius: 16px;
+    background-color: #1a1a1a;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: block;
+    margin-bottom: 20px;
+}
+
+.story-square-item:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.story-square-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, transparent 60%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 16px;
+    z-index: 1;
+}
+
+.story-square-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.story-square-label {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.story-count {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 800;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* ─── 2. MODAL FULLSCREEN ──────────────────────────────────────── */
+.stories-fullscreen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.stories-fullscreen.active {
+    display: flex;
+    opacity: 1;
+}
+
+/* Fondo negro detrás del card */
+.stories-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.88);
+    z-index: 0;
+}
+
+/* ─── 3. CARD 9:16 ─────────────────────────────────────────────── */
+/*
+   El card ocupa el alto máximo disponible y calcula su ancho
+   para mantener exactamente 9:16.
+   En pantallas muy anchas se limita a 420px de ancho.
+*/
+.stories-card {
+    position: relative;
+    z-index: 1;
+    width: min(calc(100vh * 9 / 16), 420px, 100vw);
+    height: min(100vh, calc(100vw * 16 / 9));
+    max-height: 100vh;
+    background: #000;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.7);
+    display: flex;
+    flex-direction: column;
+}
+
+/* ─── 4. SLIDES ────────────────────────────────────────────────── */
+.story-custom-container {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.story-custom-wrapper {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    will-change: transform;
+}
+
+.story-custom-slide {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+    overflow: hidden;
+}
+
+/* Media (imagen y video) */
+.story-media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* cover para llenar bien el 9:16 */
+    display: block;
+    background: #000;
+}
+
+/* Story de texto */
+.text-story-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(145deg, #1e1a2f, #0b0817);
+    padding: 110px 48px 32px;
+    text-align: center;
+    color: #fff;
+    box-sizing: border-box;
+}
+
+.dynamic-text {
+    font-weight: 800;
+    line-height: 1.15;
+    max-width: 90%;
+    word-break: break-word;
+    font-size: clamp(1.6rem, 7vw, 2rem);
+    text-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+}
+
+/* ─── 5. HEADER ────────────────────────────────────────────────── */
+.story-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 44px 14px 12px;
+    /* 44px top deja espacio para las barras */
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.55) 0%, transparent 100%);
+    gap: 8px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    /* para que el texto corte correctamente */
+}
+
+.header-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.85);
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.header-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.header-username {
+    color: #fff;
+    font-weight: 600;
+    font-size: 13px;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.header-time {
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 11px;
+    font-weight: 400;
+    margin-top: 1px;
+}
+
+/* Acciones del header (pausa + cerrar) */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.story-btn-icon {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 6px 8px;
+    border-radius: 8px;
+    transition: background 0.15s ease;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+.story-btn-icon:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.story-btn-icon:active {
+    background: rgba(255, 255, 255, 0.22);
+}
+
+/* ─── 6. BARRAS DE PROGRESO ────────────────────────────────────── */
+.progress-bars {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    gap: 4px;
+    z-index: 110;
+}
+
+.progress-segment {
+    flex: 1;
+    height: 2.5px;
+    background: rgba(255, 255, 255, 0.30);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    width: 0%;
+    height: 100%;
+    background: #fff;
+    border-radius: 4px;
+}
+
+/* ─── 7. BOTONES DE NAVEGACIÓN ─────────────────────────────────── */
+
+/* Botones dentro del card (prev/next slide) */
+.story-slide-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 200;
+    background: rgba(0, 0, 0, 0.30);
+    border: none;
+    color: #fff;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.story-slide-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.story-slide-btn:hover {
+    background: rgba(0, 0, 0, 0.55);
+}
+
+.story-slide-btn:active {
+    transform: translateY(-50%) scale(0.92);
+}
+
+.story-slide-btn--prev {
+    left: 10px;
+}
+
+.story-slide-btn--next {
+    right: 10px;
+}
+
+/* Botones de usuario (fuera del card, sobre el backdrop) */
+.story-user-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.10);
+    border: 1.5px solid rgba(255, 255, 255, 0.20);
+    color: #fff;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+.story-user-btn svg {
+    width: 22px;
+    height: 22px;
+}
+
+.story-user-btn:hover {
+    background: rgba(255, 255, 255, 0.22);
+}
+
+.story-user-btn:active {
+    transform: translateY(-50%) scale(0.93);
+}
+
+/* Posición relativa al card: se ubica a ~60px del borde del card */
+.story-user-btn--prev {
+    /* A la izquierda del card */
+    right: calc(50% + min(calc(100vh * 9 / 32), 210px, 50vw) + 14px);
+}
+
+.story-user-btn--next {
+    /* A la derecha del card */
+    left: calc(50% + min(calc(100vh * 9 / 32), 210px, 50vw) + 14px);
+}
+
+/* Ocultar botones de usuario cuando no aplican */
+.story-nav-hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ─── 8. HINT / UTILS ──────────────────────────────────────────── */
+.swipe-hint {
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.5);
+    background: rgba(0, 0, 0, 0.35);
+    padding: 5px 14px;
+    border-radius: 20px;
+    pointer-events: none;
+    z-index: 50;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+/* ─── 9. RESPONSIVE ─────────────────────────────────────────────── */
+@media (max-width: 600px) {
+
+    /* En móvil el card ocupa todo el viewport — sin bordes redondeados */
+    .stories-card {
+        width: 100vw;
+        height: 100dvh;
+        /* dynamic viewport height para móviles */
+        max-height: 100dvh;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    /* Los botones de usuario no tienen espacio fuera del card en móvil */
+    .story-user-btn {
+        display: none;
+    }
+
+    .circle-ring {
+        width: 64px;
+        height: 64px;
+    }
+
+    .story-avatar {
+        width: 58px;
+        height: 58px;
+    }
+
+    .story-name {
+        font-size: 10px;
+    }
+
+    .dynamic-text {
+        font-size: clamp(1.3rem, 9vw, 2.4rem);
+    }
+
+    .story-slide-btn {
+        width: 34px;
+        height: 34px;
+    }
+}
+
+@media (max-width: 380px) {
+    .story-slide-btn {
+        display: none;
+    }
+
+    /* pantallas muy pequeñas — solo botones en header */
+}

@@ -53,25 +53,33 @@
             </div>
             <div class="col-9">{{ $age }}</div>
 
-            <div class="col-3">
-                <h6>{{ __('owner/information/details.body_type') }}</h6>
-            </div>
-            <div class="col-9">{{ __('owner/information/details.body_types.' . $owner->getBodyType()) }}</div>
+            @if ($owner->getBodyType())
+                <div class="col-3">
+                    <h6>{{ __('owner/information/details.body_type') }}</h6>
+                </div>
+                <div class="col-9">{{ __('owner/information/details.body_types.' . $owner->getBodyType()) }}</div>
+            @endif
 
-            <div class="col-3">
-                <h6>{{ __('owner/information/details.eye_color') }}</h6>
-            </div>
-            <div class="col-9">{{ __('owner/information/details.eye_colors.' . $owner->getEyeColor()) }}</div>
+            @if ($owner->getEyeColor())
+                <div class="col-3">
+                    <h6>{{ __('owner/information/details.eye_color') }}</h6>
+                </div>
+                <div class="col-9">{{ __('owner/information/details.eye_colors.' . $owner->getEyeColor()) }}</div>
+            @endif
 
-            <div class="col-3">
-                <h6>{{ __('owner/information/details.hair_color') }}</h6>
-            </div>
-            <div class="col-9">{{ __('owner/information/details.hair_colors.' . $owner->getHairColor()) }}</div>
+            @if ($owner->getHairColor())
+                <div class="col-3">
+                    <h6>{{ __('owner/information/details.hair_color') }}</h6>
+                </div>
+                <div class="col-9">{{ __('owner/information/details.hair_colors.' . $owner->getHairColor()) }}</div>
+            @endif
 
-            <div class="col-3">
-                <h6>{{ __('owner/information/details.ethnicity') }}</h6>
-            </div>
-            <div class="col-9">{{ __('owner/information/details.ethnicities.' . $owner->getEthnicity()) }}</div>
+            @if ($owner->getEthnicity())
+                <div class="col-3">
+                    <h6>{{ __('owner/information/details.ethnicity') }}</h6>
+                </div>
+                <div class="col-9">{{ __('owner/information/details.ethnicities.' . $owner->getEthnicity()) }}</div>
+            @endif
         </div>
         {{-- Personal --}}
 

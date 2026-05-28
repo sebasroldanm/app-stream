@@ -8,6 +8,50 @@ window.Livewire.on("initMasonry", function (data) {
     initFullviewer();
 });
 
+// Re-initialize Bootstrap components on Livewire navigation
+if (!window.bootstrapNavigatedListenerAdded) {
+    document.addEventListener('livewire:navigated', () => {
+        if (typeof bootstrap !== 'undefined') {
+            // Initialize dropdowns
+            const dropdownElementList = document.querySelectorAll('[data-bs-toggle="dropdown"]');
+            dropdownElementList.forEach(dropdownToggleEl => {
+                // Dispose existing instance if any to avoid memory leaks
+                const existingInstance = bootstrap.Dropdown.getInstance(dropdownToggleEl);
+                if (existingInstance) {
+                    existingInstance.dispose();
+                }
+                new bootstrap.Dropdown(dropdownToggleEl);
+            });
+
+            // Initialize tooltips
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+            tooltipTriggerList.forEach(tooltipTriggerEl => {
+                const existingInstance = bootstrap.Tooltip.getInstance(tooltipTriggerEl);
+                if (existingInstance) {
+                    existingInstance.dispose();
+                }
+                new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+
+            // Initialize popovers
+            const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
+            popoverTriggerList.forEach(popoverTriggerEl => {
+                const existingInstance = bootstrap.Popover.getInstance(popoverTriggerEl);
+                if (existingInstance) {
+                    existingInstance.dispose();
+                }
+                new bootstrap.Popover(popoverTriggerEl);
+            });
+        }
+        
+        // Also re-run masonry and fullviewer if needed on navigation
+        if (typeof initFullviewer === 'function') {
+            initFullviewer();
+        }
+    });
+    window.bootstrapNavigatedListenerAdded = true;
+}
+
 // Periodically check for Fullviewer initialization (fallback for dynamic content)
 setInterval(() => {
     initFullviewer();

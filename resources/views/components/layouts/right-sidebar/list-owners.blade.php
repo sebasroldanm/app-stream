@@ -1,4 +1,4 @@
-<div class="media-height p-3" data-scrollbar="init">
+<div class="media-height p-3" data-scrollbar="init" wire:poll.60s.keep-alive.visible>
     @foreach ($owners as $owner)
         <div class="d-flex align-items-center mb-4">
             <div
@@ -14,7 +14,7 @@
                 </a>
                 <p class="mb-0">
                     @if ($owner->isLive)
-                        @if ($owner->show_model)<i class="fa fa-lock" aria-hidden="true"></i>@endif {{ __('sidebar.live') }}
+                        @if ($owner->show_mode)<i class="fa fa-lock" aria-hidden="true"></i>@endif {{ __('sidebar.live') }}
                     @else
                         {{ \Carbon\Carbon::parse($owner->statusChangedAt)->diffForHumans() }}
                     @endif

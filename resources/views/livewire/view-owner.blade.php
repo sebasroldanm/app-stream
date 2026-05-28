@@ -3,17 +3,43 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
+                @if ($owner->isBirthday())
+                    <div id="birthday-alert" class="alert text-white bg-success" role="alert">
+                        <div class="text-center"><i class="ri-cake-2-line"></i> ¡Feliz cumpleaños {{ $owner->name }}!</div>
+                    </div>
+                @endif
                 <div class="card">
                     <div class="card-body profile-page p-0">
                         <div class="profile-header">
+                            @if (in_array($intro->type, ['image', 'avatar']))
+                                <div class="ambient">
+                                    <img src="{{ $intro->url }}" alt="profile-bg" class="img-fluid intro-owner w-100 object-fit-cover">
+                                </div>
+                            @else
+                                @if ($showLive)
+                                    <div class="ambient">
+                                        <img src="{{ $intro->intro_image_url }}" alt="profile-bg" onerror="this.style.display='none';"
+                                            class="img-fluid intro-owner w-100 object-fit-cover">
+                                    </div>
+                                @else
+                                    <video class="ambient" autoplay muted loop>
+                                        <source src="{{ $intro->url }}" type="video/mp4">
+                                    </video>
+                                @endif
+                            @endif
                             <div class="position-relative intro-owner container-overlay">
                                 @if (in_array($intro->type, ['image', 'avatar']))
                                     <img src="{{ $intro->url }}" alt="profile-bg" onerror="this.style.display='none';"
                                         class="rounded img-fluid _overlay @if ($intro->type == 'avatar') blur_avatar @endif fullviewer">
                                 @else
-                                    <video autoplay loop muted class="rounded _overlay">
-                                        <source src="{{ $intro->url }}" type="video/mp4">
-                                    </video>
+                                    @if ($showLive)
+                                        <img src="{{ $intro->intro_image_url }}" alt="profile-bg" onerror="this.style.display='none';"
+                                            class="rounded img-fluid _overlay fullviewer">
+                                    @else
+                                        <video autoplay muted loop class="rounded _overlay">
+                                            <source src="{{ $intro->url }}" type="video/mp4">
+                                        </video>
+                                    @endif
                                 @endif
 
                                 <ul class="header-nav list-inline d-flex flex-wrap justify-end p-0 m-0">
@@ -218,45 +244,41 @@
                                         <a 
                                             href="{{ route('owner.live', ['username' => $owner->username]) }}"
                                             class="nav-link live @if ($showLive) active @endif">
-                                            @if ($owner->show_model)<i class="fa fa-lock" aria-hidden="true"></i>@endif {{ __('owner/tabs.live') }} <div class="live-icon"></div>
+                                            @if ($owner->show_mode)<i class="fa fa-lock" aria-hidden="true"></i>@endif {{ __('owner/tabs.live') }} <div class="live-icon"></div>
                                         </a>
                                     </li>
                                 @endif
 
                                 <li
                                     class="nav-item col-6 @if ($owner->isLive) col-sm-2 @else col-sm-3 @endif p-0">
-                                    <a wire:navigate
+                                    <a
                                         href="{{ route('owner.feed', ['username' => $owner->username]) }}"
-                                        class="nav-link @if ($showFeed) active @endif"
-                                        data-bs-toggle="pill" data-bs-target="#feed" role="button">
+                                        class="nav-link @if ($showFeed) active @endif">
                                         {{ __('owner/tabs.feed') }}
                                     </a>
                                 </li>
 
                                 <li class="nav-item col-6 col-sm-3 p-0">
-                                    <a wire:navigate
+                                    <a
                                         href="{{ route('owner.information', ['username' => $owner->username]) }}"
-                                        class="nav-link @if ($showInformation) active @endif"
-                                        data-bs-toggle="pill" data-bs-target="#infomation" role="button">
+                                        class="nav-link @if ($showInformation) active @endif">
                                         {{ __('owner/tabs.info') }}
                                     </a>
                                 </li>
 
                                 <li
                                     class="nav-item col-6 @if ($owner->isLive) col-sm-2 @else col-sm-3 @endif p-0">
-                                    <a wire:navigate
+                                    <a
                                         href="{{ route('owner.albums', ['username' => $owner->username]) }}"
-                                        class="nav-link @if ($showAlbums) active @endif"
-                                        data-bs-toggle="pill" data-bs-target="#albums" role="button">
+                                        class="nav-link @if ($showAlbums) active @endif">
                                         {{ __('owner/tabs.albums') }}
                                     </a>
                                 </li>
 
                                 <li class="nav-item col-6 col-sm-3 p-0">
-                                    <a wire:navigate
+                                    <a
                                         href="{{ route('owner.videos', ['username' => $owner->username]) }}"
-                                        class="nav-link @if ($showVideos) active @endif"
-                                        data-bs-toggle="pill" data-bs-target="#videos" role="button">
+                                        class="nav-link @if ($showVideos) active @endif">
                                         {{ __('owner/tabs.videos') }}
                                     </a>
                                 </li>

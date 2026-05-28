@@ -45,7 +45,7 @@ class ProcessVideo implements ShouldQueue
         $video->coverUrl = $data['coverUrl'];
         $video->trailerUrl = $data['trailerUrl'];
         $video->videoUrl = isset($data['videoUrl']) ? $data['videoUrl'] : null;
-        $video->data = json_encode($data);
+        $video->data = $data;
         $video->save();
     }
 }

@@ -28,6 +28,10 @@
             <input name="password" type="password" class="form-control mb-0" id="password"
                 placeholder="{{ __('login.password') }}">
         </div>
+        <div class="form-group">
+            <label class="form-label" for="enable_passkey">{{ __('login.enable_passkey') }}</label>
+            <input name="enable_passkey" type="checkbox" class="form-check-input" id="enable_passkey">
+        </div>
         <div class="d-inline-block w-100">
             <div class="form-check d-inline-block mt-2 pt-1">
                 <input type="checkbox" class="form-check-input" id="customCheck1">

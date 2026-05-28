@@ -1,3 +1,7 @@
+.object-fit-cover {
+    object-fit: cover;
+}
+
 video-play-button {
     display: block;
     width: 104px;
@@ -238,7 +242,6 @@ i.online {
 /* Estilos del modal (inicialmente oculto) */
 .modal_vp {
     display: none;
-    /* Oculto por defecto */
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -246,8 +249,8 @@ i.online {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.8);
-    /* Fondo oscuro semitransparente */
+    background-color: #00000066;
+    backdrop-filter: blur(6px);
     justify-content: center;
     align-items: center;
 }
@@ -366,6 +369,18 @@ i.online {
     max-height: 30vh;
     overflow-y: auto;
 }
+.status-live-badge {
+    background-color: #00000082;
+    backdrop-filter: blur(2px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.15s ease-in-out;
+}
+.status-live-badge:hover {
+    background-color: #00000021;
+    backdrop-filter: blur(0);
+} 
 /* Info Viewers */
 
 /* Skeleton Loader */
@@ -387,8 +402,8 @@ i.online {
     border-radius: 4px;
     display: inline-block;
     border: none;
-    color: transparent !important; /* Oculta texto residual */
-    pointer-events: none; /* Evita clics en carga */
+    color: transparent !important;
+    pointer-events: none;
     user-select: none;
 }
 
@@ -400,7 +415,7 @@ i.online {
 /* Utilidades de forma para combinar */
 .s-round { border-radius: 50% !important; }
 .s-w-100 { width: 100%; }
-.s-h-50  { height: 50px; } /* Puedes crear las que necesites */
+.s-h-50  { height: 50px; }
 
 
 .swiper-nav-btn {
@@ -409,7 +424,7 @@ i.online {
     background: white;
     border-radius: 50%;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    color: #50b5ff !important; /* Color principal de SocialV */
+    color: #50b5ff !important;
 }
 
 .swiper-nav-btn::after {
@@ -595,7 +610,7 @@ html[data-theme='dark'] .card-owner-info {
     width: 40px;
     height: 40px;
     margin-top: -20px;
-    z-index: 10;
+    z-index: 15;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -645,6 +660,176 @@ html[data-theme='dark'] .swiper-button-prev-owner-info {
     padding: 20px;
 }
 
+.z-index-5 {
+    z-index: 5;
+}
+
 .z-index-10 {
     z-index: 10;
 }
+
+
+/* Conversations */
+
+.photo-album,
+.photo-mixed,
+.photo-message {
+    max-width: 20vw;
+    max-height: 40vh;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+/* Conversations */
+[x-cloak] { display: none !important; }
+
+/* Intro Video */
+.ambient {
+    position: absolute;
+    top: 160px;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1.2);
+    width: 100%;
+    z-index: 0;
+    filter: blur(60px) brightness(1.2) saturate(1.8);
+    opacity: 0.6;
+    pointer-events: none;
+}
+/* Intro Video */
+
+/* Live Player */
+.live-player-wrapper .status-text {
+    font-size: 0.75rem;
+}
+
+.live-player-wrapper .transmission-info {
+    font-size: 0.7rem;
+}
+
+.live-player-wrapper .player-logs {
+    height: 120px;
+    overflow-y: auto;
+}
+
+.live-player-wrapper .logs-title {
+    font-size: 0.75rem;
+}
+
+.live-player-wrapper .log-item {
+    font-size: 0.7rem;
+    line-height: 1.2;
+}
+
+.live-player-wrapper .no-logs {
+    font-size: 0.7rem;
+}
+
+.plyr-video {
+    aspect-ratio: 16 / 9 !important;
+}
+
+.player-logs::-webkit-scrollbar {
+    width: 4px;
+}
+
+.player-logs::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 4px;
+}
+
+.live-player-wrapper .plyr {
+    --plyr-color-main: #fa377b;
+}
+
+.live-player-wrapper .plyr video {
+    object-fit: contain;
+    background: transparent;
+}
+
+.live-player-wrapper .plyr__poster {
+    background-size: contain !important;
+    background-color: transparent !important;
+    background-position: center !important;
+}
+
+.live-player-wrapper .plyr__poster::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: inherit;
+    background-size: cover;
+    background-position: center;
+    filter: blur(15px) brightness(0.5);
+    z-index: -1;
+}
+
+/* New Player Template Styles */
+
+.player-poster-blur {
+    position: absolute;
+    top: -5%;
+    left: -5%;
+    width: 110%;
+    height: 110%;
+    background-size: cover;
+    background-position: center;
+    filter: blur(25px) brightness(0.45);
+    z-index: 0;
+    transition: background-image 0.5s ease-in-out;
+}
+
+.player-state-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    padding: 2rem;
+}
+
+.pulse-icon {
+    width: 10px;
+    height: 10px;
+    background: currentColor;
+    border-radius: 50%;
+    position: relative;
+}
+
+.pulse-icon::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: currentColor;
+    border-radius: 50%;
+    animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+@keyframes pulse-ring {
+    0% { transform: scale(.33); }
+    80%, 100% { opacity: 0; }
+}
+
+/* Transparencia para mostrar el blur detrás del video */
+.live-player-wrapper .plyr,
+.live-player-wrapper .plyr__video-wrapper,
+.live-player-wrapper .plyr video {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+.live-player-wrapper .plyr__poster {
+    background-color: transparent !important;
+}
+

@@ -18,16 +18,22 @@
                     <div class="swiper-wrapper">
                         @foreach ($related->models as $item)
                             <div class="swiper-slide">
-                                <x-ownerInfoCard 
-                                    :isFav="in_array($item->id, $favs)" 
-                                    :primaryImage="$item->previewUrlThumbSmall"
-                                    :secondaryImage="'https://img.doppiocdn.net/thumbs/' . $item->verifiedSnapshotTimestamp . '/' . $item->id"
-                                    :ternaryImage="'https://img.doppiocdn.net/thumbs/' . $item->popularSnapshotTimestamp . '/' . $item->id"
+                                <x-ownerInfoCard
+                                    :isFav="in_array($item->id, $favs)"
+                                    :primaryImage="(isset($item->verifiedSnapshotTimestamp) && $item->verifiedSnapshotTimestamp) ? 'https://img.doppiocdn.net/thumbs/' . $item->verifiedSnapshotTimestamp . '/' . $item->id : null"
+                                    :secondaryImage="$item->previewUrlThumbSmall"
+                                    :ternaryImage="(isset($item->popularSnapshotTimestamp) && $item->popularSnapshotTimestamp) ? 'https://img.doppiocdn.net/thumbs/' . $item->popularSnapshotTimestamp . '/' . $item->id : null"
                                     :isNew="$item->isNew"
                                     :isMobile="$item->isMobile"
                                     :viewersCount="$item->viewersCount"
                                     :username="$item->username"
                                     :idOwner="$item->id"
+                                    :settings="[
+                                        'autoplay' => false,
+                                        'allowTouchMove' => false,
+                                        'simulateTouch' => false,
+                                    ]"
+                                    :status="$item->status"
                                 />
                             </div>
                         @endforeach

@@ -3,6 +3,7 @@
 return [
     'personal' => 'Personal',
     'position' => 'Posición :position',
+    'related_count' => 'Cuentas Relacionadas (:count)',
     'id' => 'ID',
     'name' => 'Nombre',
     'gender' => 'Género',
@@ -49,6 +50,7 @@ return [
         'hairColorBlack' => 'Negro',
         'hairColorRed' => 'Rojo',
         'hairColorColorful' => 'Colorido',
+        'hairColorOther' => 'Otro',
     ],
     'ethnicity' => 'Etnia',
     'ethnicities' => [

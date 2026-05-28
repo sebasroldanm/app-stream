@@ -15,25 +15,38 @@
             <div class="row">
                 @if ($data !== false)
                     @foreach ($owners as $owner)
-                        <div class="col-3 col-sm-2">
+                        <div class="col-3 col-sm-2 my-1">
                             <x-ownerInfoCard 
                                 :isFav="in_array($owner->id, $favs)" 
-                                :primaryImage="$owner->previewUrlThumbSmall"
-                                :secondaryImage="'https://img.doppiocdn.net/thumbs/' . $owner->verifiedSnapshotTimestamp . '/' . $owner->id"
+                                :primaryImage="'https://img.doppiocdn.net/thumbs/' . $owner->verifiedSnapshotTimestamp . '/' . $owner->id"
+                                :secondaryImage="$owner->previewUrlThumbSmall"
                                 :ternaryImage="'https://img.doppiocdn.net/thumbs/' . $owner->popularSnapshotTimestamp . '/' . $owner->id"
                                 :isNew="$owner->isNew"
                                 :isMobile="$owner->isMobile"
                                 :viewersCount="$owner->viewersCount"
                                 :username="$owner->username"
+                                :isGames="$owner->isLovense"
+                                :gender="$owner->gender"
                                 :idOwner="$owner->id"
                                 :country="$this->flagCountry($owner->country)"
+                                :settings="[
+                                    'autoplay' => false,
+                                    'allowTouchMove' => true,
+                                    'simulateTouch' => true,
+                                ]"
                             />
                         </div>
                     @endforeach
                     <div class="col-12">
                         @if (!$endResults)
-                            <button type="button" wire:click="nextPage"
-                                class="btn btn-soft-primary mb-1">Siguiente</button>
+                            <div x-intersect="$wire.nextPage()" class="d-flex justify-content-center py-3">
+                                <div wire:loading wire:target="nextPage" class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Cargando...</span>
+                                </div>
+                                <div wire:loading.remove wire:target="nextPage" class="spinner-border text-secondary opacity-25" role="status">
+                                    <span class="visually-hidden">Cargando más...</span>
+                                </div>
+                            </div>
                         @endif
                         Saltados: {{ $offset }} del limite {{ $limit }} y {{ count($data->models) }} en
                         total.

@@ -2,7 +2,7 @@
     <div class="d-flex justify-content-between">
         @php
             $classIcon = '';
-            if ($tagLive && $feed->owner->isOnline) {
+            if ($tagLive && $feed->owner->isLive) {
                 $classIcon = 'iq-profile-avatar status-live';
             }
         @endphp

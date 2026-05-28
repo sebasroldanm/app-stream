@@ -17,9 +17,13 @@ class Listing extends Component
 
     public function render()
     {
+        $this->dispatch('init-swiper');
+
+        $favorites = $this->getFavorites();
+
         return view('livewire.favorites.listing', [
-            'favorites' => $this->getFavorites(),
-            'favs' => $this->getFavorites()->pluck('id')->toArray()
+            'favorites' => $favorites,
+            'favs' => $favorites->pluck('id')->toArray()
         ]);
     }
 

@@ -18,8 +18,8 @@
                         <div class="col-3 col-sm-2">
                             <x-ownerInfoCard 
                                 :isFav="in_array($owner->id, $favs)" 
-                                :primaryImage="$owner->previewUrlThumbSmall"
-                                :secondaryImage="'https://img.doppiocdn.net/thumbs/' . $owner->verifiedSnapshotTimestamp . '/' . $owner->id"
+                                :primaryImage="'https://img.doppiocdn.net/thumbs/' . $owner->verifiedSnapshotTimestamp . '/' . $owner->id"
+                                :secondaryImage="$owner->previewUrlThumbSmall"
                                 :ternaryImage="'https://img.doppiocdn.net/thumbs/' . $owner->popularSnapshotTimestamp . '/' . $owner->id"
                                 :isNew="$owner->isNew"
                                 :isMobile="$owner->isMobile"
@@ -27,6 +27,11 @@
                                 :username="$owner->username"
                                 :idOwner="$owner->id"
                                 :country="$this->flagCountry($owner->country)"
+                                :settings="[
+                                    'autoplay' => false,
+                                    'allowTouchMove' => true,
+                                    'simulateTouch' => true,
+                                ]"
                             />
                         </div>
                     @endforeach

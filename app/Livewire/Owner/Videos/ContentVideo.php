@@ -16,7 +16,7 @@ class ContentVideo extends Component
 
     public function render()
     {
-        $this->dispatch('initVideos');
+        // dd($this->video, $this->video->data);
         $duration = $this->stringDurationTime($this->video->duration);
         return view('livewire.owner.videos.content-video', [
             'duration' => $duration
