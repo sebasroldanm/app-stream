@@ -41,6 +41,7 @@
                                     <ul class="iq-chat-ui nav flex-column nav-pills">
                                         @foreach ($conversationsData->conversations as $conv)
                                             @php
+                                                $owner = $conv->owner;
                                                 $latestMsg = $conv->latestMessage;
                                                 $avatar = $owner->pic_profile;
                                                 $username = $owner->username;

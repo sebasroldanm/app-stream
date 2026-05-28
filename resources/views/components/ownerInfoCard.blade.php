@@ -110,6 +110,12 @@
                             </span>
                         @break
 
+                        @case('virtualPrivate')
+                            <span class="badge bg-success text-white"><i class="ri-group-line"></i>
+                                <p class="mb-0 mt-1">{{ __('components/ownerInfoCard.virtualPrivate') }}</p>
+                            </span>
+                        @break
+
                         @case('blocked')
                             <span class="badge bg-danger text-dark mt-1 pt-1"><i class="ri-eye-off-fill"></i>
                                 <p class="mb-0 mt-1">{{ __('components/ownerInfoCard.blocked') }}</p>
