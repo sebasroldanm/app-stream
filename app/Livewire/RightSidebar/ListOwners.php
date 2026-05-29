@@ -47,7 +47,7 @@ class ListOwners extends Component
 
         return Cache::remember(
             $this->getCacheKey($customerId),
-            now()->addSeconds(20),
+            now()->addSeconds(60),
             fn() => $this->loadOwners($customerId)
         );
     }
