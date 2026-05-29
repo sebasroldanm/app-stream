@@ -660,6 +660,10 @@ html[data-theme='dark'] .swiper-button-prev-owner-info {
     padding: 20px;
 }
 
+.z-index-5 {
+    z-index: 5;
+}
+
 .z-index-10 {
     z-index: 10;
 }

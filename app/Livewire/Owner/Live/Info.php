@@ -16,11 +16,13 @@ class Info extends Component
 
     public Owner $owner;
 
-    public $viewers = [];
+    public object $viewers;
 
     public $percent = 0;
 
-    public $lastState = null;
+    public $lastState = [];
+
+    public $views_count = 0;
 
     public function placeholder()
     {
@@ -36,7 +38,9 @@ class Info extends Component
         // Detectar cambios de estado
         $currentState = [
             'isLive' => $this->owner->isLive,
+            'isOnline' => $this->owner->isOnline,
             'showMode' => $this->owner->show_mode,
+            'snapshot' => $this->owner->snapshot_timestamp,
         ];
 
         if ($this->lastState !== null && $this->lastState !== $currentState) {
@@ -46,15 +50,30 @@ class Info extends Component
 
         $this->viewers = $this->updateViewers();
 
-        if (isset($this->owner->data->cam->goal->goal) && $this->owner->data->cam->goal->goal > 0) {
-            $percent = ($this->owner->data->cam->goal->spent * 100) / $this->owner->data->cam->goal->goal;
-            $this->percent = (round($percent) > 100) ? 100 : round($percent, 1);
+        $this->views_count = $this->viewers->guests + $this->viewers->spies + $this->viewers->invisibles + $this->viewers->greens + $this->viewers->golds + $this->viewers->regulars;
+
+        $this->percent = $this->owner->latestGoal?->getPercentage() ?? 0;
+
+        if ($this->owner->isLive) {
+            if ($this->owner->show_mode == null) {
+                $state = "Live";
+            } else {
+                $state = $this->owner->show_mode;
+            }
+            $type = 'badge border border-danger text-danger text-bold';
+        } else if ($this->owner->isOnline) {
+            $state = 'Online';
+            $type = 'badge border border-success text-success text-bold';
+        } else {
+            $state = 'Offline';
+            $type = 'badge border border-secondary text-secondary text-bold';
         }
 
-        // Implementar
-        // https://design.spiderbees.com/bootstrap5/html-dark/chat.html
+        $historyGoals = $this->owner->latestGoal?->historyWithoutSpent;
 
-        return view('livewire.owner.live.info');
+        // dd($historyGoals);
+
+        return view('livewire.owner.live.info', compact('state', 'type', 'historyGoals'));
     }
 
     private function updateViewers()

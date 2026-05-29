@@ -10,4 +10,5 @@ return [
     'not_available' => 'No Disponible',
     'close_menu' => 'Cerrar Menú',
     'post-management' => 'Gestión de Post',
+    'conversations' => 'Conversaciones',
 ];

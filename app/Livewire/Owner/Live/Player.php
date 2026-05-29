@@ -17,25 +17,40 @@ class Player extends Component
     public bool $canExpandLayout = false;
     public bool $showExpandButton = true;
     public bool $showLogs = true;
+    
+    // Status properties for reactivity
+    public bool $isLive = false;
+    public bool $isOnline = false;
+    public $inShow = false;
+    public string $statusChangedAt = '';
+    public string $offlineStatusUpdatedAt = '';
+    public string $url = '';
+    public string $poster = '';
 
     public function render()
     {
-        $url = env("URL_HLS") . "/" . $this->owner->id . "/master/" . $this->owner->id . ".m3u8";
+        $this->url = trim(env("URL_HLS") . "/" . $this->owner->id . "/master/" . $this->owner->id . ".m3u8");
 
         $height = $this->owner->ownerCamBroadcastConfigHeight;
         $width = $this->owner->ownerCamBroadcastConfigWidth;
-        $poster = $this->getPoster($this->owner);
+        $this->poster = $this->getPoster($this->owner);
+        
+        $this->isLive = (bool) $this->owner->isLive;
+        $this->isOnline = (bool) $this->owner->isOnline;
+        $this->statusChangedAt = $this->owner->statusChangedAt?->diffForHumans() ?? '';
+        $this->offlineStatusUpdatedAt = $this->owner->offlineStatusUpdatedAt?->diffForHumans() ?? '';
+        $this->inShow = $this->owner->show_mode;
 
         return view('livewire.owner.live.player', [
-            'url' => trim($url),
-            'poster' => $poster,
+            'url' => $this->url,
+            'poster' => $this->poster,
             'height' => $height,
             'width' => $width,
-            'isLive' => $this->owner->isLive,
-            'isOnline' => $this->owner->isOnline,
-            'statusChangedAt' => $this->owner->statusChangedAt?->diffForHumans() ?? '',
-            'offlineStatusUpdatedAt' => $this->owner->offlineStatusUpdatedAt?->diffForHumans() ?? '',
-            'inShow' => $this->owner->show_mode,
+            'isLive' => $this->isLive,
+            'isOnline' => $this->isOnline,
+            'statusChangedAt' => $this->statusChangedAt,
+            'offlineStatusUpdatedAt' => $this->offlineStatusUpdatedAt,
+            'inShow' => $this->inShow,
         ]);
     }
 

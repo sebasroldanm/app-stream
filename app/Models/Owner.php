@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class Owner extends Model
 {
     use HasFactory, OwnerProp;
-    
+
     protected $fillable = [
         'name',
         'username',
@@ -145,6 +145,21 @@ class Owner extends Model
         // If we want the OWNERS, it's harder.
         // Let's keep `relations` as the hasMany to the pivot-like model.
         // And `activeGroup` to get the group if we assume 1.
+    }
+
+    public function goals()
+    {
+        return $this->hasMany(Goal::class);
+    }
+
+    public function latestGoal()
+    {
+        return $this->hasOne(Goal::class)->latestOfMany();
+    }
+
+    public function superChats()
+    {
+        return $this->hasMany(SuperChat::class);
     }
 
     public function getRelationGroupAttribute()
@@ -308,6 +323,11 @@ class Owner extends Model
         return $this->avatar;
     }
 
+    public function getWentIdleAtAttribute()
+    {
+        return $this->data?->user?->user?->wentIdleAt ?? null;
+    }
+
     public function getOwnerCamBroadcastConfigFpsAttribute()
     {
         return $this->data?->cam?->broadcastConfig?->flashFps ?? null;
@@ -336,12 +356,21 @@ class Owner extends Model
         return "16:9";
     }
 
+    public function getSnapshotTimestampAttribute()
+    {
+        return $this->data?->user?->user?->snapshotTimestamp ?? null;
+    }
+
     public function getShowModeAttribute()
     {
         return $this->data?->cam?->show?->mode ?? false;
     }
 
-    public function getShowModelOrStatusAttribute()
+    /**
+     * Get show mode or status owner
+     * @return string|null
+     */
+    public function getGeneralConditionAttribute()
     {
         $showMode = $this->getShowModeAttribute();
         if ($showMode) {
@@ -364,5 +393,42 @@ class Owner extends Model
             return $this->birthDate->format('m-d') === date('m-d');
         }
         return false;
+    }
+
+    public function getGoalDescriptionAttribute(): ?string
+    {
+        if ($this->data?->cam?->goal) {
+            return $this->data->cam->goal->description;
+        }
+        return null;
+    }
+
+    public function getGoalTargetAttribute(): ?int
+    {
+        if ($this->data?->cam?->goal) {
+            return $this->data->cam->goal->goal;
+        }
+        return null;
+    }
+
+    public function getGoalCurrentAttribute(): ?int
+    {
+        if ($this->data?->cam?->goal) {
+            return $this->data->cam->goal->spent;
+        }
+        return null;
+    }
+
+    public function getGoalEnableAttribute(): bool
+    {
+        if ($this->data?->cam?->goal) {
+            return (bool) $this->data->cam->goal->isEnabled;
+        }
+        return false;
+    }
+
+    public function getCamTopicAttribute(): ?string
+    {
+        return $this->data?->cam?->topic ?? null;
     }
 }

@@ -9,14 +9,23 @@ document.addEventListener("alpine:init", () => {
         logsOpen: false,
         expanded: false,
         config: config,
+        gracePeriodTimeout: null,
 
         init() {
             // Watch para detectar cambios en la URL (cuando Livewire refresca el Owner)
             this.$watch('config.url', (newUrl, oldUrl) => {
                 if (newUrl !== oldUrl && !this.config.inShow && this.config.isLive) {
-                    this.addLog("La URL ha cambiado, reiniciando reproductor...");
-                    this.destroy();
-                    this.initPlayer();
+                    this.addLog("La URL ha cambiado, actualizando fuente...");
+                    if (this.hls) {
+                        this.hls.loadSource(newUrl);
+                        this.hls.startLoad();
+                    } else if (this.player && this.$refs.video && this.$refs.video.canPlayType("application/vnd.apple.mpegurl")) {
+                        this.$refs.video.src = newUrl;
+                        if (this.config.autoplay) this.player.play();
+                    } else {
+                        this.destroy();
+                        this.initPlayer();
+                    }
                 }
             });
 
@@ -36,11 +45,25 @@ document.addEventListener("alpine:init", () => {
             // Watch para detectar cambios en el estado Live
             this.$watch('config.isLive', (isLive) => {
                 if (isLive && !this.config.inShow) {
-                    this.addLog("Iniciando transmisión, cargando reproductor...");
-                    this.initPlayer();
+                    if (this.gracePeriodTimeout) {
+                        clearTimeout(this.gracePeriodTimeout);
+                        this.gracePeriodTimeout = null;
+                        this.addLog("Transmisión recuperada en tiempo de gracia.");
+                    }
+                    if (!this.player) {
+                        this.addLog("Iniciando transmisión, cargando reproductor...");
+                        this.initPlayer();
+                    }
                 } else if (!isLive) {
-                    this.addLog("Transmisión finalizada, deteniendo reproductor...");
-                    this.destroy();
+                    if (!this.gracePeriodTimeout && this.player) {
+                        this.addLog("Transmisión inestable. Esperando tiempo de gracia (60s)...");
+                        this.gracePeriodTimeout = setTimeout(() => {
+                            this.addLog("Transmisión finalizada, deteniendo reproductor...");
+                            this.destroy();
+                        }, 60000);
+                    } else if (!this.player) {
+                        // Si ya está destruido o no se ha creado, no hacemos nada
+                    }
                 }
             });
 
@@ -141,7 +164,13 @@ document.addEventListener("alpine:init", () => {
                                 this.addLog(
                                     `Error fatal irrecuperable - URL: ${this.config.url}`,
                                 );
-                                this.hls.destroy();
+                                if (this.hls) {
+                                    this.hls.destroy();
+                                    this.hls = null;
+                                }
+                                if (this.$wire) {
+                                    this.$wire.refreshOwner();
+                                }
                                 break;
                         }
                     }
@@ -251,8 +280,18 @@ document.addEventListener("alpine:init", () => {
         },
 
         destroy() {
-            if (this.hls) this.hls.destroy();
-            if (this.player) this.player.destroy();
+            if (this.gracePeriodTimeout) {
+                clearTimeout(this.gracePeriodTimeout);
+                this.gracePeriodTimeout = null;
+            }
+            if (this.hls) {
+                this.hls.destroy();
+                this.hls = null;
+            }
+            if (this.player) {
+                this.player.destroy();
+                this.player = null;
+            }
         },
     }));
 });

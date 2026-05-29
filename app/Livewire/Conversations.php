@@ -2,10 +2,8 @@
 
 namespace App\Livewire;
 
-use App\Models\Owner;
-use Carbon\Carbon;
-use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Cache;
+use App\Models\Conversation;
+use App\Models\Message;
 use Livewire\Component;
 
 class Conversations extends Component
@@ -33,14 +31,15 @@ class Conversations extends Component
     {
         $this->selectedConversation = $idMessage;
         $data = $this->getOwnerMessages($idMessage);
-        
+
         // Reverse messages to show them from oldest to newest (bottom up)
         if (isset($data->messages)) {
-            $data->messages = array_reverse($data->messages);
+            $messages = is_array($data->messages) ? $data->messages : $data->messages->all();
+            $data->messages = array_reverse($messages);
         }
-        
+
         $this->messages = $data;
-        
+
         $this->dispatch('scroll-to-bottom');
     }
 
@@ -58,9 +57,15 @@ class Conversations extends Component
 
         if (isset($newData->messages) && count($newData->messages) > 0) {
             // Reverse new messages (they come DESC) and prepend them
-            $reversedNewMessages = array_reverse($newData->messages);
-            $this->messages->messages = array_merge($reversedNewMessages, $this->messages->messages);
-            
+            $newMessages = is_array($newData->messages) ? $newData->messages : $newData->messages->all();
+            $reversedNewMessages = array_reverse($newMessages);
+
+            $currentMessages = is_array($this->messages->messages)
+                ? $this->messages->messages
+                : $this->messages->messages->all();
+
+            $this->messages->messages = array_merge($reversedNewMessages, $currentMessages);
+
             $this->dispatch('messages-prepended', count($newData->messages));
         }
     }
@@ -68,104 +73,57 @@ class Conversations extends Component
     public function loadMoreConversations()
     {
         $this->conversationOffset += $this->conversationLimit;
-        
+
         $newData = $this->getConversations($this->conversationOffset, $this->conversationLimit);
-        
+
         if (isset($newData->conversations) && count($newData->conversations) > 0) {
+            $currentConversations = is_array($this->conversationsData->conversations)
+                ? $this->conversationsData->conversations
+                : $this->conversationsData->conversations->all();
+
+            $newConversations = is_array($newData->conversations)
+                ? $newData->conversations
+                : $newData->conversations->all();
+
             $this->conversationsData->conversations = array_merge(
-                $this->conversationsData->conversations, 
-                $newData->conversations
+                $currentConversations,
+                $newConversations
             );
         }
     }
 
     public function getConversations($offset = 0, $limit = 10)
     {
-        $cookieClient = env('COOKIE_CLIENT');
-        $cacheKey = 'conversations_user_' . $cookieClient . '_' . $offset . '_' . $limit;
+        $conversationsList = Conversation::with(['owner', 'latestMessage'])
+            ->orderBy('lastMessage', 'desc')
+            ->skip($offset)
+            ->take($limit)
+            ->get();
 
-        $conversations = Cache::remember($cacheKey, now()->addHours(2), function () use ($cookieClient, $offset, $limit) {
-
-            $client = new Client([
-                'verify' => false,
-                'timeout' => 15,
-            ]);
-
-            $url = env('API_SERVER') . '/api/front/v2/users/' . $cookieClient . '/conversations';
-            $query = [
-                'offset' => $offset,
-                'limit' => $limit,
-                'uniq'   => 'f0h9ck6ub3vra2t1',
-            ];
-
-            $response = $client->get($url, [
-                'headers' => [
-                    'accept'        => 'application/json, text/plain, */*',
-                    'user-agent'    => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-                    'front-version' => '11.4.72',
-                    'cookie'        => env('COOKIE_SERVER'),
-                ],
-                'query' => $query
-            ]);
-
-            $data = json_decode($response->getBody()->getContents());
-
-            foreach ($data->conversations as $conv) {
-                $owner = Owner::find($conv->counterpartId);
-
-                if (!$owner) {
-                    $conv->message->avatar = "https://ui-avatars.com/api/?name=US&background=fff&color=fa377b";
-                    $conv->message->username = "User";
-                } else {
-                    $conv->message->avatar = $owner->pic_profile;
-                    $conv->message->username = $owner->username;
-                    $conv->message->isLive = $owner->isLive;
-                }
-                $conv->message->created_at = Carbon::parse($conv->message->createdAt)->diffForHumans();
-            }
-
-            return $data;
-        });
-
-        return $conversations;
+        return (object)[
+            'conversations' => $conversationsList,
+            'conversationsCount' => Conversation::count()
+        ];
     }
 
     public function getOwnerMessages($idMessage, $beforeIdMessage = null)
     {
-        $cookieClient = env('COOKIE_CLIENT');
-        $cacheKey = 'messages_' . $cookieClient . '_' . $idMessage . '_' . $beforeIdMessage;
+        $conversation = Conversation::with(['owner'])->find($idMessage);
 
-        $messages = Cache::remember($cacheKey, now()->addHours(2), function () use ($cookieClient, $idMessage, $beforeIdMessage) {
+        $messagesQuery = Message::where('conversation_id', $idMessage)
+            ->with(['media.photos', 'media.videos']);
 
-            $client = new Client([
-                'verify' => false,
-                'timeout' => 15,
-            ]);
+        if ($beforeIdMessage) {
+            $messagesQuery->where('id', '<', $beforeIdMessage);
+        }
 
-            $url = env('API_SERVER') . '/api/front/v2/users/' . $cookieClient . '/conversations' . '/' . $idMessage;
-            $query = [
-                'offset' => 0,
-                'limit' => 10,
-                'uniq'   => 'f0h9ck6ub3vra2t1',
-            ];
+        $messagesList = $messagesQuery->orderBy('createdAt', 'desc')
+            ->limit(10)
+            ->get();
 
-            if ($beforeIdMessage) {
-                $query['beforeMassMessageId'] = $beforeIdMessage;
-            }
-
-            $response = $client->get($url, [
-                'headers' => [
-                    'accept'        => 'application/json, text/plain, */*',
-                    'user-agent'    => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-                    'front-version' => '11.4.72',
-                    'cookie' => env('COOKIE_SERVER'),
-                ],
-                'query' => $query
-            ]);
-
-            return json_decode($response->getBody()->getContents());
-        });
-
-        return $messages;
+        return (object)[
+            'conversation' => $conversation,
+            'messages' => $messagesList
+        ];
     }
 }

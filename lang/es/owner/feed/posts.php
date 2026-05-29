@@ -6,7 +6,6 @@ return [
     'photo_video' => 'Foto/Video',
     'mention_friend' => 'Menciona un amigo',
     'status_activity' => 'Estado/Actividad',
-    'mention_friend' => 'Menciona un amigo',
     'feeling_activity' => 'Sentimiento/Actividad',
     'location' => 'Ubicación',
     'live_video' => 'Video en Vivo',

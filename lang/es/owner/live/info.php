@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'goal' => 'Meta',
-    'no_goal' => 'Sin meta establecida',
+    'goal' => 'Objetivo',
+    'no_goal' => 'Sin objetivo establecido',
     'topic' => 'Tema',
     'status' => 'Estado',
     'viewers' => 'Espectadores',
@@ -10,4 +10,12 @@ return [
     'no_king' => 'Sin rey establecido',
     'viewing_now' => 'Viendo ahora',
     'visitors' => 'Visitantes',
+    'history_goals' => 'Actualizaciones del objetivo',
+    'no_history_goals' => 'No hay historial disponible.',
+    'goals' => [
+        'created' => 'Creado hace :time',
+        'updated' => [
+            'goal' => 'El objetivo cambió de :old a :new hace :time',
+        ]
+    ]
 ];
