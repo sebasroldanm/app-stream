@@ -36,7 +36,7 @@
                                         <img src="{{ $intro->intro_image_url }}" alt="profile-bg" onerror="this.style.display='none';"
                                             class="rounded img-fluid _overlay fullviewer">
                                     @else
-                                        <video autoplay muted loop class="rounded _overlay">
+                                        <video id="fullviewer-video" autoplay muted loop class="rounded _overlay">
                                             <source src="{{ $intro->url }}" type="video/mp4">
                                         </video>
                                     @endif

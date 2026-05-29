@@ -30,9 +30,6 @@ class NewCO extends Component
         $this->loadData();
 
         $favs = Customer::find(Auth::guard('customer')->user()->id)->getOwnerFavoriteIds()->toArray();
-
-        $this->dispatch('init-swiper');
-
         return view('livewire.explore.new-c-o', [
             'favs' => $favs
         ]);

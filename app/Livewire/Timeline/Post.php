@@ -24,10 +24,6 @@ class Post extends Component
     {
         $feeds = $this->getFeeds();
 
-        $this->dispatch('initFullviewer');
-
-        $this->dispatch('initVideos');
-
         return view('livewire.timeline.post', [
             'feeds' => $feeds
         ]);

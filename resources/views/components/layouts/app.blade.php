@@ -51,11 +51,44 @@
         <livewire:right-sidebar />
         <livewire:notice-age />
 
-        <div id="viewer_photo" class="modal_vp">
-            <span class="cerrar">&times;</span>
-            <img id="imageModal" class="modal_vp-content" data-img-prev="" data-img-next="">
-            <div class="modal_vp-footer">
-                <div id="thumbs" class="modal_vp-thumbs"></div>
+        <div id="viewer_photo" 
+             class="modal_vp" 
+             x-data 
+             x-cloak
+             @click.self="$store.viewer.close()"
+             @keydown.escape.window="$store.viewer.close()"
+             :class="{ 'active': $store.viewer.active }">
+            <span class="cerrar" @click="$store.viewer.close()">&times;</span>
+            
+            <!-- Mostrar Imagen -->
+            <img id="imageModal" 
+                 class="modal_vp-content" 
+                 x-show="$store.viewer.type === 'image'"
+                 :src="$store.viewer.src" 
+                 alt="Preview image">
+                 
+            <!-- Mostrar Video -->
+            <template x-if="$store.viewer.type === 'video'">
+                <video id="videoModal" 
+                       class="modal_vp-content" 
+                       controls 
+                       autoplay 
+                       playsinline 
+                       x-init="$el.load()">
+                    <source :src="$store.viewer.videoSrc">
+                </video>
+            </template>
+            
+            <!-- Miniaturas (Footer) -->
+            <div class="modal_vp-footer" x-show="$store.viewer.type === 'image' && $store.viewer.thumbs.length > 1">
+                <div id="thumbs" class="modal_vp-thumbs">
+                    <template x-for="(thumb, index) in $store.viewer.thumbs" :key="index">
+                        <img class="thumb-item" 
+                             :class="{ 'active': $store.viewer.currentIndex === index }" 
+                             :src="thumb"
+                             @click="$store.viewer.selectThumb(index)">
+                    </template>
+                </div>
             </div>
         </div>
 
@@ -101,10 +134,8 @@
     @php $version = date('YmdHi'); @endphp
     <script src="{{ asset('js/frontend/search.js') }}?v={{ $version }}" data-navigate-once></script>
     <script src="{{ asset('js/frontend/fullviewer.js') }}?v={{ $version }}" data-navigate-once></script>
-    <script src="{{ asset('js/frontend/swiper-init.js') }}?v={{ $version }}" data-navigate-once></script>
     <script src="{{ asset('js/frontend/layout-utils.js') }}?v={{ $version }}" data-navigate-once></script>
     <script src="{{ asset('js/frontend/custom.js') }}?v={{ $version }}" data-navigate-once></script>
-    <script src="{{ asset('js/frontend/video.js') }}?v={{ $version }}" data-navigate-once></script>
     <script src="{{ asset('js/frontend/video-component.js') }}?v={{ $version }}" data-navigate-once></script>
     <script src="{{ asset('js/frontend/live.js') }}?v={{ $version }}" data-navigate-once></script>
     <script src="{{ asset('js/frontend/celebrations/birthday.js') }}?v={{ $version }}" data-navigate-once></script>

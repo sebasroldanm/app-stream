@@ -270,7 +270,6 @@ i.online {
     display: block;
     margin: auto;
     position: relative;
-    transform: translateY(-50%);
     object-fit: cover;
     width: auto;
     max-height: 90%;

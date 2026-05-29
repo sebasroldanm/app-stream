@@ -5,7 +5,6 @@
 // Global event listeners for Livewire
 window.Livewire.on("initMasonry", function (data) {
     initializeMasonry();
-    initFullviewer();
 });
 
 // Re-initialize Bootstrap components on Livewire navigation
@@ -44,24 +43,16 @@ if (!window.bootstrapNavigatedListenerAdded) {
             });
         }
         
-        // Also re-run masonry and fullviewer if needed on navigation
-        if (typeof initFullviewer === 'function') {
-            initFullviewer();
+        // Also re-run masonry if needed on navigation
+        if (typeof initializeMasonry === 'function') {
+            initializeMasonry();
         }
     });
     window.bootstrapNavigatedListenerAdded = true;
 }
 
-// Periodically check for Fullviewer initialization (fallback for dynamic content)
-setInterval(() => {
-    initFullviewer();
-}, 1000);
-
-window.addEventListener("initFullviewer", () => {
-    setTimeout(() => {
-        initFullviewer();
-    }, 500);
-});
+// Note: Fullviewer initialization is now handled dynamically by Alpine.js in fullviewer.js using global click event delegation.
+// This completely avoids CPU-intensive setInterval active timers.
 
 window.addEventListener("themeApp", (event) => {
     document.documentElement.setAttribute("data-theme", event.detail.theme);

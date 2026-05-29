@@ -16,10 +16,7 @@ class Listing extends Component
     }
 
     public function render()
-    {
-        $this->dispatch('init-swiper');
-
-        $favorites = $this->getFavorites();
+    {        $favorites = $this->getFavorites();
 
         return view('livewire.favorites.listing', [
             'favorites' => $favorites,

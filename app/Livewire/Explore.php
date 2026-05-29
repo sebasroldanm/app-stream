@@ -107,8 +107,6 @@ class Explore extends Component
             ? Customer::find(Auth::guard('customer')->user()->id)->getOwnerFavoriteIds()->toArray()
             : [];
 
-        $this->dispatch('init-swiper');
-
         /** @var \Livewire\Features\SupportPageComponents\ContentRenderer $view */
         $view = view('livewire.explore', [
             'countryList' => $this->getCountryList(),

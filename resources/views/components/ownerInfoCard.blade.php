@@ -1,6 +1,34 @@
 <div class="card-owner-info">
     <a href="{{ route('owner', $username) }}">
-        <div class="swiper mySwiperOwner" data-settings="{{ json_encode($settings ?? []) }}">
+        <div class="swiper mySwiperOwner" 
+             data-settings="{{ json_encode($settings ?? []) }}"
+             x-data="{
+                swiper: null,
+                init() {
+                    const settings = JSON.parse(this.$el.getAttribute('data-settings') || '{}');
+                    const nextBtn = this.$el.querySelector('.swiper-button-next-owner-info');
+                    const prevBtn = this.$el.querySelector('.swiper-button-prev-owner-info');
+                    const slides = this.$el.querySelectorAll('.swiper-slide');
+                    const canLoop = slides.length > 1;
+                    
+                    this.swiper = new Swiper(this.$el, {
+                        nested: true,
+                        loop: canLoop,
+                        autoplay: canLoop ? {
+                            delay: 10000,
+                            disableOnInteraction: true,
+                        } : false,
+                        ...settings,
+                        navigation: {
+                            nextEl: nextBtn,
+                            prevEl: prevBtn,
+                        }
+                    });
+                },
+                destroy() {
+                    if (this.swiper) this.swiper.destroy(true, true);
+                }
+             }">
             <div class="swiper-wrapper">
                 @if (isset($primaryImage) && $primaryImage)
                     <div class="swiper-slide">
