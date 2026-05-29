@@ -25,9 +25,9 @@
     <link rel="stylesheet" href="{{ asset('/vendor/vanillajs-datepicker/dist/css/datepicker.min.css') }}">
     {{-- <link rel="stylesheet" href="{{ asset('/vendor/font-awesome-line-awesome/css/all.min.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('/vendor/line-awesome/dist/line-awesome/css/line-awesome.min.css') }}">
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+    <link rel="stylesheet" href="{{ asset('css/frontend/plyr.css') }}" />
     <!-- Link Swiper's CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="{{ asset('css/frontend/swiper-bundle.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/frontend/stories.css') }}?v=1.0">
 
     @stack('styles')
@@ -122,13 +122,13 @@
     <script src="{{ asset('js/frontend/lottie.js') }}"></script>
 
     <!-- plyr -->
-    <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+    <script src="{{ asset('vendor/plyr.js') }}"></script>
     <!-- hls.js -->
-    <script src="https://cdn.rawgit.com/video-dev/hls.js/18bb552/dist/hls.min.js"></script>
+    <script src="{{ asset('vendor/hls.min.js') }}"></script>
     <!-- Swiper JS -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+    <script src="{{ asset('vendor/swiper-bundle.min.js') }}"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="{{ asset('vendor/confetti.browser.min.js') }}"></script>
 
 
     @php $version = date('YmdHi'); @endphp
