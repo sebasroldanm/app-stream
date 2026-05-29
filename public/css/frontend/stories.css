@@ -154,16 +154,24 @@
     position: fixed;
     inset: 0;
     z-index: 9999;
-    display: none;
+
+    display: flex;
     align-items: center;
     justify-content: center;
+
     opacity: 0;
-    transition: opacity 0.25s ease;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition:
+        opacity .35s cubic-bezier(.22, 1, .36, 1),
+        visibility .35s;
 }
 
 .stories-fullscreen.active {
-    display: flex;
     opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
 }
 
 /* Fondo negro detrás del card */
@@ -192,7 +200,19 @@
     box-shadow: 0 24px 64px rgba(0, 0, 0, 0.7);
     display: flex;
     flex-direction: column;
+
+    transform: translateY(80px);
+
+    transition:
+        transform .38s cubic-bezier(.22, 1, .36, 1),
+        opacity .28s ease;
 }
+
+.stories-fullscreen.active .stories-card {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 
 /* ─── 4. SLIDES ────────────────────────────────────────────────── */
 .story-custom-container {

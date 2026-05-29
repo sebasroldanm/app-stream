@@ -6,8 +6,7 @@
     @if ($owner_id && !empty($stories))
         <div class="story-square-item"
             x-on:click="if(!window.storyManager && typeof initStoryManager === 'function') initStoryManager(); window.storyManager ? window.storyManager.open(0) : console.log('Esperando a StoryManager...')"
-            style="background-image: url('{{ $stories[0]['avatar'] }}');"
-            data-story-index="0">
+            style="background-image: url('{{ $stories[0]['avatar'] }}');" data-story-index="0">
             <div class="story-square-overlay">
                 <div class="story-square-content">
                     <span class="story-square-label">{{ __('Historias') }}</span>
@@ -20,7 +19,7 @@
     @elseif ($showRail)
         <div class="card-body stories-rail" id="storiesRail">
             @foreach ($stories as $index => $story)
-                <div class="story-circle-item" 
+                <div class="story-circle-item"
                     x-on:click="if(!window.storyManager && typeof initStoryManager === 'function') initStoryManager(); window.storyManager ? window.storyManager.open({{ $index }}) : console.log('Esperando a StoryManager...')"
                     data-story-index="{{ $index }}">
                     <div class="circle-ring">
@@ -58,9 +57,11 @@
                 </div>
                 <div class="header-actions">
                     <!-- Pausa / Reanudar -->
-                    <button class="story-btn-icon" id="storyBtnPause" x-on:click="window.storyManager._togglePause()" aria-label="Pausar">⏸</button>
+                    <button class="story-btn-icon" id="storyBtnPause" x-on:click="window.storyManager._togglePause()"
+                        aria-label="Pausar">⏸</button>
                     <!-- Cerrar -->
-                    <button class="story-btn-icon" id="closeStoryBtn" x-on:click="window.storyManager.close()" aria-label="Cerrar">✕</button>
+                    <button class="story-btn-icon" id="closeStoryBtn" x-on:click="window.storyManager.close()"
+                        aria-label="Cerrar">✕</button>
                 </div>
             </div>
 
@@ -70,13 +71,15 @@
             </div>
 
             <!-- Botones de slide (izquierda / derecha dentro del usuario) -->
-            <button class="story-slide-btn story-slide-btn--prev" id="storyBtnSlidePrev" x-on:click="window.storyManager._prev()" aria-label="Anterior">
+            <button class="story-slide-btn story-slide-btn--prev" id="storyBtnSlidePrev"
+                x-on:click="window.storyManager._prev()" aria-label="Anterior">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
                     stroke-linejoin="round">
                     <polyline points="15 18 9 12 15 6" />
                 </svg>
             </button>
-            <button class="story-slide-btn story-slide-btn--next" id="storyBtnSlideNext" x-on:click="window.storyManager._next()" aria-label="Siguiente">
+            <button class="story-slide-btn story-slide-btn--next" id="storyBtnSlideNext"
+                x-on:click="window.storyManager._next()" aria-label="Siguiente">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
                     stroke-linejoin="round">
                     <polyline points="9 18 15 12 9 6" />
@@ -86,15 +89,15 @@
         </div><!-- /.stories-card -->
 
         <!-- Botones de usuario (afuera del card, en el backdrop) -->
-        <button class="story-user-btn story-user-btn--prev story-nav-hidden" id="storyBtnPrev" x-on:click="window.storyManager._prevUser()"
-            aria-label="Usuario anterior">
+        <button class="story-user-btn story-user-btn--prev story-nav-hidden" id="storyBtnPrev"
+            x-on:click="window.storyManager._prevUser()" aria-label="Usuario anterior">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                 stroke-linejoin="round">
                 <polyline points="15 18 9 12 15 6" />
             </svg>
         </button>
-        <button class="story-user-btn story-user-btn--next story-nav-hidden" id="storyBtnNext" x-on:click="window.storyManager._nextUser()"
-            aria-label="Usuario siguiente">
+        <button class="story-user-btn story-user-btn--next story-nav-hidden" id="storyBtnNext"
+            x-on:click="window.storyManager._nextUser()" aria-label="Usuario siguiente">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                 stroke-linejoin="round">
                 <polyline points="9 18 15 12 9 6" />
@@ -103,10 +106,9 @@
 
     </div><!-- /.stories-fullscreen -->
     @once
-        @php $version = date('YmdHis'); @endphp
-        <link rel="stylesheet" href="{{ asset('css/frontend/stories.css') }}?v={{ $version }}">
+        <link rel="stylesheet" href="{{ asset('css/frontend/stories.css') }}?v=1.0">
     @endonce
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             if (typeof initStoryManager === 'function') initStoryManager();

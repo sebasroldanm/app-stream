@@ -39,4 +39,9 @@ class Actions extends Component
     {
         Artisan::call('app:update-feed');
     }
+
+    public function updateConversations()
+    {
+        Artisan::call('app:update-conversation');
+    }
 }

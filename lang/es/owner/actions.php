@@ -6,4 +6,5 @@ return [
     'full_update' => 'Actualización completa',
     'update_favorites' => 'Actualizar favoritos',
     'update_feed' => 'Actualizar feed',
+    'update_conversations' => 'Actualizar conversaciones',
 ];

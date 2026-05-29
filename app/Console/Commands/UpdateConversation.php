@@ -2,11 +2,14 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Conversation;
+use App\Jobs\SyncConversationMessages;
 use App\Services\Owner\OwnerConversationService;
 use Carbon\Carbon;
+use Illuminate\Bus\Batch;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class UpdateConversation extends Command
 {
@@ -15,64 +18,49 @@ class UpdateConversation extends Command
      *
      * @var string
      */
-    protected $signature = 'app:update-conversation';
+    protected $signature = 'app:update-conversation {owner_id=142766100 : ID del owner a sincronizar}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Sincroniza conversaciones y mensajes del owner';
 
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(OwnerConversationService $conversationService): int
     {
-        $this->info('Iniciando sincronización de conversaciones...');
+        $ownerId = $this->argument('owner_id');
 
-        $conversations = app(OwnerConversationService::class)->syncConversations('142766100', 0, 5000);
+        $this->info("Sincronizando conversaciones para owner: {$ownerId}...");
 
-        $this->info('Sincronización de conversaciones completada. Total: ' . count($conversations));
+        $conversations = $conversationService->syncConversations($ownerId, 0, 5000);
 
-        $this->info('Iniciando sincronización de mensajes...');
-
-        $bar = $this->output->createProgressBar($conversations->count());
-        $bar->setFormatDefinition(
-            'custom',
-            '%current%/%max% [%bar%] %percent:3s%% | Transcurrido: %elapsed:6s% | Restante: %remaining:6s% | Mem: %memory:6s%'
-        );
-        $bar->setFormat('custom');
-        $bar->start();
+        $this->info("Conversaciones obtenidas: {$conversations->count()}. Despachando jobs de mensajes...");
 
         $syncTimestamp = Carbon::now();
 
-        $errors = [];
+        Bus::batch(
+            $conversations->map(fn($conversation) => new SyncConversationMessages(
+                $ownerId,
+                $conversation,
+                $syncTimestamp,
+            ))->toArray()
+        )
+            ->name("sync-messages:{$ownerId}")
+            ->allowFailures()
+            ->onQueue('high')
+            ->then(function (Batch $batch) {
+                Log::info("sync-messages: batch completado. Total: {$batch->totalJobs}, Fallidos: {$batch->failedJobs}");
+            })
+            ->catch(function (Batch $batch, Throwable $e) {
+                Log::error("sync-messages: error en batch {$batch->id}: {$e->getMessage()}");
+            })
+            ->dispatch();
 
-        foreach ($conversations as $conversation) {
-            try {
-                $lastMessageId = app(OwnerConversationService::class)->syncMessages('142766100', $conversation->id, null, $syncTimestamp);
-                do {
-                    $previousMessageId = $lastMessageId;
-                    $lastMessageId = app(OwnerConversationService::class)->syncMessages('142766100', $conversation->id, $previousMessageId, $syncTimestamp);
-                } while ($lastMessageId != $previousMessageId);
-                $bar->advance();
-            } catch (\Exception $e) {
-                $errors[] = $e->getMessage();
-            }
-        }
-
-        $bar->finish();
-        $this->newLine(2);
-
-        $this->info('Sincronización de mensajes completada.');
-
-        if (!empty($errors)) {
-            $this->error('Errores: ' . count($errors));
-            foreach ($errors as $error) {
-                $this->error($error);
-            }
-        }
+        $this->info('Batch despachado correctamente.');
 
         return Command::SUCCESS;
     }
