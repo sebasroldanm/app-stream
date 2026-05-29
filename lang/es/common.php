@@ -33,6 +33,7 @@ return [
         'post_management' => 'Gestión de Publicaciones',
         'live' => 'En Vivo',
         'conversations' => 'Conversaciones',
+        'results_search' => 'Resultados de búsqueda'
     ]
 ];
 

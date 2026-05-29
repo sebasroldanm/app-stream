@@ -53,7 +53,7 @@
 
         <div id="viewer_photo" class="modal_vp">
             <span class="cerrar">&times;</span>
-            <img id="imagenModal" class="modal_vp-content" data-img-prev="" data-img-next="">
+            <img id="imageModal" class="modal_vp-content" data-img-prev="" data-img-next="">
             <div class="modal_vp-footer">
                 <div id="thumbs" class="modal_vp-thumbs"></div>
             </div>

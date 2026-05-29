@@ -62,11 +62,6 @@ trait SyncData
         return app(\App\Services\Owner\OwnerFeedSyncService::class)->syncFeedByOwnerId($id);
     }
 
-    public function searchGlobal($keyword)
-    {
-        return app(\App\Services\Owner\OwnerSearchService::class)->searchGlobal($keyword);
-    }
-
     // Helper methods like saveFeed, etc are now internal to ProcessFeedPost job and not needed here publically 
     // unless used by other classes.
     // SyncData::saveFeed was private. 

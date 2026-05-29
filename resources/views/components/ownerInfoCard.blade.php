@@ -23,6 +23,13 @@
                         </div>
                     </div>
                 @endif
+                @if (!$primaryImage && !$secondaryImage && !$ternaryImage)
+                    <div class="swiper-slide">
+                        <div class="content-image">
+                            <img src="{{ 'https://ui-avatars.com/api/?name=' . $username . '&background=random' }}" alt="{{ $username }}">
+                        </div>
+                    </div>
+                @endif
             </div>
             {{-- Swiper Navigation --}}
             @if (isset($primaryImage) && isset($secondaryImage))

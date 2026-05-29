@@ -6,6 +6,7 @@ use App\Models\Album;
 use App\Models\Feed;
 use App\Models\Owner;
 use App\Models\Video;
+use App\Services\Owner\OwnerSearchService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -55,5 +56,31 @@ class UtilController extends Controller
         }
 
         return view('utils.json', ['data' => $response]);
+    }
+
+    public function searchSuggestion(Request $request, OwnerSearchService $ownerSearchService)
+    {
+        $request->validate([
+            'q' => 'required',
+        ]);
+
+        $keyword = $request->q;
+
+        $response = $ownerSearchService->searchSuggestion($keyword);
+
+        return response()->json($response);
+    }
+
+    public function searchAll(Request $request, OwnerSearchService $ownerSearchService)
+    {
+        $request->validate([
+            'q' => 'required',
+        ]);
+
+        $keyword = $request->q;
+
+        $response = $ownerSearchService->searchAll($keyword);
+
+        return response()->json($response);
     }
 }

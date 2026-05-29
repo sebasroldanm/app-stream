@@ -2,7 +2,7 @@ function initFullviewer() {
     // Seleccionar la imagen en miniatura y el modal
     const imagenes = document.querySelectorAll(".fullviewer");
     const modal = document.getElementById("viewer_photo");
-    const imagenModal = document.getElementById("imagenModal");
+    const imageModal = document.getElementById("imageModal");
     const cerrarBtn = document.querySelector(".cerrar");
     const swipeUpContainer = document.getElementById("swipeUpContainer");
 
@@ -11,7 +11,7 @@ function initFullviewer() {
     imagenes.forEach((imagen) => {
         imagen.addEventListener("click", () => {
             const imageSrc = imagen.getAttribute("data-image_vh") || imagen.src;
-            imagenModal.src = imageSrc;
+            imageModal.src = imageSrc;
 
             swipeUpContainer.classList.add("d-none");
 
@@ -20,14 +20,14 @@ function initFullviewer() {
 
             construirThumbs(thumbImages, fullImages, imageSrc);
 
-            modal.style.display = "block";
+            modal.classList.add("active");
             document.body.classList.add("no-scroll");
         });
     });
 
     if (cerrarBtn) {
         cerrarBtn.addEventListener("click", () => {
-            modal.style.display = "none";
+            modal.classList.remove("active");
             document.body.classList.remove("no-scroll");
             swipeUpContainer.classList.remove("d-none");
         });
@@ -35,7 +35,7 @@ function initFullviewer() {
 
     modal.addEventListener("click", (event) => {
         if (event.target === modal) {
-            modal.style.display = "none";
+            modal.classList.remove("active");
             document.body.classList.remove("no-scroll");
             swipeUpContainer.classList.remove("d-none");
         }
@@ -43,7 +43,7 @@ function initFullviewer() {
 
     document.addEventListener("keydown", (event) => {
         if (event.key === "Escape") {
-            modal.style.display = "none";
+            modal.classList.remove("active");
             document.body.classList.remove("no-scroll");
             swipeUpContainer.classList.remove("d-none");
         }
@@ -54,7 +54,7 @@ function initFullviewer() {
 
 function construirThumbs(thumbImages, fullImages, currentImageSrc) {
     const thumbsContainer = document.getElementById("thumbs");
-    const imagenModal = document.getElementById("imagenModal");
+    const imageModal = document.getElementById("imageModal");
     if (!thumbsContainer) return;
     
     thumbsContainer.innerHTML = ""; // limpiar thumbs previos
@@ -82,12 +82,12 @@ function construirThumbs(thumbImages, fullImages, currentImageSrc) {
             img.classList.add("active");
 
             // Primero mostrar el thumb mientras carga la Full
-            imagenModal.src = thumb;
+            imageModal.src = thumb;
 
             // Cargar la Full en memoria
             const tempImg = new Image();
             tempImg.onload = () => {
-                imagenModal.src = full;
+                imageModal.src = full;
             };
             tempImg.src = full;
         });

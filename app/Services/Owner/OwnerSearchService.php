@@ -15,7 +15,7 @@ class OwnerSearchService
         $this->logger = $logger;
     }
 
-    public function searchGlobal($keyword)
+    public function searchSuggestion(string $keyword) : ?object
     {
         $path = '/api/front/v4/models/search/suggestion';
         $query = [
@@ -24,7 +24,37 @@ class OwnerSearchService
         ];
 
         try {
-            // Logic from SyncData::searchGlobal
+            $response = $this->apiClient->get($path, ['query' => $query]);
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode === 200) {
+                $content = $response->getBody()->getContents();
+                $data = json_decode($content, false);
+                return $data;
+            }
+        } catch (\Throwable $th) {
+             $this->logger->logError(
+                 'service/owner_search',
+                 $th->getMessage(),
+                 ['path' => $path, 'query' => $query],
+                 [],
+                 $th->getTraceAsString()
+             );
+        }
+        return null;
+    }
+
+    public function searchAll(string $keyword) : ?object
+    {
+        $path = '/api/front/v5/models/search/group/all';
+        $query = [
+            'query' => $keyword,
+            'primaryTag' => 'girls',
+            'limit' => 24,
+            'includeCvSearchResults' => false
+        ];
+
+        try {
             $response = $this->apiClient->get($path, ['query' => $query]);
             $statusCode = $response->getStatusCode();
 
