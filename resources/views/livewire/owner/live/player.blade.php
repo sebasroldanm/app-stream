@@ -34,7 +34,7 @@ class="live-player-wrapper">
                 <div class="text-center">
                     <i class="ri-lock-fill ri-4x mb-3 text-warning"></i>
                     <h3 class="text-white">{{ __('owner/live/player.private_show_title') }}</h3>
-                    <p class="text-white-50">{{ __('owner/live/player.private_show_text_prefix') }} <span class="badge bg-primary">{{ $inShow }}</span></p>
+                    <p class="text-white-50">{{ __('owner/live/player.private_show_text_prefix') }} <span class="badge bg-primary">{{ __('common.show_mode.' . $inShow) }}</span></p>
                     <p class="small text-muted">{{ __('owner/live/player.private_show_footer') }}</p>
                 </div>
             </template>

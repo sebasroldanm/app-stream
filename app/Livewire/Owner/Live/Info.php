@@ -56,16 +56,16 @@ class Info extends Component
 
         if ($this->owner->isLive) {
             if ($this->owner->show_mode == null) {
-                $state = "Live";
+                $state = "live";
             } else {
                 $state = $this->owner->show_mode;
             }
             $type = 'badge border border-danger text-danger text-bold';
         } else if ($this->owner->isOnline) {
-            $state = 'Online';
+            $state = 'online';
             $type = 'badge border border-success text-success text-bold';
         } else {
-            $state = 'Offline';
+            $state = 'offline';
             $type = 'badge border border-secondary text-secondary text-bold';
         }
 

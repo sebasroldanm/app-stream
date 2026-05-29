@@ -17,7 +17,6 @@ class Stories extends Component
 
     public function render()
     {
-        sleep(2);
         $stories = $this->getStories();
 
         if ($stories) {
