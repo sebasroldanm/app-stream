@@ -11,6 +11,7 @@ return [
         'photos' => 'Fotos',
         'price' => [
             'paid' => 'De pago',
+            'friends' => 'Solo amigos',
             'free' => 'Gratis',
             'verified' => 'Verificado',
             'fanClub' => 'Club de fans',
