@@ -26,6 +26,8 @@
                             slidesPerGroup: 2,
                             spaceBetween: 15,
                             loop: canLoop,
+                            observer: true,
+                            observeParents: true,
                             autoplay: canLoop ? {
                                 delay: 30000,
                                 disableOnInteraction: true,
@@ -58,7 +60,7 @@
                 <div x-ref="swiperContainer" class="swiper related-swiper">
                     <div class="swiper-wrapper">
                         @foreach ($related->models as $item)
-                            <div class="swiper-slide">
+                            <div class="swiper-slide" wire:key="related-owner-{{ $item->id }}">
                                 <x-ownerInfoCard
                                     :isFav="in_array($item->id, $favs)"
                                     :primaryImage="(isset($item->verifiedSnapshotTimestamp) && $item->verifiedSnapshotTimestamp) ? 'https://img.doppiocdn.net/thumbs/' . $item->verifiedSnapshotTimestamp . '/' . $item->id : null"

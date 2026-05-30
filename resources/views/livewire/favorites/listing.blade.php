@@ -1,7 +1,7 @@
 <div>
     <div class="row">
         @foreach ($favorites as $favorite)
-            <div class="col-4 col-md-3 col-lg-2 mb-2">
+            <div class="col-4 col-md-3 col-lg-2 mb-2" wire:key="fav-owner-{{ $favorite->id }}">
                 <x-ownerInfoCard 
                     :primaryImage="$favorite->isLive
                     ? 'https://img.doppiocdn.net/thumbs/' .

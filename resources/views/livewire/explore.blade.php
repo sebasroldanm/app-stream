@@ -16,7 +16,7 @@
                 <div class="col-12">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="ri-home-4-line mr-1 float-left"></i>{{ __('common.breadcrumb.home') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="ri-home-4-line me-1 float-left"></i>{{ __('common.breadcrumb.home') }}</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{ __('common.breadcrumb.explore') }}</li>
                         </ol>
                     </nav>
@@ -116,7 +116,7 @@
                     <div wire:loading.remove wire:target="applyFilters, resetFilters">
                         <div class="row">
                             @foreach ($owners as $owner)
-                                <div class="col-4 col-md-3 col-lg-2 mb-2">
+                                <div class="col-4 col-md-3 col-lg-2 mb-2" wire:key="explore-owner-{{ $owner->id }}">
                                     <x-ownerInfoCard :isFav="in_array($owner->id, $favs)" :primaryImage="'https://img.doppiocdn.net/thumbs/' .
                                         ($owner->verifiedSnapshotTimestamp ?? $owner->snapshotTimestamp) .
                                         '/' .

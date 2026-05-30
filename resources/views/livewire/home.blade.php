@@ -15,7 +15,7 @@
         <div class="container">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item active">{{ __('common.breadcrumb.home') }}</li>
+                    <li class="breadcrumb-item"><i class="ri-home-4-line me-1 float-left"></i>{{ __('common.breadcrumb.home') }}</li>
                 </ol>
             </nav>
             <div class="row mb-2">
