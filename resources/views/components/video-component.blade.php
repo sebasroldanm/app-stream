@@ -20,7 +20,7 @@
 
 <div 
     class="video-component-wrapper position-relative overflow-hidden rounded bg-dark shadow-sm" 
-    style="cursor: pointer; aspect-ratio: 16/9; transition: transform 0.2s ease-in-out; width: 100%; min-height: {{ $minHeight }};"
+    style="cursor: pointer; aspect-ratio: 16/9; transition: transform 0.2s ease-in-out; width: 100%;"
     onclick="initVideoComponent(this, '{{ $video }}', '{{ $format }}')"
 >
     <!-- Imagen de vista previa (Poster) -->

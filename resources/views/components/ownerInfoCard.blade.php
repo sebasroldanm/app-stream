@@ -14,6 +14,8 @@
                     this.swiper = new Swiper(this.$el, {
                         nested: true,
                         loop: canLoop,
+                        observer: true,
+                        observeParents: true,
                         autoplay: canLoop ? {
                             delay: 10000,
                             disableOnInteraction: true,

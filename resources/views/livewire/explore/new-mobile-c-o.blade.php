@@ -15,7 +15,7 @@
             <div class="row">
                 @if ($data !== false)
                     @foreach ($owners as $owner)
-                        <div class="col-3 col-sm-2">
+                        <div class="col-3 col-sm-2" wire:key="new-mobile-owner-{{ $owner->id }}">
                             <x-ownerInfoCard 
                                 :isFav="in_array($owner->id, $favs)" 
                                 :primaryImage="'https://img.doppiocdn.net/thumbs/' . $owner->verifiedSnapshotTimestamp . '/' . $owner->id"

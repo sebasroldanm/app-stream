@@ -11,7 +11,7 @@
         <div class="related-models-wrapper position-relative px-5">
             <div class="d-flex overflow-hidden" style="gap: 15px;">
                 @for ($i = 0; $i < 5; $i++) 
-                    <div style="min-width: 150px; flex: 1;">
+                    <div style="min-width: 100px; flex: 1;">
                         <div class="user-post-data position-relative">
                             <div class="image-container overflow-hidden rounded shadow-sm position-relative">
                                 <div class="skeleton-placeholder w-100" style="height: 180px; display: block;"></div>
