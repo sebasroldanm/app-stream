@@ -33,9 +33,6 @@ class Live extends Component
             $this->mainCol = 'col-12 col-sm-8';
             $this->sideCol = 'col-12 col-sm-4';
         }
-
-        $this->dispatch('initFullviewer');
-
         return view('livewire.owner.live');
     }
 }

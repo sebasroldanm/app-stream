@@ -3,15 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
-use App\Traits\SyncData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthCustomerController extends Controller
 {
-    use SyncData;
-
     public function index()
     {
         return view('auth.login');
@@ -77,27 +74,6 @@ class AuthCustomerController extends Controller
     {
         Auth::guard('customer')->logout();  // Cierra la sesión del usuario
         return redirect()->route('login');
-    }
-
-    public function test(Request $request)
-    {
-        return;
-    }
-    
-
-    public function search(Request $request)
-    {
-        $echo = $request->all();
-
-        $request->validate([
-            'q' => 'required',
-        ]);
-
-        $keyword = $request->q;
-
-        $response = $this->searchGlobal($keyword);
-
-        return response()->json($response);
     }
 
     public function passkeyRegister(Request $request)

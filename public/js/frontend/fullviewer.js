@@ -1,97 +1,118 @@
-function initFullviewer() {
-    // Seleccionar la imagen en miniatura y el modal
-    const imagenes = document.querySelectorAll(".fullviewer");
-    const modal = document.getElementById("viewer_photo");
-    const imagenModal = document.getElementById("imagenModal");
-    const cerrarBtn = document.querySelector(".cerrar");
-    const swipeUpContainer = document.getElementById("swipeUpContainer");
+/**
+ * Alpine.js Fullviewer Store and Event Delegation
+ * Centralizes photo/video previewing across all dynamic content.
+ */
 
-    if (!modal) return;
+document.addEventListener("alpine:init", () => {
+    // 1. Register the global viewer store
+    Alpine.store("viewer", {
+        active: false,
+        type: null, // 'image' | 'video'
+        src: "",
+        videoSrc: "",
+        thumbs: [],
+        fullImages: [],
+        currentIndex: 0,
 
-    imagenes.forEach((imagen) => {
-        imagen.addEventListener("click", () => {
-            const imageSrc = imagen.getAttribute("data-image_vh") || imagen.src;
-            imagenModal.src = imageSrc;
-
-            swipeUpContainer.classList.add("d-none");
-
-            const fullImages = JSON.parse(imagen.dataset.imagesFull || "[]");
-            const thumbImages = JSON.parse(imagen.dataset.imagesThumb || "[]");
-
-            construirThumbs(thumbImages, fullImages, imageSrc);
-
-            modal.style.display = "block";
+        openImage(src, fullImages = [], thumbImages = []) {
+            this.type = "image";
+            this.src = src;
+            this.fullImages = fullImages.length ? fullImages : [src];
+            this.thumbs = thumbImages.length ? thumbImages : [src];
+            
+            // Find current image index
+            this.currentIndex = this.fullImages.indexOf(src);
+            if (this.currentIndex === -1) {
+                // Fallback index matching
+                this.currentIndex = this.fullImages.findIndex(img => img.includes(src) || src.includes(img));
+                if (this.currentIndex === -1) this.currentIndex = 0;
+            }
+            
+            this.active = true;
             document.body.classList.add("no-scroll");
-        });
-    });
+            
+            // Hide scrollToTop button if present
+            const swipeUpContainer = document.getElementById("swipeUpContainer");
+            if (swipeUpContainer) swipeUpContainer.classList.add("d-none");
+        },
 
-    if (cerrarBtn) {
-        cerrarBtn.addEventListener("click", () => {
-            modal.style.display = "none";
+        openVideo(src) {
+            this.type = "video";
+            this.videoSrc = src;
+            this.active = true;
+            document.body.classList.add("no-scroll");
+            
+            const swipeUpContainer = document.getElementById("swipeUpContainer");
+            if (swipeUpContainer) swipeUpContainer.classList.add("d-none");
+        },
+
+        close() {
+            this.active = false;
+            this.type = null;
+            this.src = "";
+            this.videoSrc = "";
+            this.thumbs = [];
+            this.fullImages = [];
+            this.currentIndex = 0;
             document.body.classList.remove("no-scroll");
-            swipeUpContainer.classList.remove("d-none");
-        });
-    }
+            
+            const swipeUpContainer = document.getElementById("swipeUpContainer");
+            if (swipeUpContainer) swipeUpContainer.classList.remove("d-none");
+        },
 
-    modal.addEventListener("click", (event) => {
-        if (event.target === modal) {
-            modal.style.display = "none";
-            document.body.classList.remove("no-scroll");
-            swipeUpContainer.classList.remove("d-none");
-        }
-    });
+        selectThumb(index) {
+            if (index < 0 || index >= this.fullImages.length) return;
+            this.currentIndex = index;
+            
+            const thumb = this.thumbs[index];
+            const full = this.fullImages[index];
+            
+            // Instantly show the thumbnail as a fast placeholder
+            this.src = thumb;
 
-    document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape") {
-            modal.style.display = "none";
-            document.body.classList.remove("no-scroll");
-            swipeUpContainer.classList.remove("d-none");
-        }
-    });
-
-
-}
-
-function construirThumbs(thumbImages, fullImages, currentImageSrc) {
-    const thumbsContainer = document.getElementById("thumbs");
-    const imagenModal = document.getElementById("imagenModal");
-    if (!thumbsContainer) return;
-    
-    thumbsContainer.innerHTML = ""; // limpiar thumbs previos
-
-    thumbImages.forEach((thumb, index) => {
-        const full = fullImages[index];
-
-        const img = document.createElement("img");
-        img.classList.add("thumb-item");
-        img.src = thumb;
-        img.dataset.imageFull = full;
-
-        // Marcar la imagen actualmente visible
-        if (full === currentImageSrc) {
-            img.classList.add("active");
-        }
-
-        // Click en el thumb → cambia la imagen del modal
-        img.addEventListener("click", () => {
-            // Actualizar estado visual
-            document
-                .querySelectorAll(".thumb-item")
-                .forEach((el) => el.classList.remove("active"));
-
-            img.classList.add("active");
-
-            // Primero mostrar el thumb mientras carga la Full
-            imagenModal.src = thumb;
-
-            // Cargar la Full en memoria
+            // Preload the full resolution image in background
             const tempImg = new Image();
             tempImg.onload = () => {
-                imagenModal.src = full;
+                // Ensure state hasn't changed before assigning full image
+                if (this.currentIndex === index && this.active && this.type === "image") {
+                    this.src = full;
+                }
             };
             tempImg.src = full;
-        });
-
-        thumbsContainer.appendChild(img);
+        }
     });
-}
+
+    // 2. Global Event Delegation
+    // Captures all clicks on elements with .fullviewer or #fullviewer-video (even if dynamically loaded)
+    document.addEventListener("click", (event) => {
+        // Handle images (.fullviewer)
+        const imageEl = event.target.closest(".fullviewer");
+        if (imageEl && imageEl.tagName === "IMG") {
+            event.preventDefault();
+            
+            const imageSrc = imageEl.getAttribute("data-image_vh") || imageEl.src;
+            let fullImages = [];
+            let thumbImages = [];
+            
+            try {
+                fullImages = JSON.parse(imageEl.dataset.imagesFull || "[]");
+                thumbImages = JSON.parse(imageEl.dataset.imagesThumb || "[]");
+            } catch (e) {
+                console.error("Error parsing images dataset on .fullviewer element", e);
+            }
+            
+            Alpine.store("viewer").openImage(imageSrc, fullImages, thumbImages);
+            return;
+        }
+        
+        // Handle videos (#fullviewer-video)
+        const videoEl = event.target.closest("#fullviewer-video");
+        if (videoEl) {
+            event.preventDefault();
+            const videoUrl = videoEl.currentSrc || videoEl.src;
+            if (videoUrl) {
+                Alpine.store("viewer").openVideo(videoUrl);
+            }
+        }
+    });
+});

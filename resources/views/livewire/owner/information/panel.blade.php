@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-sm-12">
         <h4 class="mb-3">{{ __('owner/tabs.panel') }}</h4>
-        <div class="row masonry">
+        <div class="row masonry" x-data="masonry">
             @foreach ($panels as $panel)
                 <div class="col-sm-6 col-lg-6 masonry-item">
                     <div class="card mb-3" style="break-inside: avoid;">

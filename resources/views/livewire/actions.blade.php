@@ -1,5 +1,5 @@
 <div class="container">
-    <div class="header-for-bg">
+    {{-- <div class="header-for-bg">
         <div class="background-header position-relative">
             <img src="{{ asset('/images/page-img/profile-bg3.jpg') }}" class="img-fluid w-100" alt="header-bg">
             <div class="title-on-header">
@@ -8,7 +8,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <div id="content-page" class="content-page">
         @if ($message)
@@ -22,6 +22,13 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="ri-home-4-line mr-1 float-left"></i>{{ __('common.breadcrumb.home') }}</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ __('common.breadcrumb.action') }}</li>
+                        </ol>
+                    </nav>
+
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">{{ __('owner/actions.actions') }}</h5>

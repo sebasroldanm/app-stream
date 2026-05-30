@@ -24,9 +24,6 @@ class Snapshots extends Component
                 // Agrupa por día usando solo la fecha (sin la hora)
                 return Carbon::parse($snapshot->date_created)->format('Y-m-d');
             });
-
-        $this->dispatch('initFullviewer');
-
         return view('livewire.owner.information.snapshots', [
             'snapshots' => $snapshots
         ]);

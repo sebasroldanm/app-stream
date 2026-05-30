@@ -6257,6 +6257,11 @@ html[data-theme='dark'] .card-header {
     border-radius: .25rem
 }
 
+html[data-theme='dark'] .breadcrumb{
+    background-color: #000;
+    
+}
+
 .breadcrumb-item+.breadcrumb-item {
     padding-left: .5rem
 }
@@ -14085,7 +14090,7 @@ html[data-theme='dark'] .iq-top-navbar {
 }
 
 .breadcrumb-item+.breadcrumb-item::before {
-    content: "\ea5f";
+    content: "\ea6e";
     font-family: remixicon;
     font-size: .875rem;
     vertical-align: sub;

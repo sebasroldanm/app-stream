@@ -68,7 +68,7 @@
         <div class="card">
             <div class="card-body">
                 <h5>{{ __('owner/live/info.status') }}</h5>
-                <span class="badge {{ $type }}">{{ $state }}</span>
+                <span class="badge {{ $type }}">{{ __('common.show_mode.' . $state) }}</span>
 
                 <h5 class="card-title">{{ __('owner/live/info.viewers') }}: <span>{{ $views_count }}</span></h5>
 

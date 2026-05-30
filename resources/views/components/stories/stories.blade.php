@@ -105,10 +105,6 @@
         </button>
 
     </div><!-- /.stories-fullscreen -->
-    @once
-        <link rel="stylesheet" href="{{ asset('css/frontend/stories.css') }}?v=1.0">
-    @endonce
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             if (typeof initStoryManager === 'function') initStoryManager();

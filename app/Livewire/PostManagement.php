@@ -46,9 +46,6 @@ class PostManagement extends Component
                 })
                 ->paginate(10);
         }
-
-        $this->dispatch('initFullviewer');
-
         /** @var \Livewire\Features\SupportPageComponents\ContentRenderer $view */
         $view = view('livewire.post-management', compact('telegram_chats', 'messages'));
         return $view->layoutData(['title' => ' | Gestión Telegram']);

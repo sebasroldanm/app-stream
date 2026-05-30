@@ -17,6 +17,7 @@ use App\Livewire\Favorites;
 use App\Livewire\Home;
 use App\Livewire\Multiview;
 use App\Livewire\PostManagement;
+use App\Livewire\ResultSearch;
 use App\Livewire\Timeline;
 use App\Livewire\ViewOwner;
 use Illuminate\Support\Facades\Artisan;
@@ -72,6 +73,8 @@ Route::middleware(['auth:customer'])->group(function () {
     Route::post('/webauthn/register/options', [WebAuthnRegisterController::class, 'options']);
 
     Route::post('/webauthn/register', [WebAuthnRegisterController::class, 'register']);
+
+    Route::get('/search', ResultSearch::class)->name('searchAll');
 });
 
 Route::middleware('guest:customer')->group(function () {
@@ -83,7 +86,7 @@ Route::middleware('guest:customer')->group(function () {
 
 Route::get('/media-proxy/{fileId}', [TelegramController::class, 'proxy'])->name('telegram.proxy');
 
-Route::get('/search', [AuthCustomerController::class, 'search'])->name('searchGlobal');
+Route::get('/search-suggestion', [UtilController::class, 'searchSuggestion'])->name('searchSuggestion');
 Route::get('/dashboard', function () {
     return 'Welcome to the customer dashboard!';
 })->name('customer.dashboard')->middleware('auth');

@@ -28,9 +28,6 @@ class Detail extends Component
             $wentIdleAt = Carbon::parse($this->owner->data->user->user->wentIdleAt);
             $lasSnapshot = Carbon::parse($this->owner->data->user->user->snapshotTimestamp);
             $ratingPrivate = $this->owner->getRatingPrivate();
-
-            $this->dispatch('initFullviewer');
-
             return view('livewire.owner.information.detail', [
                 'languages' => $languages,
                 'country' => $country,

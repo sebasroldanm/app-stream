@@ -44,10 +44,6 @@ class Feed extends Component
             $this->age = Carbon::now()->diff(Carbon::parse($owner->data->user->user->birthDate))->y;
         }
 
-        $this->dispatch('initFullviewer');
-
-        $this->dispatch('initVideos');
-
         return view('livewire.owner.feed', [
             'owner'     => $owner,
             'totalItems' => ModelsFeed::where("owner_id", $owner->id)->count() + Post::where('fk_owners_id', $owner->id)->count(),

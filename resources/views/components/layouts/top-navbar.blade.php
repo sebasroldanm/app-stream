@@ -18,9 +18,9 @@
                 </div>
             </div>
             <div class="iq-search-bar device-search">
-                <form action="#" class="searchbox">
+                <form action="{{ route('searchAll') }}" method="GET" class="searchbox">
                     <a class="search-link" href="#"><i class="ri-search-line"></i></a>
-                    <input id="searchGlobe" type="text" class="text search-input" placeholder="{{ __('navbar.search_placeholder') }}">
+                    <input id="searchGlobe" type="text" name="q" class="text search-input" placeholder="{{ __('navbar.search_placeholder') }}">
                     <div id="resultSearch" class="card">
                     </div>
                 </form>

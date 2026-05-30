@@ -2,21 +2,18 @@
  * Custom JS - Orchestrator and Global Utilities
  */
 
-// Global event listeners for Livewire
-window.Livewire.on("initMasonry", function (data) {
-    initializeMasonry();
-    initFullviewer();
-});
-
 // Re-initialize Bootstrap components on Livewire navigation
 if (!window.bootstrapNavigatedListenerAdded) {
-    document.addEventListener('livewire:navigated', () => {
-        if (typeof bootstrap !== 'undefined') {
+    document.addEventListener("livewire:navigated", () => {
+        if (typeof bootstrap !== "undefined") {
             // Initialize dropdowns
-            const dropdownElementList = document.querySelectorAll('[data-bs-toggle="dropdown"]');
-            dropdownElementList.forEach(dropdownToggleEl => {
+            const dropdownElementList = document.querySelectorAll(
+                '[data-bs-toggle="dropdown"]',
+            );
+            dropdownElementList.forEach((dropdownToggleEl) => {
                 // Dispose existing instance if any to avoid memory leaks
-                const existingInstance = bootstrap.Dropdown.getInstance(dropdownToggleEl);
+                const existingInstance =
+                    bootstrap.Dropdown.getInstance(dropdownToggleEl);
                 if (existingInstance) {
                     existingInstance.dispose();
                 }
@@ -24,9 +21,12 @@ if (!window.bootstrapNavigatedListenerAdded) {
             });
 
             // Initialize tooltips
-            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-            tooltipTriggerList.forEach(tooltipTriggerEl => {
-                const existingInstance = bootstrap.Tooltip.getInstance(tooltipTriggerEl);
+            const tooltipTriggerList = document.querySelectorAll(
+                '[data-bs-toggle="tooltip"]',
+            );
+            tooltipTriggerList.forEach((tooltipTriggerEl) => {
+                const existingInstance =
+                    bootstrap.Tooltip.getInstance(tooltipTriggerEl);
                 if (existingInstance) {
                     existingInstance.dispose();
                 }
@@ -34,34 +34,29 @@ if (!window.bootstrapNavigatedListenerAdded) {
             });
 
             // Initialize popovers
-            const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
-            popoverTriggerList.forEach(popoverTriggerEl => {
-                const existingInstance = bootstrap.Popover.getInstance(popoverTriggerEl);
+            const popoverTriggerList = document.querySelectorAll(
+                '[data-bs-toggle="popover"]',
+            );
+            popoverTriggerList.forEach((popoverTriggerEl) => {
+                const existingInstance =
+                    bootstrap.Popover.getInstance(popoverTriggerEl);
                 if (existingInstance) {
                     existingInstance.dispose();
                 }
                 new bootstrap.Popover(popoverTriggerEl);
             });
         }
-        
-        // Also re-run masonry and fullviewer if needed on navigation
-        if (typeof initFullviewer === 'function') {
-            initFullviewer();
+
+        // Also re-run masonry if needed on navigation
+        if (typeof initializeMasonry === "function") {
+            initializeMasonry();
         }
     });
     window.bootstrapNavigatedListenerAdded = true;
 }
 
-// Periodically check for Fullviewer initialization (fallback for dynamic content)
-setInterval(() => {
-    initFullviewer();
-}, 1000);
-
-window.addEventListener("initFullviewer", () => {
-    setTimeout(() => {
-        initFullviewer();
-    }, 500);
-});
+// Note: Fullviewer initialization is now handled dynamically by Alpine.js in fullviewer.js using global click event delegation.
+// This completely avoids CPU-intensive setInterval active timers.
 
 window.addEventListener("themeApp", (event) => {
     document.documentElement.setAttribute("data-theme", event.detail.theme);
@@ -83,17 +78,16 @@ function scrollToTop() {
     let maxScrollReached = 0;
 
     window.onscroll = function () {
-        let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        let currentScroll =
+            window.pageYOffset || document.documentElement.scrollTop;
 
         if (currentScroll < 200) {
             scrollToTopButton.classList.remove("show");
             maxScrollReached = currentScroll;
-        } 
-        else if (currentScroll > lastScrollTop) {
+        } else if (currentScroll > lastScrollTop) {
             scrollToTopButton.classList.remove("show");
             maxScrollReached = currentScroll;
-        } 
-        else {
+        } else {
             if (maxScrollReached - currentScroll > 100) {
                 scrollToTopButton.classList.add("show");
             }
@@ -103,10 +97,10 @@ function scrollToTop() {
     };
 
     scrollToTopButton.onclick = function () {
-        scrollToTopButton.classList.add('clicked');
+        scrollToTopButton.classList.add("clicked");
         window.scrollTo({ top: 0, behavior: "smooth" });
         setTimeout(() => {
-            scrollToTopButton.classList.remove('clicked');
+            scrollToTopButton.classList.remove("clicked");
         }, 800);
     };
 }

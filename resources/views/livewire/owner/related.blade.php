@@ -12,9 +12,50 @@
     </div>
     <div class="card-body">
         @if (!empty($related) && count($related->models) > 0)
-            <div class="related-models-wrapper position-relative px-5">
+            <div class="related-models-wrapper position-relative px-5"
+                 x-data="{
+                    swiper: null,
+                    init() {
+                        const container = this.$refs.swiperContainer;
+                        const slides = container.querySelectorAll('.swiper-slide');
+                        const canLoop = slides.length > 5;
+                        
+                        this.swiper = new Swiper(container, {
+                            pauseOnMouseEnter: true,
+                            slidesPerView: 2,
+                            slidesPerGroup: 2,
+                            spaceBetween: 15,
+                            loop: canLoop,
+                            autoplay: canLoop ? {
+                                delay: 30000,
+                                disableOnInteraction: true,
+                            } : false,
+                            navigation: {
+                                nextEl: this.$refs.nextBtn,
+                                prevEl: this.$refs.prevBtn,
+                            },
+                            breakpoints: {
+                                640: {
+                                    slidesPerView: 2,
+                                    slidesPerGroup: 2,
+                                },
+                                1024: {
+                                    slidesPerView: 4,
+                                    slidesPerGroup: 3,
+                                },
+                                1400: {
+                                    slidesPerView: 5,
+                                    slidesPerGroup: 3,
+                                },
+                            },
+                        });
+                    },
+                    destroy() {
+                        if (this.swiper) this.swiper.destroy(true, true);
+                    }
+                 }">
 
-                <div class="swiper related-swiper">
+                <div x-ref="swiperContainer" class="swiper related-swiper">
                     <div class="swiper-wrapper">
                         @foreach ($related->models as $item)
                             <div class="swiper-slide">
@@ -40,8 +81,8 @@
                     </div>
                 </div>
 
-                <div class="swiper-button-next custom-arrow"></div>
-                <div class="swiper-button-prev custom-arrow"></div>
+                <div x-ref="nextBtn" class="swiper-button-next custom-arrow"></div>
+                <div x-ref="prevBtn" class="swiper-button-prev custom-arrow"></div>
 
             </div>
         @else

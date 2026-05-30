@@ -1,6 +1,34 @@
 <div class="card-owner-info">
     <a href="{{ route('owner', $username) }}">
-        <div class="swiper mySwiperOwner" data-settings="{{ json_encode($settings ?? []) }}">
+        <div class="swiper mySwiperOwner" 
+             data-settings="{{ json_encode($settings ?? []) }}"
+             x-data="{
+                swiper: null,
+                init() {
+                    const settings = JSON.parse(this.$el.getAttribute('data-settings') || '{}');
+                    const nextBtn = this.$el.querySelector('.swiper-button-next-owner-info');
+                    const prevBtn = this.$el.querySelector('.swiper-button-prev-owner-info');
+                    const slides = this.$el.querySelectorAll('.swiper-slide');
+                    const canLoop = slides.length > 1;
+                    
+                    this.swiper = new Swiper(this.$el, {
+                        nested: true,
+                        loop: canLoop,
+                        autoplay: canLoop ? {
+                            delay: 10000,
+                            disableOnInteraction: true,
+                        } : false,
+                        ...settings,
+                        navigation: {
+                            nextEl: nextBtn,
+                            prevEl: prevBtn,
+                        }
+                    });
+                },
+                destroy() {
+                    if (this.swiper) this.swiper.destroy(true, true);
+                }
+             }">
             <div class="swiper-wrapper">
                 @if (isset($primaryImage) && $primaryImage)
                     <div class="swiper-slide">
@@ -20,6 +48,13 @@
                     <div class="swiper-slide">
                         <div class="content-image" style="background-image: url('{{ $ternaryImage }}');">
                             <img src="{{ $ternaryImage }}" alt="{{ $username }}">
+                        </div>
+                    </div>
+                @endif
+                @if (!$primaryImage && !$secondaryImage && !$ternaryImage)
+                    <div class="swiper-slide">
+                        <div class="content-image">
+                            <img src="{{ 'https://ui-avatars.com/api/?name=' . $username . '&background=random' }}" alt="{{ $username }}">
                         </div>
                     </div>
                 @endif
@@ -53,11 +88,10 @@
             @if (isset($isNew) || isset($isLive) || isset($lastLive))
                 <div class="position-absolute top-0 end-0 m-1 z-index-10">
                     @if (isset($isNew) && $isNew)
-                        <span class="badge bg-warning text-dark fw-bold">{{ __('owner/related.new') }}</span>
+                        <span class="badge bg-warning text-dark fw-bold">{{ __('common.new') }}</span>
                     @endif
                     @if (isset($isLive) && $isLive)
-                        <span class="badge bg-danger text-white"><span
-                                class="text-white">{{ __('components/ownerInfoCard.live') }} </span></span>
+                        <span class="badge bg-danger text-white"><span class="text-white">{{ __('common.live') }} </span></span>
                     @endif
                     @if (isset($lastLive) && !$isLive)
                         <span class="badge bg-dark opacity-50 text-white shadow-sm"><i class="lar la-clock"></i>
@@ -94,37 +128,37 @@
                     @switch($status)
                         @case('p2p')
                             <span class="badge bg-warning text-dark p-1"><i class="ri-eye-off-fill"></i>
-                                <p class="mb-0 mt-1">{{ __('components/ownerInfoCard.p2p') }}</p>
+                                <p class="mb-0 mt-1">{{ __('common.show_mode.p2p') }}</p>
                             </span>
                         @break
 
                         @case('private')
                             <span class="badge bg-danger text-dark mt-1 pt-1"><i class="ri-lock-fill"></i>
-                                <p class="mb-0 mt-1">{{ __('components/ownerInfoCard.private') }}</p>
+                                <p class="mb-0 mt-1">{{ __('common.show_mode.private') }}</p>
                             </span>
                         @break
 
                         @case('groupShow')
                             <span class="badge bg-success text-white"><i class="ri-group-line"></i>
-                                <p class="mb-0 mt-1">{{ __('components/ownerInfoCard.groupShow') }}</p>
+                                <p class="mb-0 mt-1">{{ __('common.show_mode.groupShow') }}</p>
                             </span>
                         @break
 
                         @case('virtualPrivate')
                             <span class="badge bg-success text-white"><i class="ri-group-line"></i>
-                                <p class="mb-0 mt-1">{{ __('components/ownerInfoCard.virtualPrivate') }}</p>
+                                <p class="mb-0 mt-1">{{ __('common.show_mode.virtualPrivate') }}</p>
                             </span>
                         @break
 
                         @case('blocked')
                             <span class="badge bg-danger text-dark mt-1 pt-1"><i class="ri-eye-off-fill"></i>
-                                <p class="mb-0 mt-1">{{ __('components/ownerInfoCard.blocked') }}</p>
+                                <p class="mb-0 mt-1">{{ __('common.show_mode.blocked') }}</p>
                             </span>
                         @break
 
                         @case('inactive')
                             <span class="badge bg-dark text-white mt-1 pt-1"><i class="ri-eye-off-fill"></i>
-                                <p class="mb-0 mt-1">{{ __('components/ownerInfoCard.inactive') }}</p>
+                                <p class="mb-0 mt-1">{{ __('common.show_mode.inactive') }}</p>
                             </span>
                         @break
 
