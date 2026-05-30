@@ -294,49 +294,49 @@
             <div class="tab-content">
 
                 <div class="tab-pane fade @if ($showLive) show active @endif" id="live"
-                    role="tabpanel">
+                    role="tabpanel" wire:key="tab-pane-live-{{ $owner->id }}">
                     @if ($showLive)
-                        <div id="container-live" class="container">
-                            <livewire:owner.live :owner="$owner" />
+                        <div id="container-live" class="container" wire:key="container-live-{{ $owner->id }}">
+                            <livewire:owner.live :owner="$owner" wire:key="live-component-{{ $owner->id }}" />
                         </div>
                     @endif
                 </div>
                 <div class="tab-pane fade @if ($showFeed) show active @endif" id="feed"
-                    role="tabpanel">
+                    role="tabpanel" wire:key="tab-pane-feed-{{ $owner->id }}">
                     @if ($showFeed)
-                        <div class="container">
-                            <livewire:owner.feed :owner="$owner" />
+                        <div class="container" wire:key="container-feed-{{ $owner->id }}">
+                            <livewire:owner.feed :owner="$owner" wire:key="feed-component-{{ $owner->id }}" />
                         </div>
                     @endif
                 </div>
                 <div class="tab-pane fade @if ($showInformation) show active @endif" id="infomation"
-                    role="tabpanel">
+                    role="tabpanel" wire:key="tab-pane-info-{{ $owner->id }}">
                     @if ($showInformation)
-                        <div class="container">
-                            <livewire:owner.information :owner="$owner" />
+                        <div class="container" wire:key="container-info-{{ $owner->id }}">
+                            <livewire:owner.information :owner="$owner" wire:key="info-component-{{ $owner->id }}" />
                         </div>
                     @endif
                 </div>
                 <div class="tab-pane fade @if ($showAlbums) show active @endif" id="albums"
-                    role="tabpanel">
+                    role="tabpanel" wire:key="tab-pane-albums-{{ $owner->id }}">
                     @if ($showAlbums)
-                        <div class="container">
-                            <livewire:owner.albums :owner="$owner" />
+                        <div class="container" wire:key="container-albums-{{ $owner->id }}">
+                            <livewire:owner.albums :owner="$owner" wire:key="albums-component-{{ $owner->id }}" />
                         </div>
                     @endif
                 </div>
                 <div class="tab-pane fade @if ($showVideos) show active @endif" id="videos"
-                    role="tabpanel">
+                    role="tabpanel" wire:key="tab-pane-videos-{{ $owner->id }}">
                     @if ($showVideos)
-                        <div class="container">
-                            <livewire:owner.videos :owner="$owner" />
+                        <div class="container" wire:key="container-videos-{{ $owner->id }}">
+                            <livewire:owner.videos :owner="$owner" wire:key="videos-component-{{ $owner->id }}" />
                         </div>
                     @endif
                 </div>
             </div>
         </div>
     </div>
-    <div class="container">
-        <livewire:owner.related :owner="$owner" />
+    <div class="container" wire:key="container-related-{{ $owner->id }}">
+        <livewire:owner.related :owner="$owner" wire:key="related-component-{{ $owner->id }}" />
     </div>
 </div>

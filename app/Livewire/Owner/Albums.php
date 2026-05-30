@@ -27,6 +27,5 @@ class Albums extends Component
 
     public function refreshMasonry($id) {
         $this->id_active = $id;
-        $this->dispatch('initMasonry');
     }
 }

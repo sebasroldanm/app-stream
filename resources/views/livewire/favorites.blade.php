@@ -16,7 +16,7 @@
                 <div class="col-lg-12">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="#"><i class="ri-home-4-line mr-1 float-left"></i>{{ __('common.breadcrumb.home') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="ri-home-4-line mr-1 float-left"></i>{{ __('common.breadcrumb.home') }}</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{ __('common.breadcrumb.favorite') }}</li>
                         </ol>
                     </nav>

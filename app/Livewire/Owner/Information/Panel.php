@@ -14,7 +14,6 @@ class Panel extends Component
     public function render()
     {
         $panels = ModelsPanel::where('owner_id', $this->owner->id)->orderBy('order')->orderBy('column')->get();
-        $this->dispatch('initMasonry');
         return view('livewire.owner.information.panel', [
             'panels' => $panels
         ]);

@@ -26,7 +26,7 @@
         </div>
     </div>
     <hr>
-    <div class="row masonry">
+    <div class="row masonry" x-data="masonry">
         @foreach ($album->photos as $key => $photo)
             <div class="col-sm-6 col-lg-6 masonry-item">
                 <div class="card mb-3 user-images position-relative overflow-hidden">

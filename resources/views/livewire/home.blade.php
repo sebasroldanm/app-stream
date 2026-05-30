@@ -1,6 +1,6 @@
 <!-- Page Content  -->
 <div>
-    <div class="header-for-bg">
+    {{-- <div class="header-for-bg">
         <div class="background-header position-relative">
             <img src="{{ asset('/images/page-img/profile-bg7.jpg') }}" class="img-fluid w-100" alt="header-bg">
             <div class="title-on-header">
@@ -9,10 +9,15 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- Page Content  -->
     <div id="content-page" class="content-page">
         <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active">{{ __('common.breadcrumb.home') }}</li>
+                </ol>
+            </nav>
             <div class="row mb-2">
                 <div class="col-md-4">
                     <label>{{ __('pages/home.username') }}:</label>

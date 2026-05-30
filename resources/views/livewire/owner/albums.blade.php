@@ -8,7 +8,7 @@
                 <div class="col-md-3 list_medias">
                     <ul class="nav nav-pills list-inline p-0 m-0 flex-column">
                         @foreach ($albums as $tab => $album)
-                            <li>
+                            <li wire:key="album-tab-{{ $album->id }}">
                                 <a class="nav-link d-flex justify-content-between
                                 @if ($tab == 0 && $id_active == false) active @endif
                                 @if ($id_active == $album->id) active @endif"
@@ -34,7 +34,8 @@
                             <div class="tab-pane fade min-vh-60 @if ($panel == 0 && $id_active == false) active show @endif
                                 @if ($id_active == $album->id) active show @endif"
                                 id="v-pills-album_{{ $album->id }}" role="tabpanel"
-                                aria-labelledby="v-pills-album_{{ $album->id }}">
+                                aria-labelledby="v-pills-album_{{ $album->id }}"
+                                wire:key="album-pane-{{ $album->id }}">
                                 @livewire('owner.albums.content-album', ['owner' => $owner, 'album' => $album], key($album->id))
                             </div>
                         @endforeach
@@ -48,3 +49,5 @@
             @endif
         </div>
     </div>
+</div>
+
