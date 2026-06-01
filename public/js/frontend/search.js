@@ -17,7 +17,7 @@ function searchGlobe() {
                     return;
                 }
 
-                fetch("/search?q=" + encodeURIComponent(value))
+                fetch("/search-suggestion?q=" + encodeURIComponent(value))
                     .then((r) => r.json())
                     .then((data) => {
                         console.log("API Response:", data);

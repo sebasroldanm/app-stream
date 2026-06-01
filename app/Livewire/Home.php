@@ -6,7 +6,6 @@ use App\Models\Customer;
 use App\Models\Owner;
 use App\Traits\SyncData;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class Home extends Component
