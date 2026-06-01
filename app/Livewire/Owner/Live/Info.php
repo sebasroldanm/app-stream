@@ -3,8 +3,8 @@
 namespace App\Livewire\Owner\Live;
 
 use App\Models\Owner;
+use App\Services\Owner\OwnerStatService;
 use App\Traits\SyncData;
-use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Lazy;
 use Livewire\Component;
@@ -17,8 +17,6 @@ class Info extends Component
     public Owner $owner;
 
     public object $viewers;
-
-    public $percent = 0;
 
     public $lastState = [];
 
@@ -48,11 +46,9 @@ class Info extends Component
         }
         $this->lastState = $currentState;
 
-        $this->viewers = $this->updateViewers();
+        $stats = $this->updateViewers();
 
-        $this->views_count = $this->viewers->guests + $this->viewers->spies + $this->viewers->invisibles + $this->viewers->greens + $this->viewers->golds + $this->viewers->regulars;
-
-        $this->percent = $this->owner->latestGoal?->getPercentage() ?? 0;
+        $percent = $this->owner->latestGoal?->getPercentage() ?? 0;
 
         if ($this->owner->isLive) {
             if ($this->owner->show_mode == null) {
@@ -71,9 +67,7 @@ class Info extends Component
 
         $historyGoals = $this->owner->latestGoal?->historyWithoutSpent;
 
-        // dd($historyGoals);
-
-        return view('livewire.owner.live.info', compact('state', 'type', 'historyGoals'));
+        return view('livewire.owner.live.info', compact('state', 'type', 'percent', 'stats', 'historyGoals'));
     }
 
     private function updateViewers()
@@ -81,21 +75,8 @@ class Info extends Component
         $owner = $this->owner;
         $cacheKey = "members_list_" . $owner->username;
 
-        $data = Cache::remember($cacheKey, 15, function () use ($owner) {
-            $client = new Client();
-
-            $url = env("API_SERVER") . "/api/front/models/username/" .   $owner->username . "/members";
-            $response = $client->get($url, [
-                'verify' => false,
-                'headers' => [
-                    'User-Agent' => 'PostmanRuntime/7.39.0',
-                    'Accept' => '*/*',
-                    'Accept-Encoding' => 'gzip, deflate, br',
-                    'Connection' => 'keep-alive'
-                ],
-            ]);
-
-            $data = json_decode($response->getBody()->getContents(), false);
+        $stat = Cache::remember($cacheKey, 15, function () use ($owner) {
+            $stat = app(OwnerStatService::class)->syncStreamStat($owner);
 
             $leagueOrder = [
                 'legend' => 1,
@@ -107,20 +88,20 @@ class Info extends Component
                 'grey'   => 7
             ];
 
-            $data->members = collect($data->members)->sort(function ($a, $b) use ($leagueOrder) {
+            $stat->members = collect($stat->members)->sort(function ($a, $b) use ($leagueOrder) {
                 // If it doesn't exist, apply more weight.
-                $leagueA = $leagueOrder[strtolower($a->user->userRanking->league)] ?? 99;
-                $leagueB = $leagueOrder[strtolower($b->user->userRanking->league)] ?? 99;
+                $leagueA = $leagueOrder[strtolower($a->ranking_league)] ?? 99;
+                $leagueB = $leagueOrder[strtolower($b->ranking_league)] ?? 99;
 
                 if ($leagueA !== $leagueB) {
                     return $leagueA <=> $leagueB;
                 }
 
-                return $b->user->userRanking->level <=> $a->user->userRanking->level;
+                return $b->ranking_level <=> $a->ranking_level;
             })->values()->all(); // values() resetea las llaves numéricas del array
 
-            return $data;
+            return $stat;
         });
-        return $data;
+        return $stat;
     }
 }

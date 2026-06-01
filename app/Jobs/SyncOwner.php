@@ -7,6 +7,7 @@ use App\Services\Owner\OwnerAlbumSyncService;
 use App\Services\Owner\OwnerFeedSyncService;
 use App\Services\Owner\OwnerIntroSyncService;
 use App\Services\Owner\OwnerPanelSyncService;
+use App\Services\Owner\OwnerStatService;
 use App\Services\Owner\OwnerSyncService;
 use App\Services\Owner\OwnerVideoSyncService;
 use Illuminate\Bus\Batchable;
@@ -18,11 +19,12 @@ class SyncOwner implements ShouldQueue
     use Batchable, Queueable;
 
     protected Owner $owner;
-    protected $type;
-    
+    protected string $type;
+
     public $timeout = 1200;
 
     protected OwnerSyncService $ownerSyncService;
+    protected OwnerStatService $ownerStatService;
     protected OwnerPanelSyncService $ownerPanelSyncService;
     protected OwnerAlbumSyncService $ownerAlbumSyncService;
     protected OwnerIntroSyncService $ownerIntroSyncService;
@@ -32,7 +34,7 @@ class SyncOwner implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(Owner $owner, $type)
+    public function __construct(Owner $owner, string $type)
     {
         $this->owner = $owner;
         $this->type = $type;
@@ -43,6 +45,7 @@ class SyncOwner implements ShouldQueue
      */
     public function handle(
         OwnerSyncService $ownerSyncService,
+        OwnerStatService $ownerStatService,
         OwnerPanelSyncService $ownerPanelSyncService,
         OwnerAlbumSyncService $ownerAlbumSyncService,
         OwnerIntroSyncService $ownerIntroSyncService,
@@ -51,6 +54,7 @@ class SyncOwner implements ShouldQueue
     ): void
     {
         $this->ownerSyncService = $ownerSyncService;
+        $this->ownerStatService = $ownerStatService;
         $this->ownerPanelSyncService = $ownerPanelSyncService;
         $this->ownerAlbumSyncService = $ownerAlbumSyncService;
         $this->ownerIntroSyncService = $ownerIntroSyncService;
@@ -83,6 +87,7 @@ class SyncOwner implements ShouldQueue
     private function updateOwner($owner)
     {
         $this->ownerSyncService->syncOwnerByUsername($owner->username);
+        $this->ownerStatService->syncStreamStat($owner);
     }
 
     private function updateAll($owner)

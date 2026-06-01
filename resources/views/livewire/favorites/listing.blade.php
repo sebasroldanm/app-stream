@@ -19,6 +19,7 @@
                         'simulateTouch' => true,
                     ]" 
                     :status="$favorite->general_condition" 
+                    :viewersCount="$favorite->stat?->viewers"
                     :isLive="$favorite->isLive" 
                     :lastLive="!$favorite->isLive
                         ? \Carbon\Carbon::parse($favorite->statusChangedAt)->diffForHumans(['short' => true])

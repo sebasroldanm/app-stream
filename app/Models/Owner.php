@@ -162,6 +162,11 @@ class Owner extends Model
         return $this->hasMany(SuperChat::class);
     }
 
+    public function stat()
+    {
+        return $this->hasOne(StreamStat::class);
+    }
+
     public function getRelationGroupAttribute()
     {
         return $this->relations()->with('group')->first()?->group;
