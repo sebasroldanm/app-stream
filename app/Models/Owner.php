@@ -402,10 +402,7 @@ class Owner extends Model
 
     public function getGoalDescriptionAttribute(): ?string
     {
-        if ($this->data?->cam?->goal) {
-            return $this->data->cam->goal->description;
-        }
-        return null;
+        return data_get($this->data, 'cam.goal.description');
     }
 
     public function getGoalTargetAttribute(): ?int

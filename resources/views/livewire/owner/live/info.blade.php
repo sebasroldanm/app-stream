@@ -70,7 +70,9 @@
                 <h5>{{ __('owner/live/info.status') }}</h5>
                 <span class="badge {{ $type }}">{{ __('common.show_mode.' . $state) }}</span>
 
-                <h5 class="card-title">{{ __('owner/live/info.viewers') }}: <span>{{ number_format($stats->viewers, 0, ',', '.') }}</span></h5>
+                @if($stats)
+                    <h5 class="card-title">{{ __('owner/live/info.viewers') }}: <span>{{ number_format($stats->viewers, 0, ',', '.') }}</span></h5>
+                @endif
 
                 <h5 class="card-title">{{ __('owner/live/info.king') }}</h5>
                 @if (isset($owner->data->cam->king))
@@ -93,13 +95,12 @@
             </div>
         </div>
     </div>
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ __('owner/live/info.viewing_now') }}</h5>
-                <div class="viewers-list">
-
-                    @if (count($stats->members) > 0)
+    @if ($stats && count($stats->members) > 0)
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ __('owner/live/info.viewing_now') }}</h5>
+                    <div class="viewers-list">
                         @foreach ($stats->members as $member)
                             @if ($member->ranking_isEx)
                                 <p class="fw-bold card-text">{{ $member->username }} <sup
@@ -111,12 +112,12 @@
                                     {{ $member->ranking_level }}</p>
                             @endif
                         @endforeach
-                    @endif
-                    @if ($stats->guests > 0)
-                        <p class="card-text">{{ __('owner/live/info.visitors') }}: {{ $stats->guests }}</p>
-                    @endif
+                        @if ($stats->guests > 0)
+                            <p class="card-text">{{ __('owner/live/info.visitors') }}: {{ $stats->guests }}</p>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
 </div>

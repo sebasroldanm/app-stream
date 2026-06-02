@@ -13,6 +13,7 @@ document.addEventListener("alpine:init", () => {
         thumbs: [],
         fullImages: [],
         currentIndex: 0,
+        style: "",
 
         openImage(src, fullImages = [], thumbImages = []) {
             this.type = "image";
@@ -69,6 +70,8 @@ document.addEventListener("alpine:init", () => {
             
             // Instantly show the thumbnail as a fast placeholder
             this.src = thumb;
+            // Agregar este estilo
+            this.style = "height: 100%; filter: blur(2px);";
 
             // Preload the full resolution image in background
             const tempImg = new Image();
@@ -76,6 +79,8 @@ document.addEventListener("alpine:init", () => {
                 // Ensure state hasn't changed before assigning full image
                 if (this.currentIndex === index && this.active && this.type === "image") {
                     this.src = full;
+                    // Quitar el estilo
+                    this.style = "";
                 }
             };
             tempImg.src = full;

@@ -66,10 +66,17 @@ COPY ./xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 COPY ./www.conf /usr/local/etc/php-fpm.d/www.conf
 
 # Create www-data user with proper permissions
-RUN addgroup -g 1000 -S www-data 2>/dev/null || true \
-    && adduser -u 1000 -D -S -G www-data www-data 2>/dev/null || true
+ARG UID=1000
+ARG GID=1000
+
+RUN deluser www-data || true
+
+RUN addgroup -g ${GID} -S laravel \
+    && adduser -u ${UID} -D -S -G laravel laravel
 
 # Expose port 9000 for PHP-FPM
 EXPOSE 9000
+
+USER laravel
 
 CMD ["php-fpm"]

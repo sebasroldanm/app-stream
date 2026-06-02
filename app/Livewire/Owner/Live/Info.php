@@ -78,6 +78,10 @@ class Info extends Component
         $stat = Cache::remember($cacheKey, 15, function () use ($owner) {
             $stat = app(OwnerStatService::class)->syncStreamStat($owner);
 
+            if ($stat == null) {
+                return null;
+            }
+
             $leagueOrder = [
                 'legend' => 1,
                 'royal'  => 2,

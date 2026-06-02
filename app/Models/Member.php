@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Member extends Model
 {
+    public $incrementing = false;
+    protected $keyType = 'int';
+
     protected $fillable = [
-        'id',
         // Ranking
         'ranking_league',
         'ranking_level',

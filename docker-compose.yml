@@ -4,6 +4,9 @@ services:
     build:
       context: ./docker/php
       dockerfile: Dockerfile
+      args:
+        UID: ${UID}
+        GID: ${GID}
     container_name: laravel_app
     restart: unless-stopped
     volumes:
@@ -60,6 +63,9 @@ services:
     build:
       context: ./docker/php
       dockerfile: Dockerfile
+      args:
+        UID: ${UID}
+        GID: ${GID}
     container_name: laravel_horizon
     working_dir: /var/www/html
     volumes:
@@ -79,6 +85,9 @@ services:
     build:
       context: ./docker/php
       dockerfile: Dockerfile
+      args:
+        UID: ${UID}
+        GID: ${GID}
     container_name: laravel_scheduler
     working_dir: /var/www/html
     volumes:

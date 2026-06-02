@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('members', function (Blueprint $table) {
-            $table->bigIncrements('id')->primary();
-            
+            $table->unsignedBigInteger('id')->primary();
+
             // Ranking
             $table->string('ranking_league');
             $table->integer('ranking_level');
