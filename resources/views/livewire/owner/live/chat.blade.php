@@ -1,81 +1,91 @@
 <div class="card-body p-2" wire:poll.3s.visible>
     <ul class="iq-timeline p-2">
-        @foreach ($messages as $message)
-            <li class="{{ $message->isNew ? 'newMessage' : '' }}" wire:key="{{ $message->id }}">
-                @if (($message->userData['isModel'] ?? false) && $message->owner_id === ($message->userData['id'] ?? null))
-                    @if (isset($message->details['lovenseDetails']))
-                        <div class="timeline-dots border-danger"></div>
-                    @elseif(isset($message->details['goal']))
-                        <div class="timeline-dots border-info"></div>
-                    @else
-                        <div class="timeline-dots border-success"></div>
-                    @endif
-                @else
-                    <div class="timeline-dots"></div>
-                @endif
-                <div class="d-flex align-items-center justify-content-between">
-                    @if (isset($message->details['isAnonymous']) && $message->details['isAnonymous'])
-                        <h6 class="mb-1">Anonymous</h6>
-                    @else
-                        <h6 class="mb-1">{{ $message->userData['username'] ?? 'Anonymous' }}</h6>
-                    @endif
-                    <a href="{{ route('metadata', ['model' => 'chat', 'id' => base64_encode(json_encode($message->toArray()))]) }}"
-                        target="_blank">
-                        <small>{{ $message->elapsedTime }}</small>
-                    </a>
-                </div>
-                <div class="d-inline-block w-100">
-                    {{-- Mensaje owner --}}
-                    @if ($message->userData['isModel'] ?? false)
-                        {{-- Peticion Owner --}}
-                        @if (isset($message->details['goal']))
-                            <p>Objetivo: {{ $message->details['body'] ?? '' }} - {{ $message->details['goal'] }}</p>
-                            {{-- Respuesta owner --}}
-                        @elseif (isset($message->details['body']))
-                            <p>{{ $message->details['body'] }}</p>
-                            {{-- API --}}
-                        @elseif(isset($message->details['lovenseDetails']))
-                            @php
-                                $love = $message->details['lovenseDetails']['detail'];
-                            @endphp
-                            @if (isset($love['power']))
-                                <p>{{ $love['power'] }}({{ $love['time'] }} sec.) por <bold>{{ $love['name'] }}</bold>
-                                    - propina {{ $love['amount'] }}</p>
-                            @elseif(isset($love['specialActualValue']) && $love['specialActualValue'] == 'giveControl')
-                                <p>Control por {{ $love['name'] }}</p>
-                            @else
-                                <p>Propina {{ $love['amount'] ?? dd($love) }} ({{ $love['time'] }} sec.)
-                                    {{ $love['name'] }}</p>
-                            @endif
-                            {{-- Propina --}}
-                        @else
-                            <p>Propina {{ $message->details['amount'] ?? '' }}</p>
-                        @endif
-                        {{-- Mensaje Regular --}}
-                    @else
-                        {{-- Propina --}}
-                        @if (isset($message->details['body']) && $message->details['body'] == '' && isset($message->details['amount']))
-                            <p>Propina {{ $message->details['amount'] }}</p>
-                            {{-- Nuevo King --}}
-                        @elseif($message->type == 'newKing')
-                            <p>Nuevo King</p>
-                            {{-- Mensaje --}}
-                        @elseif ($message->type == 'userBoughtContent')
-                            <p>Comprador {{ $message->details['content']['id'] ?? '' }} -
-                                {{ $message->details['content']['type'] ?? '' }} - Cost:
-                                {{ $message->details['content']['cost'] ?? '' }}</p>
-                        @elseif($message->type == 'knightAdded')
-                            <p>King updated: {{ $message->details['knight']['username'] ?? '' }} - Level:
-                                {{ $message->details['knight']['userRanking']['level'] ?? '' }}</p>
-                        @elseif($message->type == 'userSubscribedOnFanClub')
-                            <p>Fan Club: {{ $message->details['fanClubSubscription']['user']['username'] ?? '' }} - Cost:
-                                {{ $message->details['fanClubSubscription']['tokens'] ?? '' }}</p>
-                        @else
-                            <p>{{ $message->details['body'] ?? dd($message->toArray()) }}</p>
-                        @endif
-                    @endif
+        @if ($messages->isEmpty())
+            <li class="timeline-item p-0">
+                <div class="d-flex justify-content-center">
+                    <p>No hay mensajes</p>
                 </div>
             </li>
-        @endforeach
+        @else
+            @foreach ($messages as $message)
+                <li class="{{ $message->isNew ? 'newMessage' : '' }}" wire:key="{{ $message->id }}">
+                    @if (($message->userData['isModel'] ?? false) && $message->owner_id === ($message->userData['id'] ?? null))
+                        @if (isset($message->details['lovenseDetails']))
+                            <div class="timeline-dots border-danger"></div>
+                        @elseif(isset($message->details['goal']))
+                            <div class="timeline-dots border-info"></div>
+                        @else
+                            <div class="timeline-dots border-success"></div>
+                        @endif
+                    @else
+                        <div class="timeline-dots"></div>
+                    @endif
+                    <div class="d-flex align-items-center justify-content-between">
+                        @if (isset($message->details['isAnonymous']) && $message->details['isAnonymous'])
+                            <h6 class="mb-1">Anonymous</h6>
+                        @else
+                            <h6 class="mb-1">{{ $message->userData['username'] ?? 'Anonymous' }}</h6>
+                        @endif
+                        <a href="{{ route('metadata', ['model' => 'chat', 'id' => base64_encode(json_encode($message->toArray()))]) }}"
+                            target="_blank">
+                            <small>{{ $message->elapsedTime }}</small>
+                        </a>
+                    </div>
+                    <div class="d-inline-block w-100">
+                        {{-- Mensaje owner --}}
+                        @if ($message->userData['isModel'] ?? false)
+                            {{-- Peticion Owner --}}
+                            @if (isset($message->details['goal']))
+                                <p>Objetivo: {{ $message->details['body'] ?? '' }} - {{ $message->details['goal'] }}</p>
+                                {{-- Respuesta owner --}}
+                            @elseif (isset($message->details['body']))
+                                <p>{{ $message->details['body'] }}</p>
+                                {{-- API --}}
+                            @elseif(isset($message->details['lovenseDetails']))
+                                @php
+                                    $love = $message->details['lovenseDetails']['detail'];
+                                @endphp
+                                @if (isset($love['power']))
+                                    <p>{{ $love['power'] }}({{ $love['time'] }} sec.) por <bold>{{ $love['name'] }}
+                                        </bold>
+                                        - propina {{ $love['amount'] }}</p>
+                                @elseif(isset($love['specialActualValue']) && $love['specialActualValue'] == 'giveControl')
+                                    <p>Control por {{ $love['name'] }}</p>
+                                @else
+                                    <p>Propina {{ $love['amount'] ?? dd($love) }} ({{ $love['time'] }} sec.)
+                                        {{ $love['name'] }}</p>
+                                @endif
+                                {{-- Propina --}}
+                            @else
+                                <p>Propina {{ $message->details['amount'] ?? '' }}</p>
+                            @endif
+                            {{-- Mensaje Regular --}}
+                        @else
+                            {{-- Propina --}}
+                            @if (isset($message->details['body']) && $message->details['body'] == '' && isset($message->details['amount']))
+                                <p>Propina {{ $message->details['amount'] }}</p>
+                                {{-- Nuevo King --}}
+                            @elseif($message->type == 'newKing')
+                                <p>Nuevo King</p>
+                                {{-- Mensaje --}}
+                            @elseif ($message->type == 'userBoughtContent')
+                                <p>Comprador {{ $message->details['content']['id'] ?? '' }} -
+                                    {{ $message->details['content']['type'] ?? '' }} - Cost:
+                                    {{ $message->details['content']['cost'] ?? '' }}</p>
+                            @elseif($message->type == 'knightAdded')
+                                <p>King updated: {{ $message->details['knight']['username'] ?? '' }} - Level:
+                                    {{ $message->details['knight']['userRanking']['level'] ?? '' }}</p>
+                            @elseif($message->type == 'userSubscribedOnFanClub')
+                                <p>Fan Club: {{ $message->details['fanClubSubscription']['user']['username'] ?? '' }} -
+                                    Cost:
+                                    {{ $message->details['fanClubSubscription']['tokens'] ?? '' }}</p>
+                            @else
+                                <p>{{ $message->details['body'] ?? dd($message->toArray()) }}</p>
+                            @endif
+                        @endif
+                    </div>
+                </li>
+            @endforeach
+        @endif
     </ul>
 </div>
