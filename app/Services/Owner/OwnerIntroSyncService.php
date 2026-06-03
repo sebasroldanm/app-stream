@@ -22,7 +22,9 @@ class OwnerIntroSyncService
 
         try {
 
-            $response = $this->apiClient->get($path);
+            $response = $this->apiClient->get($path, [
+                'enable_proxy' => false,
+            ]);
 
             if ($response->getStatusCode() !== 200) {
                 return false;

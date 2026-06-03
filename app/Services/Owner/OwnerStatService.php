@@ -33,7 +33,9 @@ class OwnerStatService
         $path = "/api/front/models/username/" . $owner->username . "/members";
 
         try {
-            $response = $this->apiClient->get($path);
+            $response = $this->apiClient->get($path, [
+                'enable_proxy' => false,
+            ]);
         } catch (\Exception $e) {
             return null;
         }
