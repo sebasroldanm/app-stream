@@ -65,6 +65,7 @@ class OwnerChatService
         }
 
         $chats = SuperChat::where('owner_id', $owner->id)
+            ->where('createdAt', '>=', now()->subHours(24))
             ->orderBy('createdAt', 'desc')
             ->limit(100)
             ->get();

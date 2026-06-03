@@ -65,7 +65,8 @@
                  class="modal_vp-content" 
                  x-show="$store.viewer.type === 'image'"
                  :src="$store.viewer.src" 
-                 alt="Preview image">
+                 alt="Preview image"
+                 :style="$store.viewer.style">
                  
             <!-- Mostrar Video -->
             <template x-if="$store.viewer.type === 'video'">

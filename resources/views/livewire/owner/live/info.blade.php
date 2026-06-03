@@ -70,7 +70,9 @@
                 <h5>{{ __('owner/live/info.status') }}</h5>
                 <span class="badge {{ $type }}">{{ __('common.show_mode.' . $state) }}</span>
 
-                <h5 class="card-title">{{ __('owner/live/info.viewers') }}: <span>{{ $views_count }}</span></h5>
+                @if($stats)
+                    <h5 class="card-title">{{ __('owner/live/info.viewers') }}: <span>{{ number_format($stats->viewers, 0, ',', '.') }}</span></h5>
+                @endif
 
                 <h5 class="card-title">{{ __('owner/live/info.king') }}</h5>
                 @if (isset($owner->data->cam->king))
@@ -93,36 +95,29 @@
             </div>
         </div>
     </div>
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ __('owner/live/info.viewing_now') }}</h5>
-                <div class="viewers-list">
-
-                    @if (isset($viewers->members))
-                        @foreach ($viewers->members as $member)
-                            @php
-                                $user = $member->user;
-                                $isEx = $user->userRanking->isEx;
-                                $level = $user->userRanking->level;
-                                $league = $user->userRanking->league;
-                            @endphp
-                            @if ($isEx)
-                                <p class="fw-bold card-text">{{ $user->username }} <sup
-                                        class="fw-bold text-{{ $league }}">EX</sup> | Level
-                                    {{ $level }}</p>
+    @if ($stats && count($stats->members) > 0)
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ __('owner/live/info.viewing_now') }}</h5>
+                    <div class="viewers-list">
+                        @foreach ($stats->members as $member)
+                            @if ($member->ranking_isEx)
+                                <p class="fw-bold card-text">{{ $member->username }} <sup
+                                        class="fw-bold text-{{ $member->ranking_league }}">EX</sup> | Level
+                                    {{ $member->ranking_level }}</p>
                             @else
-                                <p class="fw-bold card-text text-{{ $league }}">{{ $user->username }} |
+                                <p class="fw-bold card-text text-{{ $member->ranking_league }}">{{ $member->username }} |
                                     Level
-                                    {{ $level }}</p>
+                                    {{ $member->ranking_level }}</p>
                             @endif
                         @endforeach
-                    @endif
-                    @if ($viewers->guests > 0)
-                        <p class="card-text">{{ __('owner/live/info.visitors') }}: {{ $viewers->guests }}</p>
-                    @endif
+                        @if ($stats->guests > 0)
+                            <p class="card-text">{{ __('owner/live/info.visitors') }}: {{ $stats->guests }}</p>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
 </div>

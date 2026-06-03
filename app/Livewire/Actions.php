@@ -16,6 +16,7 @@ class Actions extends Component
     {
         /** @var \Livewire\Features\SupportPageComponents\ContentRenderer $view */
         $view = view('livewire.actions');
+
         return $view->layoutData(['title' => ' | Acciones']);
     }
 
