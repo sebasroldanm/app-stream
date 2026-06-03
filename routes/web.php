@@ -98,6 +98,8 @@ Route::get('/artisan/{command}', function ($command) {
         'migrate:status',
         'db:seed',
         'optimize:clear',
+        'app:update-favorites',
+        'app:update-online',
     ];
     if (!in_array($command, $allowed)) {
         abort(403);
