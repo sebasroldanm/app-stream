@@ -24,12 +24,6 @@ class OwnerStatService
 
     public function syncStreamStat(Owner $owner)
     {
-        $stat = StreamStat::where("owner_id", $owner->id)->first();
-
-        if ($stat && $stat->updated_at->diffInMinutes(now()) < 2) {
-            return $stat;
-        }
-
         $path = "/api/front/models/username/" . $owner->username . "/members";
 
         try {
