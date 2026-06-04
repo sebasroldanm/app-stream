@@ -6,6 +6,7 @@ use App\Models\Goal;
 use App\Models\Owner;
 use App\Services\Logger\ServiceLogger;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
 
 class OwnerSyncService
 {
@@ -220,5 +221,69 @@ class OwnerSyncService
                 $currentGoal->each->delete();
             }
         }
+    }
+
+    public function syncOwnerBatch(array $dataOwners): array
+    {
+        $models = collect($dataOwners)
+            ->map(function ($owner) {
+                $site = env('NAME_SERVER_BATCH');
+                return [
+                    'id' => $site . '_' . $owner['id'],
+                    'site' => $site,
+                    'name' => $owner['username'],
+                ];
+            })
+            ->values()
+            ->toArray();
+
+        $path = env('API_SERVER_BATCH') . '/api/performers/batch';
+
+        $client = new Client();
+
+        $response = $client->post($path, [
+            'headers' => [
+                'Content-Type' => 'application/json',
+            ],
+            'json' => [
+                'models' => $models,
+            ],
+        ]);
+
+        $statusCode = $response->getStatusCode();
+
+        if ($statusCode !== 200) {
+            return [];
+        }
+
+        $content = $response->getBody()->getContents();
+        $data = json_decode($content, true);
+
+        if (data_get($data, 'data')) {
+            foreach (data_get($data, 'data') as $owner) {
+                $ownerId = str_replace(env('NAME_SERVER_BATCH') . '_', '', $owner['id']);
+                $ownerModel = Owner::where('id', $ownerId)->first();
+                if ($ownerModel) {
+                    $ownerModel->isLive = $owner['isLive'];
+                    switch ($owner['status']) {
+                        case 'online':
+                            $ownerModel->isOnline = true;
+                            break;
+                        case 'offline':
+                            $ownerModel->isOnline = true;
+                            break;
+                        default:
+                            $ownerModel->isOnline = false;
+                            break;
+                    }
+                    $ownerModel->save();
+                }
+            }
+        }
+
+        return [
+            'models' => $models,
+            'data' => $data,
+        ];
     }
 }

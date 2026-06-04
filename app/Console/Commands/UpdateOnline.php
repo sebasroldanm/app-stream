@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\SyncOwner;
 use App\Models\Owner;
+use App\Services\Owner\OwnerSyncService;
 use Illuminate\Bus\Batch;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Bus;
@@ -17,7 +18,7 @@ class UpdateOnline extends Command
      *
      * @var string
      */
-    protected $signature = 'app:update-online';
+    protected $signature = 'app:update-online {--type=batch}';
 
     /**
      * The console command description.
@@ -31,6 +32,21 @@ class UpdateOnline extends Command
         $owners = Owner::where('isLive', true)
             ->orWhere('isOnline', true)
             ->get();
+
+        if ($this->option('type') === 'batch') {
+            $this->info('Updating owners in batches...');
+            $service = app(OwnerSyncService::class);
+            $owners
+                ->chunk(50)
+                ->each(function ($chunk) use ($service) {
+
+                    $service->syncOwnerBatch(
+                        $chunk->values()->toArray()
+                    );
+                });
+
+            return Command::SUCCESS;
+        }
 
         Bus::batch(
             $owners->map(fn($owner) => (new SyncOwner($owner, 'owner')))->toArray()
