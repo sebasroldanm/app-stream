@@ -118,7 +118,22 @@ class OwnerConversationService
         $data = json_decode($response->getBody()->getContents(), true);
         $messagesApi = $data['messages'] ?? [];
 
-        $this->syncOwnerByUsername($data['model']['username']);
+        $owner = $this->syncOwnerByUsername($data['model']['username']);
+
+        if (!$owner) {
+            $dataOwner = [
+                'id' => $data['model']['id'],
+                'username' => 'owner_' . $data['model']['id'],
+                'isLive' => $data['model']['isLive'] ?? false,
+                'isOnline' => $data['model']['isOnline'] ?? false,
+                'isBlocked' => $data['model']['isBlocked'] ?? false,
+                'isDeleted' => $data['model']['isDeleted'] ?? false,
+            ];
+            // Log::info('Creando owner con datos: ' . json_encode($dataOwner));
+            $owner = app(OwnerSyncService::class)->createOwnerOnlyWithId($dataOwner);
+            // Log::info('Owner creado: ' . json_encode($owner));
+        }
+        
         Conversation::where('id', $data['model']['id'])->update([
             'metadataFriendship' => json_encode($data['friendship']),
             'metadataOwner' => json_encode($data['model']),

@@ -137,6 +137,9 @@ trait OwnerProp
                 case 'fi':
                     $html .= '<span class="fi fi-fi fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Finlandes"></span>';
                     break;
+                case 'ro':
+                    $html .= '<span class="fi fi-ro fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Rumano"></span>';
+                    break;
                 default:
                     $html .= '<span class="fi fi-xx fis ms-1 rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="' . $lang . '"></span>';
                     break;

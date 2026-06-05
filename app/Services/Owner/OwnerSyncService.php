@@ -286,4 +286,12 @@ class OwnerSyncService
             'data' => $data,
         ];
     }
+
+    public function createOwnerOnlyWithId(array $data)
+    {
+        return Owner::firstOrCreate(
+            ['id' => data_get($data, 'id')],
+            $data
+        );
+    }
 }

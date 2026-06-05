@@ -1,4 +1,4 @@
-<div class="row" wire:poll.10s.visible x-data="progressComponent(@entangle('percent'))">
+<div class="row" wire:poll.10s.visible>
     <div class="col-6">
         <div class="card">
             <div class="card-body">
@@ -45,9 +45,9 @@
 
                     <div class="progress" style="height: 20px;" wire:ignore>
                         <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success"
-                            role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0"
+                            role="progressbar" style="width: {{$percent}}%;" aria-valuenow="0" aria-valuemin="0"
                             aria-valuemax="100">
-                            <span id="progressText"></span>
+                            <span id="progressText">{{$percent}} %</span>
                         </div>
                     </div>
 

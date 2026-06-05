@@ -17,13 +17,12 @@ class OwnerStatService
         $this->apiClient = $apiClient;
     }
 
-    public function getStreamStatData(Owner $owner)
-    {
-        return $this->syncStreamStat($owner);
-    }
-
     public function syncStreamStat(Owner $owner)
     {
+        if ($owner->isError) {
+            return null;
+        }
+
         $path = "/api/front/models/username/" . $owner->username . "/members";
 
         try {
@@ -31,6 +30,9 @@ class OwnerStatService
                 'enable_proxy' => false,
             ]);
         } catch (\Exception $e) {
+            Owner::where('id', $owner->id)->update([
+                'isError' => true,
+            ]);
             return null;
         }
         $statusCode = $response->getStatusCode();
