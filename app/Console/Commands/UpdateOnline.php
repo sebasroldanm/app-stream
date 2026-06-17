@@ -35,16 +35,36 @@ class UpdateOnline extends Command
 
         if ($this->option('type') === 'batch') {
             $this->info('Updating owners in batches...');
+
+            $bar = $this->output->createProgressBar($owners->count());
+            $bar->setFormatDefinition(
+                'custom',
+                '%current%/%max% [%bar%] %percent:3s%% | Transcurrido: %elapsed:6s% | Restante: %remaining:6s% | Mem: %memory:6s%'
+            );
+            $bar->setFormat('custom');
+            $bar->start();
+
             $service = app(OwnerSyncService::class);
             $owners
                 ->chunk(50)
-                ->each(function ($chunk) use ($service) {
-
-                    $service->syncOwnerBatch(
-                        $chunk->values()->toArray()
-                    );
+                ->each(function ($chunk) use ($service, $bar) {
+                    $loteIds = $chunk->pluck("id")->toArray();
+                    $resultOwners = $service->getInfoByIds($loteIds);
+                    if ($resultOwners) {
+                        foreach ($resultOwners as $resultOwner) {
+                            Owner::where('id', data_get($resultOwner, 'id'))->update([
+                                'username' => data_get($resultOwner, 'username'),
+                                'isBlocked' => data_get($resultOwner, 'isBlocked'),
+                                'isOnline' => data_get($resultOwner, 'isOnline')
+                            ]);
+                            $bar->advance();
+                        }
+                    }
                 });
 
+            $bar->finish();
+            $this->newLine(2);
+            $this->info('Owners updated successfully - Total owners updated: ' . $owners->count());
             return Command::SUCCESS;
         }
 

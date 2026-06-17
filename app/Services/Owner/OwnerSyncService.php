@@ -123,6 +123,12 @@ class OwnerSyncService
                 if (!$owner) {
                     $owner = new Owner();
                     $owner->username = $username;
+                } else {
+                    $data = $this->getInfoById($owner->id);
+                    if ($data && !data_get($data, 'isModel')) {
+                        $owner->delete();
+                        return false;
+                    }
                 }
                 $owner->notFound = true;
                 $owner->isLive = false;
@@ -293,5 +299,73 @@ class OwnerSyncService
             ['id' => data_get($data, 'id')],
             $data
         );
+    }
+
+    public function getInfoById(string $id): array
+    {
+        $path = '/api/front/v2/users';
+        $query = [
+            'userIds' => [
+                $id
+            ],
+        ];
+
+        try {
+            $response = $this->apiClient->get($path, [
+                'query' => $query,
+            ]);
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode !== 200) {
+                return [];
+            }
+
+            $content = $response->getBody()->getContents();
+            $data = json_decode($content, true);
+
+            return data_get($data, 'items')[0] ?? [];
+        } catch (\Throwable $th) {
+            $this->logger->logError(
+                'service/owner_sync/get_info_by_id',
+                $th->getMessage(),
+                ['path' => $path],
+                [],
+                $th->getTraceAsString()
+            );
+            return [];
+        }
+    }
+
+    public function getInfoByIds(array $ids): array
+    {
+        $path = '/api/front/v2/users';
+        $query = [
+            'userIds' => $ids,
+        ];
+
+        try {
+            $response = $this->apiClient->get($path, [
+                'query' => $query,
+            ]);
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode !== 200) {
+                return [];
+            }
+
+            $content = $response->getBody()->getContents();
+            $data = json_decode($content, true);
+
+            return data_get($data, 'items') ?? [];
+        } catch (\Throwable $th) {
+            $this->logger->logError(
+                'service/owner_sync/get_info_by_ids',
+                $th->getMessage(),
+                ['path' => $path],
+                [],
+                $th->getTraceAsString()
+            );
+            return [];
+        }
     }
 }

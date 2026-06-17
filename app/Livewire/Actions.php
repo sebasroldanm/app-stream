@@ -22,7 +22,7 @@ class Actions extends Component
 
     public function updateOnline()
     {
-        Artisan::call('app:update-online');
+        Artisan::call('app:update-online --type=normal');
     }
 
     public function updateAll()
