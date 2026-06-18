@@ -1,5 +1,9 @@
 <div class="card-owner-info">
-    <a href="{{ route('owner', $username) }}">
+    @if(isset($isRedirectLive) && $isRedirectLive && isset($isLive) && $isLive)
+        <a href="{{ route('owner.live', $username) }}">
+    @else
+        <a href="{{ route('owner', $username) }}">
+    @endif
         <div class="swiper mySwiperOwner" 
              data-settings="{{ json_encode($settings ?? []) }}"
              x-data="{

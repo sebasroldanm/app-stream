@@ -29,6 +29,7 @@
                     :status="$favorite->general_condition" 
                     :viewersCount="$favorite->stat?->viewers"
                     :isLive="$favorite->isLive" 
+                    :isRedirectLive="true" 
                     :lastLive="!$favorite->isLive ? \Carbon\Carbon::parse($favorite->statusChangedAt)->diffForHumans(['short' => true]) : null"
                     :lastGoal="$favorite->latestGoal?->getPercentage()" 
                     :lastGoalDescription="$favorite->latestGoal?->description" 

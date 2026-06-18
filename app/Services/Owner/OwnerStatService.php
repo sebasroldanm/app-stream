@@ -30,9 +30,11 @@ class OwnerStatService
                 'enable_proxy' => false,
             ]);
         } catch (\Exception $e) {
-            Owner::where('id', $owner->id)->update([
-                'isError' => true,
-            ]);
+            if (str_contains($e->getMessage(), "not found")) {
+                Owner::where('id', $owner->id)->update([
+                    'isError' => true,
+                ]);
+            }
             return null;
         }
         $statusCode = $response->getStatusCode();
