@@ -37,7 +37,7 @@
             {{-- CONTENEDOR DE VIDEOS --}}
             <div
                 id="video-grid"
-                class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4"
+                class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3"
             ></div>
 
         </div>

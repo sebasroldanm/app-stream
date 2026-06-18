@@ -15,7 +15,7 @@ class Multiview extends Component
         $liveOwners = Owner::favoritedByCustomers(Auth::guard('customer')->user()->id)
             ->where('isLive', true)
             ->orderBy('statusChangedAt', 'desc')
-            ->limit(20)
+            ->limit(50)
             ->get();
         
         return view('livewire.multiview', [
