@@ -2,16 +2,26 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class AlbumFeed extends Model
 {
-    // use HasFactory;
+    public $incrementing = false;
+    protected $keyType = 'int';
 
     protected $fillable = [
-        'post_id', 'createdAt', 'isDeleted', 'owner_id', 'name', 
-        'description', 'cost', 'accessMode', 'photosCount', 'likes', 'preview'
+        'id',
+        'post_id',
+        'createdAt',
+        'isDeleted',
+        'owner_id',
+        'name',
+        'description',
+        'cost',
+        'accessMode',
+        'photosCount',
+        'likes',
+        'preview'
     ];
 
     public function feed()
