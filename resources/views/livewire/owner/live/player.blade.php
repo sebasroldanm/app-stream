@@ -45,6 +45,9 @@ class="live-player-wrapper">
                     <i class="ri-signal-tower-fill ri-4x mb-3 text-success"></i>
                     <h3 class="text-white">{{ __('owner/live/player.online_title') }}</h3>
                     <p class="text-white-50">{{ __('owner/live/player.online_text') }}</p>
+                    @if ($offlineText)
+                        <h5 class="text-white fst-italic mb-3">{{ $offlineText }}</h5>
+                    @endif
                     <p class="small text-muted">{{ __('owner/live/player.last_transmission') }}: <span class="text-white">{{ $statusChangedAt }}</span></p>
                 </div>
             </template>
@@ -55,6 +58,9 @@ class="live-player-wrapper">
                     <i class="ri-moon-clear-fill ri-4x mb-3 text-white-50"></i>
                     <h3 class="text-white">{{ __('owner/live/player.offline_title') }}</h3>
                     <p class="text-white-50">{{ __('owner/live/player.offline_text') }}</p>
+                    @if ($offlineText)
+                        <h5 class="text-white fst-italic mb-3">{{ $offlineText }}</h5>
+                    @endif
                     <p class="small text-muted">{{ __('owner/live/player.last_seen') }}: <span class="text-white">{{ $offlineStatusUpdatedAt }}</span></p>
                 </div>
             </template>

@@ -51,6 +51,7 @@ class Player extends Component
             'statusChangedAt' => $this->statusChangedAt,
             'offlineStatusUpdatedAt' => $this->offlineStatusUpdatedAt,
             'inShow' => $this->inShow,
+            'offlineText' => $this->owner->offlineText
         ]);
     }
 

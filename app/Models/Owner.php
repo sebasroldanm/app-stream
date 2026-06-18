@@ -433,4 +433,9 @@ class Owner extends Model
     {
         return $this->data?->cam?->topic ?? null;
     }
+
+    public function getOfflineTextAttribute(): ?string
+    {
+        return $this->data?->user?->user?->offlineStatus ?? null;
+    }
 }
