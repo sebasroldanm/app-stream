@@ -6,6 +6,7 @@ use App\Models\Member;
 use App\Models\MemberStreamStat;
 use App\Models\Owner;
 use App\Models\StreamStat;
+use Illuminate\Support\Facades\DB;
 
 class OwnerStatService
 {
@@ -17,24 +18,24 @@ class OwnerStatService
         $this->apiClient = $apiClient;
     }
 
-    public function getStreamStatData(Owner $owner)
-    {
-        return $this->syncStreamStat($owner);
-    }
-
     public function syncStreamStat(Owner $owner)
     {
-        $stat = StreamStat::where("owner_id", $owner->id)->first();
-
-        if ($stat && $stat->updated_at->diffInMinutes(now()) < 2) {
-            return $stat;
+        if ($owner->isError) {
+            return null;
         }
 
         $path = "/api/front/models/username/" . $owner->username . "/members";
 
         try {
-            $response = $this->apiClient->get($path);
+            $response = $this->apiClient->get($path, [
+                'enable_proxy' => false,
+            ]);
         } catch (\Exception $e) {
+            if (str_contains($e->getMessage(), "not found")) {
+                Owner::where('id', $owner->id)->update([
+                    'isError' => true,
+                ]);
+            }
             return null;
         }
         $statusCode = $response->getStatusCode();
@@ -63,39 +64,91 @@ class OwnerStatService
         return $stat->fresh();
     }
 
-    public function syncMembers(array $members, StreamStat $streamStat)
-    {
-        MemberStreamStat::where('stream_stat_id', $streamStat->id)->delete();
-        foreach ($members as $member) {
-            $memberModel = Member::find(data_get($member, 'user.id'));
-            if (!$memberModel) {
-                $memberModel = new Member();
-                $memberModel->id = data_get($member, 'user.id');
-            }
-            $memberModel->ranking_league = data_get($member, 'user.userRanking.league');
-            $memberModel->ranking_level = data_get($member, 'user.userRanking.level');
-            $memberModel->ranking_isEx = data_get($member, 'user.userRanking.isEx');
-            $memberModel->isDeleted = data_get($member, 'user.isDeleted');
-            $memberModel->username = data_get($member, 'user.username');
-            $memberModel->isOnline = data_get($member, 'user.isOnline');
-            $memberModel->isBlocked = data_get($member, 'user.isBlocked');
-            $memberModel->isRegular = data_get($member, 'user.isRegular');
-            $memberModel->isExGreen = data_get($member, 'user.isExGreen');
-            $memberModel->isUltimate = data_get($member, 'user.isUltimate');
-            $memberModel->isGreen = data_get($member, 'user.isGreen');
-            $memberModel->hasVrDevice = data_get($member, 'user.hasVrDevice');
-            $memberModel->isModel = data_get($member, 'user.isModel');
-            $memberModel->isStudio = data_get($member, 'user.isStudio');
-            $memberModel->isAdmin = data_get($member, 'user.isAdmin');
-            $memberModel->isSupport = data_get($member, 'user.isSupport');
-            $memberModel->hasAdminBadge = data_get($member, 'user.hasAdminBadge');
-            $memberModel->isPermanentlyBlocked = data_get($member, 'user.isPermanentlyBlocked');
-            $memberModel->save();
+    public function syncMembers(array $members, StreamStat $streamStat): void {
+        DB::transaction(function () use ($members, $streamStat) {
+            $memberRows = [];
+            $pivotRows = [];
+            $memberIds = [];
+            $now = now();
 
-            MemberStreamStat::create([
-                'member_id' => $memberModel->id,
-                'stream_stat_id' => $streamStat->id,
-            ]);
-        }
+            foreach ($members as $member) {
+                $memberId = data_get($member, 'user.id');
+
+                if (!$memberId) {
+                    continue;
+                }
+
+                $memberIds[] = $memberId;
+
+                $memberRows[] = [
+                    'id' => $memberId,
+                    // Ranking
+                    'ranking_league' => data_get($member, 'user.userRanking.league'),
+                    'ranking_level' => data_get($member, 'user.userRanking.level'),
+                    'ranking_isEx' => data_get($member, 'user.userRanking.isEx'),
+
+                    // Status
+                    'isDeleted' => data_get($member, 'user.isDeleted'),
+                    'username' => data_get($member, 'user.username'),
+                    'isOnline' => data_get($member, 'user.isOnline'),
+                    'isBlocked' => data_get($member, 'user.isBlocked'),
+                    'isRegular' => data_get($member, 'user.isRegular'),
+                    'isExGreen' => data_get($member, 'user.isExGreen'),
+                    'isUltimate' => data_get($member, 'user.isUltimate'),
+                    'isGreen' => data_get($member, 'user.isGreen'),
+                    'hasVrDevice' => data_get($member, 'user.hasVrDevice'),
+                    'isModel' => data_get($member, 'user.isModel'),
+                    'isStudio' => data_get($member, 'user.isStudio'),
+                    'isAdmin' => data_get($member, 'user.isAdmin'),
+                    'isSupport' => data_get($member, 'user.isSupport'),
+                    'hasAdminBadge' => data_get($member, 'user.hasAdminBadge'),
+                    'isPermanentlyBlocked' => data_get($member, 'user.isPermanentlyBlocked'),
+
+                    'updated_at' => $now,
+                    'created_at' => $now,
+                ];
+
+                $pivotRows[] = [
+                    'member_id' => $memberId,
+                    'stream_stat_id' => $streamStat->id,
+                ];
+            }
+
+            Member::upsert(
+                $memberRows,
+                ['id'],
+                [
+                    'ranking_league',
+                    'ranking_level',
+                    'ranking_isEx',
+                    'isDeleted',
+                    'username',
+                    'isOnline',
+                    'isBlocked',
+                    'isRegular',
+                    'isExGreen',
+                    'isUltimate',
+                    'isGreen',
+                    'hasVrDevice',
+                    'isModel',
+                    'isStudio',
+                    'isAdmin',
+                    'isSupport',
+                    'hasAdminBadge',
+                    'isPermanentlyBlocked',
+                    'updated_at',
+                ]
+            );
+
+            MemberStreamStat::where('stream_stat_id', $streamStat->id)
+                // ->whereNotIn('member_id', $memberIds)
+                ->delete();
+
+            MemberStreamStat::upsert(
+                $pivotRows,
+                ['member_id', 'stream_stat_id'],
+                []
+            );
+        });
     }
 }

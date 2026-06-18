@@ -5,27 +5,31 @@ namespace App\Services\Owner;
 use App\Models\Owner;
 use App\Models\SuperChat;
 use Carbon\Carbon;
-use GuzzleHttp\Client;
 
 class OwnerChatService
 {
+    protected OwnerApiClient $apiClient;
+
+    public function __construct(OwnerApiClient $apiClient)
+    {
+        $this->apiClient = $apiClient;
+    }
+
     public function getChatData(Owner $owner)
     {
-        return $this->syncSuperChats($owner);
+        return SuperChat::where('owner_id', $owner->id)
+            ->where('createdAt', '>=', now()->subHours(24))
+            ->orderBy('createdAt', 'desc')
+            ->limit(100)
+            ->get();
     }
 
     public function syncSuperChats(Owner $owner)
     {
-        $client = new Client();
-        $url = env("API_SERVER") . "/api/front/v2/models/" . $owner->id . "/chat";
-        $response = $client->get($url, [
-            'verify' => false,
-            'headers' => [
-                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36',
-                'Accept' => '*/*',
-                'Accept-Encoding' => 'gzip, deflate, br',
-                'Connection' => 'keep-alive',
-            ],
+        $uri = '/api/front/v2/models/' . $owner->id . '/chat';
+
+        $response = $this->apiClient->get($uri, [
+            'enable_proxy' => false,
             'query' => [
                 'source' => 'regular'
             ],
@@ -64,11 +68,7 @@ class OwnerChatService
             }
         }
 
-        $chats = SuperChat::where('owner_id', $owner->id)
-            ->where('createdAt', '>=', now()->subHours(24))
-            ->orderBy('createdAt', 'desc')
-            ->limit(100)
-            ->get();
+        $chats = $this->getChatData($owner);
 
         $chats->each(function ($chat) use ($newIds) {
             $chat->isNew = in_array($chat->id, $newIds);

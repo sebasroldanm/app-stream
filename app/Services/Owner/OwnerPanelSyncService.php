@@ -20,9 +20,11 @@ class OwnerPanelSyncService
     public function syncPanelByOwnerId($id)
     {
         $path = '/api/front/users/' . $id . '/panels';
-        
+
         try {
-            $response = $this->apiClient->get($path);
+            $response = $this->apiClient->get($path, [
+                'enable_proxy' => false,
+            ]);
             $statusCode = $response->getStatusCode();
 
             if ($statusCode === 200) {

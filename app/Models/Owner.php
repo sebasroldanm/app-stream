@@ -149,7 +149,7 @@ class Owner extends Model
 
     public function goals()
     {
-        return $this->hasMany(Goal::class);
+        return $this->hasMany(Goal::class)->withTrashed();
     }
 
     public function latestGoal()
@@ -432,5 +432,10 @@ class Owner extends Model
     public function getCamTopicAttribute(): ?string
     {
         return $this->data?->cam?->topic ?? null;
+    }
+
+    public function getOfflineTextAttribute(): ?string
+    {
+        return $this->data?->user?->user?->offlineStatus ?? null;
     }
 }

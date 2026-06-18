@@ -10,6 +10,7 @@ class Member extends Model
     protected $keyType = 'int';
 
     protected $fillable = [
+        'id',
         // Ranking
         'ranking_league',
         'ranking_level',

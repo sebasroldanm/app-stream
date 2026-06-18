@@ -6,8 +6,11 @@ trait SyncData
 {
     use OwnerProp;
 
-    public function syncOwnerByUsername($username)
+    public function syncOwnerByUsername(?string $username): mixed
     {
+        if (empty($username)) {
+            return false;
+        }
         return app(\App\Services\Owner\OwnerSyncService::class)->syncOwnerByUsername($username);
     }
 

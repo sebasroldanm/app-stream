@@ -236,7 +236,24 @@ class ViewOwner extends Component
     public function force_sync_enable()
     {
         $this->force_sync = true;
-        Owner::where('id', $this->id_owner)->update(['notFound' => false]);
+        $service = app(\App\Services\Owner\OwnerSyncService::class);
+        $data = $service->getInfoById($this->id_owner);
+        if ($data) {
+            if (data_get($data, 'isModel') === false) {
+                Owner::where('id', $this->id_owner)->delete();
+                return redirect()->route('favorites');
+            } else if (data_get($data, 'username') != $this->username) {
+                Owner::where('id', $this->id_owner)->update(['notFound' => false]);
+                return redirect()->route('owner', data_get($data, 'username'));
+            } else {
+                Owner::where('id', $this->id_owner)->update([
+                    'isBlocked' => data_get($data, 'isBlocked'),
+                    'isOnline' => data_get($data, 'isOnline'),
+                    'notFound' => false,
+                ]);
+            }
+        }
+        // Owner::where('id', $this->id_owner)->update(['notFound' => false]);
     }
 
     private function resolveOwnerFromSyncResult(mixed $result, string $username): ?Owner

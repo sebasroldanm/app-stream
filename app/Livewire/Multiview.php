@@ -2,32 +2,20 @@
 
 namespace App\Livewire;
 
+use App\Models\Owner;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class Multiview extends Component
 {
     public $selectedOwners = [];
 
-    public function toggleOwner($ownerId)
-    {
-        $ownerId = (int) $ownerId;
-        if (($key = array_search($ownerId, $this->selectedOwners)) !== false) {
-            unset($this->selectedOwners[$key]);
-            $this->selectedOwners = array_values($this->selectedOwners);
-        } else {
-            if (count($this->selectedOwners) < 12) {
-                $this->selectedOwners[] = $ownerId;
-            }
-        }
-    }
-
     public function render()
     {
-        $favs = \App\Models\Customer::find(1)->getOwnerFavoriteIds()->toArray();
-        $liveOwners = \App\Models\Owner::where('isLive', true)
-            ->whereIn('id', $favs)
-            ->orderBy('isLive', 'asc')
+        $liveOwners = Owner::favoritedByCustomers(Auth::guard('customer')->user()->id)
+            ->where('isLive', true)
             ->orderBy('statusChangedAt', 'desc')
+            ->limit(20)
             ->get();
         
         return view('livewire.multiview', [

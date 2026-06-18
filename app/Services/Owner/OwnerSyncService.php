@@ -6,6 +6,7 @@ use App\Models\Goal;
 use App\Models\Owner;
 use App\Services\Logger\ServiceLogger;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
 
 class OwnerSyncService
 {
@@ -122,6 +123,12 @@ class OwnerSyncService
                 if (!$owner) {
                     $owner = new Owner();
                     $owner->username = $username;
+                } else {
+                    $data = $this->getInfoById($owner->id);
+                    if ($data && !data_get($data, 'isModel')) {
+                        $owner->delete();
+                        return false;
+                    }
                 }
                 $owner->notFound = true;
                 $owner->isLive = false;
@@ -219,6 +226,146 @@ class OwnerSyncService
             if ($currentGoal->count() >= 1) {
                 $currentGoal->each->delete();
             }
+        }
+    }
+
+    public function syncOwnerBatch(array $dataOwners): array
+    {
+        $models = collect($dataOwners)
+            ->map(function ($owner) {
+                $site = env('NAME_SERVER_BATCH');
+                return [
+                    'id' => $site . '_' . $owner['id'],
+                    'site' => $site,
+                    'name' => $owner['username'],
+                ];
+            })
+            ->values()
+            ->toArray();
+
+        $path = env('API_SERVER_BATCH') . '/api/performers/batch';
+
+        $client = new Client();
+
+        $response = $client->post($path, [
+            'headers' => [
+                'Content-Type' => 'application/json',
+            ],
+            'json' => [
+                'models' => $models,
+            ],
+        ]);
+
+        $statusCode = $response->getStatusCode();
+
+        if ($statusCode !== 200) {
+            return [];
+        }
+
+        $content = $response->getBody()->getContents();
+        $data = json_decode($content, true);
+
+        if (data_get($data, 'data')) {
+            foreach (data_get($data, 'data') as $owner) {
+                $ownerId = str_replace(env('NAME_SERVER_BATCH') . '_', '', $owner['id']);
+                $ownerModel = Owner::where('id', $ownerId)->first();
+                if ($ownerModel) {
+                    $ownerModel->isLive = $owner['isLive'];
+                    switch ($owner['status']) {
+                        case 'online':
+                            $ownerModel->isOnline = true;
+                            break;
+                        case 'offline':
+                            $ownerModel->isOnline = true;
+                            break;
+                        default:
+                            $ownerModel->isOnline = false;
+                            break;
+                    }
+                    $ownerModel->save();
+                }
+            }
+        }
+
+        return [
+            'models' => $models,
+            'data' => $data,
+        ];
+    }
+
+    public function createOwnerOnlyWithId(array $data)
+    {
+        return Owner::firstOrCreate(
+            ['id' => data_get($data, 'id')],
+            $data
+        );
+    }
+
+    public function getInfoById(string $id): array
+    {
+        $path = '/api/front/v2/users';
+        $query = [
+            'userIds' => [
+                $id
+            ],
+        ];
+
+        try {
+            $response = $this->apiClient->get($path, [
+                'query' => $query,
+            ]);
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode !== 200) {
+                return [];
+            }
+
+            $content = $response->getBody()->getContents();
+            $data = json_decode($content, true);
+
+            return data_get($data, 'items')[0] ?? [];
+        } catch (\Throwable $th) {
+            $this->logger->logError(
+                'service/owner_sync/get_info_by_id',
+                $th->getMessage(),
+                ['path' => $path],
+                [],
+                $th->getTraceAsString()
+            );
+            return [];
+        }
+    }
+
+    public function getInfoByIds(array $ids): array
+    {
+        $path = '/api/front/v2/users';
+        $query = [
+            'userIds' => $ids,
+        ];
+
+        try {
+            $response = $this->apiClient->get($path, [
+                'query' => $query,
+            ]);
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode !== 200) {
+                return [];
+            }
+
+            $content = $response->getBody()->getContents();
+            $data = json_decode($content, true);
+
+            return data_get($data, 'items') ?? [];
+        } catch (\Throwable $th) {
+            $this->logger->logError(
+                'service/owner_sync/get_info_by_ids',
+                $th->getMessage(),
+                ['path' => $path],
+                [],
+                $th->getTraceAsString()
+            );
+            return [];
         }
     }
 }

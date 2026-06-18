@@ -41,6 +41,6 @@ class Chat extends Component
     private function chat()
     {
         $chatService = app(OwnerChatService::class);
-        return $chatService->getChatData($this->owner);
+        return $chatService->syncSuperChats($this->owner);
     }
 }

@@ -46,7 +46,9 @@ class OwnerApiClient
     {
         $requestUri = $uri;
 
-        if ($this->enableProxy) {
+        $enableProxy = $options['enable_proxy'] ?? $this->enableProxy;
+
+        if ($enableProxy) {
             $fullUrl = $this->apiServer . '/' . ltrim($uri, '/');
 
             if (!empty($options['query'])) {

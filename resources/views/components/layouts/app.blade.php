@@ -62,7 +62,7 @@
             
             <!-- Mostrar Imagen -->
             <img id="imageModal" 
-                 class="modal_vp-content" 
+                 class="modal_vp-content rounded" 
                  x-show="$store.viewer.type === 'image'"
                  :src="$store.viewer.src" 
                  alt="Preview image"
@@ -71,7 +71,7 @@
             <!-- Mostrar Video -->
             <template x-if="$store.viewer.type === 'video'">
                 <video id="videoModal" 
-                       class="modal_vp-content" 
+                       class="modal_vp-content rounded" 
                        controls 
                        autoplay 
                        playsinline 
