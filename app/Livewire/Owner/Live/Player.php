@@ -9,56 +9,41 @@ use Livewire\Component;
 class Player extends Component
 {
     public Owner $owner;
-    public bool $isMultiview = false;
-    public bool $showInfo = true;
-    public bool $showControls = true;
-    public bool $autoplay = true;
-    public bool $muted = true;
-    public bool $canExpandLayout = false;
-    public bool $showExpandButton = true;
-    public bool $showLogs = true;
-    
-    // Status properties for reactivity
-    public bool $isLive = false;
-    public bool $isOnline = false;
-    public $inShow = false;
-    public string $statusChangedAt = '';
-    public string $offlineStatusUpdatedAt = '';
-    public string $url = '';
-    public string $poster = '';
 
     public function render()
     {
-        $this->url = trim(env("URL_HLS") . "/" . $this->owner->id . "/master/" . $this->owner->id . ".m3u8");
+        $url = trim(env("URL_HLS") . "/" . $this->owner->id . "/master/" . $this->owner->id . ".m3u8");
+        $poster = $this->getPoster($this->owner);
 
         $height = $this->owner->ownerCamBroadcastConfigHeight;
         $width = $this->owner->ownerCamBroadcastConfigWidth;
-        $this->poster = $this->getPoster($this->owner);
+
+        if ($this->owner->isLive) {
+            if ($this->owner->show_mode == null) {
+                $state = 'live';
+            } else {
+                $state = $this->owner->show_mode;
+            }
+        } else if ($this->owner->isOnline) {
+            $state = 'online';
+        } else {
+            $state = 'offline';
+        }
         
-        $this->isLive = (bool) $this->owner->isLive;
-        $this->isOnline = (bool) $this->owner->isOnline;
-        $this->statusChangedAt = $this->owner->statusChangedAt?->diffForHumans() ?? '';
-        $this->offlineStatusUpdatedAt = $this->owner->offlineStatusUpdatedAt?->diffForHumans() ?? '';
-        $this->inShow = $this->owner->show_mode;
+        $statusChangedAt = $this->owner->statusChangedAt?->diffForHumans() ?? '';
+        $offlineStatusUpdatedAt = $this->owner->offlineStatusUpdatedAt?->diffForHumans() ?? '';
 
         return view('livewire.owner.live.player', [
-            'url' => $this->url,
-            'poster' => $this->poster,
+            'url' => $url,
+            'poster' => $poster,
             'height' => $height,
             'width' => $width,
-            'isLive' => $this->isLive,
-            'isOnline' => $this->isOnline,
-            'statusChangedAt' => $this->statusChangedAt,
-            'offlineStatusUpdatedAt' => $this->offlineStatusUpdatedAt,
-            'inShow' => $this->inShow,
-            'offlineText' => $this->owner->offlineText
+            'state' => $state,
+            'offlineText' => $this->owner->offlineText,
+            'statusChangedAt' => $statusChangedAt,
+            'offlineStatusUpdatedAt' => $offlineStatusUpdatedAt,
+            'apiUrl' => route('stream', $this->owner->username)
         ]);
-    }
-
-    #[On('owner-status-updated')]
-    public function refreshOwner()
-    {
-        $this->owner->refresh();
     }
 
     private function getPoster(Owner $owner)

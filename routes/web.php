@@ -75,6 +75,8 @@ Route::middleware(['auth:customer'])->group(function () {
     Route::post('/webauthn/register', [WebAuthnRegisterController::class, 'register']);
 
     Route::get('/search', ResultSearch::class)->name('searchAll');
+
+    Route::get('/stream/{username}', [UtilController::class, 'dataStream'])->name('stream');
 });
 
 Route::middleware('guest:customer')->group(function () {
