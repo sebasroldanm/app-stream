@@ -83,4 +83,35 @@ class UtilController extends Controller
 
         return response()->json($response);
     }
+
+    public function dataStream(Request $request, $username)
+    {
+        $owner = Owner::where('username', $username)->first();
+        if ($owner->isLive) {
+            if ($owner->show_mode == null) {
+                $state = 'live';
+            } else {
+                $state = $owner->show_mode;
+            }
+        } else if ($owner->isOnline) {
+            $state = 'online';
+        } else {
+            $state = 'offline';
+        }
+        if ($owner) {
+            return response()->json([
+                'state' => $state,
+                'streamUrl' => $owner->isLive ? trim(env("URL_HLS") . "/" . $owner->id . "/master/" . $owner->id . ".m3u8") : '',
+                'text' => $owner->offlineText,
+                'date' => $owner->statusChangedAt?->diffForHumans(),
+            ]);
+        }
+
+        return response()->json([
+            'state' => 'offline',
+            'streamUrl' => '',
+            'text' => 'Usuario no encontrado',
+            'date' => '',
+        ]);
+    }
 }

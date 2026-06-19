@@ -41,7 +41,8 @@ class Player extends Component
             'state' => $state,
             'offlineText' => $this->owner->offlineText,
             'statusChangedAt' => $statusChangedAt,
-            'offlineStatusUpdatedAt' => $offlineStatusUpdatedAt
+            'offlineStatusUpdatedAt' => $offlineStatusUpdatedAt,
+            'apiUrl' => route('stream', $this->owner->username)
         ]);
     }
 

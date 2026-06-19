@@ -2,5 +2,6 @@
     data-stream-url="{{ $url }}"
     data-state="{{ $state }}"
     data-text="{{ $offlineText }}"
-    data-date="{{ $statusChangedAt }}">
+    data-date="{{ $statusChangedAt }}"
+    data-api-url="{{ $apiUrl }}">
 </div>
