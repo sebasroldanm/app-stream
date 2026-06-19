@@ -26,6 +26,7 @@
     {{-- <link rel="stylesheet" href="{{ asset('/vendor/font-awesome-line-awesome/css/all.min.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('/vendor/line-awesome/dist/line-awesome/css/line-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/frontend/plyr.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/frontend/live.css') }}" />
     <!-- Link Swiper's CSS -->
     <link rel="stylesheet" href="{{ asset('css/frontend/swiper-bundle.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/frontend/stories.css') }}?v=1.0">

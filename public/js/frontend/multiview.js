@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const grid = document.getElementById('video-grid');
     const activePlayers = new Map(); // ownerId -> { player, hls, container, button }
 
-    const MAX_STREAMS = 6; // Límite de streams simultáneos
+    const MAX_STREAMS = 9; // Límite de streams simultáneos
 
     // --- Contador de streams activos (opcional: añade <span id="stream-count"> en tu HTML) ---
     function updateStreamCount() {
