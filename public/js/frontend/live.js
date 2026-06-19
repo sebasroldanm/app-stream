@@ -1,297 +1,211 @@
-document.addEventListener("alpine:init", () => {
-    Alpine.data("livePlayer", (config) => ({
-        player: null,
-        hls: null,
-        status: "", // 'warning' | 'danger'
-        statusMessage: "",
-        transmissionInfo: "",
-        logs: [],
-        logsOpen: false,
-        expanded: false,
-        config: config,
-        gracePeriodTimeout: null,
+document.addEventListener('DOMContentLoaded', () => {
+  const container = document.getElementById('video-player');
+  if (!container) return;
 
-        init() {
-            // Watch para detectar cambios en la URL (cuando Livewire refresca el Owner)
-            this.$watch('config.url', (newUrl, oldUrl) => {
-                if (newUrl !== oldUrl && !this.config.inShow && this.config.isLive) {
-                    this.addLog("La URL ha cambiado, actualizando fuente...");
-                    if (this.hls) {
-                        this.hls.loadSource(newUrl);
-                        this.hls.startLoad();
-                    } else if (this.player && this.$refs.video && this.$refs.video.canPlayType("application/vnd.apple.mpegurl")) {
-                        this.$refs.video.src = newUrl;
-                        if (this.config.autoplay) this.player.play();
-                    } else {
-                        this.destroy();
-                        this.initPlayer();
-                    }
-                }
-            });
+  const state = container.dataset.state || 'Offline';
+  const streamUrl = container.dataset.streamUrl;
+  const text = container.dataset.text || '';
+  const date = container.dataset.date || '';
 
-            // Watch para detectar cambios en el estado de Show
-            this.$watch('config.inShow', (inShow) => {
-                if (inShow) {
-                    this.addLog("Iniciando Show Privado, deteniendo reproductor...");
-                    this.destroy();
-                } else {
-                    if (this.config.isLive) {
-                        this.addLog("Show Privado finalizado, reiniciando reproductor...");
-                        this.initPlayer();
-                    }
-                }
-            });
+  // ---------- Si no es "Live", mostramos la plantilla correspondiente ----------
+  if (state !== 'live') {
+    renderTemplate(state, text, date);
+    return;
+  }
 
-            // Watch para detectar cambios en el estado Live
-            this.$watch('config.isLive', (isLive) => {
-                if (isLive && !this.config.inShow) {
-                    if (this.gracePeriodTimeout) {
-                        clearTimeout(this.gracePeriodTimeout);
-                        this.gracePeriodTimeout = null;
-                        this.addLog("Transmisión recuperada en tiempo de gracia.");
-                    }
-                    if (!this.player) {
-                        this.addLog("Iniciando transmisión, cargando reproductor...");
-                        this.initPlayer();
-                    }
-                } else if (!isLive) {
-                    if (!this.gracePeriodTimeout && this.player) {
-                        this.addLog("Transmisión inestable. Esperando tiempo de gracia (60s)...");
-                        this.gracePeriodTimeout = setTimeout(() => {
-                            this.addLog("Transmisión finalizada, deteniendo reproductor...");
-                            this.destroy();
-                        }, 60000);
-                    } else if (!this.player) {
-                        // Si ya está destruido o no se ha creado, no hacemos nada
-                    }
-                }
-            });
+  // ---------- Modo Live: reproductor de video ----------
+  if (!streamUrl) {
+    container.innerHTML = `<div class="player-error">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      Falta la URL del stream (data-stream-url)
+    </div>`;
+    return;
+  }
 
-            // Pequeño delay para asegurar que el DOM esté listo
-            setTimeout(() => {
-                if (!this.config.inShow && this.config.isLive) {
-                    this.initPlayer();
-                } else {
-                    if (this.config.inShow) {
-                        this.addLog("Show Privado activo al cargar, reproductor en pausa.");
-                    } else if (!this.config.isLive) {
-                        this.addLog("Usuario no está transmitiendo al cargar.");
-                    }
-                }
-            }, 100);
-        },
+  let hls = null;
+  let player = null;
+  let retryCount = 0;
+  const MAX_RETRIES = 3;
 
-        initPlayer() {
-            const videoElement = this.$refs.video;
-            if (!videoElement) {
-                console.error(
-                    "ERROR: No se encontró el elemento video ref en el DOM",
-                );
-                return;
-            }
+  container.innerHTML = `
+    <div class="player-body" id="player-body">
+      <div class="skeleton-loading">
+        <div class="spinner"></div>
+        <div class="loading-text">Conectando…</div>
+      </div>
+    </div>
+  `;
 
-            const plyrOptions = {
-                controls: this.config.showControls
-                    ? ["play-large", "play", "mute", "volume", "fullscreen"]
-                    : [],
-                debug: false,
-                autoplay: this.config.autoplay,
-                muted: this.config.muted,
-                volume: 1,
-                ratio: "16:9", // Forzamos proporción 16:9 siempre
-                poster: this.config.poster,
-            };
+  const bodyEl = document.getElementById('player-body');
+  const skeleton = bodyEl.querySelector('.skeleton-loading');
+  const loadingText = skeleton.querySelector('.loading-text');
 
-            if (Hls.isSupported()) {
-                this.hls = new Hls({
-                    manifestLoadingMaxRetry: 4,
-                    manifestLoadingRetryDelay: 1000,
-                });
-                this.hls.loadSource(this.config.url);
+  const video = document.createElement('video');
+  video.id = 'main-video';
+  video.playsInline = true;
+  video.preload = 'metadata';
+  video.style.display = 'none';
+  bodyEl.appendChild(video);
 
-                this.player = new Plyr(videoElement, plyrOptions);
-                this.hls.attachMedia(this.player.media);
+  function destroyHls() {
+    if (hls) { hls.destroy(); hls = null; }
+  }
 
-                this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                    this.addLog("HLS: Manifiesto cargado");
-                    this.addLog(`URL: ${this.config.url}`);
-                    if (this.config.autoplay) {
-                        this.player.play().catch((error) => {
-                            this.addLog("Autoplay bloqueado por el navegador");
-                        });
-                    }
-                });
+  function destroyPlayer() {
+    if (player) { player.destroy(); player = null; }
+    destroyHls();
+  }
 
-                this.hls.on(Hls.Events.LEVEL_SWITCHED, (event, data) => {
-                    const level = this.hls.levels[data.level];
-                    if (level) {
-                        this.transmissionInfo = `${level.width}x${level.height} (${(level.bitrate / 1000).toFixed(0)}kbps)`;
-                        this.addLog(`Calidad: ${this.transmissionInfo}`);
-                    }
-                });
+  function revealVideo() {
+    if (skeleton && skeleton.parentNode) skeleton.remove();
+    video.style.display = 'block';
+  }
 
-                this.hls.on(Hls.Events.ERROR, (event, data) => {
-                    if (data.fatal) {
-                        this.status = "danger";
-                        const errorDetail = data.networkDetails
-                            ? ` (${data.networkDetails.response || data.networkDetails.statusText})`
-                            : "";
+  function showPlayerError(message) {
+    if (skeleton && skeleton.parentNode) skeleton.remove();
+    if (video.parentNode) video.remove();
+    destroyPlayer();
 
-                        switch (data.type) {
-                            case Hls.ErrorTypes.NETWORK_ERROR:
-                                this.statusMessage =
-                                    "Conexión interrumpida" + errorDetail;
-                                this.addLog(
-                                    `Error de red: ${this.statusMessage}. Consultando estado del Owner...`,
-                                );
-                                
-                                // Intentamos refrescar los datos del Owner vía Livewire
-                                if (this.$wire) {
-                                    this.$wire.refreshOwner();
-                                }
-                                
-                                this.hls.startLoad();
-                                break;
-                            case Hls.ErrorTypes.MEDIA_ERROR:
-                                this.statusMessage = "Error de medios";
-                                this.addLog(
-                                    `Error de medios - Recuperando... URL: ${this.config.url}`,
-                                );
-                                this.hls.recoverMediaError();
-                                break;
-                            default:
-                                this.statusMessage = "Error fatal";
-                                this.addLog(
-                                    `Error fatal irrecuperable - URL: ${this.config.url}`,
-                                );
-                                if (this.hls) {
-                                    this.hls.destroy();
-                                    this.hls = null;
-                                }
-                                if (this.$wire) {
-                                    this.$wire.refreshOwner();
-                                }
-                                break;
-                        }
-                    }
-                });
-            } else if (
-                videoElement.canPlayType("application/vnd.apple.mpegurl")
-            ) {
-                videoElement.src = this.config.url;
-                this.player = new Plyr(videoElement, plyrOptions);
-                if (this.config.autoplay) this.player.play();
-            } else {
-                this.status = "danger";
-                this.statusMessage = "No soportado";
-                this.addLog("Formato no soportado en este navegador");
-            }
+    const errDiv = document.createElement('div');
+    errDiv.className = 'player-error';
+    errDiv.innerHTML = `
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      ${escapeHtml(message)}
+    `;
+    bodyEl.appendChild(errDiv);
+  }
 
-            if (this.player) {
-                this.player.on("playing", () => {
-                    this.status = "";
-                    this.statusMessage = "";
-                    this.addLog("Reproduciendo");
-                });
+  function initPlyr() {
+    if (player) return;
+    player = new Plyr(video, {
+      controls: ['play', 'mute', 'volume', 'fullscreen'],
+      ratio: '16:9',
+      tooltips: { controls: false },
+    });
+    revealVideo();
+    player.play().catch(() => {});
+  }
 
-                this.player.on("waiting", () => {
-                    this.status = "warning";
-                    this.statusMessage = "Cargando...";
-                    this.addLog("Buffering");
-                });
+  function setupHls() {
+    destroyHls();
 
-                this.player.on("pause", () => {
-                    this.status = "warning";
-                    this.statusMessage = "Pausado";
-                    this.addLog("Pausado");
-                });
+    if (Hls.isSupported()) {
+      hls = new Hls({
+        enableWorker: true,
+        lowLatencyMode: true,
+        maxBufferLength: 30,
+        backBufferLength: 10,
+      });
 
-                this.player.on("error", (e) => {
-                    this.status = "danger";
-                    this.statusMessage = "Error de Plyr";
-                    this.addLog("Error del reproductor");
-                });
-            }
-        },
+      hls.loadSource(streamUrl);
+      hls.attachMedia(video);
 
-        addLog(msg) {
-            const time = new Date().toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-            });
-            this.logs.unshift(`${time} - ${msg}`);
-            if (this.logs.length > 4) this.logs.pop();
-        },
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        retryCount = 0;
+        initPlyr();
+      });
 
-        toggleExpand() {
-            this.expanded = !this.expanded;
+      hls.on(Hls.Events.ERROR, (event, data) => {
+        if (!data.fatal) return;
+        if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
+          destroyHls();
+          tryReconnect();
+        } else {
+          showPlayerError('Error fatal al cargar el stream.');
+          destroyPlayer();
+        }
+      });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = streamUrl;
+      video.addEventListener('loadedmetadata', initPlyr, { once: true });
+      video.addEventListener('error', () => {
+        showPlayerError('Error al cargar el stream (nativo).');
+        destroyPlayer();
+      }, { once: true });
+    } else {
+      showPlayerError('HLS no está soportado en este navegador.');
+    }
+  }
 
-            // Lógica de expansión de contenedor (anteriormente en custom.js)
-            const liveContainer = document.getElementById("container-live");
-            if (
-                this.config.canExpandLayout &&
-                liveContainer &&
-                window.innerWidth > 1449
-            ) {
-                if (this.expanded) {
-                    // Expandir
-                    if (
-                        !document
-                            .querySelector(".wrapper-menu")
-                            ?.classList.contains("open")
-                    ) {
-                        sessionStorage.setItem("menu-open", "true");
-                        document.querySelector(".wrapper-menu")?.click();
-                    }
-                    if (
-                        !document
-                            .querySelector(".right-sidebar-mini")
-                            ?.classList.contains("right-sidebar")
-                    ) {
-                        sessionStorage.setItem("sidebar-open", "true");
-                        document
-                            .querySelector(".right-sidebar-toggle")
-                            ?.click();
-                    }
-                    liveContainer.classList.remove("container");
-                    liveContainer.classList.add("container-fluid");
-                } else {
-                    // Contraer
-                    liveContainer.classList.remove("container-fluid");
-                    liveContainer.classList.add("container");
-                    if (sessionStorage.getItem("menu-open") === "true") {
-                        document.querySelector(".wrapper-menu")?.click();
-                        sessionStorage.removeItem("menu-open");
-                    }
-                    if (sessionStorage.getItem("sidebar-open") === "true") {
-                        document
-                            .querySelector(".right-sidebar-toggle")
-                            ?.click();
-                        sessionStorage.removeItem("sidebar-open");
-                    }
-                }
-            }
+  function tryReconnect() {
+    if (retryCount >= MAX_RETRIES) {
+      showPlayerError('No se pudo conectar al stream');
+      return;
+    }
+    retryCount++;
+    const delay = retryCount * 2000;
+    if (loadingText) loadingText.textContent = `Reintentando (${retryCount}/${MAX_RETRIES})…`;
 
-            this.$dispatch("live-player-toggle-expand", {
-                expanded: this.expanded,
-                ownerId: this.config.ownerId,
-            });
-        },
+    setTimeout(() => {
+      setupHls();
+    }, delay);
+  }
 
-        destroy() {
-            if (this.gracePeriodTimeout) {
-                clearTimeout(this.gracePeriodTimeout);
-                this.gracePeriodTimeout = null;
-            }
-            if (this.hls) {
-                this.hls.destroy();
-                this.hls = null;
-            }
-            if (this.player) {
-                this.player.destroy();
-                this.player = null;
-            }
-        },
-    }));
+  setupHls();
+
+  window.addEventListener('beforeunload', () => {
+    destroyPlayer();
+  });
+
+  // ========== Utilidades ==========
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, c =>
+      ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])
+    );
+  }
 });
+
+// ========== Plantillas para estados NO Live ==========
+function renderTemplate(state, text, date) {
+  const container = document.getElementById('video-player');
+  if (!container) return;
+
+  let icon = '';
+  let title = '';
+  let description = '';
+
+  switch (state) {
+    case 'online':
+      icon = 'ri-signal-tower-fill ri-4x mb-3 text-success';
+      title = 'Online';
+      description = 'El usuario está conectado, pero no está transmitiendo en este momento.';
+      break;
+    case 'offline':
+      icon = 'ri-moon-clear-fill ri-4x mb-3 text-white-50';
+      title = 'Offline';
+      description = 'El usuario se encuentra actualmente desconectado.';
+      break;
+    default:
+      icon = 'ri-lock-fill ri-4x mb-3 text-warning';
+      title = 'No disponible';
+      description = 'Este contenido no está accesible en este momento.';
+      // En este caso ignoramos text y date a menos que quieras mostrarlos
+      text = '';
+      date = '';
+      break;
+  }
+
+  const textHtml = text ? `<h5 class="text-white fst-italic mb-3">${escapeHtml(text)}</h5>` : '';
+  const dateHtml = date ? `<p class="small text-muted">Visto por última vez: <span class="text-white">${escapeHtml(date)}</span></p>` : '';
+
+  container.innerHTML = `
+    <div class="text-center p-4 bg-dark rounded" style="aspect-ratio: 16/9; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+      <i class="${icon}"></i>
+      <h3 class="text-white">${escapeHtml(title)}</h3>
+      <p class="text-white-50">${escapeHtml(description)}</p>
+      ${textHtml}
+      ${dateHtml}
+    </div>
+  `;
+}
+
+// Función escapeHtml (global para que también la use renderTemplate)
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, c =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])
+  );
+}

@@ -1,162 +1,72 @@
-/* Live Player */
-.live-player-wrapper .status-text {
-    font-size: 0.75rem;
+/* === Contenedor principal === */
+#video-player {
+  max-width: 900px;
 }
 
-.live-player-wrapper .transmission-info {
-    font-size: 0.7rem;
+/* === Área del reproductor (siempre relación 16:9) === */
+.player-body {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.live-player-wrapper .player-logs {
-    height: 120px;
-    overflow-y: auto;
+/* === Skeleton de carga === */
+.skeleton-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: #000;
+  z-index: 2;
+}
+.skeleton-loading .spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 0.75rem;
+}
+.skeleton-loading .loading-text {
+  font-size: 0.8rem;
+  opacity: 0.85;
 }
 
-.live-player-wrapper .logs-title {
-    font-size: 0.75rem;
+/* === Video (oculto hasta estar listo) === */
+.player-body video {
+  width: 100%;
+  height: 100%;
+  display: none;
+  object-fit: contain;
 }
 
-.live-player-wrapper .log-item {
-    font-size: 0.7rem;
-    line-height: 1.2;
+/* === Mensaje de error (reemplaza al skeleton y al video) === */
+.player-error {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #dc3545;
+  background: #000;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 1.5rem;
+  z-index: 3;
+}
+.player-error svg {
+  margin-bottom: 0.5rem;
 }
 
-.live-player-wrapper .no-logs {
-    font-size: 0.7rem;
-}
-
-.plyr-video {
-    aspect-ratio: 16 / 9 !important;
-}
-
-.player-logs::-webkit-scrollbar {
-    width: 4px;
-}
-
-.player-logs::-webkit-scrollbar-thumb {
-    background: #444;
-    border-radius: 4px;
-}
-
-.live-player-wrapper .plyr {
-    --plyr-color-main: #fa377b;
-}
-
-.live-player-wrapper .plyr video {
-    object-fit: contain;
-    background: transparent;
-}
-
-.live-player-wrapper .plyr__poster {
-    background-size: contain !important;
-    background-color: transparent !important;
-    background-position: center !important;
-}
-
-.live-player-wrapper .plyr__poster::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: inherit;
-    background-size: cover;
-    background-position: center;
-    filter: blur(15px) brightness(0.5);
-    z-index: -1;
-}
-
-/* New Player Template Styles */
-
-.player-poster-blur {
-    position: absolute;
-    top: -5%;
-    left: -5%;
-    width: 110%;
-    height: 110%;
-    background-size: cover;
-    background-position: center;
-    filter: blur(25px) brightness(0.45);
-    z-index: 0;
-    transition: background-image 0.5s ease-in-out;
-}
-
-.player-state-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    padding: 2rem;
-}
-
-.pulse-icon {
-    width: 10px;
-    height: 10px;
-    background: currentColor;
-    border-radius: 50%;
-    position: relative;
-}
-
-.pulse-icon::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: currentColor;
-    border-radius: 50%;
-    animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
-}
-
-@keyframes pulse-ring {
-    0% { transform: scale(.33); }
-    80%, 100% { opacity: 0; }
-}
-
-/* Transparencia para mostrar el blur detrás del video */
-.live-player-wrapper .plyr,
-.live-player-wrapper .plyr__video-wrapper,
-.live-player-wrapper .plyr video {
-    background: transparent !important;
-    background-color: transparent !important;
-}
-
-.live-player-wrapper .plyr__poster {
-    background-color: transparent !important;
-}
-
-/* Badge flotante para estados transitorios: loading, grace_period, reconnecting.
-   Se superpone al video sin tapar los controles de Plyr (z-index menor que
-   .player-state-overlay, que solo aparece cuando NO hay video). */
-.player-transient-badge {
-    position: absolute;
-    top: 0.5rem;
-    left: 0.5rem;
-    z-index: 5;
-    pointer-events: none;
-}
-
-.player-transient-badge .badge {
-    font-size: 0.7rem;
-    font-weight: 500;
-    padding: 0.35rem 0.6rem;
-}
-
-.player-transient-badge .badge-warning {
-    background-color: rgba(255, 193, 7, 0.9);
-    color: #1a1a1a;
-}
-
-.player-transient-badge .badge-danger {
-    background-color: rgba(220, 53, 69, 0.9);
-    color: #fff;
+/* === Animación del spinner === */
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
