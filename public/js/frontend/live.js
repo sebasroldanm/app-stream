@@ -2,26 +2,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('video-player');
   if (!container) return;
 
-  const apiUrl = container.dataset.apiUrl || '';   // endpoint para polling
+  const apiUrl = container.dataset.apiUrl || '';
+  const posterUrl = container.dataset.poster || '';   // URL de la imagen de fondo
   let pollingTimer = null;
 
-  // Devuelve el intervalo en milisegundos según el estado
   function getPollInterval(state) {
     switch (state) {
-      case 'offline': return 60000;   // 60 segundos
-      case 'online':  return 30000;   // 30 segundos
-      default:        return 5000;    // 5 segundos (private, p2p...)
+      case 'offline': return 60000;
+      case 'online':  return 30000;
+      default:        return 5000;
     }
   }
 
-  /**
-   * Construye la interfaz según el estado actual de los data-* del contenedor.
-   * Si es "live" -> reproductor HLS/Plyr.
-   * Si es otro estado -> plantilla correspondiente.
-   * Inicia polling si el estado no es "live" y hay apiUrl.
-   */
   function initPlayer() {
-    // Detener cualquier polling previo para evitar duplicados
     clearPolling();
 
     const rawState = container.dataset.state || 'Offline';
@@ -30,11 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const text = container.dataset.text || '';
     const date = container.dataset.date || '';
 
-    // Si no es live, mostramos plantilla
+    // Si no es live, mostramos plantilla (con posible fondo borroso)
     if (state !== 'live') {
-      renderTemplate(state, text, date);
-
-      // Iniciar polling solo si hay apiUrl y NO es live (online también entra)
+      renderTemplate(state, text, date, posterUrl);
       if (apiUrl) {
         startPolling();
       }
@@ -58,9 +49,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let retryCount = 0;
     const MAX_RETRIES = 3;
 
-    // Plantilla inicial (skeleton)
+    // Construir el esqueleto con posible fondo borroso
+    const hasPosterClass = posterUrl ? ' has-poster' : '';
+    const posterStyle = posterUrl ? `--poster-url: url('${posterUrl.replace(/'/g, "\\'")}');` : '';
+
     container.innerHTML = `
-      <div class="player-body" id="player-body">
+      <div class="player-body${hasPosterClass}" id="player-body" style="${posterStyle}">
         <div class="skeleton-loading">
           <div class="spinner"></div>
           <div class="loading-text">Conectando…</div>
@@ -71,7 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const skeleton = bodyEl.querySelector('.skeleton-loading');
     const loadingText = skeleton.querySelector('.loading-text');
 
-    // Crear <video>
     const video = document.createElement('video');
     video.id = 'main-video';
     video.playsInline = true;
@@ -79,7 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
     video.style.display = 'none';
     bodyEl.appendChild(video);
 
-    // ─── Funciones internas del reproductor ───
     function destroyHls() {
       if (hls) { hls.destroy(); hls = null; }
     }
@@ -92,12 +84,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function revealVideo() {
       if (skeleton && skeleton.parentNode) skeleton.remove();
       video.style.display = 'block';
+      // Una vez que el video se muestra, quitamos la clase has-poster para que no estorbe el fondo
+      bodyEl.classList.remove('has-poster');
     }
 
     function showPlayerError(message) {
       if (skeleton && skeleton.parentNode) skeleton.remove();
       if (video.parentNode) video.remove();
       destroyPlayer();
+      bodyEl.classList.remove('has-poster');
 
       const errDiv = document.createElement('div');
       errDiv.className = 'player-error';
@@ -162,41 +157,37 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // Verifica el estado actual con la API antes de reintentar
     async function checkApiBeforeRetry() {
-      if (!apiUrl) return false; // sin API, se sigue con reintentos normales
+      if (!apiUrl) return false;
 
       try {
         const response = await fetch(apiUrl);
-        if (!response.ok) return false; // error de API, se reintentará igual
+        if (!response.ok) return false;
 
         const data = await response.json();
         const newState = (data.state || '').toLowerCase();
 
-        // Actualizar dataset siempre para reflejar cambios
         if (data.state) container.dataset.state = data.state;
         if (data.streamUrl !== undefined) container.dataset.streamUrl = data.streamUrl;
         if (data.text !== undefined) container.dataset.text = data.text;
         if (data.date !== undefined) container.dataset.date = data.date;
+        if (data.poster !== undefined) container.dataset.poster = data.poster; // actualizar también poster
 
         if (newState !== 'live') {
-          // El stream ya no es live: detener todo y reconstruir interfaz
           destroyPlayer();
-          initPlayer(); // Esto mostrará la plantilla correspondiente
-          return true;  // indica que se manejó el cambio
+          initPlayer(); // reconstruye con los nuevos datos y el nuevo poster
+          return true;
         }
-        // Si sigue live, devolvemos false para continuar con reintentos
         return false;
       } catch (err) {
         console.warn('Error consultando API antes de reintentar:', err);
-        return false; // fallo de red, seguimos con reintento normal
+        return false;
       }
     }
 
     async function tryReconnect() {
-      // Antes de reintentar, verificar si el estado cambió vía API
       const stateChanged = await checkApiBeforeRetry();
-      if (stateChanged) return; // la interfaz ya fue reconstruida
+      if (stateChanged) return;
 
       if (retryCount >= MAX_RETRIES) {
         showPlayerError('No se pudo conectar al stream');
@@ -211,42 +202,38 @@ document.addEventListener('DOMContentLoaded', () => {
       }, delay);
     }
 
-    // Arrancar la carga del stream
     setupHls();
 
-    // Limpieza al cerrar la página
     window.addEventListener('beforeunload', () => {
       destroyPlayer();
     });
   }
 
-  // ────────── POLLING A LA API (para estados no live) ──────────
+  // ────────── POLLING ──────────
   async function pollApi() {
     try {
       const response = await fetch(apiUrl);
       if (!response.ok) return;
 
-      const data = await response.json();  // { state, streamUrl, text, date, ... }
+      const data = await response.json();
 
-      // Actualizar dataset con los nuevos valores
       if (data.state) container.dataset.state = data.state;
       if (data.streamUrl !== undefined) container.dataset.streamUrl = data.streamUrl;
       if (data.text !== undefined) container.dataset.text = data.text;
       if (data.date !== undefined) container.dataset.date = data.date;
+      if (data.poster !== undefined) container.dataset.poster = data.poster;
 
       const newState = (data.state || '').toLowerCase();
 
       if (newState === 'live') {
-        // Cambio a live: detener polling y levantar el reproductor
         clearPolling();
         initPlayer();
       } else {
-        // Otro estado: refrescar plantilla y reiniciar polling con la nueva frecuencia
         const text = container.dataset.text || '';
         const date = container.dataset.date || '';
-        renderTemplate(newState || 'offline', text, date);
+        const poster = container.dataset.poster || '';
+        renderTemplate(newState || 'offline', text, date, poster);
 
-        // Reiniciar el polling con el intervalo adecuado al nuevo estado
         clearPolling();
         startPolling();
       }
@@ -257,8 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function startPolling() {
     if (!apiUrl) return;
-    if (pollingTimer) clearPolling();   // por seguridad
-
+    if (pollingTimer) clearPolling();
     const currentState = container.dataset.state.toLowerCase();
     const interval = getPollInterval(currentState);
     pollingTimer = setInterval(pollApi, interval);
@@ -271,12 +257,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // ────────── INICIO ──────────
   initPlayer();
 });
 
-// ==================== PLANTILLAS ====================
-function renderTemplate(state, text, date) {
+// ==================== PLANTILLAS (con soporte para poster) ====================
+function renderTemplate(state, text, date, posterUrl) {
   const container = document.getElementById('video-player');
   if (!container) return;
 
@@ -297,7 +282,7 @@ function renderTemplate(state, text, date) {
       title = 'Offline';
       description = 'El usuario se encuentra actualmente desconectado.';
       break;
-    default:   // private, p2p, banned, etc.
+    default:
       icon = 'ri-lock-fill ri-4x mb-3 text-warning';
       title = 'No disponible';
       description = 'Este contenido no está accesible en este momento.';
@@ -309,8 +294,12 @@ function renderTemplate(state, text, date) {
   const textHtml = text ? `<h5 class="text-white fst-italic mb-3">${escapeHtml(text)}</h5>` : '';
   const dateHtml = date ? `<p class="small text-muted">Visto por última vez: <span class="text-white">${escapeHtml(date)}</span></p>` : '';
 
+  // Configurar el fondo borroso si hay poster
+  const hasPosterClass = posterUrl ? ' has-poster' : '';
+  const posterStyle = posterUrl ? `--poster-url: url('${posterUrl.replace(/'/g, "\\'")}');` : '';
+
   container.innerHTML = `
-    <div class="text-center p-4 bg-dark rounded" style="aspect-ratio: 16/9; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    <div class="template-container${hasPosterClass}" style="${posterStyle}">
       <i class="${icon}"></i>
       <h3 class="text-white">${escapeHtml(title)}</h3>
       <p class="text-white-50">${escapeHtml(description)}</p>

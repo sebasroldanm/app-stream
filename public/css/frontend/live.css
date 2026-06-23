@@ -22,8 +22,11 @@
   align-items: center;
   justify-content: center;
   color: #fff;
-  background: #000;
   z-index: 2;
+}
+/* Si hay poster, el skeleton se muestra sobre él */
+.player-body.has-poster .skeleton-loading {
+  background: rgba(0, 0, 0, 0.3); /* ligero oscurecimiento extra para legibilidad */
 }
 .skeleton-loading .spinner {
   width: 32px;
@@ -64,6 +67,69 @@
 }
 .player-error svg {
   margin-bottom: 0.5rem;
+}
+
+/* ==================== FONDO BORROSO PARA PLANTILLAS ==================== */
+/* Contenedor de la plantilla (Online, Offline, etc.) */
+.template-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #000; /* fallback si no hay poster */
+}
+
+/* Pseudo-elemento para el fondo con blur y oscurecido */
+.template-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(12px) brightness(0.35);
+  z-index: 0;
+  /* La imagen se asigna mediante una variable CSS inyectada en el style inline */
+  background-image: var(--poster-url, none);
+}
+
+/* Si no hay poster, el ::before no se muestra (o se ve el fondo negro) */
+.template-container:not(.has-poster)::before {
+  display: none;
+}
+
+/* Contenido de la plantilla por encima del fondo */
+.template-container > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ==================== FONDO BORROSO PARA SKELETON EN MODO LIVE ==================== */
+/* Si hay poster, el player-body también lo muestra debajo del skeleton */
+.player-body.has-poster {
+  background: none; /* quitamos el negro sólido */
+}
+.player-body.has-poster::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(12px) brightness(0.35);
+  z-index: 0;
+  background-image: var(--poster-url, none);
+}
+
+/* Aseguramos que el skeleton y el video estén por encima */
+.player-body.has-poster .skeleton-loading,
+.player-body.has-poster video {
+  z-index: 1;
 }
 
 /* === Animación del spinner === */

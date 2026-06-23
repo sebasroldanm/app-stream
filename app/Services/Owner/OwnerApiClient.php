@@ -19,44 +19,56 @@ class OwnerApiClient
         $this->logger = $logger;
         $this->enableProxy = (bool) env('ENABLE_PROXY', false);
         $this->apiServer = rtrim(env('API_SERVER'), '/');
-        $this->proxyServer = env('API_PROXY_SERVER');
+        $this->proxyServer = rtrim(env('API_PROXY_SERVER'), '/');
 
         $this->client = new Client([
             'base_uri' => $this->apiServer,
             'verify' => false,
-            'headers' => [
-                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36',
-                'Accept' => '*/*',
-                'Accept-Encoding' => 'gzip, deflate, br',
-                'Connection' => 'keep-alive',
-                'cookie'        => env('COOKIE_SERVER'),
-            ]
+            'headers' => $this->getDefaultHeaders()
         ]);
     }
 
     /**
-     * Perform a GET request.
-     *
-     * @param string $uri
-     * @param array $options
-     * @return Response
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * Defines the default headers in an isolated method
      */
+    protected function getDefaultHeaders(): array
+    {
+        return [
+            'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36',
+            'Accept' => '*/*',
+            'Accept-Encoding' => 'gzip, deflate, br',
+            'Connection' => 'keep-alive',
+            'cookie' => env('COOKIE_SERVER'),
+        ];
+    }
+
     public function get(string $uri, array $options = []): Response
     {
-        $requestUri = $uri;
-
         $enableProxy = $options['enable_proxy'] ?? $this->enableProxy;
 
         if ($enableProxy) {
             $fullUrl = $this->apiServer . '/' . ltrim($uri, '/');
-
             if (!empty($options['query'])) {
                 $fullUrl .= (str_contains($fullUrl, '?') ? '&' : '?') . http_build_query($options['query']);
                 unset($options['query']);
             }
 
-            $requestUri = $this->proxyServer . base64_encode($fullUrl);
+            $specificHeaders = $options['headers'] ?? [];
+            $mergedHeaders = json_encode(array_merge($this->getDefaultHeaders(), $specificHeaders), JSON_UNESCAPED_SLASHES);
+
+            $queryParams = [
+                's' => $this->base64UrlEncode($fullUrl),
+                'h' => $this->base64UrlEncode($mergedHeaders)
+            ];
+
+            $requestUri = $this->proxyServer . '?' . http_build_query($queryParams, '', '&', PHP_QUERY_RFC3986);
+
+            $options['headers'] = [
+                'User-Agent' => 'Guzzle-Proxy-Client/1.0',
+                'Accept' => 'application/json'
+            ];
+        } else {
+            $requestUri = $uri;
         }
 
         try {
@@ -71,5 +83,13 @@ class OwnerApiClient
             );
             throw $th;
         }
+    }
+
+    /**
+     * Encode to URL-safe Base64 (RFC 4648)
+     */
+    protected function base64UrlEncode(string $data): string
+    {
+        return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
     }
 }

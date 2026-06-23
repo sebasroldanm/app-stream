@@ -3,5 +3,6 @@
     data-state="{{ $state }}"
     data-text="{{ $offlineText }}"
     data-date="{{ $statusChangedAt }}"
-    data-api-url="{{ $apiUrl }}">
+    data-api-url="{{ $apiUrl }}"
+    data-poster="{{ $poster }}">
 </div>
