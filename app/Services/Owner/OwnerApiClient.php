@@ -44,45 +44,61 @@ class OwnerApiClient
 
     public function get(string $uri, array $options = []): Response
     {
-        $enableProxy = $options['enable_proxy'] ?? $this->enableProxy;
+        $maxRetries = 3;
+        $baseDelay = 2;
+        $attempt = 0;
 
-        if ($enableProxy) {
-            $fullUrl = $this->apiServer . '/' . ltrim($uri, '/');
-            if (!empty($options['query'])) {
-                $fullUrl .= (str_contains($fullUrl, '?') ? '&' : '?') . http_build_query($options['query']);
-                unset($options['query']);
+        do {
+            $attempt++;
+            try {
+                $enableProxy = $options['enable_proxy'] ?? $this->enableProxy;
+
+                if ($enableProxy) {
+                    $fullUrl = $this->apiServer . '/' . ltrim($uri, '/');
+                    if (!empty($options['query'])) {
+                        $fullUrl .= (str_contains($fullUrl, '?') ? '&' : '?') . http_build_query($options['query']);
+                        unset($options['query']);
+                    }
+
+                    $specificHeaders = $options['headers'] ?? [];
+                    $mergedHeaders = json_encode(array_merge($this->getDefaultHeaders(), $specificHeaders), JSON_UNESCAPED_SLASHES);
+
+                    $queryParams = [
+                        's' => $this->base64UrlEncode($fullUrl),
+                        'h' => $this->base64UrlEncode($mergedHeaders)
+                    ];
+
+                    $requestUri = $this->proxyServer . '?' . http_build_query($queryParams, '', '&', PHP_QUERY_RFC3986);
+
+                    $options['headers'] = [
+                        'User-Agent' => 'Guzzle-Proxy-Client/1.0',
+                        'Accept' => 'application/json'
+                    ];
+                } else {
+                    $requestUri = $uri;
+                }
+                return $this->client->get($requestUri, $options);
+            } catch (\Throwable $th) {
+                if ($attempt >= $maxRetries) {
+                    $this->logger->logError(
+                        'service/owner_api_client',
+                        $th->getMessage(),
+                        ['uri' => $uri, 'requestUri' => $requestUri ?? '', 'options' => $options, 'attempt' => $attempt],
+                        [],
+                        $th->getTraceAsString()
+                    );
+                    throw $th;
+                }
+
+                $delay = $baseDelay * pow(2, $attempt - 1);
+                $this->logger->logError(
+                    'service/owner_api_client',
+                    "Reintento {$attempt} de {$maxRetries} después de {$delay}s por error: " . $th->getMessage(),
+                    ['uri' => $uri]
+                );
+                sleep($delay);
             }
-
-            $specificHeaders = $options['headers'] ?? [];
-            $mergedHeaders = json_encode(array_merge($this->getDefaultHeaders(), $specificHeaders), JSON_UNESCAPED_SLASHES);
-
-            $queryParams = [
-                's' => $this->base64UrlEncode($fullUrl),
-                'h' => $this->base64UrlEncode($mergedHeaders)
-            ];
-
-            $requestUri = $this->proxyServer . '?' . http_build_query($queryParams, '', '&', PHP_QUERY_RFC3986);
-
-            $options['headers'] = [
-                'User-Agent' => 'Guzzle-Proxy-Client/1.0',
-                'Accept' => 'application/json'
-            ];
-        } else {
-            $requestUri = $uri;
-        }
-
-        try {
-            return $this->client->get($requestUri, $options);
-        } catch (\Throwable $th) {
-            $this->logger->logError(
-                'service/owner_api_client',
-                $th->getMessage(),
-                ['uri' => $uri, 'requestUri' => $requestUri, 'options' => $options],
-                [],
-                $th->getTraceAsString()
-            );
-            throw $th;
-        }
+        } while (true);
     }
 
     /**
