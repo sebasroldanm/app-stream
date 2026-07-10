@@ -196,7 +196,7 @@ class Owner extends Model
      */
     public function getContinent()
     {
-        return $this->data?->user?->modelTopPosition?->continent;
+        return $this->data?->user?->modelTopPosition?->continent ? $this->data->user->modelTopPosition->continent : 'nn';
     }
 
     /**

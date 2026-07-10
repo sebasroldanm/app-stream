@@ -78,6 +78,7 @@ return [
         'na' => 'América del Norte',
         'oc' => 'Oceanía',
         'sa' => 'América del Sur',
+        'nn' => 'No Definido',
     ],
     'last_offline' => 'Último estado',
     'last_active' => 'Última conexión',

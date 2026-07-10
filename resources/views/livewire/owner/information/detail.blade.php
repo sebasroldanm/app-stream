@@ -107,7 +107,7 @@
                             'position'  => $owner->getTopPosition(),
                             'icon'      => $owner->getGenderIcon(),
                             'points'    => $owner->getTopPoints(),
-                            'continent' => __('owner/information/details.regions' . $owner->getContinent()),
+                            'continent' => __('owner/information/details.regions.' . $owner->getContinent()),
                         ]) !!}
                     </span>
                 </div>
