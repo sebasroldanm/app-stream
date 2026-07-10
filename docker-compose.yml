@@ -116,7 +116,7 @@ services:
       MYSQL_PASSWORD: password
       MYSQL_ALLOW_EMPTY_PASSWORD: "no"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/data:/var/lib/mysql
       - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
     ports:
       - "33061:3306"
@@ -137,7 +137,7 @@ services:
     ports:
       - "6313:6379"
     volumes:
-      - redis_data:/data
+      - ./docker/redis/data:/data
     networks:
       - laravel_network
     healthcheck:
@@ -145,13 +145,6 @@ services:
       interval: 10s
       timeout: 3s
       retries: 5
-
-# Volumes
-volumes:
-  mysql_data:
-    driver: local
-  redis_data:
-    driver: local
 
 # Networks
 networks:
