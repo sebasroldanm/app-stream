@@ -39,6 +39,14 @@ trait OwnerProp
         }
     }
 
+    public function ageTooltipBirthdate($age = 0, $birthdate = null)
+    {
+        if ($age == 0 || $birthdate == null) {
+            return false;
+        }
+        return '<span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="' . $birthdate->format('Y-m-d') . '">' . $age . '</span>';
+    }
+
     public function flagCountry($country)
     {
         if (empty($country)) {

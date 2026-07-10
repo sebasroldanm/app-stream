@@ -2,6 +2,7 @@
 
 return [
     'title' => 'Detalles',
+    'position' => 'Posición :position',
     'country' => 'Vive en',
     'languages' => 'Mis idiomas',
     'gender' => 'Mi genero',

@@ -41,7 +41,7 @@ class Feed extends Component
             $this->description = $owner->data->user->user->description;
             $this->gender = $owner->data ? $this->iconGender($owner->gender) : false;
             $this->birthDate = $owner->data->user->user->birthDate;
-            $this->age = Carbon::now()->diff(Carbon::parse($owner->data->user->user->birthDate))->y;
+            $this->age = $this->ageTooltipBirthdate($owner->age, $owner->birthDate);
         }
 
         return view('livewire.owner.feed', [

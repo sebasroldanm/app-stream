@@ -9,6 +9,7 @@ if (typeof window.StoryManager === "undefined") {
             this.pausedAt = 0;
             this.slideStart = 0;
             this._ns = "";
+            this._exitFallbackTimer = null; // para limpiar el timeout de transición
 
             this._init();
         }
@@ -16,6 +17,7 @@ if (typeof window.StoryManager === "undefined") {
         destroy() {
             this._stopProgress();
             this._pauseVideos();
+            clearTimeout(this._exitFallbackTimer);
             this.data = [];
         }
 
@@ -51,22 +53,43 @@ if (typeof window.StoryManager === "undefined") {
             if (!user?.contents?.length) return;
 
             this._stopProgress();
+            this._pauseVideos();
 
+            const modal = document.getElementById("fullscreenStories");
+            if (!modal) return;
+
+            const wasActive = modal.classList.contains("active"); // ¿Ya estaba abierto?
+
+            // Actualizar índices
             this.userIndex = userIndex;
             this.slideIndex = Math.min(startSlide, user.contents.length - 1);
             this.isPaused = false;
             this.pausedAt = 0;
 
-            const modal = document.getElementById("fullscreenStories");
-            if (!modal) return;
-            modal.classList.add("active");
-            document.body.style.overflow = "hidden";
+            // Mostrar el modal si no estaba activo
+            if (!wasActive) {
+                modal.classList.add("active");
+                document.body.style.overflow = "hidden";
+            }
 
             this._buildDOM(user);
             this._renderSlide(this.slideIndex, true);
+
+            // Si el modal ya estaba abierto (cambio de usuario), lanzamos animación de entrada
+            if (wasActive) {
+                this._animateCardEntrance();
+            }
         }
 
         close() {
+            clearTimeout(this._exitFallbackTimer);
+            const card = document.querySelector(".stories-card");
+            if (card) {
+                card.style.transition = "";
+                card.style.filter = "";
+                card.style.opacity = "";
+            }
+
             this._stopProgress();
             this._pauseVideos();
 
@@ -315,9 +338,11 @@ if (typeof window.StoryManager === "undefined") {
             }
         }
 
+        // ─── TRANSICIONES ENTRE USUARIOS ────────────────────────────────────────
+
         _nextUser() {
             if (this.userIndex + 1 < this.data.length) {
-                this.open(this.userIndex + 1, 0);
+                this._transitionToUser(this.userIndex + 1);
             } else {
                 this.close();
             }
@@ -325,9 +350,83 @@ if (typeof window.StoryManager === "undefined") {
 
         _prevUser() {
             if (this.userIndex > 0) {
-                this.open(this.userIndex - 1, 0);
+                this._transitionToUser(this.userIndex - 1);
             }
         }
+
+        /**
+         * Aplica una animación de salida (blur + fade out) y luego abre el nuevo usuario.
+         */
+        _transitionToUser(newUserIndex) {
+            const card = document.querySelector(".stories-card");
+            if (!card) {
+                this.open(newUserIndex, 0);
+                return;
+            }
+
+            // 1. Animación de salida
+            card.style.transition = "filter 0.3s ease, opacity 0.3s ease";
+            card.style.filter = "blur(12px)";
+            card.style.opacity = "0";
+
+            const onTransitionEnd = () => {
+                card.removeEventListener("transitionend", onTransitionEnd);
+                this._performUserChange(newUserIndex);
+            };
+
+            card.addEventListener("transitionend", onTransitionEnd);
+
+            // Fallback de seguridad por si transitionend no se dispara
+            this._exitFallbackTimer = setTimeout(() => {
+                card.removeEventListener("transitionend", onTransitionEnd);
+                this._performUserChange(newUserIndex);
+            }, 350);
+        }
+
+        _performUserChange(newUserIndex) {
+            clearTimeout(this._exitFallbackTimer);
+            this.open(newUserIndex, 0);
+        }
+
+        /**
+         * Restaura el card desde el estado difuminado a su estado normal.
+         */
+        _animateCardEntrance() {
+            const card = document.querySelector(".stories-card");
+            if (!card) return;
+
+            // Forzamos el estado inicial (el que dejó la salida)
+            card.style.transition = "none";
+            card.style.filter = "blur(12px)";
+            card.style.opacity = "0";
+            // Forzamos reflow
+            card.offsetHeight;
+
+            // Lanzamos la animación de entrada
+            card.style.transition = "filter 0.35s ease, opacity 0.35s ease";
+            card.style.filter = "blur(0)";
+            card.style.opacity = "1";
+
+            const onEnterEnd = () => {
+                card.removeEventListener("transitionend", onEnterEnd);
+                // Limpiamos estilos inline para que el CSS vuelva a mandar
+                card.style.transition = "";
+                card.style.filter = "";
+                card.style.opacity = "";
+            };
+
+            card.addEventListener("transitionend", onEnterEnd);
+
+            // Fallback de limpieza
+            setTimeout(() => {
+                card.removeEventListener("transitionend", onEnterEnd);
+                card.style.transition = "";
+                card.style.filter = "";
+                card.style.opacity = "";
+            }, 400);
+        }
+
+        // ─── UTILIDADES ─────────────────────────────────────────────────────────
 
         _fill(index) {
             return document.getElementById(`${this._ns}-fill-${index}`);

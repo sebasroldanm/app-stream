@@ -34,7 +34,8 @@
                                         @endif
                                         @if ($age !== false)
                                             <p><i class="las la-gifts"></i>
-                                                {{ __('owner/feed/panels.age', ['age' => $age]) }}</p>
+                                                {!! __('owner/feed/panels.age', ['age' => $age]) !!}
+                                            </p>
                                         @endif
                                         @if (isset($owner->isMobile))
                                             <p>
@@ -49,6 +50,11 @@
                                         @if ($owner->isGeoBanned || $owner->isBanned || !$owner->isActive || $owner->isBlocked)
                                             <p><i class="las la-clock"></i>
                                                 {{ __('owner/feed/panels.went_idle_at', ['date' => \Carbon\Carbon::parse($owner->wentIdleAt)->format('Y-m-d')]) }}
+                                            </p>
+                                        @endif
+                                        @if ($owner->getTopPosition())
+                                            <p><i class="las la-trophy"></i>
+                                                {{ __('owner/feed/panels.position', ['position' => $owner->getTopPosition()]) }}
                                             </p>
                                         @endif
                                     @else

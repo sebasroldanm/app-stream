@@ -81,21 +81,6 @@
                                                 @if ($is_fav) class="las la-heart" @else class="lar la-heart" @endif></i>
                                         </a>
                                     </li>
-                                    @if (isset($owner->data->user->modelTopPosition) && $owner->data->user->modelTopPosition->position !== 0)
-                                        <li><a href="javascript:void(0);" data-bs-toggle="tooltip"
-                                                data-bs-placement="top"
-                                                data-bs-original-title="{{ __('owner/information/details.position', ['position' => $owner->data->user->modelTopPosition->position]) }}">
-                                                <i class="las la-trophy"></i>
-                                            </a></li>
-                                    @else
-                                        @if (isset($owner->data->usercurrPosition) && $owner->data->usercurrPosition !== 0)
-                                            <li><a href="javascript:void(0);" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top"
-                                                    data-bs-original-title="{{ __('owner/information/details.position', ['position' => $owner->data->user->modelTopPosition->position]) }}">
-                                                    <i class="las la-trophy"></i>
-                                                </a></li>
-                                        @endif
-                                    @endif
                                     @if ($owner->notFound)
                                         @if (!$force_sync)
                                             <li><a href="javascript:void(0);" data-bs-toggle="tooltip"

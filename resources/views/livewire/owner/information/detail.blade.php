@@ -97,7 +97,7 @@
                     <span>{{ __('owner/information/details.profile_not_found') }}</span>
                 </div>
             @endif
-            @if ($owner->topPosition)
+            @if ($owner->getTopPosition())
                 <div class="col-3">
                     <h6>{{ __('owner/information/details.profile_top_position') }}</h6>
                 </div>

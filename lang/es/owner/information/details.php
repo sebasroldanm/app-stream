@@ -2,7 +2,6 @@
 
 return [
     'personal' => 'Personal',
-    'position' => 'Posición :position',
     'related_count' => 'Cuentas Relacionadas (:count)',
     'id' => 'ID',
     'name' => 'Nombre',

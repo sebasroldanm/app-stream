@@ -299,7 +299,7 @@ function renderTemplate(state, text, date, posterUrl) {
   const posterStyle = posterUrl ? `--poster-url: url('${posterUrl.replace(/'/g, "\\'")}');` : '';
 
   container.innerHTML = `
-    <div class="template-container${hasPosterClass}" style="${posterStyle}">
+    <div class="template-container p-3${hasPosterClass}" style="${posterStyle}">
       <i class="${icon}"></i>
       <h3 class="text-white">${escapeHtml(title)}</h3>
       <p class="text-white-50">${escapeHtml(description)}</p>

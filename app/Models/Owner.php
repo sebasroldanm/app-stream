@@ -239,18 +239,18 @@ class Owner extends Model
      * Get the top position
      * @return string|null
      */
-    public function getTopPosition()
+    public function getTopPosition($decimals = 0)
     {
-        return number_format($this->data?->user?->modelTopPosition?->position, 2);
+        return number_format($this->data?->user?->modelTopPosition?->position, $decimals);
     }
 
     /**
      * Get the top points
      * @return string|null
      */
-    public function getTopPoints()
+    public function getTopPoints($decimals = 0)
     {
-        return number_format($this->data?->user?->modelTopPosition?->points, 2);
+        return number_format($this->data?->user?->modelTopPosition?->points, $decimals);
     }
 
     /**
