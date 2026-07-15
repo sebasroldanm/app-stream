@@ -28,9 +28,9 @@
                                             <p><i class="las la-globe"></i> {{ __('owner/feed/panels.languages') }}
                                                 {!! $languages !!}</p>
                                         @endif
-                                        @if ($gender !== false)
+                                        @if ($owner->present()->iconGender() !== false)
                                             <p><i class="las la-users"></i> {{ __('owner/feed/panels.gender') }}
-                                                {!! $gender !!}</p>
+                                                {!! $owner->present()->iconGender() !!}</p>
                                         @endif
                                         @if ($age !== false)
                                             <p><i class="las la-gifts"></i>

@@ -64,10 +64,10 @@
                                             <p class="mb-0">{{ __('owner/ia/results.platform') }}:
                                                 {{ $result->platform }}</p>
                                             <p class="mb-0">{{ __('owner/ia/results.conexion') }}:
-                                                {{ \Carbon\Carbon::parse($result->seen)->diffForHumans() }}
+                                                {{ \Carbon\Carbon::parse($result->seen)->diffForHumans(['parts' => 2, 'join' => true, 'short' => true, 'syntax' => Carbon\CarbonInterface::DIFF_ABSOLUTE]) }}
                                             </p>
                                             <p class="mb-0">{{ __('owner/ia/results.profile') }}:
-                                                {{ \Carbon\Carbon::parse($result->accountSeen)->diffForHumans() }}
+                                                {{ \Carbon\Carbon::parse($result->accountSeen)->diffForHumans(['parts' => 2, 'join' => true, 'short' => true, 'syntax' => Carbon\CarbonInterface::DIFF_ABSOLUTE]) }}
                                                 @if ($this->favorites && in_array($result->model, $this->favorites))
                                                     <i class="las la-heart text-danger ms-1"></i>
                                                 @endif

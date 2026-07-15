@@ -143,7 +143,7 @@
                                             @else
                                                 <i class="ri-indeterminate-circle-fill offline" data-bs-toggle="tooltip"
                                                     data-bs-placement="top"
-                                                    data-bs-original-title="{{ \Carbon\Carbon::parse($owner->statusChangedAt)->diffForHumans() }}"></i>
+                                                    data-bs-original-title="{{ \Carbon\Carbon::parse($owner->statusChangedAt)->diffForHumans(['parts' => 2, 'join' => true, 'short' => false]) }}"></i>
                                             @endif
                                         @endif
                                     </h3>

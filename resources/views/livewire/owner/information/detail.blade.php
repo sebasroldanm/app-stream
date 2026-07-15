@@ -105,7 +105,7 @@
                     <span>
                         {!! __('owner/information/details.ranking_info', [
                             'position'  => $owner->getTopPosition(),
-                            'icon'      => $owner->getGenderIcon(),
+                            'icon'      => $owner->present()->iconGender(),
                             'points'    => $owner->getTopPoints(),
                             'continent' => __('owner/information/details.regions.' . $owner->getContinent()),
                         ]) !!}

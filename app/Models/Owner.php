@@ -2,14 +2,17 @@
 
 namespace App\Models;
 
+use App\Presenters\OwnerPresenter;
 use App\Traits\OwnerProp;
+use Coderflex\LaravelPresenter\Concerns\CanPresent;
+use Coderflex\LaravelPresenter\Concerns\UsesPresenters;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class Owner extends Model
+class Owner extends Model implements CanPresent
 {
-    use HasFactory, OwnerProp;
+    use HasFactory, OwnerProp, UsesPresenters;
 
     protected $fillable = [
         'name',
@@ -65,6 +68,10 @@ class Owner extends Model
         'birthDate' => 'date',
         'favoritedCount' => 'integer',
         'age' => 'integer',
+    ];
+
+    protected $presenters = [
+        'default' => OwnerPresenter::class,
     ];
 
     public function intro()
@@ -178,16 +185,6 @@ class Owner extends Model
         if (!$group) return collect();
 
         return $group->owners()->where('owners.id', '!=', $this->id)->get();
-    }
-
-    public function getGender()
-    {
-        return $this->data?->user?->user?->gender;
-    }
-
-    public function getGenderIcon()
-    {
-        return $this->iconGender($this->getGender());
     }
 
     /**

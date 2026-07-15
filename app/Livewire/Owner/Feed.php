@@ -39,7 +39,6 @@ class Feed extends Component
         if (isset($owner->data)) {
             $this->languages = $this->flagsLanguages($owner->data->user->user->languages);
             $this->description = $owner->data->user->user->description;
-            $this->gender = $owner->data ? $this->iconGender($owner->gender) : false;
             $this->birthDate = $owner->data->user->user->birthDate;
             $this->age = $this->ageTooltipBirthdate($owner->age, $owner->birthDate);
         }

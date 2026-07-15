@@ -6,39 +6,6 @@ use Carbon\Carbon;
 
 trait OwnerProp
 {
-    public function iconGender($gender)
-    {
-        switch ($gender) {
-            case 'female':
-                return '<i class="las la-venus" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Mujer"></i>';
-                break;
-            case 'females':
-                return '<i class="las la-venus-double" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Mujeres"></i>';
-                break;
-            case 'femaleTranny':
-                return '<i class="las la-mercury" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Mujer Trans"></i>';
-                break;
-            case 'male':
-                return '<i class="las la-mars" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Hombre"></i>';
-                break;
-            case 'males':
-                return '<i class="las la-mars-double" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Hombres"></i>';
-                break;
-            case 'maleTranny':
-                return '<i class="las la-mars-stroke-h" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Hombre Trans"></i>';
-                break;
-            case 'tranny':
-                return '<i class="las la-transgender" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Trans"></i>';
-                break;
-            case 'trannies':
-                return '<i class="las la-transgender-alt" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Trans Bi"></i>';
-                break;
-            default:
-                return '<i class="las la-genderless" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Sin genero"></i>';
-                break;
-        }
-    }
-
     public function ageTooltipBirthdate($age = 0, $birthdate = null)
     {
         if ($age == 0 || $birthdate == null) {
