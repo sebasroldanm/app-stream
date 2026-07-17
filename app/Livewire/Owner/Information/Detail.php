@@ -13,15 +13,16 @@ class Detail extends Component
     use OwnerProp;
     public Owner $owner;
 
+    // FIXME: No debe existir lógica de Presenters aquí
     public function render()
     {
         if (isset($this->owner->data) && $this->owner->data !== 'null') {
             if (is_string($this->owner->data)) {
                 $this->owner->data = json_decode($this->owner->data, false);
             }
-            $languages = $this->flagsLanguages($this->owner->data->user->user->languages);
-            $country = $this->flagCountry($this->owner->data->user->user->country);
-            $age = Carbon::now()->diff(Carbon::parse($this->owner->data->user->user->birthDate))->y;
+            // $languages = $this->flagsLanguages($this->owner->data->user->user->languages);
+            // $country = $this->flagCountry($this->owner->data->user->user->country);
+            // $age = Carbon::now()->diff(Carbon::parse($this->owner->data->user->user->birthDate))->y;
 
             $statusChangedAt = Carbon::parse($this->owner->statusChangedAt);
             $offlineStatusUpdatedAt = Carbon::parse($this->owner->offlineStatusUpdatedAt);
@@ -29,9 +30,9 @@ class Detail extends Component
             $lasSnapshot = Carbon::parse($this->owner->data->user->user->snapshotTimestamp);
             $ratingPrivate = $this->owner->getRatingPrivate();
             return view('livewire.owner.information.detail', [
-                'languages' => $languages,
-                'country' => $country,
-                'age' => $age,
+                // 'languages' => $languages,
+                // 'country' => $country,
+                // 'age' => $age,
                 'lastActive' => $statusChangedAt->copy()->diffForHumans(),
                 'lastOffline' => $offlineStatusUpdatedAt->copy()->diffForHumans(),
                 'activeHuman' => $statusChangedAt->copy()->calendar(),

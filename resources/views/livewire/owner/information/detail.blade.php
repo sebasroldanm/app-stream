@@ -1,5 +1,5 @@
 <div>
-    @if (isset($this->owner->data) && $this->owner->data !== 'null')
+    @if ($owner->present()->hasValidData())
 
         {{-- Personal --}}
         <h4 class="d-flex justify-content-between">
@@ -15,70 +15,71 @@
             </div>
             <div class="col-9"><code>{{ $owner->id }}</code></div>
 
-            @if ($owner->data->user->user->name)
+            @if ($owner->present()->rawName())
                 <div class="col-3">
                     <h6>{{ __('owner/information/details.name') }}</h6>
                 </div>
-                <div class="col-9">{{ $owner->data->user->user->name }}</div>
+                <div class="col-9">{{ $owner->present()->rawName() }}</div>
             @endif
 
-            @if ($owner->data->user->user->gender)
+            @if ($owner->present()->rawGender())
                 <div class="col-3">
                     <h6>{{ __('owner/information/details.gender') }}</h6>
                 </div>
-                <div class="col-9">{{ __('owner/information/details.genders.' . $owner->data->user->user->gender) }}</div>
+                <div class="col-9">{{ $owner->present()->gender() }}</div>
             @endif
 
-            @if ($country)
+            @if ($owner->present()->rawCountry())
                 <div class="col-3">
                     <h6>{{ __('owner/information/details.country') }}</h6>
                 </div>
-                <div class="col-9">{!! $country !!}</div>
+                <div class="col-9">{!! $owner->present()->flagCountry() !!}</div>
             @endif
 
-            @if ($languages)
+            @if ($owner->present()->rawLanguages())
                 <div class="col-3">
                     <h6>{{ __('owner/information/details.language') }}</h6>
                 </div>
-                <div class="col-9">{!! $languages !!}</div>
+                <div class="col-9">{!! $owner->present()->flagLanguages() !!}</div>
             @endif
 
             <div class="col-3">
                 <h6>{{ __('owner/information/details.birth_date') }}</h6>
             </div>
-            <div class="col-9">{{ $owner->data->user->user->birthDate }}</div>
+            <div class="col-9">{{ $owner->present()->rawBirthDate() }}</div>
 
             <div class="col-3">
                 <h6>{{ __('owner/information/details.age') }}</h6>
             </div>
-            <div class="col-9">{{ $age }}</div>
+            <div class="col-9">{{ $owner->present()->rawAge() }}</div>
 
-            @if ($owner->getBodyType())
+            @if ($owner->present()->rawBodyType())
                 <div class="col-3">
                     <h6>{{ __('owner/information/details.body_type') }}</h6>
                 </div>
-                <div class="col-9">{{ __('owner/information/details.body_types.' . $owner->getBodyType()) }}</div>
+                <div class="col-9">{{ $owner->present()->bodyType() }}
+                </div>
             @endif
 
-            @if ($owner->getEyeColor())
+            @if ($owner->present()->rawEyeColor())
                 <div class="col-3">
                     <h6>{{ __('owner/information/details.eye_color') }}</h6>
                 </div>
-                <div class="col-9">{{ __('owner/information/details.eye_colors.' . $owner->getEyeColor()) }}</div>
+                <div class="col-9">{{ $owner->present()->eyeColor() }}</div>
             @endif
 
-            @if ($owner->getHairColor())
+            @if ($owner->present()->rawHairColor())
                 <div class="col-3">
                     <h6>{{ __('owner/information/details.hair_color') }}</h6>
                 </div>
-                <div class="col-9">{{ __('owner/information/details.hair_colors.' . $owner->getHairColor()) }}</div>
+                <div class="col-9">{{ $owner->present()->hairColor() }}</div>
             @endif
 
-            @if ($owner->getEthnicity())
+            @if ($owner->present()->rawEthnicity())
                 <div class="col-3">
                     <h6>{{ __('owner/information/details.ethnicity') }}</h6>
                 </div>
-                <div class="col-9">{{ __('owner/information/details.ethnicities.' . $owner->getEthnicity()) }}</div>
+                <div class="col-9">{{ $owner->present()->ethnicity() }}</div>
             @endif
         </div>
         {{-- Personal --}}
@@ -89,7 +90,7 @@
         </h4>
         <hr>
         <div class="row">
-            @if ($owner->notFound)
+            @if ($owner->present()->isNotFound())
                 <div class="col-3">
                     <h6>{{ __('owner/information/details.profile_status') }}</h6>
                 </div>
@@ -97,39 +98,32 @@
                     <span>{{ __('owner/information/details.profile_not_found') }}</span>
                 </div>
             @endif
-            @if ($owner->getTopPosition())
+            @if ($owner->present()->topPosition())
                 <div class="col-3">
                     <h6>{{ __('owner/information/details.profile_top_position') }}</h6>
                 </div>
                 <div class="col-9">
-                    <span>
-                        {!! __('owner/information/details.ranking_info', [
-                            'position'  => $owner->getTopPosition(),
-                            'icon'      => $owner->present()->iconGender(),
-                            'points'    => $owner->getTopPoints(),
-                            'continent' => __('owner/information/details.regions.' . $owner->getContinent()),
-                        ]) !!}
-                    </span>
+                    <span>{!! $owner->present()->translatedRanking() !!}</span>
                 </div>
             @endif
 
-            @if ($offlineHuman != '01/01/1970')
+            @if ($owner->present()->isOfflinePost())
                 <div class="col-3">
                     <h6>{{ __('owner/information/details.last_offline') }}</h6>
                 </div>
-                <div class="col-9">{{ $offlineHuman }} - {{ $lastOffline }}</div>
+                <div class="col-9">{{ $owner->present()->offlinePost()->date() }} - {{ $owner->present()->offlinePost()->human()->parts(2) }}</div>
             @endif
 
             <div class="col-3">
                 <h6>{{ __('owner/information/details.last_active') }}</h6>
             </div>
-            <div class="col-9">{{ $activeHuman }} - {{ $lastActive }}</div>
+            <div class="col-9">{{ $owner->present()->statusChangedDate()->date() }} - {{ $owner->present()->statusChangedDate()->human()->parts(2) }}</div>
 
             <div class="col-3">
                 <h6>{{ __('owner/information/details.idle') }}</h6>
             </div>
             <div class="col-9">
-                {{ $idleCalendar }} - {{ $idleDiff }}
+                {{ $owner->present()->idleDate()->calendar() }} - {{ $owner->present()->idleDate()->human()->parts(2) }}
             </div>
 
             @if ($ratingPrivate)

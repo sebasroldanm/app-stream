@@ -24,7 +24,7 @@ class Owner extends Model implements CanPresent
         'gender',
         'country',
         'isMobile',
-        'statusChangedAt',
+        'statusChangedAt', // last activity
         'isLive',
         'isOnline',
         'isError',
@@ -37,7 +37,7 @@ class Owner extends Model implements CanPresent
         'age',
         'birthDate',
         'favoritedCount',
-        'offlineStatusUpdatedAt',
+        'offlineStatusUpdatedAt', // last offline post
         'notFound',
         'lastSync',
         'isGeoBanned',
@@ -188,15 +188,6 @@ class Owner extends Model implements CanPresent
     }
 
     /**
-     * Get the continent
-     * @return string|null
-     */
-    public function getContinent()
-    {
-        return $this->data?->user?->modelTopPosition?->continent ? $this->data->user->modelTopPosition->continent : 'nn';
-    }
-
-    /**
      * Get the hair color
      * @return string|null
      */
@@ -239,15 +230,6 @@ class Owner extends Model implements CanPresent
     public function getTopPosition($decimals = 0)
     {
         return number_format($this->data?->user?->modelTopPosition?->position, $decimals);
-    }
-
-    /**
-     * Get the top points
-     * @return string|null
-     */
-    public function getTopPoints($decimals = 0)
-    {
-        return number_format($this->data?->user?->modelTopPosition?->points, $decimals);
     }
 
     /**

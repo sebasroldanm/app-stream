@@ -69,6 +69,7 @@ return [
     'not_found_origin_search' => 'Buscar en similitudes',
     'profile_top_position' => 'Posición en el Top',
     'ranking_info' => ':position en el género :icon con :points puntos en :continent',
+    'ranking_info_no_continent' => ':position en el género :icon con :points puntos',
     'region' => 'Región',
     'regions' => [
         'af' => 'África',
@@ -77,11 +78,10 @@ return [
         'eu' => 'Europa',
         'na' => 'América del Norte',
         'oc' => 'Oceanía',
-        'sa' => 'América del Sur',
-        'nn' => 'No Definido',
+        'sa' => 'América del Sur'
     ],
-    'last_offline' => 'Último estado',
-    'last_active' => 'Última conexión',
+    'last_offline' => 'Publicación offline',
+    'last_active' => 'Última actividad',
     'idle' => 'Inactivo',
     'rating_private' => 'Evaluación Privada',
     'last_snapshot' => 'Último snapshot',
